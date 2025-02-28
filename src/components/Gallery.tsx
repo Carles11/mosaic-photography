@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import ImageCard from "./ImageCard";
+import { useAppContext } from "@/context/AppContext";
 
 interface Image {
   id: string;
@@ -14,7 +15,8 @@ interface Image {
 
 const Gallery = () => {
   const [images, setImages] = useState<Image[]>([]);
-
+  const { isMosaic } = useAppContext();
+  console.log("isMosaic--->", isMosaic);
   useEffect(() => {
     const fetchImages = async () => {
       const { data: images, error } = await supabase
