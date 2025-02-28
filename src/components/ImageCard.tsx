@@ -1,5 +1,7 @@
-// filepath: /C:/Users/Usuario/Documents/AAA_REPOs/mosaic/src/components/ImageCard.tsx
 import { useState } from "react";
+import Image from "next/image";
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 
 interface Image {
   id: string;
@@ -16,11 +18,19 @@ const ImageCard = ({ image }: { image: Image }) => {
   return (
     <div
       className="image-card"
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => setIsHovered(false)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => window.open(image.url, "_blank")}
+      style={{ position: "relative" }}
     >
-      <img src={image.url} alt={image.title} />
+      <Zoom>
+        <Image
+          src={image.url}
+          alt={image.title}
+          layout="responsive"
+          width={0}
+          height={0}
+        />
+      </Zoom>
       {isHovered && (
         <div className="overlay">
           <h3>{image.title}</h3>

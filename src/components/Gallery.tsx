@@ -17,7 +17,7 @@ const Gallery = () => {
 
   useEffect(() => {
     const fetchImages = async () => {
-      let { data: images, error } = await supabase
+      const { data: images, error } = await supabase
         .from("images")
         .select("*")
         .order("created_at", { ascending: false });
