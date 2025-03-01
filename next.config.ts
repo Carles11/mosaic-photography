@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
     remotePatterns: [
+      // Allow loading images from picsum.photos. update when from S3
       {
         protocol: "https",
         hostname: "picsum.photos",

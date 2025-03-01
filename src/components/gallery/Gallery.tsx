@@ -1,8 +1,8 @@
-// filepath: /C:/Users/Usuario/Documents/AAA_REPOs/mosaic/src/components/Gallery.tsx
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import ImageCard from "./ImageCard";
-import { useAppContext } from "@/context/AppContext";
+import ImageCard from "../cards/ImageCard";
+
+import styles from "./gallery.module.css";
 
 interface Image {
   id: string;
@@ -15,8 +15,7 @@ interface Image {
 
 const Gallery = () => {
   const [images, setImages] = useState<Image[]>([]);
-  const { isMosaic } = useAppContext();
-  console.log("isMosaic--->", isMosaic);
+
   useEffect(() => {
     const fetchImages = async () => {
       const { data: images, error } = await supabase
@@ -32,9 +31,11 @@ const Gallery = () => {
   }, []);
 
   return (
-    <div className="gallery-grid">
+    <div className={styles.galleryGrid}>
       {images.map((image) => (
-        <ImageCard key={image.id} image={image} />
+        <div key={image.id} className={styles.galleryGridItem}>
+          <ImageCard key={image.id} image={image} />
+        </div>
       ))}
     </div>
   );

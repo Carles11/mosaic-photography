@@ -7,7 +7,6 @@ import Image from "next/image";
 
 const ThemeToggle = () => {
   const [theme, setTheme] = useState("light");
-  console.log("The current theme is: ", { theme });
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
