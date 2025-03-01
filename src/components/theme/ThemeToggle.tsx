@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import styles from "./ThemeToggle.module.css";
 
+import Image from "next/image";
+
 const ThemeToggle = () => {
   const [theme, setTheme] = useState("light");
   console.log("The current theme is: ", { theme });
@@ -26,7 +28,21 @@ const ThemeToggle = () => {
 
   return (
     <button className={styles.toggleButton} onClick={toggleTheme}>
-      {theme === "light" ? "Dark Mode" : "Light Mode"}
+      {theme === "light" ? (
+        <Image
+          src="/icons/theme-moon.png"
+          width={24}
+          height={24}
+          alt="dark mode"
+        />
+      ) : (
+        <Image
+          src="/icons/theme-sun.png"
+          width={24}
+          height={24}
+          alt="light mode"
+        />
+      )}
     </button>
   );
 };
