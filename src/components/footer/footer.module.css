@@ -1,0 +1,29 @@
+.footerContainer {
+  background-color: #736aaa;
+  color: #f0f6fc;
+  padding: 20px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.footerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.footerItem {
+  margin: 10px;
+}
+
+.footerItem a {
+  color: #f0f6fc;
+  text-decoration: none;
+}
+
+.footerItem a:hover {
+  text-decoration: underline;
+}

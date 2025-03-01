@@ -1,8 +1,28 @@
 /* filepath: /C:/Users/Usuario/Documents/AAA_REPOs/mosaic/styles/globals.css */
+
+:root {
+  --background-color: #e0e0e0;
+  --text-color: #333333;
+}
+
+[data-theme="dark"] {
+  --background-color: #333333;
+  --text-color: #e0e0e0;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #0d1117;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #e0e0e0;
+    --text-color: #333333;
+  }
 }

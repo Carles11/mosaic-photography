@@ -1,8 +1,10 @@
-// filepath: /c:/Users/Usuario/Documents/AAA_REPOs/mosaic/src/app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Header from "@/components/header";
-import { AppProvider } from "@/context/AppContext";
+import Header from "@/components/header/Header";
+import Footer from "@/components/footer";
+import { AppContextProvider } from "@/context/AppContext";
+import { ThemeProvider } from "next-themes";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -26,12 +28,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <AppProvider>
-          <Header />
-          {children}
-        </AppProvider>
+        <ThemeProvider defaultTheme="system">
+          <AppContextProvider>
+            <Header />
+            {children}
+            <Footer />
+          </AppContextProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

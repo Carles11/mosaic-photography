@@ -1,7 +1,8 @@
 // filepath: /c:/Users/Usuario/Documents/AAA_REPOs/mosaic/src/components/header/index.tsx
 "use client";
 import Image from "next/image";
-import styles from "./header.module.css";
+import styles from "./Header.module.css";
+import ThemeToggle from "../theme/ThemeToggle";
 import Link from "next/link";
 import { useAppContext } from "@/context/AppContext";
 
@@ -41,7 +42,7 @@ const Header = () => {
             </div>
           </li>
           <li className={`${styles.navItem} ${styles.sticky}`}>
-            <h1>darkmodus switch</h1>
+            <ThemeToggle />
           </li>
         </ul>
       </nav>

@@ -1,0 +1,22 @@
+.container {
+  padding: 20px;
+  color: #f0f6fc;
+  background-color: #0d1117;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.text {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}

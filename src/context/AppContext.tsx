@@ -8,7 +8,7 @@ interface AppContextProps {
 }
 const AppContext = createContext<AppContextProps | undefined>(undefined);
 
-export const AppProvider = ({ children }: { children: ReactNode }) => {
+export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [isMosaic, setIsMosaic] = useState(false);
 
   const toggleView = (viewModus: string) => {
@@ -25,7 +25,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 export const useAppContext = () => {
   const context = useContext(AppContext);
   if (context === undefined) {
-    throw new Error("useAppContext must be used within an AppProvider");
+    throw new Error("useAppContext must be used within an AppContextProvider");
   }
   return context;
 };
