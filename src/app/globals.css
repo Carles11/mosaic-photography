@@ -3,11 +3,13 @@
 :root {
   --background-color: #e0e0e0;
   --text-color: #333333;
+  --headfoot-background-color: #736aaa;
 }
 
 [data-theme="dark"] {
   --background-color: #333333;
   --text-color: #e0e0e0;
+  --headfoot-background-color: #555555;
 }
 
 body {
@@ -22,7 +24,7 @@ body {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background-color: #e0e0e0;
-    --text-color: #333333;
+    background-color: var(--background-color);
+    color: var(--text-color);
   }
 }

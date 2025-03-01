@@ -1,5 +1,5 @@
 .footerContainer {
-  background-color: #736aaa;
+  background-color: var(--headfoot-background-color);
   color: #f0f6fc;
   padding: 20px;
   text-align: center;
