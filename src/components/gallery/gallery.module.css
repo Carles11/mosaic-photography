@@ -2,22 +2,22 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
   grid-auto-rows: 200px; /* Ensure consistent row height */
-  gap: 0.5rem; /* Adjust gap size */
+  grid-auto-flow: dense; /* Fill in gaps */
+  gap: 0.1rem;
   width: 100%;
-  height: auto;
-  margin: 0.5rem;
   background-color: var(--color-white);
+  position: relative;
 }
 
 .galleryGridItem {
   background-size: cover;
-  border-radius: 0.5rem;
+  border-radius: 0.3rem;
   background-color: var(--color-black);
   overflow: hidden;
   height: 200px;
   box-shadow: 0 0 10px var(--color-black);
   position: relative;
-  border: 2px solid rgb(16, 204, 238);
+  border: 1px solid var(--secondary-color);
 }
 
 .galleryGridItem img {
@@ -29,18 +29,21 @@
   left: 0;
 }
 
-/* Optional: Add different sizes for a more mosaic-like effect */
-.galleryGridItem:nth-child(2n) {
+.galleryGridItem.landscape {
   grid-column: span 2;
-  grid-row: span 2;
 }
 
-.galleryGridItem:nth-child(3n) {
+.galleryGridItem.portrait {
   grid-column: span 1;
-  grid-row: span 1;
 }
 
-.galleryGridItem:nth-child(4n) {
+/* Optional: Add different sizes for a more mosaic-like effect */
+/* .galleryGridItem:nth-child(4n) {
+    grid-column: span 2;
+    grid-row: span 2;
+
+
+.galleryGridItem:nth-child(7n) {
   grid-column: span 3;
   grid-row: span 3;
-}
+}  }*/
