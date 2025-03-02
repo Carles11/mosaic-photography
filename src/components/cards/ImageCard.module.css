@@ -25,6 +25,25 @@
   margin-left: 5px;
 }
 
+/* .galleryGridItem {
+  background-size: cover;
+  border-radius: 0.3rem;
+  background-color: var(--color-black);
+  overflow: hidden;
+  height: 200px;
+  box-shadow: 0 0 10px var(--color-black);
+  position: relative;
+}
+
+.galleryGridItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+} */
+
 .galleryGridItem.landscape {
   grid-column: span 2;
 }

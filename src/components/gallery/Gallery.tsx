@@ -7,8 +7,14 @@ const Gallery = () => {
   const { isMosaic } = useAppContext();
 
   return (
-    <div className={styles.galleryGrid}>
-      {isMosaic ? <ImageCard /> : <AuthorCard />}
+    <div className={styles.galleryGridContainer}>
+      {isMosaic ? (
+        <div className={styles.galleryGrid}>
+          <ImageCard />
+        </div>
+      ) : (
+        <AuthorCard />
+      )}
     </div>
   );
 };

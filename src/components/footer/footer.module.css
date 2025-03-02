@@ -4,6 +4,8 @@
   bottom: 0;
   width: 100%;
   height: 8rem;
+  background-color: var(--background-color);
+  z-index: 1000; /* Ensure footer is on top */
 }
 
 .footerContent {

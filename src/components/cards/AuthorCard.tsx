@@ -10,6 +10,7 @@ interface Photographer {
   birthdate: string;
   deceasedate: string | null;
   origin: string;
+  images: Image[];
 }
 
 interface Image {
@@ -24,14 +25,26 @@ interface Image {
 
 const AuthorCard: React.FC = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
-  const [images, setImages] = useState<Image[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchPhotographers = async () => {
-      const { data, error } = await supabase
-        .from("photographers")
-        .select("name,surname,biography,birthdate,deceasedate,origin");
+    const fetchPhotographersWithImages = async () => {
+      const { data, error } = await supabase.from("photographers").select(`
+          name,
+          surname,
+          biography,
+          birthdate,
+          deceasedate,
+          origin,
+          images (
+            id,
+            url,
+            author,
+            title,
+            description,
+            created_at
+          )
+        `);
 
       if (error) {
         setError(error.message);
@@ -40,33 +53,12 @@ const AuthorCard: React.FC = () => {
       }
     };
 
-    const fetchImages = async () => {
-      const { data, error } = await supabase
-        .from("images")
-        .select("id,url,author,title,description,created_at");
-
-      if (error) {
-        setError(error.message);
-      } else {
-        setImages(data);
-      }
-    };
-
-    fetchPhotographers();
-    fetchImages();
+    fetchPhotographersWithImages();
   }, []);
 
   if (error) {
     return <div>Error: {error}</div>;
   }
-
-  const imagesByAuthor = images.reduce((acc, image) => {
-    if (!acc[image.author]) {
-      acc[image.author] = [];
-    }
-    acc[image.author].push(image);
-    return acc;
-  }, {} as Record<string, Image[]>);
 
   return (
     <div className={styles.authorCardContainer}>
@@ -90,7 +82,7 @@ const AuthorCard: React.FC = () => {
             </p>
           )}
           <div className={styles.imageList}>
-            {imagesByAuthor[photographer.name]?.map((image, index) => (
+            {photographer.images.map((image, index) => (
               <Image
                 key={index}
                 src={image.url}

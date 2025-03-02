@@ -1,6 +1,6 @@
 .authorCardContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Ensure cards are displayed in a column */
   gap: 20px;
   padding: 10px;
 }
@@ -9,9 +9,9 @@
   border: 1px solid #ccc;
   padding: 20px;
   border-radius: 8px;
-  background-color: #f9f9f9;
-  width: 100vw;
-  margin: 0 2rem;
+  background-color: var(--background-color);
+  width: 100%; /* Ensure the card takes full width */
+  margin: 0 auto; /* Center the card horizontally */
 }
 
 .authorCard h2 {
