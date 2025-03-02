@@ -1,4 +1,5 @@
 "use client";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "./Header.module.css";
 import ThemeToggle from "../theme/ThemeToggle";
@@ -8,7 +9,15 @@ import ThemeImage from "../theme/ThemeImageDark";
 
 const Header = () => {
   const { toggleView } = useAppContext();
+  const [isLoaded, setIsLoaded] = useState(false);
 
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
+  if (!isLoaded) {
+    return null;
+  }
   return (
     <header>
       <nav className={styles.navContainer}></nav>

@@ -12,8 +12,6 @@ interface Image {
 }
 
 const ImageCard: React.FC<{ image: Image }> = ({ image }) => {
-  console.log({ image });
-
   return (
     <div className={styles.imageCard}>
       <Image

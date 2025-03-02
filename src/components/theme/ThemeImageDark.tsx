@@ -8,14 +8,14 @@ type Props = Omit<ImageProps, "src" | "priority" | "loading"> & {
 
 const ThemeImage = (props: Props) => {
   const { srcLight, srcDark, ...rest } = props;
-  const { theme } = useTheme();
+  const { theme, resolvedTheme } = useTheme();
 
   return (
     <>
-      {theme === "light" ? (
-        <Image {...rest} src={srcLight} alt="Light theme image" />
+      {resolvedTheme === "light" ? (
+        <Image key="light" {...rest} src={srcLight} alt="Light theme image" />
       ) : (
-        <Image {...rest} src={srcDark} alt="Dark theme image" />
+        <Image key="dark" {...rest} src={srcDark} alt="Dark theme image" />
       )}
     </>
   );

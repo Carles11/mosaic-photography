@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styles from "./ThemeToggle.module.css";
+import { useTheme } from "next-themes";
 
 import Image from "next/image";
 
 const ThemeToggle = () => {
-  const [theme, setTheme] = useState("light");
+  const { theme, setTheme, resolvedTheme } = useTheme();
 
   const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
+    const newTheme = resolvedTheme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
     localStorage.setItem("theme", newTheme);
   };
 
@@ -22,8 +22,7 @@ const ThemeToggle = () => {
     ).matches;
     const defaultTheme = storedTheme || (prefersDarkScheme ? "dark" : "light");
     setTheme(defaultTheme);
-    document.documentElement.setAttribute("data-theme", defaultTheme);
-  }, []);
+  }, [setTheme]);
 
   return (
     <button className={styles.toggleButton} onClick={toggleTheme}>
