@@ -1,18 +1,27 @@
 /* filepath: /C:/Users/Usuario/Documents/AAA_REPOs/mosaic/styles/globals.css */
 
 :root {
-  --background-color: #e0e0e0;
-  --text-color: #333333;
-  --headfoot-background-color: #736aaa;
-  --color-white: #e0e0e0;
-  --color-black: #141414;
+  --background-color: #fff;
+  --text-color: #1d1d1d;
   --secondary-color: rgb(16, 204, 238);
+  --headfoot-background-gradient: linear-gradient(
+    135deg,
+    #736aaa 30%,
+    #ff6347 70%
+  );
+  --color-white: #fff;
+  --color-black: #1d1d1d;
 }
 
 [data-theme="dark"] {
-  --background-color: #333333;
-  --text-color: #e0e0e0;
-  --headfoot-background-color: #555555;
+  --background-color: #1d1d1d;
+  --text-color: #fff;
+  --headfoot-background-gradient: linear-gradient(135deg, #555555, #999999);
+}
+
+header,
+footer {
+  background: transparent;
 }
 
 body {
@@ -23,6 +32,7 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
+  position: relative;
 }
 
 @media (prefers-color-scheme: dark) {

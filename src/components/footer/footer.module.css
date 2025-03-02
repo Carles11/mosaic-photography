@@ -1,11 +1,9 @@
 .footerContainer {
-  background-color: var(--headfoot-background-color);
-  color: #f0f6fc;
-  padding: 20px;
-  text-align: center;
-  position: fixed;
+  color: var(--text-color);
+  position: absolute;
   bottom: 0;
   width: 100%;
+  height: 8rem;
 }
 
 .footerContent {
@@ -20,10 +18,16 @@
 }
 
 .footerItem a {
-  color: #f0f6fc;
-  text-decoration: none;
+  color: var(--text-color);
+  text-decoration: underline;
 }
 
 .footerItem a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 767px) {
+  .footerContainer {
+    height: 11rem;
+  }
 }

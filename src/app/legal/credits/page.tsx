@@ -42,6 +42,11 @@ const Credits: React.FC = () => {
             Mosaic icons created by Freepik - Flaticon
           </a>
         </li>
+        <li>
+          <a href="https://favicon.io/" title="mosaic favicons">
+            Mosaic favicons created by favicon.io
+          </a>
+        </li>
       </ul>
     </div>
   );

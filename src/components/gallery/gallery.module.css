@@ -5,8 +5,9 @@
   grid-auto-flow: dense; /* Fill in gaps */
   gap: 0.2rem;
   width: 100%;
-  background-color: var(--color-white);
+  background-color: var(--background-color);
   position: relative;
+  padding-bottom: 8rem;
 }
 
 .galleryGridItem {

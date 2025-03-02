@@ -1,30 +1,24 @@
-// import styles from "./theme-image.module.css";
-// import Image, { ImageProps } from "next/image";
+import Image, { ImageProps } from "next/image";
+import { useTheme } from "next-themes";
 
-// type Props = Omit<ImageProps, "src" | "priority" | "loading"> & {
-//   srcLight: string;
-//   srcDark: string;
-// };
+type Props = Omit<ImageProps, "src" | "priority" | "loading"> & {
+  srcLight: string;
+  srcDark: string;
+};
 
-// const ThemeImage = (props: Props) => {
-//   const { srcLight, srcDark, ...rest } = props;
+const ThemeImage = (props: Props) => {
+  const { srcLight, srcDark, ...rest } = props;
+  const { theme } = useTheme();
 
-//   return (
-//     <>
-//       <Image
-//         {...rest}
-//         src={srcLight}
-//         className={styles.imgLight}
-//         alt="Light theme image"
-//       />
-//       <Image
-//         {...rest}
-//         src={srcDark}
-//         className={styles.imgDark}
-//         alt="Dark theme image"
-//       />
-//     </>
-//   );
-// };
+  return (
+    <>
+      {theme === "light" ? (
+        <Image {...rest} src={srcLight} alt="Light theme image" />
+      ) : (
+        <Image {...rest} src={srcDark} alt="Dark theme image" />
+      )}
+    </>
+  );
+};
 
-// export default ThemeImage;
+export default ThemeImage;

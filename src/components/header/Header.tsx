@@ -1,51 +1,55 @@
-// filepath: /c:/Users/Usuario/Documents/AAA_REPOs/mosaic/src/components/header/index.tsx
 "use client";
 import Image from "next/image";
 import styles from "./Header.module.css";
 import ThemeToggle from "../theme/ThemeToggle";
 import Link from "next/link";
 import { useAppContext } from "@/context/AppContext";
+import ThemeImage from "../theme/ThemeImageDark";
 
 const Header = () => {
   const { toggleView } = useAppContext();
 
   return (
     <header>
-      <nav className={styles.navContainer}>
-        <ul className={styles.navGrid}>
+      <nav className={styles.navContainer}></nav>
+      <ul className={styles.navGrid}>
+        <li className={styles.navLogo}>
           <Link href="/">
-            <li className={styles.navItem}>
-              <Image
-                src="/logos/svg/logo-no-background.svg"
-                alt="Mosaic photography logo"
-                width={500}
-                height={200}
-              />
-            </li>
+            <ThemeImage
+              srcLight="/logos/svg/logo-grayscale.svg"
+              srcDark="/logos/svg/logo-no-background.svg"
+              width={500}
+              height={200}
+              alt="Mosaic Logo"
+            />
           </Link>
-          <li className={`${styles.navItem} ${styles.sticky}`}>
+        </li>
+        <div className={styles.navLinks}>
+          <li>
             <div onClick={() => toggleView("authors")}>
               <Image
                 src="/icons/authors-list-icon-round-colored.png"
                 alt="Mosaic Icon"
                 width={50}
                 height={50}
-              />{" "}
+              />
             </div>
+          </li>
+          <li>
             <div onClick={() => toggleView("mosaic")}>
               <Image
                 src="/icons/mosaic-icon-round-colored.png"
                 alt="Mosaic Icon"
                 width={50}
                 height={50}
-              />{" "}
+              />
             </div>
           </li>
-          <li className={`${styles.navItem} ${styles.sticky}`}>
+          <li>
             <ThemeToggle />
           </li>
-        </ul>
-      </nav>
+        </div>
+      </ul>
     </header>
   );
 };
