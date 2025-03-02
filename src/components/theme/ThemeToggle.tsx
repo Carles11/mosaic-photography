@@ -29,15 +29,15 @@ const ThemeToggle = () => {
       {theme === "light" ? (
         <Image
           src="/icons/theme-moon.png"
-          width={24}
-          height={24}
+          width={32}
+          height={32}
           alt="dark mode"
         />
       ) : (
         <Image
           src="/icons/theme-sun.png"
-          width={24}
-          height={24}
+          width={32}
+          height={32}
           alt="light mode"
         />
       )}

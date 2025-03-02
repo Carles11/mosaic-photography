@@ -25,11 +25,12 @@ const Header = () => {
         <li className={styles.navLogo}>
           <Link href="/">
             <ThemeImage
-              srcLight="/logos/svg/logo-grayscale.svg"
-              srcDark="/logos/svg/logo-no-background.svg"
-              width={500}
-              height={200}
+              srcLight="/logos/svg/mosaic-high-resolution-logo-grayscale-transparent.svg"
+              srcDark="/logos/svg/mosaic-high-resolution-logo-transparent.svg"
               alt="Mosaic Logo"
+              className={styles.themeImage}
+              width={0}
+              height={0}
             />
           </Link>
         </li>
@@ -37,20 +38,20 @@ const Header = () => {
           <li>
             <div onClick={() => toggleView("authors")}>
               <Image
-                src="/icons/authors-list-icon-round-colored.png"
+                src="/icons/authors-list-icon-colored.png"
                 alt="Mosaic Icon"
-                width={50}
-                height={50}
+                width={32}
+                height={32}
               />
             </div>
           </li>
           <li>
             <div onClick={() => toggleView("mosaic")}>
               <Image
-                src="/icons/mosaic-icon-round-colored.png"
+                src="/icons/mosaic-icon-colored.png"
                 alt="Mosaic Icon"
-                width={50}
-                height={50}
+                width={32}
+                height={32}
               />
             </div>
           </li>

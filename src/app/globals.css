@@ -3,11 +3,12 @@
 :root {
   --background-color: #fff;
   --text-color: #1d1d1d;
-  --secondary-color: rgb(16, 204, 238);
+  --secondary-color: #2c106a;
+  --tertiary-color: #ff6347;
   --headfoot-background-gradient: linear-gradient(
     135deg,
-    #736aaa 30%,
-    #ff6347 70%
+    var(--secondary-color) 30%,
+    var(--tertiary-color) 70%
   );
   --color-white: #fff;
   --color-black: #1d1d1d;
