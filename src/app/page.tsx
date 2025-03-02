@@ -13,10 +13,12 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Mosaic Nude Iconic Photography Gallery</title>
+        <title>
+          Mosaic | Iconic Nude Photographers | Timeless Artistic Beauty
+        </title>
         <meta
           name="description"
-          content="A beautiful image gallery with iconic nude photography"
+          content="Discover Mosaic's curated gallery of iconic nude photography, celebrating the beauty of the human form through the lens of the world's most renowned nude photographers."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicons/favicon.ico" />
