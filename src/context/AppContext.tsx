@@ -9,7 +9,7 @@ interface AppContextProps {
 const AppContext = createContext<AppContextProps | undefined>(undefined);
 
 export const AppContextProvider = ({ children }: { children: ReactNode }) => {
-  const [isMosaic, setIsMosaic] = useState(false);
+  const [isMosaic, setIsMosaic] = useState(true);
 
   const toggleView = (viewModus: string) => {
     setIsMosaic(viewModus === "mosaic");

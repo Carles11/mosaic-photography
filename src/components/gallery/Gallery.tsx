@@ -19,7 +19,6 @@ interface Image {
 const Gallery = () => {
   const [images, setImages] = useState<Image[]>([]);
   const { isMosaic } = useAppContext();
-  console.log("isMosaic--->", isMosaic);
 
   useEffect(() => {
     const fetchImages = async () => {
