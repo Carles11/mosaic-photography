@@ -9,6 +9,7 @@ interface Photographer {
   biography: string;
   birthdate: string;
   deceasedate: string | null;
+  origin: string;
 }
 
 interface Image {
@@ -30,7 +31,7 @@ const AuthorCard: React.FC = () => {
     const fetchPhotographers = async () => {
       const { data, error } = await supabase
         .from("photographers")
-        .select("name,surname,biography,birthdate,deceasedate");
+        .select("name,surname,biography,birthdate,deceasedate,origin");
 
       if (error) {
         setError(error.message);
@@ -78,6 +79,9 @@ const AuthorCard: React.FC = () => {
           <p>
             <strong>Birthdate:</strong>{" "}
             {new Date(photographer.birthdate).toLocaleDateString()}
+          </p>
+          <p>
+            <strong>Origin:</strong> {photographer.origin}
           </p>
           {photographer.deceasedate && (
             <p>

@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./ImageCard.module.css";
+import { getImageDimensions } from "@/helpers/imageHelpers";
+import { supabase } from "@/lib/supabaseClient";
 
 interface Image {
   id: string;
@@ -12,7 +14,37 @@ interface Image {
   className?: string;
 }
 
-const ImageCard: React.FC<{ images: Image[] }> = ({ images }) => {
+const ImageCard: React.FC = () => {
+  const [images, setImages] = useState<Image[]>([]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      const { data: images, error } = await supabase
+        .from("images")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) console.error("Error fetching images:", error);
+      else {
+        const processedImages = await Promise.all(
+          images.map(async (image) => {
+            const dimensions = await getImageDimensions(image.url);
+            return {
+              ...image,
+              className:
+                dimensions.width > dimensions.height
+                  ? styles.landscape
+                  : styles.portrait,
+            };
+          })
+        );
+        setImages(processedImages);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
   return (
     <>
       {images.map((image) => (

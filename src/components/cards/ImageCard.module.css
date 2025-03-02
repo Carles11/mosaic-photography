@@ -24,3 +24,11 @@
   font-size: 0.8rem;
   margin-left: 5px;
 }
+
+.galleryGridItem.landscape {
+  grid-column: span 2;
+}
+
+.galleryGridItem.portrait {
+  grid-column: span 1;
+}

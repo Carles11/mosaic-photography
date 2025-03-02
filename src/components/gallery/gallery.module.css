@@ -30,21 +30,3 @@
   top: 0;
   left: 0;
 }
-
-.galleryGridItem.landscape {
-  grid-column: span 2;
-}
-
-.galleryGridItem.portrait {
-  grid-column: span 1;
-}
-
-/* Optional: Add different sizes for a more mosaic-like effect */
-/*.galleryGridItem:nth-child(4n) {
-  grid-row: span 2;
-}
-
-.galleryGridItem:nth-child(7n) {
-  grid-column: span 3;
-  grid-row: span 3;
-}  }*/
