@@ -5,6 +5,8 @@
   grid-auto-flow: dense; /* Fill in gaps */
   gap: 0.2rem;
   width: 100%;
+  height: auto;
+  min-height: 60vh;
   background-color: var(--background-color);
   position: relative;
   padding-bottom: 8rem;

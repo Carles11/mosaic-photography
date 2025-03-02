@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import ImageCard from "../cards/ImageCard";
+import AuthorCard from "../cards/AuthorCard";
 import { useAppContext } from "@/context/AppContext";
 import { getImageDimensions } from "@/helpers/imageHelpers";
 import styles from "./gallery.module.css";
@@ -50,15 +51,7 @@ const Gallery = () => {
 
   return (
     <div className={styles.galleryGrid}>
-      {images.map((image) => (
-        <div
-          key={image.id}
-          className={`${styles.galleryGridItem} ${image.className}`}
-          style={{ height: "200px" }}
-        >
-          <ImageCard key={image.id} image={image} />
-        </div>
-      ))}
+      {isMosaic ? <ImageCard images={images} /> : <AuthorCard />}
     </div>
   );
 };

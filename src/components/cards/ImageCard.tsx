@@ -9,23 +9,34 @@ interface Image {
   title: string;
   description: string;
   created_at: string;
+  className?: string;
 }
 
-const ImageCard: React.FC<{ image: Image }> = ({ image }) => {
+const ImageCard: React.FC<{ images: Image[] }> = ({ images }) => {
   return (
-    <div className={styles.imageCard}>
-      <Image
-        src={image.url}
-        alt={image.title}
-        layout="fill"
-        className={styles.image}
-        placeholder="blur"
-        blurDataURL={"/images/default-BG-image.png"}
-      />
-      <div className={styles.imageInfo}>
-        <p className={styles.imageText}>{image.author}</p>
-      </div>
-    </div>
+    <>
+      {images.map((image) => (
+        <div
+          key={image.id}
+          className={`${styles.galleryGridItem} ${image.className}`}
+          style={{ height: "200px" }}
+        >
+          <div className={styles.imageCard}>
+            <Image
+              src={image.url}
+              alt={image.title}
+              layout="fill"
+              className={styles.image}
+              placeholder="blur"
+              blurDataURL={"/images/default-BG-image.png"}
+            />
+            <div className={styles.imageInfo}>
+              <p className={styles.imageText}>{image.author}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </>
   );
 };
 

@@ -1,0 +1,39 @@
+.authorCardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px;
+}
+
+.authorCard {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  width: 100vw;
+  margin: 0 2rem;
+}
+
+.authorCard h2 {
+  margin: 0 0 10px;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.authorCard p {
+  margin: 0 0 10px;
+  color: #666;
+}
+
+.authorCard img {
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.imageList {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  overflow-x: auto;
+  padding-top: 10px;
+}
