@@ -10,7 +10,7 @@ import { Tooltip } from "react-tooltip";
 import ThemeToggle from "../theme/ThemeToggle";
 import ThemeImage from "../theme/ThemeImageDark";
 
-import styles from "./Header.module.css";
+import styles from "./header.module.css";
 
 const Header = () => {
   const { toggleView } = useAppContext();
