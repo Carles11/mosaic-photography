@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
-import styles from "./AuthorCard.module.css";
 import { Photographer, Image as ImageType } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
 import ImageGalleryModal from "@/components/modals/imageGallery/ImageGalleryModal";
+
+import styles from "./AuthorCard.module.css";
 
 const AuthorCard: React.FC = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
@@ -16,21 +17,21 @@ const AuthorCard: React.FC = () => {
   useEffect(() => {
     const fetchPhotographersWithImages = async () => {
       const { data, error } = await supabase.from("photographers").select(`
-          name,
-          surname,
-          biography,
-          birthdate,
-          deceasedate,
-          origin,
-          images (
-            id,
-            url,
-            author,
-            title,
-            description,
-            created_at
-          )
-        `);
+        name,
+        surname,
+        biography,
+        birthdate,
+        deceasedate,
+        origin,
+        images (
+        id,
+        url,
+        author,
+        title,
+        description,
+        created_at
+        )
+      `);
 
       if (error) {
         setError(error.message);
@@ -91,7 +92,7 @@ const AuthorCard: React.FC = () => {
               <div key={index} onClick={() => handleImageClick(image)}>
                 <Image
                   src={image.url}
-                  alt={image.title}
+                  alt={image.title || "Image"}
                   width={50}
                   height={50}
                   className={styles.image}

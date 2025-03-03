@@ -6,6 +6,8 @@ import styles from "./gallery.module.css";
 const Gallery = () => {
   const { isMosaic } = useAppContext();
 
+  console.log("isMosaic:", isMosaic); // Debugging information
+
   return (
     <div className={styles.galleryGridContainer}>
       {isMosaic ? (
