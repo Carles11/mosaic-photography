@@ -2,26 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 import styles from "./AuthorCard.module.css";
-
-interface Photographer {
-  name: string;
-  surname: string;
-  biography: string;
-  birthdate: string;
-  deceasedate: string | null;
-  origin: string;
-  images: Image[];
-}
-
-interface Image {
-  id: string;
-  url: string;
-  author: string;
-  title: string;
-  description: string;
-  created_at: string;
-  className?: string;
-}
+import { Author, Photographer } from "@/types";
 
 const AuthorCard: React.FC = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
@@ -60,11 +41,24 @@ const AuthorCard: React.FC = () => {
     return <div>Error: {error}</div>;
   }
 
+  const handleNameClick = (photographer: Photographer) => {
+    const author: Author = {
+      name: photographer.name,
+      surname: photographer.surname,
+      biography: photographer.biography,
+      birthdate: photographer.birthdate,
+      deceasedate: photographer.deceasedate,
+      origin: photographer.origin,
+      imageUrl: photographer.images[0]?.url || "", // Assuming the first image is the author's image
+    };
+    setShowAuthorModal(author);
+  };
+
   return (
     <div className={styles.authorCardContainer}>
       {photographers.map((photographer, index) => (
         <div key={index} className={styles.authorCard}>
-          <h2>
+          <h2 onClick={() => handleNameClick(photographer)}>
             {`${photographer.name} ${photographer.surname}`.toUpperCase()}
           </h2>
           <p>{photographer.biography || "No biography available."}</p>
