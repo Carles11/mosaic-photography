@@ -1,0 +1,64 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  text-align: center;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.photographerImageContainer {
+  margin-bottom: 20px;
+}
+
+.photographerImage {
+  border-radius: 50%;
+}
+
+.photographerInfo {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.photographerInfo h2 {
+  margin-bottom: 10px;
+}
+
+.photographerInfo p {
+  margin-bottom: 10px;
+}
+
+.externalLinks {
+  display: flex;
+  justify-content: space-around;
+}
+
+.link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}

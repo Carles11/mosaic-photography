@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 import styles from "./AuthorCard.module.css";
-import { Author, Photographer } from "@/types";
+import { Photographer } from "@/types";
+import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
 
 const AuthorCard: React.FC = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [selectedPhotographer, setSelectedPhotographer] =
+    useState<Photographer | null>(null);
 
   useEffect(() => {
     const fetchPhotographersWithImages = async () => {
@@ -42,16 +45,11 @@ const AuthorCard: React.FC = () => {
   }
 
   const handleNameClick = (photographer: Photographer) => {
-    const author: Author = {
-      name: photographer.name,
-      surname: photographer.surname,
-      biography: photographer.biography,
-      birthdate: photographer.birthdate,
-      deceasedate: photographer.deceasedate,
-      origin: photographer.origin,
-      imageUrl: photographer.images[0]?.url || "", // Assuming the first image is the author's image
-    };
-    setShowAuthorModal(author);
+    setSelectedPhotographer(photographer);
+  };
+
+  const closeModal = () => {
+    setSelectedPhotographer(null);
   };
 
   return (
@@ -89,6 +87,12 @@ const AuthorCard: React.FC = () => {
           </div>
         </div>
       ))}
+      {selectedPhotographer && (
+        <PhotographerModal
+          photographer={selectedPhotographer}
+          onClose={closeModal}
+        />
+      )}
     </div>
   );
 };
