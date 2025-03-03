@@ -12,6 +12,8 @@
   );
   --color-white: #fff;
   --color-black: #1d1d1d;
+
+  --link-color: rgb(107, 154, 192);
 }
 
 [data-theme="dark"] {

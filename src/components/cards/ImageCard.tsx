@@ -3,6 +3,7 @@ import Image from "next/image";
 import styles from "./ImageCard.module.css";
 import { getImageDimensions } from "@/helpers/imageHelpers";
 import { supabase } from "@/lib/supabaseClient";
+import ImageGalleryModal from "@/components/modals/imageGallery/ImageGalleryModal";
 
 interface Image {
   id: string;
@@ -16,7 +17,12 @@ interface Image {
 
 const ImageCard: React.FC = () => {
   const [images, setImages] = useState<Image[]>([]);
-
+  const [galleryImages, setGalleryImages] = useState<
+    { original: string; thumbnail: string }[]
+  >([]);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [startIndex, setStartIndex] = useState(0);
+  console.log({ isGalleryOpen });
   useEffect(() => {
     const fetchImages = async () => {
       const { data: images, error } = await supabase
@@ -39,19 +45,35 @@ const ImageCard: React.FC = () => {
           })
         );
         setImages(processedImages);
+        setGalleryImages(
+          processedImages.map((image) => ({
+            original: image.url,
+            thumbnail: image.url,
+          }))
+        );
       }
     };
 
     fetchImages();
   }, []);
 
+  const handleImageClick = (index: number) => {
+    setStartIndex(index);
+    setIsGalleryOpen(true);
+  };
+
+  const closeGallery = () => {
+    setIsGalleryOpen(false);
+  };
+
   return (
     <>
-      {images.map((image) => (
+      {images.map((image, index) => (
         <div
           key={image.id}
           className={`${styles.galleryGridItem} ${image.className}`}
           style={{ height: "200px" }}
+          onClick={() => handleImageClick(index)}
         >
           <div className={styles.imageCard}>
             <Image
@@ -68,6 +90,16 @@ const ImageCard: React.FC = () => {
           </div>
         </div>
       ))}
+      {isGalleryOpen && (
+        <ImageGalleryModal
+          images={galleryImages}
+          startIndex={startIndex}
+          onClose={closeGallery}
+          play={true}
+          bullets={false}
+          fullscreen={true}
+        />
+      )}
     </>
   );
 };

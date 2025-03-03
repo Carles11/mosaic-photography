@@ -43,6 +43,14 @@ const Credits: React.FC = () => {
           </a>
         </li>
         <li>
+          <a
+            href="https://www.flaticon.com/free-icons/close"
+            title="close icons"
+          >
+            Close icons created by Uniconlabs - Flaticon
+          </a>
+        </li>
+        <li>
           <a href="https://favicon.io/" title="mosaic favicons">
             Mosaic favicons created by favicon.io
           </a>

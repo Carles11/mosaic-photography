@@ -12,7 +12,7 @@
 }
 
 .modalContent {
-  background: white;
+  background: var(--background-color);
   padding: 20px;
   border-radius: 8px;
   width: 90%;
@@ -58,7 +58,7 @@
 }
 
 .link {
-  color: blue;
+  color: var(--link-color);
   text-decoration: underline;
   cursor: pointer;
 }

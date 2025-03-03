@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 import styles from "./AuthorCard.module.css";
-import { Photographer } from "@/types";
+import { Photographer, Image as ImageType } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
+import ImageGalleryModal from "@/components/modals/imageGallery/ImageGalleryModal";
 
 const AuthorCard: React.FC = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [selectedPhotographer, setSelectedPhotographer] =
     useState<Photographer | null>(null);
+  const [selectedImage, setSelectedImage] = useState<ImageType | null>(null);
 
   useEffect(() => {
     const fetchPhotographersWithImages = async () => {
@@ -48,8 +50,16 @@ const AuthorCard: React.FC = () => {
     setSelectedPhotographer(photographer);
   };
 
-  const closeModal = () => {
+  const handleImageClick = (image: ImageType) => {
+    setSelectedImage(image);
+  };
+
+  const closePhotographerModal = () => {
     setSelectedPhotographer(null);
+  };
+
+  const closeImageGalleryModal = () => {
+    setSelectedImage(null);
   };
 
   return (
@@ -78,14 +88,15 @@ const AuthorCard: React.FC = () => {
           )}
           <div className={styles.imageList}>
             {photographer.images.map((image, index) => (
-              <Image
-                key={index}
-                src={image.url}
-                alt={image.title}
-                width={50}
-                height={50}
-                className={styles.image}
-              />
+              <div key={index} onClick={() => handleImageClick(image)}>
+                <Image
+                  src={image.url}
+                  alt={image.title}
+                  width={50}
+                  height={50}
+                  className={styles.image}
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -93,7 +104,19 @@ const AuthorCard: React.FC = () => {
       {selectedPhotographer && (
         <PhotographerModal
           photographer={selectedPhotographer}
-          onClose={closeModal}
+          onClose={closePhotographerModal}
+        />
+      )}
+      {selectedImage && (
+        <ImageGalleryModal
+          images={[
+            { original: selectedImage?.url, thumbnail: selectedImage?.url },
+          ]}
+          startIndex={0}
+          onClose={closeImageGalleryModal}
+          play={false}
+          bullets={false}
+          fullscreen={true}
         />
       )}
     </div>
