@@ -56,7 +56,10 @@ const AuthorCard: React.FC = () => {
     <div className={styles.authorCardContainer}>
       {photographers.map((photographer, index) => (
         <div key={index} className={styles.authorCard}>
-          <h2 onClick={() => handleNameClick(photographer)}>
+          <h2
+            onClick={() => handleNameClick(photographer)}
+            className={styles.authorName}
+          >
             {`${photographer.name} ${photographer.surname}`.toUpperCase()}
           </h2>
           <p>{photographer.biography || "No biography available."}</p>

@@ -30,6 +30,10 @@
   margin-right: 10px;
 }
 
+.authorName {
+  cursor: pointer;
+}
+
 .imageList {
   display: flex;
   flex-direction: row;

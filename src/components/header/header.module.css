@@ -33,6 +33,10 @@
   margin: 2rem 0;
 }
 
+.navLinks img {
+  cursor: pointer;
+}
+
 .themeImage {
   width: auto;
   height: 80vh;
