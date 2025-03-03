@@ -31,12 +31,12 @@ const ImageCard: React.FC = () => {
     target.src = "/images/default-BG-image.png"; // Fallback image
   };
 
-  const handleImageLoad = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>
-  ) => {
-    const target = e.currentTarget as HTMLImageElement;
-    console.log("Image loaded successfully:", target.src); // Log success with more details
-  };
+  // const handleImageLoad = (
+  //   e: React.SyntheticEvent<HTMLImageElement, Event>
+  // ) => {
+  //   const target = e.currentTarget as HTMLImageElement;
+  //   console.log("Image loaded successfully:", target.src); // Log success with more details
+  // };
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -49,8 +49,6 @@ const ImageCard: React.FC = () => {
         if (error) {
           throw new Error(`Error fetching images: ${error.message}`);
         }
-
-        console.log("Fetched images:", images); // Debugging information
 
         const processedImages = await Promise.all(
           images.map(async (image) => {
@@ -70,16 +68,13 @@ const ImageCard: React.FC = () => {
           })
         );
 
-        console.log("Processed images:", processedImages); // Log processed images
         setImages(processedImages);
-        console.log("Updated images state:", processedImages); // Log updated images state
 
         const galleryImagesData = processedImages.map((image) => ({
           original: image.url,
           thumbnail: image.url,
         }));
         setGalleryImages(galleryImagesData);
-        console.log("Gallery images:", galleryImagesData); // Log gallery images
       } catch (fetchError) {
         console.error(fetchError);
       }
@@ -96,10 +91,6 @@ const ImageCard: React.FC = () => {
   const closeGallery = () => {
     setIsGalleryOpen(false);
   };
-
-  console.log("Gallery open:", isGalleryOpen); // Debugging information
-  console.log("Gallery images:", galleryImages); // Debugging information
-  console.log("mapping images", images);
 
   return (
     <>
@@ -119,10 +110,11 @@ const ImageCard: React.FC = () => {
               alt={image.title || "Image"} // Ensure alt property is set to a non-null value
               fill
               className={styles.image} // Ensure className is set
+              sizes="(max-width: 600px) 100vw, 50vw" // Add sizes prop
               placeholder="blur"
               blurDataURL={"/images/default-BG-image.png"}
               onError={handleImageError} // Use handleImageError for fallback
-              onLoad={handleImageLoad} // Log success
+              // onLoad={handleImageLoad} // Log success
             />
             <div className={styles.imageInfo}>
               <p className={styles.imageText}>{image.author}</p>
