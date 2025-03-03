@@ -17,6 +17,9 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
   images,
   startIndex,
   onClose,
+  play,
+  bullets,
+  fullscreen,
 }) => {
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -34,9 +37,9 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
         startIndex={startIndex}
         showThumbnails={false}
         lazyLoad={true}
-        showBullets={false}
-        showFullscreenButton={true}
-        showPlayButton={true}
+        showBullets={bullets}
+        showFullscreenButton={fullscreen}
+        showPlayButton={play}
       />
     </div>
   );
