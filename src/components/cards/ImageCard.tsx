@@ -1,151 +1,115 @@
 import React, { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
+import { Image as ImageType } from "@/types";
+import { Gallery, Item } from "react-photoswipe-gallery";
+import "photoswipe/dist/photoswipe.css";
 import styles from "./ImageCard.module.css";
 import { getImageDimensions } from "@/helpers/imageHelpers";
-import { supabase } from "@/lib/supabaseClient";
-import ImageGalleryModal from "@/components/modals/imageGallery/ImageGalleryModal";
 
-interface Image {
-  id: string;
-  url: string;
-  author: string;
-  title: string | null;
-  description: string;
-  created_at: string;
-  className?: string;
-}
+type ImageCardProps = object;
 
-const ImageCard: React.FC = () => {
-  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-  const [images, setImages] = useState<Image[]>([]);
-  const [galleryImages, setGalleryImages] = useState<
-    { id: number; original: string; thumbnail: string; caption: string }[]
-  >([]);
-  const [startIndex, setStartIndex] = useState(0);
-
-  const handleImageError = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>
-  ) => {
-    const target = e.currentTarget as HTMLImageElement;
-    console.error("Error loading image:", target.src); // Log error with more details
-    target.src = "/images/default-BG-image.png"; // Fallback image
-  };
-
-  const handleImageLoad = (
-    e: React.SyntheticEvent<HTMLImageElement, Event>
-  ) => {
-    const target = e.currentTarget as HTMLImageElement;
-    console.log("Image loaded successfully:", target.src); // Log success with more details
-  };
+const ImageCard: React.FC<ImageCardProps> = () => {
+  const [images, setImages] = useState<ImageType[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchImages = async () => {
-      try {
-        const { data: images, error } = await supabase
-          .from("images")
-          .select("*")
-          .order("created_at", { ascending: false });
+      const { data: images, error } = await supabase.from("images").select(`
+        id,
+        url,
+        author,
+        title,
+        description,
+        created_at
+      `);
 
-        if (error) {
-          throw new Error(`Error fetching images: ${error.message}`);
-        }
-
-        const processedImages = await Promise.all(
-          images.map(async (image) => {
-            try {
-              const encodedUrl = encodeURI(image.url);
-              const dimensions = await getImageDimensions(encodedUrl);
-              return {
-                ...image,
-                url: encodedUrl, // Use encoded URL
-                className:
-                  dimensions.width > dimensions.height
-                    ? styles.landscape
-                    : styles.portrait,
-              };
-            } catch (dimensionError) {
-              if (dimensionError instanceof Error) {
-                console.error(
-                  "Error getting image dimensions:",
-                  dimensionError.message
-                );
-              } else {
-                console.error(
-                  "Error getting image dimensions:",
-                  dimensionError
-                );
-              }
-              return { ...image, className: "" };
-            }
-          })
-        );
-
-        const shuffledImages = processedImages.sort(() => Math.random() - 0.5);
-
-        setImages(shuffledImages);
-
-        const galleryImagesData = shuffledImages.map((image) => ({
-          id: parseInt(image.id, 10),
-          original: image.url,
-          thumbnail: image.url,
-          caption: image.author,
-        }));
-        setGalleryImages(galleryImagesData);
-      } catch (fetchError) {
-        if (fetchError instanceof Error) {
-          console.error("Error fetching images:", fetchError.message);
-        } else {
-          console.error("Error fetching images:", fetchError);
-        }
+      if (error) {
+        setError(error.message);
       }
+
+      if (!images) {
+        setError("No images found");
+        return;
+      }
+
+      const processedImages = await Promise.all(
+        images.map(async (image) => {
+          try {
+            const encodedUrl = encodeURI(image.url);
+            const dimensions = await getImageDimensions(encodedUrl);
+            return {
+              ...image,
+              url: encodedUrl, // Use encoded URL
+              width: dimensions.width,
+              height: dimensions.height,
+              className:
+                dimensions.width > dimensions.height
+                  ? styles.landscape
+                  : styles.portrait,
+            };
+          } catch (dimensionError) {
+            if (dimensionError instanceof Error) {
+              console.error(
+                "Error getting image dimensions:",
+                dimensionError.message
+              );
+            } else {
+              console.error("Error getting image dimensions:", dimensionError);
+            }
+            return { ...image, width: 0, height: 0, className: "" };
+          }
+        })
+      );
+
+      const shuffledImages = processedImages.sort(() => Math.random() - 0.5);
+
+      setImages(shuffledImages);
     };
 
     fetchImages();
   }, []);
 
-  const handleImageClick = (index: number) => {
-    setStartIndex(index);
-    setIsGalleryOpen(true);
-  };
-
-  const closeGallery = () => {
-    setIsGalleryOpen(false);
-  };
-
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  console.log({ images });
   return (
-    <>
-      {images.map((image, index) => (
-        <div
-          key={image.id}
-          className={`${styles.galleryGridItem} ${image.className}`}
-          style={{ height: "200px", position: "relative" }} // Added position: relative
-          onClick={() => handleImageClick(index)}
-        >
+    <Gallery withCaption>
+      {images.map((image, index) => {
+        return (
           <div
-            className={styles.imageCard}
-            style={{ position: "relative", width: "100%", height: "100%" }} // Ensure alt property is set
+            key={index}
+            className={`${styles.imageCard} ${
+              image.width > image.height ? styles.landscape : styles.portrait
+            }`}
           >
-            <Image
-              src={image.url}
-              alt={image.title || "Image"} // Ensure alt property is set to a non-null value
-              fill
-              className={styles.image} // Ensure className is set
-              sizes="(max-width: 600px) 100vw, 50vw" // Add sizes prop
-              placeholder="blur"
-              blurDataURL={"/images/default-BG-image.png"}
-              onError={handleImageError} // Use handleImageError for fallback
-              onLoad={handleImageLoad} // Log success
-            />
-            <div className={styles.imageInfo}>
-              <p className={styles.imageText}>{image.author}</p>
+            <Item
+              original={image.url}
+              thumbnail={image.url}
+              caption={image.author}
+              width={image.width}
+              height={image.height}
+            >
+              {({ ref, open }) => (
+                <div ref={ref} onClick={open}>
+                  <Image
+                    src={image.url}
+                    alt={image.title || "Image"}
+                    className={styles.image}
+                    fill
+                  />
+                </div>
+              )}
+            </Item>
+            <div>
+              <h3 className={styles.imageTitle}>{image.author}</h3>
+              <p className={styles.imageDescription}>{image.description}</p>
             </div>
           </div>
-        </div>
-      ))}
-      {isGalleryOpen && (
-        <ImageGalleryModal images={galleryImages} onClose={closeGallery} />
-      )}
-    </>
+        );
+      })}
+    </Gallery>
   );
 };
 

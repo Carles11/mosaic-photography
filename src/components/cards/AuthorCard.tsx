@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
-import { Photographer, Image as ImageType } from "@/types";
+import { Photographer } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
 import { Gallery, Item } from "react-photoswipe-gallery";
 import "photoswipe/dist/photoswipe.css";
@@ -31,7 +31,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         author,
         title,
         description,
-        created_at
+        created_at,
         )
       `);
 

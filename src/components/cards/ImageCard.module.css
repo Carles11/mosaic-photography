@@ -1,7 +1,27 @@
+.imageCardContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
 .imageCard {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.landscape {
+  grid-column: span 2;
+}
+
+.portrait {
+  grid-column: span 1;
 }
 
 .image {
@@ -51,4 +71,12 @@
 
 .galleryGridItem.portrait {
   grid-column: span 1;
+}
+
+.imageTitle {
+  /* ...existing code... */
+}
+
+.imageDescription {
+  /* ...existing code... */
 }

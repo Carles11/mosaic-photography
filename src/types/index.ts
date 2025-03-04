@@ -16,6 +16,8 @@ export interface Image {
   description: string;
   created_at: string;
   className?: string;
+  width: number;
+  height: number;
 }
 
 export interface Author {
