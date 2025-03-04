@@ -40,6 +40,16 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
         showBullets={bullets}
         showFullscreenButton={fullscreen}
         showPlayButton={play}
+        renderItem={(item) => (
+          <div className={styles.imageGalleryImage}>
+            <Image
+              src={item.original}
+              alt={item.originalTitle || "Gallery Image"}
+              layout="fill"
+              objectFit="contain"
+            />
+          </div>
+        )}
       />
     </div>
   );

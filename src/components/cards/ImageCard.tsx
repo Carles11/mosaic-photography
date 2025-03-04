@@ -80,9 +80,11 @@ const ImageCard: React.FC = () => {
           })
         );
 
-        setImages(processedImages);
+        const shuffledImages = processedImages.sort(() => Math.random() - 0.5);
 
-        const galleryImagesData = processedImages.map((image) => ({
+        setImages(shuffledImages);
+
+        const galleryImagesData = shuffledImages.map((image) => ({
           original: image.url,
           thumbnail: image.url,
         }));
@@ -108,11 +110,9 @@ const ImageCard: React.FC = () => {
     setIsGalleryOpen(false);
   };
 
-  const shuffledImages = images.sort(() => Math.random() - 0.5);
-
   return (
     <>
-      {shuffledImages.map((image, index) => (
+      {images.map((image, index) => (
         <div
           key={image.id}
           className={`${styles.galleryGridItem} ${image.className}`}

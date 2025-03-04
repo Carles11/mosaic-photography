@@ -21,3 +21,10 @@
   font-size: 24px;
   cursor: pointer;
 }
+
+.imageGalleryImage {
+  max-width: 90vw; /* Ensure the image does not exceed 90% of the viewport width */
+  max-height: 80vh; /* Ensure the image does not exceed 80% of the viewport height */
+  object-fit: contain; /* Ensure the image maintains its aspect ratio */
+  margin: auto; /* Center the image */
+}

@@ -5,6 +5,8 @@ import Footer from "@/components/footer/Footer";
 import { AppContextProvider } from "@/context/AppContext";
 import { ThemeProvider } from "next-themes";
 
+import { Analytics } from "@vercel/analytics/react";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mosaic photography Gallery",
+  title: "Mosaic nude photography gallery",
   description: "Iconic nude photography from the Mosaic Gallery",
 };
 
@@ -34,6 +36,7 @@ export default function RootLayout({
           <AppContextProvider>
             <Header />
             {children}
+            <Analytics />
             <Footer />
           </AppContextProvider>
         </ThemeProvider>
