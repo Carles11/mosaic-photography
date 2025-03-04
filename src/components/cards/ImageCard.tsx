@@ -19,7 +19,7 @@ const ImageCard: React.FC = () => {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [images, setImages] = useState<Image[]>([]);
   const [galleryImages, setGalleryImages] = useState<
-    { original: string; thumbnail: string; description: string }[]
+    { id: number; original: string; thumbnail: string; caption: string }[]
   >([]);
   const [startIndex, setStartIndex] = useState(0);
 
@@ -85,9 +85,10 @@ const ImageCard: React.FC = () => {
         setImages(shuffledImages);
 
         const galleryImagesData = shuffledImages.map((image) => ({
+          id: parseInt(image.id, 10),
           original: image.url,
           thumbnail: image.url,
-          description: image.author,
+          caption: image.author,
         }));
         setGalleryImages(galleryImagesData);
       } catch (fetchError) {
@@ -142,14 +143,7 @@ const ImageCard: React.FC = () => {
         </div>
       ))}
       {isGalleryOpen && (
-        <ImageGalleryModal
-          images={galleryImages}
-          startIndex={startIndex}
-          onClose={closeGallery}
-          play={true}
-          bullets={false}
-          fullscreen={true}
-        />
+        <ImageGalleryModal images={galleryImages} onClose={closeGallery} />
       )}
     </>
   );

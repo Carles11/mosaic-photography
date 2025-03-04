@@ -1,25 +1,22 @@
 import React from "react";
-import ImageGallery from "react-image-gallery";
-import "react-image-gallery/styles/css/image-gallery.css";
+import { Gallery, Item } from "react-photoswipe-gallery";
+import "photoswipe/dist/photoswipe.css";
 import styles from "./imageGalleryModal.module.css";
 import Image from "next/image";
 
 interface ImageGalleryModalProps {
-  images: { original: string; thumbnail: string }[];
-  startIndex: number;
+  images: {
+    id: number;
+    original: string;
+    thumbnail: string;
+    caption: string;
+  }[];
   onClose: () => void;
-  play: boolean;
-  bullets: boolean;
-  fullscreen: boolean;
 }
 
 const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
   images,
-  startIndex,
   onClose,
-  play,
-  bullets,
-  fullscreen,
 }) => {
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
@@ -33,34 +30,31 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
         <Image src="/icons/close-icon.png" alt="Close" width={32} height={32} />
       </button>
 
-      <ImageGallery
-        items={images}
-        startIndex={startIndex}
-        showThumbnails={false}
-        lazyLoad={true}
-        showBullets={bullets}
-        showFullscreenButton={fullscreen}
-        showPlayButton={play}
-        showNav={true}
-        renderLeftNav={(onClick, disabled) => (
-          <button
-            className={`${styles.navButton} ${styles.leftNav}`}
-            disabled={disabled}
-            onClick={onClick}
+      <Gallery withCaption id="mosaic-gallery">
+        {images.map((image, index) => (
+          <Item
+            id={image.id.toString()}
+            key={index}
+            original={image.original}
+            thumbnail={image.thumbnail}
+            caption={image.caption}
+            width="1024"
+            height="768"
           >
-            &#10094;
-          </button>
-        )}
-        renderRightNav={(onClick, disabled) => (
-          <button
-            className={`${styles.navButton} ${styles.rightNav}`}
-            disabled={disabled}
-            onClick={onClick}
-          >
-            &#10095;
-          </button>
-        )}
-      />
+            {({ ref, open }) => (
+              <Image
+                ref={ref as unknown as React.MutableRefObject<HTMLImageElement>}
+                width="1024"
+                height="768"
+                onClick={open}
+                src={image.thumbnail}
+                alt={image.caption}
+                className={styles.imageGalleryImage}
+              />
+            )}
+          </Item>
+        ))}
+      </Gallery>
     </div>
   );
 };

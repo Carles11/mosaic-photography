@@ -3,7 +3,8 @@ import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 import { Photographer, Image as ImageType } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
-import ImageGalleryModal from "@/components/modals/imageGallery/ImageGalleryModal";
+import { Gallery, Item } from "react-photoswipe-gallery";
+import "photoswipe/dist/photoswipe.css";
 
 import styles from "./AuthorCard.module.css";
 
@@ -14,11 +15,6 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedPhotographer, setSelectedPhotographer] =
     useState<Photographer | null>(null);
-  const [selectedImage, setSelectedImage] = useState<ImageType | null>(null);
-  const [selectedPhotographerImages, setSelectedPhotographerImages] = useState<
-    ImageType[]
-  >([]);
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
 
   useEffect(() => {
     const fetchPhotographersWithImages = async () => {
@@ -57,18 +53,8 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
     setSelectedPhotographer(photographer);
   };
 
-  const handleImageClick = (images: ImageType[], index: number) => {
-    setSelectedPhotographerImages(images);
-    setSelectedImageIndex(index);
-    setSelectedImage(images[index]);
-  };
-
   const closePhotographerModal = () => {
     setSelectedPhotographer(null);
-  };
-
-  const closeImageGalleryModal = () => {
-    setSelectedImage(null);
   };
 
   return (
@@ -95,41 +81,37 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
               {new Date(photographer.deceasedate).toLocaleDateString()}
             </p>
           )}
-          <div className={styles.imageList}>
-            {photographer.images.map((image, index) => (
-              <div
-                key={index}
-                onClick={() => handleImageClick(photographer.images, index)}
-              >
-                <Image
-                  src={image.url}
-                  alt={image.title || "Image"}
-                  width={50}
-                  height={50}
-                  className={styles.image}
-                />
-              </div>
-            ))}
-          </div>
+          <Gallery>
+            <div className={styles.imageList}>
+              {photographer.images.map((image, index) => (
+                <Item
+                  key={index}
+                  original={image.url}
+                  thumbnail={image.url}
+                  width="1024"
+                  height="768"
+                >
+                  {({ ref, open }) => (
+                    <div ref={ref} onClick={open}>
+                      <Image
+                        src={image.url}
+                        alt={image.title || "Image"}
+                        width={50}
+                        height={50}
+                        className={styles.image}
+                      />
+                    </div>
+                  )}
+                </Item>
+              ))}
+            </div>
+          </Gallery>
         </div>
       ))}
       {selectedPhotographer && (
         <PhotographerModal
           photographer={selectedPhotographer}
           onClose={closePhotographerModal}
-        />
-      )}
-      {selectedImage && (
-        <ImageGalleryModal
-          images={selectedPhotographerImages.map((image) => ({
-            original: image.url,
-            thumbnail: image.url,
-          }))}
-          startIndex={selectedImageIndex}
-          onClose={closeImageGalleryModal}
-          play={true}
-          bullets={false}
-          fullscreen={true}
         />
       )}
     </div>

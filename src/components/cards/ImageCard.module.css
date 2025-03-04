@@ -26,13 +26,14 @@
 }
 
 .galleryGridItem {
-  background-size: cover;
+  /* background-size: cover; */
   border-radius: 0.3rem;
   background-color: var(--color-black);
   overflow: hidden;
   height: 200px;
   box-shadow: 0 0 10px var(--color-black);
   position: relative;
+  cursor: zoom-in;
 }
 
 .galleryGridItem img {
