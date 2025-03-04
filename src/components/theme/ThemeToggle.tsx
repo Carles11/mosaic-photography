@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import styles from "./ThemeToggle.module.css";
 import { useTheme } from "next-themes";
+import { Tooltip } from "react-tooltip";
 
 import Image from "next/image";
 
@@ -24,8 +25,14 @@ const ThemeToggle = () => {
     setTheme(defaultTheme);
   }, [setTheme]);
 
+  const theOtherTheme = theme === "light" ? "dark" : "light";
+
   return (
-    <button className={styles.toggleButton} onClick={toggleTheme}>
+    <button
+      id="theme-icon"
+      className={styles.toggleButton}
+      onClick={toggleTheme}
+    >
       {theme === "light" ? (
         <Image
           src="/icons/theme-moon.png"
@@ -41,6 +48,7 @@ const ThemeToggle = () => {
           alt="light mode"
         />
       )}
+      <Tooltip anchorSelect="#theme-icon" content={`Go ${theOtherTheme}!`} />
     </button>
   );
 };

@@ -17,12 +17,12 @@
 .authorCard h2 {
   margin: 0 0 10px;
   font-size: 1.5em;
-  color: #333;
+  color: var(--text-color);
 }
 
 .authorCard p {
   margin: 0 0 10px;
-  color: #666;
+  color: var(--text-color);
 }
 
 .authorCard img {

@@ -7,12 +7,18 @@ import ImageGalleryModal from "@/components/modals/imageGallery/ImageGalleryModa
 
 import styles from "./AuthorCard.module.css";
 
-const AuthorCard: React.FC = () => {
+type AuthorCardProps = object;
+
+const AuthorCard: React.FC<AuthorCardProps> = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [selectedPhotographer, setSelectedPhotographer] =
     useState<Photographer | null>(null);
   const [selectedImage, setSelectedImage] = useState<ImageType | null>(null);
+  const [selectedPhotographerImages, setSelectedPhotographerImages] = useState<
+    ImageType[]
+  >([]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
 
   useEffect(() => {
     const fetchPhotographersWithImages = async () => {
@@ -51,8 +57,10 @@ const AuthorCard: React.FC = () => {
     setSelectedPhotographer(photographer);
   };
 
-  const handleImageClick = (image: ImageType) => {
-    setSelectedImage(image);
+  const handleImageClick = (images: ImageType[], index: number) => {
+    setSelectedPhotographerImages(images);
+    setSelectedImageIndex(index);
+    setSelectedImage(images[index]);
   };
 
   const closePhotographerModal = () => {
@@ -89,7 +97,10 @@ const AuthorCard: React.FC = () => {
           )}
           <div className={styles.imageList}>
             {photographer.images.map((image, index) => (
-              <div key={index} onClick={() => handleImageClick(image)}>
+              <div
+                key={index}
+                onClick={() => handleImageClick(photographer.images, index)}
+              >
                 <Image
                   src={image.url}
                   alt={image.title || "Image"}
@@ -110,12 +121,13 @@ const AuthorCard: React.FC = () => {
       )}
       {selectedImage && (
         <ImageGalleryModal
-          images={[
-            { original: selectedImage?.url, thumbnail: selectedImage?.url },
-          ]}
-          startIndex={0}
+          images={selectedPhotographerImages.map((image) => ({
+            original: image.url,
+            thumbnail: image.url,
+          }))}
+          startIndex={selectedImageIndex}
           onClose={closeImageGalleryModal}
-          play={false}
+          play={true}
           bullets={false}
           fullscreen={true}
         />

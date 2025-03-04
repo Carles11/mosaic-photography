@@ -45,20 +45,6 @@ const Header = () => {
         )}
         <div className={styles.navLinks}>
           <li>
-            <div id="authors-list-icon" onClick={() => toggleView("authors")}>
-              <Image
-                src="/icons/authors-list-icon-colored.png"
-                alt="Mosaic Icon"
-                width={32}
-                height={32}
-              />
-            </div>
-            <Tooltip
-              anchorSelect="#authors-list-icon"
-              content="Photographers list"
-            />
-          </li>
-          <li>
             <div id="mosaic-images-icon" onClick={() => toggleView("mosaic")}>
               <Image
                 src="/icons/mosaic-icon-colored.png"
@@ -70,6 +56,20 @@ const Header = () => {
             <Tooltip
               anchorSelect="#mosaic-images-icon"
               content="Images mosaic gallery"
+            />
+          </li>
+          <li>
+            <div id="authors-list-icon" onClick={() => toggleView("authors")}>
+              <Image
+                src="/icons/authors-list-icon-colored.png"
+                alt="Mosaic Icon"
+                width={32}
+                height={32}
+              />
+            </div>
+            <Tooltip
+              anchorSelect="#authors-list-icon"
+              content="Photographers list"
             />
           </li>
           <li>

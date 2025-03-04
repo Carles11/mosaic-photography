@@ -32,6 +32,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
       <button onClick={onClose} className={styles.closeButton}>
         <Image src="/icons/close-icon.png" alt="Close" width={32} height={32} />
       </button>
+
       <ImageGallery
         items={images}
         startIndex={startIndex}
@@ -40,6 +41,25 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
         showBullets={bullets}
         showFullscreenButton={fullscreen}
         showPlayButton={play}
+        showNav={true}
+        renderLeftNav={(onClick, disabled) => (
+          <button
+            className={`${styles.navButton} ${styles.leftNav}`}
+            disabled={disabled}
+            onClick={onClick}
+          >
+            &#10094;
+          </button>
+        )}
+        renderRightNav={(onClick, disabled) => (
+          <button
+            className={`${styles.navButton} ${styles.rightNav}`}
+            disabled={disabled}
+            onClick={onClick}
+          >
+            &#10095;
+          </button>
+        )}
       />
     </div>
   );
