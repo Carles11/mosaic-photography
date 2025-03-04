@@ -21,7 +21,7 @@
 .navLogo {
   justify-self: center;
   padding: 0;
-  margin: 1rem 0;
+  margin: 0;
 }
 
 .navLinks {
@@ -43,6 +43,14 @@
   max-width: 100vw;
 }
 
+/* Media query for tablets Portrait and landscape */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .themeImage {
+    width: auto;
+    height: 60vh;
+  }
+}
+
 /* Media query for mobile devices */
 @media (max-width: 767px) {
   .navGrid {
@@ -51,6 +59,10 @@
 
   .themeImage {
     width: auto;
-    height: 80vh;
+    height: 40vh;
+  }
+  .themeImage img {
+    width: 450px;
+    min-width: 350px;
   }
 }

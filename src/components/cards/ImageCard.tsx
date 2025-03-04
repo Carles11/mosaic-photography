@@ -31,12 +31,12 @@ const ImageCard: React.FC = () => {
     target.src = "/images/default-BG-image.png"; // Fallback image
   };
 
-  // const handleImageLoad = (
-  //   e: React.SyntheticEvent<HTMLImageElement, Event>
-  // ) => {
-  //   const target = e.currentTarget as HTMLImageElement;
-  //   console.log("Image loaded successfully:", target.src); // Log success with more details
-  // };
+  const handleImageLoad = (
+    e: React.SyntheticEvent<HTMLImageElement, Event>
+  ) => {
+    const target = e.currentTarget as HTMLImageElement;
+    console.log("Image loaded successfully:", target.src); // Log success with more details
+  };
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -53,16 +53,28 @@ const ImageCard: React.FC = () => {
         const processedImages = await Promise.all(
           images.map(async (image) => {
             try {
-              const dimensions = await getImageDimensions(image.url);
+              const encodedUrl = encodeURI(image.url);
+              const dimensions = await getImageDimensions(encodedUrl);
               return {
                 ...image,
+                url: encodedUrl, // Use encoded URL
                 className:
                   dimensions.width > dimensions.height
                     ? styles.landscape
                     : styles.portrait,
               };
             } catch (dimensionError) {
-              console.error("Error getting image dimensions:", dimensionError);
+              if (dimensionError instanceof Error) {
+                console.error(
+                  "Error getting image dimensions:",
+                  dimensionError.message
+                );
+              } else {
+                console.error(
+                  "Error getting image dimensions:",
+                  dimensionError
+                );
+              }
               return { ...image, className: "" };
             }
           })
@@ -76,7 +88,11 @@ const ImageCard: React.FC = () => {
         }));
         setGalleryImages(galleryImagesData);
       } catch (fetchError) {
-        console.error(fetchError);
+        if (fetchError instanceof Error) {
+          console.error("Error fetching images:", fetchError.message);
+        } else {
+          console.error("Error fetching images:", fetchError);
+        }
       }
     };
 
@@ -92,9 +108,11 @@ const ImageCard: React.FC = () => {
     setIsGalleryOpen(false);
   };
 
+  const shuffledImages = images.sort(() => Math.random() - 0.5);
+
   return (
     <>
-      {images.map((image, index) => (
+      {shuffledImages.map((image, index) => (
         <div
           key={image.id}
           className={`${styles.galleryGridItem} ${image.className}`}
@@ -114,7 +132,7 @@ const ImageCard: React.FC = () => {
               placeholder="blur"
               blurDataURL={"/images/default-BG-image.png"}
               onError={handleImageError} // Use handleImageError for fallback
-              // onLoad={handleImageLoad} // Log success
+              onLoad={handleImageLoad} // Log success
             />
             <div className={styles.imageInfo}>
               <p className={styles.imageText}>{image.author}</p>

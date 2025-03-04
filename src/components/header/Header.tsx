@@ -55,7 +55,7 @@ const Header = () => {
             </div>
             <Tooltip
               anchorSelect="#authors-list-icon"
-              content="Show as a list"
+              content="Photographers list"
             />
           </li>
           <li>
@@ -69,7 +69,7 @@ const Header = () => {
             </div>
             <Tooltip
               anchorSelect="#mosaic-images-icon"
-              content="Show as a mosaic"
+              content="Images mosaic gallery"
             />
           </li>
           <li>

@@ -13,9 +13,19 @@ const ThemeImage = (props: Props) => {
   return (
     <>
       {resolvedTheme === "light" ? (
-        <Image key="light" {...rest} src={srcLight} alt="Light theme image" />
+        <Image
+          key="light"
+          {...rest}
+          src={srcLight}
+          alt="Light theme mosaic photography logo"
+        />
       ) : (
-        <Image key="dark" {...rest} src={srcDark} alt="Dark theme image" />
+        <Image
+          key="dark"
+          {...rest}
+          src={srcDark}
+          alt="Dark theme mosaic photography logo"
+        />
       )}
     </>
   );
