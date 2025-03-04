@@ -16,6 +16,12 @@
   height: 100%;
 }
 
+.imageItem {
+  position: relative;
+  cursor: zoom-in;
+  height: 300px;
+}
+
 .landscape {
   grid-column: span 2;
 }

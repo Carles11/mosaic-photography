@@ -73,7 +73,6 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
-  console.log({ images });
   return (
     <Gallery withCaption>
       {images.map((image, index) => {
@@ -92,12 +91,13 @@ const ImageCard: React.FC<ImageCardProps> = () => {
               height={image.height}
             >
               {({ ref, open }) => (
-                <div ref={ref} onClick={open}>
+                <div ref={ref} onClick={open} className={styles.imageItem}>
                   <Image
                     src={image.url}
-                    alt={image.title || "Image"}
+                    alt={image.title || "Mosaic Nude Gallery Image"}
                     className={styles.image}
                     fill
+                    sizes="(max-width: 600px) 100vw, 50vw"
                   />
                 </div>
               )}

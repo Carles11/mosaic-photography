@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
-import { Photographer } from "@/types";
+import { Photographer, Image as ImageType } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
 import { Gallery, Item } from "react-photoswipe-gallery";
 import "photoswipe/dist/photoswipe.css";
+import { getImageDimensions } from "@/helpers/imageHelpers";
 
 import styles from "./AuthorCard.module.css";
 
@@ -18,7 +19,9 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
 
   useEffect(() => {
     const fetchPhotographersWithImages = async () => {
-      const { data, error } = await supabase.from("photographers").select(`
+      const { data: photographers, error } = await supabase.from(
+        "photographers"
+      ).select(`
         name,
         surname,
         biography,
@@ -31,14 +34,14 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         author,
         title,
         description,
-        created_at,
+        created_at       
         )
       `);
 
       if (error) {
         setError(error.message);
       } else {
-        setPhotographers(data);
+        setPhotographers(photographers);
       }
     };
 
@@ -57,8 +60,66 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
     setSelectedPhotographer(null);
   };
 
+  const ImageItem: React.FC<{ image: ImageType }> = ({ image }) => {
+    const [dimensions, setDimensions] = useState<{
+      width: number;
+      height: number;
+    } | null>(null);
+
+    useEffect(() => {
+      const fetchDimensions = async () => {
+        try {
+          const encodedUrl = encodeURI(image.url);
+          const dims = await getImageDimensions(encodedUrl);
+
+          setDimensions(dims);
+        } catch (dimensionError) {
+          if (dimensionError instanceof Error) {
+            console.error(
+              "Error getting image dimensions:",
+              dimensionError.message
+            );
+          } else {
+            console.error("Error getting image dimensions:", dimensionError);
+          }
+        }
+      };
+
+      fetchDimensions();
+    }, [image.url]);
+
+    if (!dimensions) {
+      return null;
+    }
+
+    return (
+      <Item
+        original={image.url}
+        thumbnail={image.url}
+        caption={image.author}
+        width={dimensions.width}
+        height={dimensions.height}
+      >
+        {({ ref, open }) => (
+          <div ref={ref} onClick={open} className={styles.imageItem}>
+            <Image
+              src={image.url}
+              alt={image.title || "Image"}
+              width={50}
+              height={50}
+              className={
+                dimensions.width > dimensions.height
+                  ? styles.landscape
+                  : styles.portrait
+              }
+            />
+          </div>
+        )}
+      </Item>
+    );
+  };
   return (
-    <div className={styles.authorCardContainer}>
+    <div>
       {photographers.map((photographer, index) => (
         <div key={index} className={styles.authorCard}>
           <h2
@@ -81,28 +142,10 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
               {new Date(photographer.deceasedate).toLocaleDateString()}
             </p>
           )}
-          <Gallery>
+          <Gallery withCaption>
             <div className={styles.imageList}>
               {photographer.images.map((image, index) => (
-                <Item
-                  key={index}
-                  original={image.url}
-                  thumbnail={image.url}
-                  width="1024"
-                  height="768"
-                >
-                  {({ ref, open }) => (
-                    <div ref={ref} onClick={open}>
-                      <Image
-                        src={image.url}
-                        alt={image.title || "Image"}
-                        width={50}
-                        height={50}
-                        className={styles.image}
-                      />
-                    </div>
-                  )}
-                </Item>
+                <ImageItem key={index} image={image} />
               ))}
             </div>
           </Gallery>

@@ -42,6 +42,10 @@
   padding-top: 10px;
 }
 
+.imageItem {
+  cursor: zoom-in;
+}
+
 .customCloseIcon {
   position: absolute;
   top: 10px;
