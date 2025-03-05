@@ -2,6 +2,7 @@
   padding: 20px;
   color: var(--text-color);
   background-color: var(--background-color);
+  height: 100vh;
 }
 
 .title {
