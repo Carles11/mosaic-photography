@@ -34,14 +34,45 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         author,
         title,
         description,
-        created_at   
+        created_at
         )
       `);
 
       if (error) {
         setError(error.message);
       } else {
-        setPhotographers(photographers);
+        const processedPhotographers = await Promise.all(
+          photographers.map(async (photographer) => {
+            const processedImages = await Promise.all(
+              photographer.images.map(async (image) => {
+                try {
+                  const encodedUrl = encodeURI(image.url);
+                  const dimensions = await getImageDimensions(encodedUrl);
+                  return {
+                    ...image,
+                    width: dimensions.width,
+                    height: dimensions.height,
+                  };
+                } catch (dimensionError) {
+                  if (dimensionError instanceof Error) {
+                    console.error(
+                      "Error getting image dimensions:",
+                      dimensionError.message
+                    );
+                  } else {
+                    console.error(
+                      "Error getting image dimensions:",
+                      dimensionError
+                    );
+                  }
+                  return { ...image, width: 0, height: 0 };
+                }
+              })
+            );
+            return { ...photographer, images: processedImages };
+          })
+        );
+        setPhotographers(processedPhotographers);
       }
     };
 
