@@ -32,18 +32,21 @@
 
 .image {
   object-fit: cover;
+  position: relative;
+  z-index: 1; /* Ensure the image is behind the text */
 }
 
 .imageInfo {
   display: flex;
   position: absolute;
-  bottom: 0;
+  top: 0;
   background: rgba(0, 0, 0, 0.5);
   color: white;
   width: 100%;
   height: 22px;
   align-items: center;
   padding: 5px;
+  z-index: 2;
 }
 
 .imageText {
@@ -77,10 +80,6 @@
 
 .galleryGridItem.portrait {
   grid-column: span 1;
-}
-
-.imageTitle {
-  /* ...existing code... */
 }
 
 .imageDescription {

@@ -34,7 +34,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         author,
         title,
         description,
-        created_at       
+        created_at   
         )
       `);
 

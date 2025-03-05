@@ -99,6 +99,12 @@ const ImageCard: React.FC<ImageCardProps> = () => {
                     fill
                     sizes="(max-width: 600px) 100vw, 50vw"
                   />
+                  <div className={styles.imageInfo}>
+                    <h3 className={styles.imageText}>{image.author}</h3>
+                    <p className={styles.imageDescription}>
+                      {image.description}
+                    </p>
+                  </div>
                 </div>
               )}
             </Item>

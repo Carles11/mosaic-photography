@@ -8,7 +8,10 @@ interface PhotographerModalProps {
   onClose: () => void;
 }
 
-const PhotographerModal: React.FC<PhotographerModalProps> = ({ photographer, onClose }) => {
+const PhotographerModal: React.FC<PhotographerModalProps> = ({
+  photographer,
+  onClose,
+}) => {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
@@ -25,7 +28,9 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({ photographer, onC
           />
         </div>
         <div className={styles.photographerInfo}>
-          <h2>{`${photographer.name} ${photographer.surname}`.toUpperCase()}</h2>
+          <h2>
+            {`${photographer.name} ${photographer.surname}`.toUpperCase()}
+          </h2>
           <p>{photographer.biography || "No biography available."}</p>
           <p>
             <strong>Birthdate:</strong>{" "}

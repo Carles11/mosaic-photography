@@ -1,5 +1,6 @@
 import Image, { ImageProps } from "next/image";
 import { useTheme } from "next-themes";
+// import styles from "./ThemeImage.module.css";
 
 type Props = Omit<ImageProps, "src" | "priority" | "loading"> & {
   srcLight: string;
