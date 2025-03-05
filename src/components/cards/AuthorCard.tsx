@@ -31,7 +31,6 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         website,
         instagram,
         store,
-        author,
         images (
         id,
         url,

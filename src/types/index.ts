@@ -7,7 +7,6 @@ export interface Photographer {
   origin: string;
   website: string;
   instagram: string;
-  author: string;
   images: Image[];
   store: [];
 }

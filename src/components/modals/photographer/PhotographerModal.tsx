@@ -100,12 +100,12 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
         <div className={styles.externalLinks}>
           {photographer.website && (
             <a href={`${photographer.website}`} className={styles.link}>
-              Official website of {photographer.author}
+              Official website
             </a>
           )}
           {photographer.instagram && (
             <a href={`${photographer.instagram}`} className={styles.link}>
-              Official instagram of {photographer.author}
+              Official instagram
             </a>
           )}
           <Dropdown buttonText="Buy some stuff!" items={stores} />
