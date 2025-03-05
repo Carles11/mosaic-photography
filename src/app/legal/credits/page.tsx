@@ -63,7 +63,7 @@ const Credits: React.FC = () => {
           Hello! I´m a passionate developer who loves coding and creating useful
           tools and content. My name is Carles, the creator of
           mosaic.photography. This website is a labor of love, aimed at
-          providing valuable resources and services for free.
+          providing valuable something for free.
         </p>
         <p>
           Maintaining and improving this site takes a lot of time and effort,
@@ -84,7 +84,7 @@ const Credits: React.FC = () => {
         >
           <Image
             height="36"
-            width="100"
+            width="144"
             style={{ border: "0px", height: "36px" }}
             src="https://storage.ko-fi.com/cdn/kofi6.png?v=6"
             alt="Buy Me a Coffee at ko-fi.com"

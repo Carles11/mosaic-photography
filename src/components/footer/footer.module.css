@@ -20,7 +20,7 @@
 }
 
 .footerItem a {
-  color: var(--text-color);
+  color: var(--link-color);
   text-decoration: underline;
 }
 

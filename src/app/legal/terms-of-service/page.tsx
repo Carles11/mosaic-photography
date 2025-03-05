@@ -5,10 +5,7 @@ const TermsOfService: React.FC = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Terms of Service</h1>
-      <p className={styles.text}>
-        Welcome to Mosaic Photography Gallery. By using this website, you agree
-        to the following terms and conditions.
-      </p>
+      <p className={styles.text}>Welcome to Mosaic Nude Photography Gallery.</p>
       <h2 className={styles.subtitle}>Use of Images</h2>
       <p className={styles.text}>
         This website is a gallery of images sourced from the internet. If you
