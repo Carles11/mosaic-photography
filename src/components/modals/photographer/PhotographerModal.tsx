@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import styles from "./photographerModal.module.css";
 import { Photographer } from "@/types";
@@ -12,6 +12,24 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
   photographer,
   onClose,
 }) => {
+  const [isBiographyExpanded, setIsBiographyExpanded] = useState(false);
+  const [stores, setStores] = useState<
+    { store: string; url: string; affiliate: boolean }[]
+  >([]);
+
+  useEffect(() => {
+    if (photographer.store) {
+      const parsedStores = photographer.store.map((storeString: string) =>
+        JSON.parse(storeString)
+      );
+      setStores(parsedStores);
+    }
+  }, [photographer.store]);
+
+  const toggleBiography = () => {
+    setIsBiographyExpanded(!isBiographyExpanded);
+  };
+
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
@@ -31,7 +49,14 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
           <h2>
             {`${photographer.name} ${photographer.surname}`.toUpperCase()}
           </h2>
-          <p>{photographer.biography || "No biography available."}</p>
+          <p
+            className={`${styles.biography} ${
+              isBiographyExpanded ? styles.expanded : ""
+            }`}
+            onClick={toggleBiography}
+          >
+            {photographer.biography || "No biography available."}
+          </p>
           <p>
             <strong>Birthdate:</strong>{" "}
             {new Date(photographer.birthdate).toLocaleDateString()}
@@ -47,12 +72,29 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
           )}
         </div>
         <div className={styles.externalLinks}>
-          <a href="#" className={styles.link}>
-            More Information
-          </a>
+          {photographer.website && (
+            <a href="#" className={styles.link}>
+              Official website of {photographer.name}: {photographer.website}
+            </a>
+          )}
+          {photographer.instagram && (
+            <a href="#" className={styles.link}>
+              Official instagram of {photographer.name}:{" "}
+              {photographer.instagram}
+            </a>
+          )}
           <a href="#" className={styles.link}>
             Buy Prints
           </a>
+          {stores.length > 0 && (
+            <select className={styles.storeDropdown}>
+              {stores.map((store, index) => (
+                <option key={index} value={store.url}>
+                  {store.store}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
       </div>
     </div>

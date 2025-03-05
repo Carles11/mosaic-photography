@@ -52,6 +52,20 @@
   margin-bottom: 10px;
 }
 
+.biography {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.biography.expanded {
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
 .externalLinks {
   display: flex;
   justify-content: space-around;
@@ -60,5 +74,15 @@
 .link {
   color: var(--link-color);
   text-decoration: underline;
+  cursor: pointer;
+}
+
+.storeDropdown {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: var(--background-color);
+  color: var(--text-color);
   cursor: pointer;
 }

@@ -5,7 +5,10 @@ export interface Photographer {
   birthdate: string;
   deceasedate: string | null;
   origin: string;
+  website: string;
+  instagram: string;
   images: Image[];
+  store: [];
 }
 
 export interface Image {

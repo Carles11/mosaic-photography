@@ -28,6 +28,9 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         birthdate,
         deceasedate,
         origin,
+        website,
+        instagram,
+        store,
         images (
         id,
         url,

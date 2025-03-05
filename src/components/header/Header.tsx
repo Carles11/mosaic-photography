@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAppContext } from "@/context/AppContext";
 
 import Image from "next/image";
@@ -16,11 +16,19 @@ const Header = () => {
   const { toggleView } = useAppContext();
   const [isLoaded, setIsLoaded] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const isHome = pathname === "/";
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
+
+  const handleIconClick = (view: string) => {
+    if (!isHome) {
+      router.push("/");
+    }
+    toggleView(view);
+  };
 
   if (!isLoaded) {
     return null;
@@ -45,7 +53,10 @@ const Header = () => {
         )}
         <div className={styles.navLinks}>
           <li>
-            <div id="mosaic-images-icon" onClick={() => toggleView("mosaic")}>
+            <div
+              id="mosaic-images-icon"
+              onClick={() => handleIconClick("mosaic")}
+            >
               <Image
                 src="/icons/mosaic-icon-colored.png"
                 alt="Mosaic Icon"
@@ -59,7 +70,11 @@ const Header = () => {
             />
           </li>
           <li>
-            <div id="authors-list-icon" onClick={() => toggleView("authors")}>
+            s{" "}
+            <div
+              id="authors-list-icon"
+              onClick={() => handleIconClick("authors")}
+            >
               <Image
                 src="/icons/authors-list-icon-colored.png"
                 alt="Mosaic Icon"
