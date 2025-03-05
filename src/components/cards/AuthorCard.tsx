@@ -31,6 +31,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         website,
         instagram,
         store,
+        author,
         images (
         id,
         url,
@@ -156,26 +157,25 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
     <div>
       {photographers.map((photographer, index) => (
         <div key={index} className={styles.authorCard}>
-          <h2
-            onClick={() => handleNameClick(photographer)}
-            className={styles.authorName}
-          >
-            {`${photographer.name} ${photographer.surname}`.toUpperCase()}
-          </h2>
-          <p>{photographer.biography || "No biography available."}</p>
-          <p>
-            <strong>Birthdate:</strong>{" "}
-            {new Date(photographer.birthdate).toLocaleDateString()}
-          </p>
-          <p>
-            <strong>Origin:</strong> {photographer.origin}
-          </p>
-          {photographer.deceasedate && (
+          <div onClick={() => handleNameClick(photographer)}>
+            <h2 className={styles.authorName}>
+              {`${photographer.name} ${photographer.surname}`.toUpperCase()}
+            </h2>
+            <p>{photographer.biography || "No biography available."}</p>
             <p>
-              <strong>Deceasedate:</strong>{" "}
-              {new Date(photographer.deceasedate).toLocaleDateString()}
+              <strong>Birthdate:</strong>
+              {new Date(photographer.birthdate).toLocaleDateString()}
             </p>
-          )}
+            <p>
+              <strong>Origin:</strong> {photographer.origin}
+            </p>
+            {photographer.deceasedate && (
+              <p>
+                <strong>Deceasedate:</strong>{" "}
+                {new Date(photographer.deceasedate).toLocaleDateString()}
+              </p>
+            )}
+          </div>
           <Gallery withCaption>
             <div className={styles.imageList}>
               {photographer.images.map((image, index) => (

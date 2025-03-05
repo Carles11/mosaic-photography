@@ -70,7 +70,6 @@ const Header = () => {
             />
           </li>
           <li>
-            s{" "}
             <div
               id="authors-list-icon"
               onClick={() => handleIconClick("authors")}

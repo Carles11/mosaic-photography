@@ -67,8 +67,9 @@
 }
 
 .externalLinks {
-  display: flex;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
 .link {
@@ -85,4 +86,8 @@
   background-color: var(--background-color);
   color: var(--text-color);
   cursor: pointer;
+}
+
+.storeDropdown__option {
+  /* Add your styles for the option element here */
 }
