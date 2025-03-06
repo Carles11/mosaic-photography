@@ -28,6 +28,14 @@
   cursor: pointer;
 }
 
+.biography {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .imageList {
   display: flex;
   flex-direction: row;
@@ -49,4 +57,11 @@
   padding: 5px;
   cursor: pointer;
   z-index: 1000;
+}
+
+@media (max-width: 768px) {
+  .authorCard {
+    width: 80%; /* Ensure the card takes full width */
+    margin: 1rem auto; /* Center the card horizontally */
+  }
 }

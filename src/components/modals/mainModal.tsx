@@ -21,7 +21,12 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children, btnText }) => {
     <div className={styles.modalOverlay} onClick={handleOverlayClick}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         {children}
-        <PrimaryButton handleClick={onClose} btnText={btnText} />
+        <PrimaryButton
+          handleClick={onClose}
+          btnText={btnText}
+          className=""
+          id=""
+        />
       </div>
     </div>
   );

@@ -17,6 +17,8 @@
   border-radius: 8px;
   width: 90%;
   max-width: 500px;
+  height: auto;
+  overflow-y: auto;
   position: relative;
   text-align: center;
 }
@@ -29,4 +31,11 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .modalContent {
+    margin-top: 2rem;
+    padding: 4px;
+  }
 }

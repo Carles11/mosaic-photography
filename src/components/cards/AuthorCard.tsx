@@ -160,7 +160,9 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
             <h2 className={styles.authorName}>
               {`${photographer.name} ${photographer.surname}`.toUpperCase()}
             </h2>
-            <p>{photographer.biography || "No biography available."}</p>
+            <p className={styles.biography}>
+              {photographer.biography || "No biography available."}
+            </p>
             <p>
               <strong>Birthdate:</strong>
               {new Date(photographer.birthdate).toLocaleDateString()}

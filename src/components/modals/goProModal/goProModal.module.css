@@ -4,6 +4,10 @@
   gap: 0.5rem;
   align-items: center;
   justify-items: center;
+  height: auto;
+  overflow-y: auto; /* Enable vertical scrolling if needed */
+  padding: 1rem; /* Add some padding for better spacing */
+  box-sizing: border-box; /* Ensure padding is included in the height */
 }
 
 .goProTitle {
@@ -13,4 +17,19 @@
 
 .goProText {
   font-size: 1.2rem;
+}
+
+@media (max-width: 600px) {
+  .goProContainer {
+    gap: 0;
+  }
+  .goProTitle {
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-top: 1rem;
+  }
+
+  .goProText {
+    font-size: 0.8rem;
+  }
 }
