@@ -8,17 +8,11 @@ const Footer: React.FC = () => {
       <div className={styles.footerContent}>
         <div className={styles.footerItem}>
           <p>&copy; {currentYear} Mosaic Photography Gallery</p>
-        </div>
-        <div className={styles.footerItem}>
-          <a href="/legal/privacy-policy">Privacy Policy</a>
-        </div>
-        <div className={styles.footerItem}>
-          <a href="/legal/terms-of-service">Terms of Service</a>
-        </div>
-        <div className={styles.footerItem}>
-          <a href="/legal/credits">Credits</a>
-        </div>
-        <div className={styles.footerItem}>
+          <p>
+            <a href="/legal/privacy-policy">Privacy Policy</a> |{" "}
+            <a href="/legal/terms-of-service">Terms of Service</a> |{" "}
+            <a href="/legal/credits">Credits</a>
+          </p>
           <p>Created by </p>
           <p>
             <a

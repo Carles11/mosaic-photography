@@ -75,7 +75,11 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
             return { ...photographer, images: processedImages };
           })
         );
-        setPhotographers(processedPhotographers);
+        const shuffledPhotographers = processedPhotographers.sort(
+          () => Math.random() - 0.5
+        );
+
+        setPhotographers(shuffledPhotographers);
       }
     };
 

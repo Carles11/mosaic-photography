@@ -62,6 +62,5 @@
 @media (max-width: 768px) {
   .authorCard {
     width: 80%; /* Ensure the card takes full width */
-    margin: 1rem auto; /* Center the card horizontally */
   }
 }
