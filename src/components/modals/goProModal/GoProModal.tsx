@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Modal from "../mainModal";
 import ShareButtons from "@/components/buttons/ShareButtons";
-import PrimaryButton from "@/components/buttons/primaryButton";
+import PrimaryButton from "@/components/buttons/PrimaryButton";
 import { Tooltip as ReactTooltip } from "react-tooltip";
 
 import styles from "./goProModal.module.css";
