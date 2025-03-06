@@ -1,15 +1,15 @@
-import "./Modal.css";
-
 import { FC, ReactNode } from "react";
+import PrimaryButton from "@/components/buttons/primaryButton";
 import styles from "./mainModal.module.css";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  btnText: string;
   children: ReactNode;
 }
 
-const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Modal: FC<ModalProps> = ({ isOpen, onClose, children, btnText }) => {
   if (!isOpen) return null;
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -21,7 +21,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
     <div className={styles.modalOverlay} onClick={handleOverlayClick}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         {children}
-        <button onClick={onClose}>Close</button>
+        <PrimaryButton handleClick={onClose} btnText={btnText} />
       </div>
     </div>
   );

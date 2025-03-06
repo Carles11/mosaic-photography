@@ -9,12 +9,14 @@ import { Tooltip } from "react-tooltip";
 
 import ThemeToggle from "../theme/ThemeToggle";
 import ThemeImage from "../theme/ThemeImageDark";
+import GoProModal from "@/components/modals/goProModal/GoProModal";
 
 import styles from "./header.module.css";
 
 const Header = () => {
   const { toggleView } = useAppContext();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showGoProModal, setShowGoProModal] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const isHome = pathname === "/";
@@ -33,6 +35,7 @@ const Header = () => {
   if (!isLoaded) {
     return null;
   }
+
   return (
     <header>
       <nav className={styles.navContainer}></nav>
@@ -51,46 +54,61 @@ const Header = () => {
             </Link>
           </li>
         )}
-        <div className={styles.navLinks}>
-          <li>
-            <div
-              id="mosaic-images-icon"
-              onClick={() => handleIconClick("mosaic")}
-            >
-              <Image
-                src="/icons/mosaic-icon-colored.png"
-                alt="Mosaic Icon"
-                width={32}
-                height={32}
+        <li>
+          <p
+            className={styles.goProText}
+            onClick={() => setShowGoProModal(true)}
+          >
+            Go pro!
+          </p>
+          <div className={styles.navLinks}>
+            <li>
+              <div
+                id="mosaic-images-icon"
+                onClick={() => handleIconClick("mosaic")}
+              >
+                <Image
+                  src="/icons/mosaic-icon-colored.png"
+                  alt="Mosaic Icon"
+                  width={32}
+                  height={32}
+                />
+              </div>
+              <Tooltip
+                anchorSelect="#mosaic-images-icon"
+                content="Images mosaic gallery"
               />
-            </div>
-            <Tooltip
-              anchorSelect="#mosaic-images-icon"
-              content="Images mosaic gallery"
-            />
-          </li>
-          <li>
-            <div
-              id="authors-list-icon"
-              onClick={() => handleIconClick("authors")}
-            >
-              <Image
-                src="/icons/authors-list-icon-colored.png"
-                alt="Mosaic Icon"
-                width={32}
-                height={32}
+            </li>
+
+            <li>
+              <div
+                id="authors-list-icon"
+                onClick={() => handleIconClick("authors")}
+              >
+                <Image
+                  src="/icons/authors-list-icon-colored.png"
+                  alt="Mosaic Icon"
+                  width={32}
+                  height={32}
+                />
+              </div>
+              <Tooltip
+                anchorSelect="#authors-list-icon"
+                content="Photographers list"
               />
-            </div>
-            <Tooltip
-              anchorSelect="#authors-list-icon"
-              content="Photographers list"
-            />
-          </li>
-          <li>
-            <ThemeToggle />
-          </li>
-        </div>
+            </li>
+            <li>
+              <ThemeToggle />
+            </li>
+          </div>
+        </li>
       </ul>
+      {showGoProModal && (
+        <GoProModal
+          isOpen={showGoProModal}
+          onClose={() => setShowGoProModal(false)}
+        />
+      )}
     </header>
   );
 };

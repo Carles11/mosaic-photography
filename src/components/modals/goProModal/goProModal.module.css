@@ -1,0 +1,16 @@
+.goProContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  align-items: center;
+  justify-items: center;
+}
+
+.goProTitle {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.goProText {
+  font-size: 1.2rem;
+}

@@ -24,6 +24,20 @@
   margin: 0;
 }
 
+.goProText {
+  font-size: 1.2rem;
+  font-weight: 700;
+  background: var(--text-gradient);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-align: center;
+  cursor: pointer;
+}
+.goProText:hover {
+  text-decoration: underline;
+  color: var(--text-color);
+}
+
 .navLinks {
   display: grid;
   grid-template-columns: repeat(3, auto);

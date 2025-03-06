@@ -1,0 +1,23 @@
+.primaryButton {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.primaryButton:hover {
+  background-color: var(--primary-color-dark);
+}
+
+.primaryButton:active {
+  background-color: var(--primary-color-darker);
+}
+
+.primaryButton:disabled {
+  background-color: var(--disabled-color);
+  cursor: not-allowed;
+}

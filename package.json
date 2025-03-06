@@ -20,6 +20,7 @@
     "react-image-gallery": "^1.4.0",
     "react-medium-image-zoom": "^5.2.14",
     "react-photoswipe-gallery": "^3.0.2",
+    "react-share": "^5.2.2",
     "react-tooltip": "^5.28.0"
   },
   "devDependencies": {

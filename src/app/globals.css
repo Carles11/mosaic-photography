@@ -5,11 +5,8 @@
   --text-color: #1d1d1d;
   --secondary-color: #2c106a;
   --tertiary-color: #ff6347;
-  --headfoot-background-gradient: linear-gradient(
-    135deg,
-    var(--secondary-color) 30%,
-    var(--tertiary-color) 70%
-  );
+
+  --text-gradient: linear-gradient(135deg, #4cf6c3 30%, #1faef0 70%);
   --color-white: #fff;
   --color-black: #1d1d1d;
 
