@@ -6,6 +6,7 @@ import { AppContextProvider } from "@/context/AppContext";
 import { ThemeProvider } from "next-themes";
 
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import "./globals.css";
 
@@ -36,8 +37,9 @@ export default function RootLayout({
           <AppContextProvider>
             <Header />
             {children}
-            <Analytics />
             <Footer />
+            <Analytics />
+            <SpeedInsights />
           </AppContextProvider>
         </ThemeProvider>
       </body>
