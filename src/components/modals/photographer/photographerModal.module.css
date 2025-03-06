@@ -8,7 +8,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 999999;
+  overflow-y: auto; /* Ensure the overlay itself is scrollable */
 }
 
 .modalContent {
@@ -17,6 +18,9 @@
   border-radius: 8px;
   width: 90%;
   max-width: 500px;
+  height: auto;
+  max-height: 90vh; /* Ensure the modal content does not exceed the viewport height */
+  overflow-y: auto; /* Allow scrolling within the modal content */
   position: relative;
   text-align: center;
 }
@@ -88,6 +92,12 @@
   cursor: pointer;
 }
 
-.storeDropdown__option {
-  /* Add your styles for the option element here */
+@media (max-width: 767px) {
+  .modalContent {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+  }
 }

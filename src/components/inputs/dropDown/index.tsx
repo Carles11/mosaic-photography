@@ -3,7 +3,7 @@ import styles from "./Dropdown.module.css";
 
 interface DropdownProps {
   buttonText: string;
-  items: { name: string; website: string; affiliate: boolean }[];
+  items: { store: string; website: string; affiliate: boolean }[];
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ buttonText, items }) => {
@@ -21,7 +21,7 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items }) => {
               rel="noopener noreferrer"
               className={styles.link}
             >
-              {item.name}
+              {item.store}
             </a>
           </li>
         ))}

@@ -9,6 +9,9 @@
   padding: 1rem; /* Add some padding for better spacing */
   box-sizing: border-box; /* Ensure padding is included in the height */
 }
+.goProContainer p {
+  margin: 0.5rem;
+}
 
 .goProTitle {
   font-size: 2rem;
@@ -23,6 +26,14 @@
   .goProContainer {
     gap: 0;
   }
+
+  .copyButton {
+    padding: 0 4px;
+  }
+  .goProContainer p {
+    margin: 0.2rem;
+  }
+
   .goProTitle {
     font-size: 1.1rem;
     font-weight: 400;

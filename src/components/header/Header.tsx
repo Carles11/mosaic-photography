@@ -38,31 +38,33 @@ const Header = () => {
 
   return (
     <header>
-      <nav className={styles.navContainer}></nav>
-      <ul className={styles.navGrid}>
-        {isHome && (
-          <li className={styles.navLogo}>
-            <Link href="/">
-              <ThemeImage
-                srcLight="/logos/svg/mosaic-high-resolution-logo-grayscale-transparent.svg"
-                srcDark="/logos/svg/mosaic-high-resolution-logo-transparent.svg"
-                alt="Mosaic Logo"
-                className={styles.themeImage}
-                width={0}
-                height={0}
-              />
-            </Link>
+      <nav className={styles.navContainer}>
+        <ul className={styles.navGrid}>
+          {isHome && (
+            <li className={styles.navLogo}>
+              <Link href="/">
+                <ThemeImage
+                  srcLight="/logos/svg/mosaic-high-resolution-logo-grayscale-transparent.svg"
+                  srcDark="/logos/svg/mosaic-high-resolution-logo-transparent.svg"
+                  alt="Mosaic Logo"
+                  className={styles.themeImage}
+                  width={0}
+                  height={0}
+                />
+              </Link>
+            </li>
+          )}
+          <li>
+            <p
+              className={styles.goProText}
+              onClick={() => setShowGoProModal(true)}
+            >
+              Go pro!
+            </p>{" "}
           </li>
-        )}
-        <li>
-          <p
-            className={styles.goProText}
-            onClick={() => setShowGoProModal(true)}
-          >
-            Go pro!
-          </p>
-          <div className={styles.navLinks}>
-            <li>
+
+          <li className={styles.navLinks}>
+            <div>
               <div
                 id="mosaic-images-icon"
                 onClick={() => handleIconClick("mosaic")}
@@ -78,9 +80,9 @@ const Header = () => {
                 anchorSelect="#mosaic-images-icon"
                 content="Images mosaic gallery"
               />
-            </li>
+            </div>
 
-            <li>
+            <div>
               <div
                 id="authors-list-icon"
                 onClick={() => handleIconClick("authors")}
@@ -96,19 +98,19 @@ const Header = () => {
                 anchorSelect="#authors-list-icon"
                 content="Photographers list"
               />
-            </li>
-            <li>
+            </div>
+            <div>
               <ThemeToggle />
-            </li>
-          </div>
-        </li>
-      </ul>
-      {showGoProModal && (
-        <GoProModal
-          isOpen={showGoProModal}
-          onClose={() => setShowGoProModal(false)}
-        />
-      )}
+            </div>
+          </li>
+        </ul>
+        {showGoProModal && (
+          <GoProModal
+            isOpen={showGoProModal}
+            onClose={() => setShowGoProModal(false)}
+          />
+        )}
+      </nav>
     </header>
   );
 };

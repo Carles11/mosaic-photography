@@ -1,9 +1,10 @@
-import styles from "./goProModal.module.css";
 import Image from "next/image";
 import Modal from "../mainModal";
 import ShareButtons from "@/components/buttons/ShareButtons";
 import PrimaryButton from "@/components/buttons/primaryButton";
 import { Tooltip as ReactTooltip } from "react-tooltip";
+
+import styles from "./goProModal.module.css";
 
 interface GoProModalProps {
   isOpen: boolean;
@@ -35,7 +36,7 @@ const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
           appreciated.
         </p>
         <p className={styles.goProText}>
-          If you want to help, you can donate to the site.
+          If you would like to help, you can donate to the site.
         </p>
         <a
           href="https://ko-fi.com/Q5Q6R6S40"
@@ -45,7 +46,7 @@ const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
           <Image
             height="36"
             width="144"
-            style={{ border: "0px", height: "36px" }}
+            style={{ border: "0px", height: "36px", margin: "0.5rem auto" }}
             src="https://storage.ko-fi.com/cdn/kofi6.png?v=6"
             alt="Buy Me a Coffee at ko-fi.com"
           />

@@ -15,7 +15,7 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
 }) => {
   const [isBiographyExpanded, setIsBiographyExpanded] = useState(false);
   const [stores, setStores] = useState<
-    { name: string; website: string; affiliate: boolean }[]
+    { store: string; website: string; affiliate: boolean }[]
   >([]);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -24,7 +24,7 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
       const parsedStores = photographer.store.map((storeString: string) => {
         const store = JSON.parse(storeString);
         return {
-          name: store.name,
+          store: store.store,
           website: store.website,
           affiliate: store.affiliate,
         };
