@@ -2,9 +2,10 @@
   padding: 20px;
   color: var(--text-color);
   background-color: var(--background-color);
-  height: 100vh;
+  min-height: 100vh; /* Change from height to min-height */
+  display: flex;
+  flex-direction: column;
 }
-
 .title {
   font-size: 2rem;
   font-weight: bold;
