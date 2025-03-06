@@ -108,7 +108,9 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
               Official instagram
             </a>
           )}
-          <Dropdown buttonText="Buy some stuff!" items={stores} />
+          {stores && stores.length > 0 && (
+            <Dropdown buttonText="Buy some stuff!" items={stores} />
+          )}
         </div>
       </div>
     </div>
