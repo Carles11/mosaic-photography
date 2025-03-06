@@ -1,6 +1,15 @@
 /* filepath: /C:/Users/Usuario/Documents/AAA_REPOs/mosaic/styles/globals.css */
+/* Add this new style in your main CSS file */
+html,
+body {
+  height: 100%;
+}
 
 :root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
   --background-color: #fff;
   --text-color: #1d1d1d;
   --secondary-color: #2c106a;
@@ -24,7 +33,13 @@ footer {
   background: transparent;
 }
 
+footer {
+  margin-top: auto;
+}
+
 body {
+  position: relative;
+  height: 100%;
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -32,7 +47,6 @@ body {
   background-color: var(--background-color);
   color: var(--text-color);
   transition: background-color 0.3s, color 0.3s;
-  position: relative;
 }
 
 @media (prefers-color-scheme: dark) {

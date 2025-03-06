@@ -1,10 +1,10 @@
 .footerContainer {
-  color: var(--text-color);
   position: absolute;
-  bottom: 0;
+  margin-top: auto;
   width: 100%;
-  height: 8rem;
-  background-color: var(--background-color);
+  height: auto;
+  background-color: red;
+  color: var(--text-color);
   z-index: 1999; /* Ensure footer is on top but below dropdown author */
 }
 
@@ -16,7 +16,11 @@
 }
 
 .footerItem {
-  margin: 10px auto 0 auto;
+  padding-left: 10px;
+}
+
+.footerItem p:last-child {
+  margin: 0.2rem;
 }
 
 .footerItem a {
