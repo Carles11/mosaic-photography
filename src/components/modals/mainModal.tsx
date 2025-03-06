@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import PrimaryButton from "@/components/buttons/primaryButton";
+import PrimaryButton from "@/components/buttons/PrimaryButton";
 import styles from "./mainModal.module.css";
 
 interface ModalProps {
