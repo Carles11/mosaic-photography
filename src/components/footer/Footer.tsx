@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
           <p>
             <a href="/legal/privacy-policy">Privacy Policy</a> |{" "}
             <a href="/legal/terms-of-service">Terms of Service</a> |{" "}
-            <a href="/legal/credits">Credits</a>
+            <a href="/legal/credits">Thank you</a>
           </p>
         </div>{" "}
         <div className={styles.footerItem}>

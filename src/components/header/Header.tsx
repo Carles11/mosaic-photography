@@ -59,7 +59,7 @@ const Header = () => {
               className={styles.goProText}
               onClick={() => setShowGoProModal(true)}
             >
-              Go pro!
+              Go Pro
             </p>{" "}
           </li>
 

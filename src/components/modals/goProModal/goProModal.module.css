@@ -22,25 +22,27 @@
   font-size: 1.2rem;
 }
 
+.copyButton {
+  padding: 0 4px;
+  text-decoration: underline;
+}
+
 @media (max-width: 600px) {
   .goProContainer {
     gap: 0;
   }
 
-  .copyButton {
-    padding: 0 4px;
-  }
   .goProContainer p {
     margin: 0.2rem;
   }
 
   .goProTitle {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 400;
     margin-top: 1rem;
   }
 
   .goProText {
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
 }

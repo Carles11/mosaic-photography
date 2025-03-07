@@ -17,9 +17,10 @@ const title = "Check out this awesome website!";
 const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} btnText="Close">
-      <h1 className={styles.goProTitle}>Great news, there is no pro!</h1>
+      <h1 className={styles.goProTitle}>There is no Pro Plan</h1>
       <div className={styles.goProContainer}>
         <p className={styles.goProText}>
+          I created{" "}
           <PrimaryButton
             id="copyButton"
             className={styles.copyButton}
@@ -28,15 +29,17 @@ const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
               navigator.clipboard.writeText("https://www.mosaic.photography")
             }
           />
-          is a free site and it will always be.
+          to be opensource and free. All its features are and will be forever
+          free.
         </p>
         <p className={styles.goProText}>
-          However, it takes a lot of time, resources and quite a bit of money to
-          keep alive a site like this. That is why any help is very much
-          appreciated.
+          However,if you like and regularly use mosaic, feel free to show your
+          support by buying me a coffee. I of course appreciate that very much.
         </p>
         <p className={styles.goProText}>
-          If you would like to help, you can donate to the site.
+          Also if you have any questions or feature requests, don&apos;t be shy!
+          Hit me up on{" "}
+          <a href="mailto:carles@crix.design">carles@crix.design</a>
         </p>
         <a
           href="https://ko-fi.com/Q5Q6R6S40"
@@ -53,7 +56,14 @@ const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
         </a>
         <p className={styles.goProText}>
           Or you can also help by sharing the site with your friends and
-          collegues.
+          colleagues or starring the project on{" "}
+          <a
+            href="https://github.com/Carles11/mosaic-photography"
+            target="_blank"
+          >
+            the GitHub repository
+          </a>
+          .
         </p>
         <ShareButtons url={url} title={title} />
         <p className={styles.goProText}>Thank you for your support!</p>

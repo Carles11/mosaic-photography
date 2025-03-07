@@ -5,10 +5,7 @@ const PrivacyPolicy: React.FC = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Privacy Policy</h1>
-      <p className={styles.text}>
-        This privacy policy explains how we collect, use, and share your
-        personal information when you use our website.
-      </p>
+
       <h2 className={styles.subtitle}>Information Collection</h2>
       <p className={styles.text}>
         We do not collect any personal information from visitors to our website.

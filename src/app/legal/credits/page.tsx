@@ -6,7 +6,7 @@ import styles from "./credits.module.css";
 const Credits: React.FC = () => {
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>This is a thank you page</h1>
+      <h1 className={styles.title}>Thanks</h1>
 
       <h2 className={styles.subtitle}>Logo Credits</h2>
       <p className={styles.text}>
