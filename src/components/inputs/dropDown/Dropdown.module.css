@@ -47,7 +47,7 @@
 }
 
 .dropdown ul {
-  position: absolute;
+  position: relative;
   margin: 20px 0 0 0;
   padding: 20px 0;
   width: 160px;
@@ -78,7 +78,7 @@
 }
 
 .dropdown ul li a:hover {
-  background-color: var(--secondary-color);
+  background-color: var(--tertiary-color);
   color: var(--text-color);
 }
 
