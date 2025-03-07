@@ -53,6 +53,11 @@ const Credits: React.FC = () => {
             Mosaic favicons created by favicon.io
           </a>
         </li>
+        <li>
+          <a href="https://tholman.com/github-corners/" title="GitHub Corners">
+            GitHub Corners created by Tim Holman
+          </a>
+        </li>
       </ul>
       <div className={styles.kofiWidgetContainer}>
         <p>
