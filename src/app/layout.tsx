@@ -4,6 +4,7 @@ import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import { AppContextProvider } from "@/context/AppContext";
 import { ThemeProvider } from "next-themes";
+import GitHubCorner from "@/components/buttons/GitHubCorner";
 
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -35,6 +36,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider defaultTheme="system">
           <AppContextProvider>
+            <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
             <Header />
             {children}
             <Footer />
