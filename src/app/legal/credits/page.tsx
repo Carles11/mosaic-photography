@@ -65,10 +65,10 @@ const Credits: React.FC = () => {
           <a href="https://www.rio-frances.com" title="Carles">
             Carles
           </a>
-          , the creator of mosaic.photography. This site is a labor of love to
-          photography, and your support helps cover the costs of hosting and
-          development, allowing me to continue providing valuable content for
-          free. If you find my work helpful, please consider buying me a coffee.
+          , this site is a labor of love for photography and web development.
+          Your support helps cover hosting expenses and keeps the content fresh
+          and accessible. If you find my work helpful, please consider buying me
+          a coffee.
         </p>
         <p>Thank you for your support!</p>
         <iframe
