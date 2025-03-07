@@ -3,6 +3,8 @@ import styles from "./gitHubCorner.module.css";
 const GitHubCorner = ({ url }: { url: string }) => (
   <a
     href={url}
+    target="_blank"
+    rel="noopener noreferrer"
     className={styles.githubCorner}
     aria-label="View source on GitHub"
   >
