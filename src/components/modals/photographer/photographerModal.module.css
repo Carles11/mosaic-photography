@@ -19,7 +19,7 @@
   width: 90%;
   max-width: 500px;
   height: auto;
-  max-height: 90vh; /* Ensure the modal content does not exceed the viewport height */
+  max-height: 70vh; /* Ensure the modal content does not exceed the viewport height */
   overflow-y: auto; /* Allow scrolling within the modal content */
   position: relative;
   text-align: center;
