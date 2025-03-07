@@ -1,0 +1,19 @@
+.themeImage {
+  width: 100%;
+  height: auto;
+}
+
+/* Media query for tablets Portrait and landscape */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .themeImage {
+    max-width: 800px; /* Adjust as needed for tablets */
+  }
+}
+
+/* Media query for mobile devices */
+@media (max-width: 767px) {
+  .themeImage {
+    max-width: 100%;
+    width: 100%; /* Ensure the image scales to container width */
+  }
+}

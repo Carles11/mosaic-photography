@@ -1,6 +1,6 @@
 import Image, { ImageProps } from "next/image";
 import { useTheme } from "next-themes";
-// import styles from "./ThemeImage.module.css";
+import styles from "./ThemeImage.module.css";
 
 type Props = Omit<ImageProps, "src" | "priority" | "loading"> & {
   srcLight: string;
@@ -20,6 +20,7 @@ const ThemeImage = (props: Props) => {
           {...rest}
           src={srcLight}
           alt="Light theme mosaic photography logo"
+          className={styles.themeImage}
         />
       ) : (
         <Image
@@ -28,6 +29,7 @@ const ThemeImage = (props: Props) => {
           {...rest}
           src={srcDark}
           alt="Dark theme mosaic photography logo"
+          className={styles.themeImage}
         />
       )}
     </>
