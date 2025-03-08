@@ -7,6 +7,7 @@ const Credits: React.FC = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Thanks</h1>
+
       <h2 className={styles.subtitle}>Logo Credits</h2>
       <p className={styles.text}>
         The mosaic logo was created for free using{" "}
@@ -21,6 +22,7 @@ const Credits: React.FC = () => {
         libraries. We would like to thank the creators of these icons for their
         work.
       </p>
+
       <ul className={styles.list}>
         <li>
           <a
@@ -57,7 +59,6 @@ const Credits: React.FC = () => {
           </a>
         </li>
       </ul>
-      <h2 className={styles.subtitle}>About the creator of Mosaic</h2>
       <div className={styles.kofiWidgetContainer}>
         <p>
           Hi, I&apos;m{" "}
@@ -83,41 +84,6 @@ const Credits: React.FC = () => {
           title="carlesdelriofrances"
         ></iframe>
       </div>
-      <h2 className={styles.subtitle}>Imprint / Legal Notice</h2>
-
-      <ul className={styles.noBullets}>
-        <li>Owner & Operator: Carles del Río Francés</li>
-        <li>Address: Elbestrasse 15, 60329 Frankfurt am Main - Deutschland</li>
-        <li>
-          Email:{" "}
-          <a
-            href="mailto:carles@crix.design"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            carles@crix.design
-          </a>
-        </li>
-        <li>
-          Website:{" "}
-          <a
-            href="https://www.rio-frances.com"
-            title="Carles del Río Francés"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            www.rio-frances.com
-          </a>
-        </li>
-        <li>
-          Responsible for Content (§ 55 Abs. 2 RStV): Carles del Río Francés{" "}
-        </li>
-      </ul>
-      <p>
-        Disclaimer: Despite careful content control, we assume no liability for
-        the content of external links. The operators of the linked pages are
-        solely responsible for their content.
-      </p>
     </div>
   );
 };

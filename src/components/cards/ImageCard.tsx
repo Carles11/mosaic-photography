@@ -1,28 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
-import { Image as ImageType } from "@/types";
+import { ImageData, ImageCardProps } from "@/types";
 import { Gallery, Item } from "react-photoswipe-gallery";
 import "photoswipe/dist/photoswipe.css";
 import styles from "./ImageCard.module.css";
 import { getImageDimensions } from "@/helpers/imageHelpers";
 
-type ImageCardProps = object;
-
 const ImageCard: React.FC<ImageCardProps> = () => {
-  const [images, setImages] = useState<ImageType[]>([]);
+  const [images, setImages] = useState<ImageData[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchImages = async () => {
-      const { data: images, error } = await supabase.from("images").select(`
-        id,
-        url,
-        author,
-        title,
-        description,
-        created_at
-      `);
+    const ITEMS_PER_PAGE = 50;
+
+    const fetchImages = async (page: number): Promise<void> => {
+      const { data: images, error } = await supabase
+        .from("images")
+        .select(
+          `
+      id,
+      url,
+      author,
+      title,
+      description,
+      created_at
+      `
+        )
+        .range((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE - 1);
 
       if (error) {
         setError(error.message);
@@ -34,7 +39,7 @@ const ImageCard: React.FC<ImageCardProps> = () => {
       }
 
       const processedImages = await Promise.all(
-        images.map(async (image) => {
+        images.map(async (image): Promise<ImageData> => {
           try {
             const encodedUrl = encodeURI(image.url);
             const dimensions = await getImageDimensions(encodedUrl);
@@ -57,7 +62,12 @@ const ImageCard: React.FC<ImageCardProps> = () => {
             } else {
               console.error("Error getting image dimensions:", dimensionError);
             }
-            return { ...image, width: 0, height: 0, className: "" };
+            return {
+              ...image,
+              width: 0,
+              height: 0,
+              className: "",
+            } as ImageData;
           }
         })
       );
@@ -67,7 +77,7 @@ const ImageCard: React.FC<ImageCardProps> = () => {
       setImages(shuffledImages);
     };
 
-    fetchImages();
+    fetchImages(1);
   }, []);
 
   if (error) {
@@ -98,6 +108,7 @@ const ImageCard: React.FC<ImageCardProps> = () => {
                     className={styles.image}
                     fill
                     sizes="(max-width: 600px) 100vw, 50vw"
+                    loading="lazy"
                   />
                   <div className={styles.imageInfo}>
                     <h3 className={styles.imageText}>{image.author}</h3>

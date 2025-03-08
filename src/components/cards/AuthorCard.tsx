@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
-import { Photographer, Image as ImageType } from "@/types";
+import { Photographer, ImageData, AuthorCardProps } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
 import { Gallery, Item } from "react-photoswipe-gallery";
 import "photoswipe/dist/photoswipe.css";
 import { getImageDimensions } from "@/helpers/imageHelpers";
 
 import styles from "./AuthorCard.module.css";
-
-type AuthorCardProps = object;
 
 const AuthorCard: React.FC<AuthorCardProps> = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
@@ -98,7 +96,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
     setSelectedPhotographer(null);
   };
 
-  const ImageItem: React.FC<{ image: ImageType }> = ({ image }) => {
+  const ImageItem: React.FC<{ image: ImageData }> = ({ image }) => {
     const [dimensions, setDimensions] = useState<{
       width: number;
       height: number;
@@ -150,6 +148,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
                   ? styles.landscape
                   : styles.portrait
               }
+              loading="lazy"
             />
           </div>
         )}

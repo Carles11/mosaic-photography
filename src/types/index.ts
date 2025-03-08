@@ -7,20 +7,20 @@ export interface Photographer {
   origin: string;
   website: string;
   instagram: string;
-  images: Image[];
+  images: ImageData[];
   store: [];
 }
 
-export interface Image {
+export interface ImageData {
   id: string;
   url: string;
   author: string;
   title: string;
   description: string;
   created_at: string;
-  className?: string;
   width: number;
   height: number;
+  className?: string;
 }
 
 export interface Author {
@@ -32,3 +32,7 @@ export interface Author {
   origin: string;
   imageUrl: string;
 }
+
+export type AuthorCardProps = object;
+
+export type ImageCardProps = object;
