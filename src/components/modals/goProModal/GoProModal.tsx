@@ -33,8 +33,8 @@ const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
           free.
         </p>
         <p className={styles.goProText}>
-          However,if you like and regularly use mosaic, feel free to show your
-          support by buying me a coffee. I of course appreciate that very much.
+          However, if you like mosaic, feel free to show your support by
+          buying me a coffee. I of course appreciate that very much.
         </p>
         <p className={styles.goProText}>
           Also if you have any questions or feature requests, don&apos;t be shy!

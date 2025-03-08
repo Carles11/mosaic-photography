@@ -2,8 +2,7 @@
   padding: 20px;
   color: var(--text-color);
   background-color: var(--background-color);
-  min-height: 100vh; /* Change from height to min-height */
-  width: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -31,6 +30,10 @@
 
 .list li {
   margin-bottom: 0.5rem;
+}
+
+.noBullets {
+  list-style-type: none;
 }
 
 .kofiWidgetContainer {

@@ -22,7 +22,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mosaic nude photography gallery",
+  title: "Mosaic Photography",
   description: "Iconic nude photography from the Mosaic Gallery",
 };
 

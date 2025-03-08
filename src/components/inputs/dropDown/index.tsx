@@ -4,12 +4,13 @@ import styles from "./Dropdown.module.css";
 interface DropdownProps {
   buttonText: string;
   items: { store: string; website: string; affiliate: boolean }[];
+  closeBio: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ buttonText, items }) => {
+const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, closeBio }) => {
   return (
     <details className={styles.dropdown}>
-      <summary role="button">
+      <summary role="button" onClick={() => closeBio(false)}>
         <a className={styles.button}>{buttonText}</a>
       </summary>
       <ul>

@@ -109,7 +109,11 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
             </a>
           )}
           {stores && stores.length > 0 && (
-            <Dropdown buttonText="Buy some stuff!" items={stores} />
+            <Dropdown
+              buttonText="Buy some stuff!"
+              items={stores}
+              closeBio={setIsBiographyExpanded}
+            />
           )}
         </div>
       </div>
