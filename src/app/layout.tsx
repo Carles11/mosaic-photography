@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import MetaHead from "@/components/metaHead";
+
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import { AppContextProvider } from "@/context/AppContext";
 import { ThemeProvider } from "next-themes";
 import GitHubCorner from "@/components/buttons/GitHubCorner";
-
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -33,6 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <MetaHead />
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider defaultTheme="system">
           <AppContextProvider>

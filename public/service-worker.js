@@ -4,7 +4,7 @@ self.addEventListener("install", (event) => {
       return cache.addAll([
         "/",
         "/index.html",
-        "/manifest.json",
+        "/favicons/site.webmanifest",
         "/favicons/android-chrome-192x192.png",
         "/favicons/android-chrome-512x512.png",
         "/favicons/apple-touch-icon.png",
