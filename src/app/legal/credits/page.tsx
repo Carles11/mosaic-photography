@@ -103,6 +103,12 @@ const Credits: React.FC = () => {
           <strong>Email:</strong>{" "}
           <a href="mailto:carles@crix.design">carles@crix.design</a>
         </p>
+        <p>
+          <strong>Official Website:</strong>{" "}
+          <a href="https://www.rio-frances.com" title="Official Website">
+            www.rio-frances.com
+          </a>
+        </p>
 
         {/* <p>
           <strong>Commercial Register:</strong> Frankfurt am Main, HRB 123456
