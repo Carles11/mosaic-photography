@@ -25,8 +25,8 @@
   }
   .mobileImage {
     display: block;
-    max-width: 165%;
-    width: 165%; /* Ensure the image scales to container width */
+    max-width: 90%;
+    width: 90%; /* Ensure the image scales to container width */
     justify-self: center;
   }
 }
