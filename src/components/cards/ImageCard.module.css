@@ -42,7 +42,7 @@
   top: 0;
   background: rgba(0, 0, 0, 0.5);
   color: white;
-  width: 100%;
+  width: auto;
   height: 22px;
   align-items: center;
   padding: 5px;

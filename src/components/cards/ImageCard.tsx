@@ -111,17 +111,17 @@ const ImageCard: React.FC<ImageCardProps> = () => {
                   />
                   <div className={styles.imageInfo}>
                     <h3 className={styles.imageText}>{image.author}</h3>
-                    <p className={styles.imageDescription}>
+                    {/* <p className={styles.imageDescription}>
                       {image.description}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               )}
             </Item>
-            <div>
+            {/* <div>
               <h3 className={styles.imageTitle}>{image.author}</h3>
               <p className={styles.imageDescription}>{image.description}</p>
-            </div>
+            </div> */}
           </div>
         );
       })}
