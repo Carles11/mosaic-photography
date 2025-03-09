@@ -12,13 +12,11 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const ITEMS_PER_PAGE = 50;
+    // const ITEMS_PER_PAGE = 50;
 
-    const fetchImages = async (page: number): Promise<void> => {
-      const { data: images, error } = await supabase
-        .from("images")
-        .select(
-          `
+    const fetchImages = async (): Promise<void> => {
+      const { data: images, error } = await supabase.from("images").select(
+        `
       id,
       url,
       author,
@@ -26,8 +24,9 @@ const ImageCard: React.FC<ImageCardProps> = () => {
       description,
       created_at
       `
-        )
-        .range((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE - 1);
+      );
+
+      // .range((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE - 1);
 
       if (error) {
         setError(error.message);
@@ -77,7 +76,7 @@ const ImageCard: React.FC<ImageCardProps> = () => {
       setImages(shuffledImages);
     };
 
-    fetchImages(1);
+    fetchImages();
   }, []);
 
   if (error) {

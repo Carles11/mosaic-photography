@@ -84,6 +84,40 @@ const Credits: React.FC = () => {
           title="carlesdelriofrances"
         ></iframe>
       </div>
+      <h2 className={styles.subtitle}>Imprint</h2>
+      <div className={styles.imprint}>
+        <p>
+          <strong>Owner:</strong> Carles del Río Francés
+        </p>
+        <p>
+          <strong>Address:</strong> Elbestrasse 15, 60329 Frankfurt am Main,
+          Germany
+        </p>
+        <p>
+          <strong>Tax Number:</strong> DE275710941
+        </p>
+        <p>
+          <strong>Commercial Register:</strong> Finanzamt Frankfurt am Main I
+        </p>
+        <p>
+          <strong>Email:</strong>{" "}
+          <a href="mailto:carles@crix.design">carles@crix.design</a>
+        </p>
+
+        {/* <p>
+          <strong>Commercial Register:</strong> Frankfurt am Main, HRB 123456
+        </p> */}
+        <p>
+          <strong>VAT Identification Number:</strong> DE275710941
+        </p>
+        <p>
+          <strong>Authorized Representative:</strong> Carles del Río Francés
+        </p>
+        <p>
+          <strong>Responsible for content according to § 18 MStV:</strong>{" "}
+          Carles del Río Francés
+        </p>
+      </div>
     </div>
   );
 };
