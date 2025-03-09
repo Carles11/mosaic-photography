@@ -46,6 +46,8 @@ const Header = () => {
                 <ThemeImage
                   srcLight="/logos/svg/mosaic-high-resolution-logo-grayscale-transparent.svg"
                   srcDark="/logos/svg/mosaic-high-resolution-logo-transparent.svg"
+                  srcLightMobile="/logos/svg/mosaic-high-resolution-logo-grayscale-transparent.svg"
+                  srcDarkMobile="/logos/svg/mosaic-high-resolution-logo-transparent.svg"
                   alt="Mosaic Logo"
                   className={styles.themeImage}
                   width={0}

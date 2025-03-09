@@ -3,6 +3,14 @@
   height: auto;
 }
 
+.desktopImage {
+  display: block;
+}
+
+.mobileImage {
+  display: none;
+}
+
 /* Media query for tablets Portrait and landscape */
 @media (min-width: 768px) and (max-width: 1024px) {
   .themeImage {
@@ -12,8 +20,13 @@
 
 /* Media query for mobile devices */
 @media (max-width: 767px) {
-  .themeImage {
-    max-width: 100%;
-    width: 100%; /* Ensure the image scales to container width */
+  .desktopImage {
+    display: none;
+  }
+  .mobileImage {
+    display: block;
+    max-width: 165%;
+    width: 165%; /* Ensure the image scales to container width */
+    justify-self: center;
   }
 }
