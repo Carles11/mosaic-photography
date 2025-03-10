@@ -42,7 +42,7 @@ const ImageCard: React.FC<ImageCardProps> = () => {
           try {
             const encodedUrl = encodeURI(image.url);
             const dimensions = await getImageDimensions(encodedUrl);
-            console.log({ encodedUrl, dimensions });
+            // console.log({ encodedUrl, dimensions });
 
             return {
               ...image,
