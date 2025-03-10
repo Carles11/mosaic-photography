@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
       },
     ],
     domains: ["storage.ko-fi.com"],
+    minimumCacheTTL: 2678400, // 31 days
   },
 };
 
