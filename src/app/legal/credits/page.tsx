@@ -59,7 +59,7 @@ const Credits: React.FC = () => {
           </a>
         </li>
       </ul>
-      <div className={styles.kofiWidgetContainer}>
+      {/* <div className={styles.kofiWidgetContainer}>
         <p>
           Hi, I&apos;m{" "}
           <a href="https://www.rio-frances.com" title="Carles">
@@ -83,7 +83,7 @@ const Credits: React.FC = () => {
           height="712"
           title="carlesdelriofrances"
         ></iframe>
-      </div>
+      </div> */}
       <h2 className={styles.subtitle}>Imprint</h2>
       <div className={styles.imprint}>
         <p>
