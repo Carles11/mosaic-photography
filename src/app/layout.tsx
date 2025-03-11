@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
@@ -20,6 +20,12 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#ffffff",
+};
 
 export const metadata: Metadata = {
   title: "Mosaic | Iconic Nude Photographers | Timeless Artistic Beauty",
@@ -48,7 +54,6 @@ export const metadata: Metadata = {
     apple: "/favicons/apple-touch-icon.png",
   },
   manifest: "/favicons/site.webmanifest",
-  themeColor: "#ffffff",
 };
 
 export default function RootLayout({

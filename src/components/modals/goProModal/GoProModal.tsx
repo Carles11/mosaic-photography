@@ -33,14 +33,10 @@ const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
           free.
         </p>
         <p className={styles.goProText}>
-          However, if you like mosaic, feel free to show your support by
-          buying me a coffee. I of course appreciate that very much.
+          However, if you like mosaic, feel free to show your support by buying
+          me a coffee. I of course appreciate that very much.
         </p>
-        <p className={styles.goProText}>
-          Also if you have any questions or feature requests, don&apos;t be shy!
-          Hit me up on{" "}
-          <a href="mailto:carles@crix.design">carles@crix.design</a>
-        </p>
+
         <a
           href="https://ko-fi.com/Q5Q6R6S40"
           target="_blank"
@@ -55,16 +51,17 @@ const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
           />
         </a>
         <p className={styles.goProText}>
-          Or you can also help by sharing the site with your friends and
-          colleagues or starring the project on{" "}
+          Enjoyed the site? Share it with friends and colleagues or star the
+          project on{" "}
           <a
             href="https://github.com/Carles11/mosaic-photography"
             target="_blank"
           >
-            the GitHub repository
+            GitHub
           </a>
           .
         </p>
+
         <ShareButtons url={url} title={title} />
         <p className={styles.goProText}>Thank you for your support!</p>
       </div>
@@ -72,6 +69,10 @@ const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
         anchorSelect="#copyButton"
         content="Copy url to clipboard"
       />
+      <p className={styles.goProText}>
+        Also if you have any questions or feature requests, don&apos;t be shy!
+        Hit me up on <a href="mailto:carles@crix.design">carles@crix.design</a>
+      </p>
     </Modal>
   );
 };

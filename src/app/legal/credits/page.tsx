@@ -1,6 +1,10 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
+import PrimaryButton from "@/components/buttons/PrimaryButton";
+import { Tooltip as ReactTooltip } from "react-tooltip";
+
 import styles from "./credits.module.css";
 
 const Credits: React.FC = () => {
@@ -59,19 +63,50 @@ const Credits: React.FC = () => {
           </a>
         </li>
       </ul>
-      {/* <div className={styles.kofiWidgetContainer}>
+      <div className={styles.kofiWidgetContainer}>
+        <h2 className={styles.subtitle}>About me</h2>
+
         <p>
-          Hi, I&apos;m{" "}
-          <a href="https://www.rio-frances.com" title="Carles">
-            Carles
+          Hi! My name is Carles, I created{" "}
+          <PrimaryButton
+            id="copyButton"
+            className={styles.copyButton}
+            btnText="MOSAIC"
+            handleClick={() =>
+              navigator.clipboard.writeText("https://www.mosaic.photography")
+            }
+          />{" "}
+          to be opensource and free. This site reflects my passion for both{" "}
+          <a
+            href="https://www.instagram.com/analogue_carles/"
+            title="Carles' instagram"
+          >
+            photography
+          </a>{" "}
+          and{" "}
+          <a href="https://www.rio-frances.com" title="Carles' Portfolio">
+            web development
           </a>
-          , this site is a labor of love for photography and web development.
-          Your support helps cover hosting expenses and keeps the content fresh
-          and accessible. If you find my work helpful, please consider buying me
-          a coffee.
+          . If you enjoy my work, your support helps keep it running—consider
+          buying me a coffee!{" "}
         </p>
-        <p>Thank you for your support!</p>
-        <iframe
+        <div className={styles.thankYou}>
+          <p>Thank you for your support!</p>
+          <a
+            href="https://ko-fi.com/Q5Q6R6S40"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              height="36"
+              width="144"
+              style={{ border: "0px", height: "36px", margin: "1rem 0 2rem 0" }}
+              src="https://storage.ko-fi.com/cdn/kofi6.png?v=6"
+              alt="Buy Me a Coffee at ko-fi.com"
+            />
+          </a>
+        </div>
+        {/* <iframe
           id="kofiframe"
           src="https://ko-fi.com/carlesdelriofrances/?hidefeed=true&widget=true&embed=true&preview=true"
           style={{
@@ -82,8 +117,12 @@ const Credits: React.FC = () => {
           }}
           height="712"
           title="carlesdelriofrances"
-        ></iframe>
-      </div> */}
+        ></iframe> */}
+        <ReactTooltip
+          anchorSelect="#copyButton"
+          content="Copy url to clipboard"
+        />
+      </div>
       <h2 className={styles.subtitle}>Imprint</h2>
       <div className={styles.imprint}>
         <p>
