@@ -7,6 +7,8 @@ import "photoswipe/dist/photoswipe.css";
 import styles from "./ImageCard.module.css";
 import { getImageDimensions } from "@/helpers/imageHelpers";
 
+// Image list to show when isMosaic is true
+
 const ImageCard: React.FC<ImageCardProps> = () => {
   const [images, setImages] = useState<ImageData[]>([]);
   const [error, setError] = useState<string | null>(null);

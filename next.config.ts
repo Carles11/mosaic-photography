@@ -21,4 +21,4 @@ export default withPWA({
   dest: "public",
   register: true,
   skipWaiting: true,
-})(nextConfig);
+})(nextConfig); // Configuring PWA with Next.js configuration

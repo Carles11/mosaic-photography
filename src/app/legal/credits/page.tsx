@@ -66,7 +66,7 @@ const Credits: React.FC = () => {
       <div className={styles.kofiWidgetContainer}>
         <h2 className={styles.subtitle}>About me</h2>
 
-        <p>
+        <p className={styles.text}>
           Hi! My name is Carles, I created{" "}
           <PrimaryButton
             id="copyButton"
@@ -91,7 +91,7 @@ const Credits: React.FC = () => {
           buying me a coffee!{" "}
         </p>
         <div className={styles.thankYou}>
-          <p>Thank you for your support!</p>
+          <p className={styles.text}>Thank you for your support!</p>
           <a
             href="https://ko-fi.com/Q5Q6R6S40"
             target="_blank"

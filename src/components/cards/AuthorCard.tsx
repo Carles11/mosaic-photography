@@ -9,6 +9,7 @@ import { getImageDimensions } from "@/helpers/imageHelpers";
 
 import styles from "./AuthorCard.module.css";
 
+// Author list to show when isMosaic is false
 const AuthorCard: React.FC<AuthorCardProps> = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
   const [error, setError] = useState<string | null>(null);
