@@ -156,6 +156,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
                   : styles.portrait
               }
               loading="lazy"
+              unoptimized
             />
           </div>
         )}
