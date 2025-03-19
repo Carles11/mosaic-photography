@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAppContext } from "@/context/AppContext";
 
@@ -15,15 +15,10 @@ import styles from "./header.module.css";
 
 const Header = () => {
   const { toggleView } = useAppContext();
-  const [isLoaded, setIsLoaded] = useState(false);
   const [showGoProModal, setShowGoProModal] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const isHome = pathname === "/";
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, []);
 
   const handleIconClick = (view: string) => {
     if (!isHome) {
@@ -31,10 +26,6 @@ const Header = () => {
     }
     toggleView(view);
   };
-
-  if (!isLoaded) {
-    return null;
-  }
 
   return (
     <header>

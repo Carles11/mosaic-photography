@@ -6,17 +6,19 @@ import { Gallery, Item } from "react-photoswipe-gallery";
 import "photoswipe/dist/photoswipe.css";
 import styles from "./ImageCard.module.css";
 import { getImageDimensions } from "@/helpers/imageHelpers";
+import { ClimbingBoxLoader } from "react-spinners";
 
 // Image list to show when isMosaic is true
 
 const ImageCard: React.FC<ImageCardProps> = () => {
   const [images, setImages] = useState<ImageData[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // const ITEMS_PER_PAGE = 50;
-
     const fetchImages = async (): Promise<void> => {
+      setLoading(true);
+
       const { data: images, error } = await supabase.from("images").select(
         `
       id,
@@ -28,14 +30,15 @@ const ImageCard: React.FC<ImageCardProps> = () => {
       `
       );
 
-      // .range((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE - 1);
-
       if (error) {
         setError(error.message);
+        setLoading(false);
+        return;
       }
 
       if (!images) {
         setError("No images found");
+        setLoading(false);
         return;
       }
 
@@ -44,7 +47,6 @@ const ImageCard: React.FC<ImageCardProps> = () => {
           try {
             const encodedUrl = encodeURI(image.url);
             const dimensions = await getImageDimensions(encodedUrl);
-            // console.log({ encodedUrl, dimensions });
 
             return {
               ...image,
@@ -78,60 +80,76 @@ const ImageCard: React.FC<ImageCardProps> = () => {
       const shuffledImages = processedImages.sort(() => Math.random() - 0.5);
 
       setImages(shuffledImages);
+      setLoading(false);
     };
 
     fetchImages();
   }, []);
 
   if (error) {
-    return <div>Error fetchx: {error}</div>;
+    return <div>Error: {error}</div>;
   }
 
   return (
-    <Gallery withCaption>
-      {images.map((image, index) => {
-        return (
-          <div
-            key={index}
-            className={`${styles.imageCard} ${
-              image.width > image.height ? styles.landscape : styles.portrait
-            }`}
-          >
-            <Item
-              original={image.url}
-              thumbnail={image.url}
-              caption={image.author}
-              width={image.width}
-              height={image.height}
-            >
-              {({ ref, open }) => (
-                <div ref={ref} onClick={open} className={styles.imageItem}>
-                  <Image
-                    src={image.url}
-                    alt={image.title || "Mosaic Nude Gallery Image"}
-                    className={styles.image}
-                    fill
-                    sizes="(max-width: 600px) 100vw, 50vw"
-                    loading="lazy"
-                    unoptimized={true}
-                  />
-                  <div className={styles.imageInfo}>
-                    <h3 className={styles.imageText}>{image.author}</h3>
-                    {/* <p className={styles.imageDescription}>
-                      {image.description}
-                    </p> */}
-                  </div>
-                </div>
-              )}
-            </Item>
-            {/* <div>
-              <h3 className={styles.imageTitle}>{image.author}</h3>
-              <p className={styles.imageDescription}>{image.description}</p>
-            </div> */}
-          </div>
-        );
-      })}
-    </Gallery>
+    <>
+      {loading ? (
+        <div className={styles.loaderContainer}>
+          <ClimbingBoxLoader
+            color="var(--secondary-color)"
+            loading={loading}
+            size={25}
+          />
+          <p className={styles.loaderText}>Loading images...</p>
+        </div>
+      ) : (
+        <Gallery withCaption>
+          {images.map((image, index) => {
+            return (
+              <div
+                key={index}
+                className={`${styles.imageCard} ${
+                  image.width > image.height
+                    ? styles.landscape
+                    : styles.portrait
+                }`}
+              >
+                <Item
+                  original={image.url}
+                  thumbnail={image.url}
+                  caption={image.author}
+                  width={image.width}
+                  height={image.height}
+                >
+                  {({ ref, open }) => (
+                    <div ref={ref} onClick={open} className={styles.imageItem}>
+                      <Image
+                        src={image.url}
+                        alt={image.title || "Mosaic Nude Gallery Image"}
+                        className={styles.image}
+                        fill
+                        sizes="(max-width: 600px) 100vw, 50vw"
+                        loading="lazy"
+                        unoptimized
+                      />
+                      <div className={styles.imageInfo}>
+                        <h3 className={styles.imageText}>{image.author}</h3>
+                        {/* <p className={styles.imageDescription}>
+                          {image.description}
+                        </p> */}
+                      </div>
+                    </div>
+                  )}
+                </Item>
+                {/* <div>
+                  <h3 className={styles.imageTitle}>{image.author}</h3>
+                  <p className={styles.imageDescription}>{image.description}</p>
+                </div> */}
+              </div>
+            );
+          })}
+        </Gallery>
+      )}
+    </>
   );
 };
 

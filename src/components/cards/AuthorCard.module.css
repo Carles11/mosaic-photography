@@ -64,3 +64,22 @@
     width: 80%; /* Ensure the card takes full width */
   }
 }
+
+.loaderContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  gap: 2rem;
+  margin-top: 4rem;
+  height: 100%;
+}
+
+.loaderText {
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: var(--text-gradient);
+  -webkit-background-clip: text;
+  color: transparent;
+}

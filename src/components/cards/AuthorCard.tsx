@@ -6,6 +6,7 @@ import PhotographerModal from "@/components/modals/photographer/PhotographerModa
 import { Gallery, Item } from "react-photoswipe-gallery";
 import "photoswipe/dist/photoswipe.css";
 import { getImageDimensions } from "@/helpers/imageHelpers";
+import { ClimbingBoxLoader } from "react-spinners";
 
 import styles from "./AuthorCard.module.css";
 
@@ -13,11 +14,14 @@ import styles from "./AuthorCard.module.css";
 const AuthorCard: React.FC<AuthorCardProps> = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [selectedPhotographer, setSelectedPhotographer] =
     useState<Photographer | null>(null);
 
   useEffect(() => {
     const fetchPhotographersWithImages = async () => {
+      setLoading(true);
+
       const { data: photographers, error } = await supabase.from(
         "photographers"
       ).select(`
@@ -42,6 +46,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
 
       if (error) {
         setError(error.message);
+        setLoading(false);
       } else {
         const processedPhotographers = await Promise.all(
           photographers.map(async (photographer) => {
@@ -79,6 +84,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         );
 
         setPhotographers(shuffledPhotographers);
+        setLoading(false);
       }
     };
 
@@ -150,47 +156,58 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
                   : styles.portrait
               }
               loading="lazy"
-              unoptimized={true}
             />
           </div>
         )}
       </Item>
     );
   };
+
   return (
     <div>
-      {photographers.map((photographer, index) => (
-        <div key={index} className={styles.authorCard}>
-          <div onClick={() => handleNameClick(photographer)}>
-            <h2 className={styles.authorName}>
-              {`${photographer.name} ${photographer.surname}`.toUpperCase()}
-            </h2>
-            <p className={styles.biography}>
-              {photographer.biography || "No biography available."}
-            </p>
-            <p>
-              <strong>Birthdate:</strong>
-              {new Date(photographer.birthdate).toLocaleDateString()}
-            </p>
-            <p>
-              <strong>Origin:</strong> {photographer.origin}
-            </p>
-            {photographer.deceasedate && (
-              <p>
-                <strong>Deceasedate:</strong>{" "}
-                {new Date(photographer.deceasedate).toLocaleDateString()}
-              </p>
-            )}
-          </div>
-          <Gallery withCaption>
-            <div className={styles.imageList}>
-              {photographer.images.map((image, index) => (
-                <ImageItem key={index} image={image} />
-              ))}
-            </div>
-          </Gallery>
+      {loading ? (
+        <div className={styles.loaderContainer}>
+          <ClimbingBoxLoader
+            color="var(--secondary-color)"
+            loading={loading}
+            size={25}
+          />
+          <p className={styles.loaderText}>Loading photographers...</p>
         </div>
-      ))}
+      ) : (
+        photographers.map((photographer, index) => (
+          <div key={index} className={styles.authorCard}>
+            <div onClick={() => handleNameClick(photographer)}>
+              <h2 className={styles.authorName}>
+                {`${photographer.name} ${photographer.surname}`.toUpperCase()}
+              </h2>
+              <p className={styles.biography}>
+                {photographer.biography || "No biography available."}
+              </p>
+              <p>
+                <strong>Birthdate:</strong>
+                {new Date(photographer.birthdate).toLocaleDateString()}
+              </p>
+              <p>
+                <strong>Origin:</strong> {photographer.origin}
+              </p>
+              {photographer.deceasedate && (
+                <p>
+                  <strong>Deceasedate:</strong>{" "}
+                  {new Date(photographer.deceasedate).toLocaleDateString()}
+                </p>
+              )}
+            </div>
+            <Gallery withCaption>
+              <div className={styles.imageList}>
+                {photographer.images.map((image, index) => (
+                  <ImageItem key={index} image={image} />
+                ))}
+              </div>
+            </Gallery>
+          </div>
+        ))
+      )}
       {selectedPhotographer && (
         <PhotographerModal
           photographer={selectedPhotographer}
