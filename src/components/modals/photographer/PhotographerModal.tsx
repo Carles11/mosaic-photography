@@ -69,6 +69,7 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
             width={100}
             height={100}
             className={styles.photographerImage}
+            unoptimized
           />
         </div>
         <div className={styles.photographerInfo}>
