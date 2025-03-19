@@ -31,10 +31,10 @@ export const metadata: Metadata = {
   title: "Mosaic | Iconic Nude Photographers | Timeless Artistic Beauty",
   description:
     "Discover Mosaic's curated gallery of iconic nude photography, celebrating the beauty of the human form through the lens of the world's most renowned nude photographers.",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-  },
+  // viewport: {
+  //   width: "device-width",
+  //   initialScale: 1,
+  // },
   icons: {
     icon: [
       { rel: "icon", url: "/favicons/favicon.ico" },

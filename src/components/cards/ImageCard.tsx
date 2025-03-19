@@ -84,14 +84,12 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   }, []);
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Error fetchx: {error}</div>;
   }
 
   return (
     <Gallery withCaption>
       {images.map((image, index) => {
-        console.log("image-data-fetched", { image });
-
         return (
           <div
             key={index}
@@ -115,6 +113,7 @@ const ImageCard: React.FC<ImageCardProps> = () => {
                     fill
                     sizes="(max-width: 600px) 100vw, 50vw"
                     loading="lazy"
+                    unoptimized={true}
                   />
                   <div className={styles.imageInfo}>
                     <h3 className={styles.imageText}>{image.author}</h3>
