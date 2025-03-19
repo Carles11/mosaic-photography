@@ -86,9 +86,12 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
+
   return (
     <Gallery withCaption>
       {images.map((image, index) => {
+        console.log("image-data-fetched", { image });
+
         return (
           <div
             key={index}
