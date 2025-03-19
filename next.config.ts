@@ -11,8 +11,13 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "storage.ko-fi.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
-    domains: ["storage.ko-fi.com"],
     minimumCacheTTL: 2678400, // 31 days
   },
 };
