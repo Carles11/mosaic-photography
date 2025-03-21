@@ -15,7 +15,7 @@ export default async function handler(
       const lastmod = await getLastModifiedDate(url);
       return `
         <url>
-          <loc>${baseUrl}${url}</loc>
+          <loc>${baseUrl}/${url}</loc>
           <changefreq>weekly</changefreq>
           <priority>0.8</priority>
           <lastmod>${lastmod}</lastmod>
