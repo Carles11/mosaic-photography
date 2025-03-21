@@ -14,16 +14,19 @@ export async function getAllImageUrls(): Promise<string[]> {
 
 // Function to get the last modified date of a URL
 export async function getLastModifiedDate(url: string): Promise<string> {
+  // console.log("Fetching last modified date for URL:", url); // Log the URL
+
   const { data, error } = await supabase
     .from("images")
     .select("last_modified")
     .eq("url", url)
-    .single();
+    .limit(1);
 
   if (error) {
     console.error("Error fetching last modified date:", error);
     return new Date().toISOString();
   }
 
-  return new Date(data.last_modified).toISOString();
+  // console.log("Data returned:", data); // Log the returned data
+  return new Date(data[0]?.last_modified).toISOString();
 }
