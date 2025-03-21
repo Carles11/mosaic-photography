@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Allow crawling of legal pages
+Allow: /legal/
+
+# Specify the location of the sitemap
+Sitemap: https://www.mosaic.photography/api/sitemap.xml
+
+# Crawl delay to reduce server load (10 seconds between requests)
+Crawl-delay: 10
