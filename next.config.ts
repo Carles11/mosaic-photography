@@ -20,6 +20,14 @@ const nextConfig: NextConfig = {
     ],
     minimumCacheTTL: 2678400, // 31 days
   },
+  async rewrites() {
+    return [
+      {
+        source: "/sitemap.xml",
+        destination: "/api/sitemap",
+      },
+    ];
+  },
 };
 
 export default withPWA({

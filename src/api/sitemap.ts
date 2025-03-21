@@ -7,6 +7,7 @@ export default async function handler(
 ) {
   const baseUrl = "https://www.mosaic.photography";
   const urls = await getAllImageUrls(); // Fetch dynamic URLs
+
   const sitemap = `
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       <url>
@@ -28,7 +29,8 @@ export default async function handler(
         )
       ).then((entries) => entries.join(""))}
     </urlset>
-  `;
+  `.trim();
+
   res.setHeader("Content-Type", "application/xml");
   res.status(200).send(sitemap);
 }
