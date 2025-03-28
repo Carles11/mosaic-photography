@@ -2,15 +2,15 @@ import ImageCard from "../cards/ImageCard";
 import AuthorCard from "../cards/AuthorCard";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
 
-import { useAppContext } from "@/context/AppContext";
 import styles from "./gallery.module.css";
 
-const Gallery = () => {
-  const { isMosaic } = useAppContext();
-
+type MosaicProp = {
+  isMosaic: boolean;
+};
+const Gallery = (mosaicProp: MosaicProp) => {
   return (
     <div className={styles.galleryGridContainer}>
-      {isMosaic ? (
+      {mosaicProp.isMosaic ? (
         <div className={styles.galleryGrid}>
           <ImageCard />
         </div>

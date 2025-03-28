@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 import { ImageData, ImageCardProps } from "@/types";
@@ -8,7 +9,7 @@ import styles from "./ImageCard.module.css";
 import { getImageDimensions } from "@/helpers/imageHelpers";
 import { ClimbingBoxLoader } from "react-spinners";
 
-// Image list to show when isMosaic is true
+// Image Gallery to show when isMosaic is true
 
 const ImageCard: React.FC<ImageCardProps> = () => {
   const [images, setImages] = useState<ImageData[]>([]);

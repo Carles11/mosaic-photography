@@ -5,7 +5,7 @@ import Footer from "@/components/footer/Footer";
 import { AppContextProvider } from "@/context/AppContext";
 import { ThemeProvider } from "next-themes";
 import GitHubCorner from "@/components/buttons/GitHubCorner";
-
+import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -22,10 +22,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mosaic | Iconic Nude Photography Gallery | Timeless Artistic Beauty",
+  title: {
+    default: "Mosaic | Nude photography | Mosaic Photography curated Gallery",
+    template: "%s | Mosaic Photography",
+  },
   description:
     "Discover Mosaic's curated gallery of iconic nude photography, celebrating the beauty of the human form through the lens of the world's most renowned nude photographers.",
   keywords: [
+    "mosaic",
+    "mosaic photography",
     "nude photography",
     "artistic nudes",
     "art nudes",
@@ -79,6 +84,24 @@ export const metadata: Metadata = {
     apple: "/favicons/apple-touch-icon.png",
   },
   manifest: "/favicons/site.webmanifest",
+  openGraph: {
+    title: "Nude photography | Mosaic Photography curated Gallery",
+    description:
+      "Meet the iconic photographers behind the stunning classic nude photography in our collection.",
+    // images: [
+    //   "https://cdn.mosaic.photography/Google%20Fotos/mosaic_man-ray/webImage26.jpg",
+    //   "https://cdn.mosaic.photography/Google%20Fotos/mosaic_david-dubnitskiy/david5.jpg",
+    //   "https://cdn.mosaic.photography/Google%20Fotos/mosaic_helmuth-newton/webImage136.jpg",
+    // ],
+    images: ["/favicons/favicon-32x32.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Nude photography | Mosaic Photography curated Gallery",
+    description:
+      "Explore our stunning image gallery featuring classic nude photography by iconic photographers.",
+    images: ["/favicons/favicon-32x32.png"],
+  },
 };
 
 export const viewport = {
@@ -89,9 +112,9 @@ export const viewport = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>

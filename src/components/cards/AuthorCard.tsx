@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 import { Photographer, ImageData, AuthorCardProps } from "@/types";
@@ -11,6 +12,7 @@ import { ClimbingBoxLoader } from "react-spinners";
 import styles from "./AuthorCard.module.css";
 
 // Author list to show when isMosaic is false
+
 const AuthorCard: React.FC<AuthorCardProps> = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
   const [error, setError] = useState<string | null>(null);
