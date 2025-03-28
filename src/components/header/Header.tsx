@@ -29,6 +29,9 @@ const Header = () => {
 
   return (
     <header>
+      <h1 className="sr-only">
+        Mosaic Photography: Iconic Nude Photography Gallery
+      </h1>
       <nav className={styles.navContainer}>
         <ul className={styles.navGrid}>
           {isHome && (

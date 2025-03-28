@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     template: "%s | Mosaic Photography",
   },
   description:
-    "Explore Mosaic's gallery of iconic nude photography, celebrating the beauty of the human form through renowned photographers.",
+    "Discover Mosaic's curated gallery of iconic nude photography, celebrating the timeless beauty of the human form through the lens of legendary photographers.",
   keywords: [
     "mosaic",
     "mosaic photography",
