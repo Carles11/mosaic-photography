@@ -23,11 +23,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Mosaic | Nude photography | Mosaic Photography curated Gallery",
+    default: "Mosaic | Nude iconic photography",
     template: "%s | Mosaic Photography",
   },
   description:
-    "Discover Mosaic's curated gallery of iconic nude photography, celebrating the beauty of the human form through the lens of the world's most renowned nude photographers.",
+    "Explore Mosaic's gallery of iconic nude photography, celebrating the beauty of the human form through renowned photographers.",
   keywords: [
     "mosaic",
     "mosaic photography",
@@ -88,11 +88,6 @@ export const metadata: Metadata = {
     title: "Nude photography | Mosaic Photography curated Gallery",
     description:
       "Meet the iconic photographers behind the stunning classic nude photography in our collection.",
-    // images: [
-    //   "https://cdn.mosaic.photography/Google%20Fotos/mosaic_man-ray/webImage26.jpg",
-    //   "https://cdn.mosaic.photography/Google%20Fotos/mosaic_david-dubnitskiy/david5.jpg",
-    //   "https://cdn.mosaic.photography/Google%20Fotos/mosaic_helmuth-newton/webImage136.jpg",
-    // ],
     images: ["/favicons/favicon-32x32.png"],
   },
   twitter: {
