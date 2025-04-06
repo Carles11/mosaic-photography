@@ -22,7 +22,7 @@ export default function Home() {
 
   const handleAgeConfirmation = () => {
     setIsMinimumAgeConfirmed(true);
-    sessionStorage.setItem("isMinimumAgeConfirmed", "true"); // Store confirmation in sessionStorage
+    sessionStorage.setItem("isMinimumAgeConfirmed", "true");
   };
 
   useEffect(() => {
