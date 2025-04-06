@@ -1,0 +1,46 @@
+.ageConfirmationModal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  align-items: center;
+  justify-items: center;
+  height: 100vh;
+  overflow-y: 100%; /* Enable vertical scrolling if needed */
+  padding: 1rem; /* Add some padding for better spacing */
+  box-sizing: border-box; /* Ensure padding is included in the height */
+}
+.modalContent {
+  background: var(--background-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 75%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.consentTitle {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.consentText {
+  font-size: 1.2rem;
+}
+
+.consentButton {
+  padding: 0 4px;
+  text-decoration: underline;
+  border: 1px solid var(--text-color);
+  border-radius: 4px;
+  padding: 9px;
+}
+
+.consentButton:hover {
+  background: #005bb5;
+}

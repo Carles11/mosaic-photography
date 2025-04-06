@@ -1,12 +1,29 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppContext } from "@/context/AppContext";
 
 import Gallery from "@/components/gallery/Gallery";
+import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
 
 export default function Home() {
   const { isMosaic } = useAppContext();
+  const [isMinimumAgeConfirmed, setIsMinimumAgeConfirmed] = useState(false);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
+
+  useEffect(() => {
+    // Check sessionStorage for age confirmation
+    const ageConfirmed = sessionStorage.getItem("isMinimumAgeConfirmed");
+    if (ageConfirmed === "true") {
+      setIsMinimumAgeConfirmed(true);
+    }
+    setIsCheckingSession(false); // Ensure the modal doesn't disappear prematurely
+  }, []);
+
+  const handleAgeConfirmation = () => {
+    setIsMinimumAgeConfirmed(true);
+    sessionStorage.setItem("isMinimumAgeConfirmed", "true"); // Store confirmation in sessionStorage
+  };
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {
@@ -22,6 +39,26 @@ export default function Home() {
       });
     }
   }, []);
+
+  if (isCheckingSession) {
+    return null; // Prevent rendering anything until session check is complete
+  }
+
+  if (!isMinimumAgeConfirmed) {
+    return (
+      <div style={{ position: "absolute", top: 0, left: 0 }}>
+        <div
+          style={{
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.8)",
+            zIndex: 999,
+          }}
+        />
+        <AgeConsent setIsMinimumAgeConfirmed={handleAgeConfirmation} />
+      </div>
+    );
+  }
 
   return (
     <>
