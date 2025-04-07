@@ -30,11 +30,20 @@ const Credits: React.FC = () => {
     <main className={styles.container}>
       <h1 className={styles.title}>Thanks</h1>
 
-      <h2 className={styles.subtitle}>Logo Credits</h2>
+      <h2 className={styles.subtitle}>Logo credits</h2>
       <p className={styles.text}>
         The mosaic logo was created for free using{" "}
         <a href="https://logo.com" title="Logo.com">
           Logo.com
+        </a>
+        .
+      </p>
+      <h2 className={styles.subtitle}>Image optimization credits</h2>
+      <p className={styles.text}>
+        All images in the mosaic gallery were optimized into webp format for
+        free using{" "}
+        <a href="https://towebp.io/" title="towebp.io">
+          towebp.io
         </a>
         .
       </p>
