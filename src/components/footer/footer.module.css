@@ -1,6 +1,7 @@
 .footerContainer {
   position: absolute;
   margin-top: auto;
+  bottom: 0;
   width: 100%;
   height: auto;
   background-color: var(--background-color);

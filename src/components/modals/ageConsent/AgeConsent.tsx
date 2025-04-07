@@ -9,8 +9,8 @@ export const AgeConsent = ({
   setIsMinimumAgeConfirmed: (value: boolean) => void;
 }) => {
   return (
-    <div className={styles.ageConfirmationModal}>
-      <div className={styles.modalContent}>
+    <div className={styles.ageModalOverlay}>
+      <div className={styles.ageConfirmationContent}>
         <h2 className={styles.consentTitle}>Age Confirmation</h2>
         <p className={styles.consentText}>
           By proceeding, you confirm that you are of legal age to access this

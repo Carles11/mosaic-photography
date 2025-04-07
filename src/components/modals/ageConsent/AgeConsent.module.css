@@ -1,27 +1,32 @@
-.ageConfirmationModal {
+.ageModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+  overflow-y: auto; /* Ensure the overlay itself is scrollable */
+}
+
+.ageConfirmationContent {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.5rem;
-  align-items: center;
-  justify-items: center;
-  height: 100vh;
-  overflow-y: 100%; /* Enable vertical scrolling if needed */
-  padding: 1rem; /* Add some padding for better spacing */
-  box-sizing: border-box; /* Ensure padding is included in the height */
-}
-.modalContent {
   background: var(--background-color);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   padding: 20px;
   border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  height: auto;
+  max-height: 70vh; /* Ensure the modal content does not exceed the viewport height */
+  overflow-y: auto; /* Allow scrolling within the modal content */
+  position: relative;
   text-align: center;
-  width: 75%;
-  max-width: 600px;
-  margin: auto;
 }
 
 .consentTitle {
