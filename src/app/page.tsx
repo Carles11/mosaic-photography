@@ -62,7 +62,13 @@ export default function Home() {
 
   return (
     <>
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "100vh",
+        }}
+      >
         <main>
           {/* Visually hidden content for SEO */}
           <h1 className="sr-only">
