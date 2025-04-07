@@ -149,7 +149,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
           <div ref={ref} onClick={open} className={styles.imageItem}>
             <Image
               src={image.url}
-              alt={image.title || "Image"}
+              alt={image.title || `Image of the photographer ${image.author}`}
               width={50}
               height={50}
               className={
@@ -171,7 +171,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
       {loading ? (
         <div className={styles.loaderContainer}>
           <ClimbingBoxLoader
-            color="var(--secondary-color)"
+            color="var(--color-white)"
             loading={loading}
             size={25}
           />

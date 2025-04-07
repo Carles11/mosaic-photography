@@ -96,7 +96,7 @@ const ImageCard: React.FC<ImageCardProps> = () => {
       {loading ? (
         <div className={styles.loaderContainer}>
           <ClimbingBoxLoader
-            color="var(--secondary-color)"
+            color="var(--color-white)"
             loading={loading}
             size={25}
           />

@@ -4,13 +4,10 @@ import GoToTopButton from "@/components/buttons/GoToTopButton";
 
 import styles from "./gallery.module.css";
 
-type MosaicProp = {
-  isMosaic: boolean;
-};
-const Gallery = (mosaicProp: MosaicProp) => {
+const Gallery = ({ isMosaic }: { isMosaic: boolean }) => {
   return (
     <div className={styles.galleryGridContainer}>
-      {mosaicProp.isMosaic ? (
+      {!isMosaic ? (
         <div className={styles.galleryGrid}>
           <ImageCard />
         </div>

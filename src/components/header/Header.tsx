@@ -74,7 +74,7 @@ const Header = () => {
               </div>
               <Tooltip
                 anchorSelect="#mosaic-images-icon"
-                content="Mosaic images gallery"
+                content="Images gallery"
               />
             </div>
 
