@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 import { Photographer, ImageData, AuthorCardProps } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
-import { Gallery, Item } from "react-photoswipe-gallery";
+import { Gallery, Item, GalleryProps } from "react-photoswipe-gallery";
 import "photoswipe/dist/photoswipe.css";
 import { getImageDimensions } from "@/helpers/imageHelpers";
 import { ClimbingBoxLoader } from "react-spinners";
@@ -19,6 +19,12 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedPhotographer, setSelectedPhotographer] =
     useState<Photographer | null>(null);
+
+  const galleryOptions: GalleryProps["options"] = {
+    zoom: true, // Enable zoom functionality
+    // initialZoomLevel: 0.8, // Set initial zoom level (e.g., 80% of the image size)
+    // maxZoomLevel: 2, // Set maximum zoom level (e.g., 200% of the image size)
+  };
 
   useEffect(() => {
     const fetchPhotographersWithImages = async () => {
@@ -201,7 +207,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
                 </p>
               )}
             </div>
-            <Gallery withCaption>
+            <Gallery withCaption options={galleryOptions}>
               <div className={styles.imageList}>
                 {photographer.images.map((image, index) => (
                   <ImageItem key={index} image={image} />

@@ -26,17 +26,24 @@ const TermsOfService: React.FC = () => {
       <h1 className={styles.title}>Terms of Service</h1>
       <h2 className={styles.subtitle}>Use of Images</h2>
       <p className={styles.text}>
-        This website is a gallery of images sourced from the internet. If you
-        are a photographer and see your images on this site and would like them
-        to be removed, please contact me, and I will promptly remove them.
+        This website primarily features images that are in the public domain,
+        sourced from platforms like{" "}
+        <a
+          href="https://commons.wikimedia.org/wiki/Main_Page"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Wikimedia Commons
+        </a>
+        . If other images are displayed, it means that explicit permission has
+        been obtained from the copyright owner. If you believe an image has been
+        used improperly, please contact me, and I will address the issue
+        promptly.
       </p>
       <p className={styles.text}>
         Conversely, if you are a photographer and would like to see your
-        pictures featured in the mosaic, please feel free to reach out to me at{" "}
+        pictures featured in the gallery, please feel free to reach out to me at{" "}
         <a href="mailto:carles@crix.design">carles@crix.design</a>.
-      </p>
-      <p className={styles.text}>
-        Thank you for your understanding and support.
       </p>
       <h2 className={styles.subtitle}>Disclaimer</h2>
       <p className={styles.text}>

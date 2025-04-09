@@ -18,8 +18,8 @@ const ImageCard: React.FC<ImageCardProps> = () => {
 
   const galleryOptions: GalleryProps["options"] = {
     zoom: true, // Enable zoom functionality
-    initialZoomLevel: 0.8, // Set initial zoom level (e.g., 80% of the image size)
-    maxZoomLevel: 2, // Set maximum zoom level (e.g., 200% of the image size)
+    // initialZoomLevel: 0.8, // Set initial zoom level (e.g., 80% of the image size)
+    // maxZoomLevel: 2, // Set maximum zoom level (e.g., 200% of the image size)
   };
 
   useEffect(() => {
