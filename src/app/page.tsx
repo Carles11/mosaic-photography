@@ -10,6 +10,7 @@ export default function Home() {
   const { isMosaic } = useAppContext();
   const [isMinimumAgeConfirmed, setIsMinimumAgeConfirmed] = useState(false);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
+  const [isDatabaseReady, setIsDatabaseReady] = useState(false);
 
   useEffect(() => {
     // Check sessionStorage for age confirmation
@@ -40,8 +41,42 @@ export default function Home() {
     }
   }, []);
 
+  useEffect(() => {
+    // Simulate database readiness check
+    const checkDatabase = async () => {
+      // Replace this with actual database readiness logic
+      const dbReady = false; // Set to true when the database is ready
+      setIsDatabaseReady(dbReady);
+    };
+    checkDatabase();
+  }, []);
+
   if (isCheckingSession) {
     return null; // Prevent rendering anything until session check is complete
+  }
+
+  if (!isDatabaseReady) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          backgroundColor: "#f8f9fa",
+          color: "#212529",
+          fontFamily: "Arial, sans-serif",
+          textAlign: "center",
+        }}
+      >
+        <div>
+          <h1>Under Construction</h1>
+          <p>
+            We are currently working on the database. Please check back later!
+          </p>
+        </div>
+      </div>
+    );
   }
 
   if (!isMinimumAgeConfirmed) {
