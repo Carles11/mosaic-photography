@@ -7,6 +7,7 @@ type Props = Omit<ImageProps, "src" | "priority" | "loading"> & {
   srcDark: string;
   srcLightMobile: string;
   srcDarkMobile: string;
+  priority?: boolean;
 };
 
 const ThemeImage = (props: Props) => {

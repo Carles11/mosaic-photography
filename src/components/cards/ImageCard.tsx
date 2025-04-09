@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 import { ImageData, ImageCardProps } from "@/types";
-import { Gallery, Item } from "react-photoswipe-gallery";
+import { Gallery, Item, GalleryProps } from "react-photoswipe-gallery";
 import "photoswipe/dist/photoswipe.css";
 import styles from "./ImageCard.module.css";
 import { getImageDimensions } from "@/helpers/imageHelpers";
@@ -15,6 +15,12 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   const [images, setImages] = useState<ImageData[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const galleryOptions: GalleryProps["options"] = {
+    zoom: true, // Enable zoom functionality
+    initialZoomLevel: 0.8, // Set initial zoom level (e.g., 80% of the image size)
+    maxZoomLevel: 2, // Set maximum zoom level (e.g., 200% of the image size)
+  };
 
   useEffect(() => {
     const fetchImages = async (): Promise<void> => {
@@ -103,7 +109,7 @@ const ImageCard: React.FC<ImageCardProps> = () => {
           <p className={styles.loaderText}>Loading images...</p>
         </div>
       ) : (
-        <Gallery withCaption>
+        <Gallery withCaption options={galleryOptions}>
           {images.map((image, index) => {
             return (
               <div
@@ -132,12 +138,18 @@ const ImageCard: React.FC<ImageCardProps> = () => {
                         loading="lazy"
                         unoptimized
                       />
+
+                      {/*   
+                      UNCOMMENT TO ADD LEGEND TO IMAGES
+                      
                       <div className={styles.imageInfo}>
-                        <h3 className={styles.imageText}>{image.author}</h3>
-                        {/* <p className={styles.imageDescription}>
+                        <h3 className={styles.imageText}>
+                          fafaf{image.author}
+                        </h3>
+                       <p className={styles.imageDescription}>
                           {image.description}
-                        </p> */}
-                      </div>
+                        </p> 
+                      </div>*/}
                     </div>
                   )}
                 </Item>

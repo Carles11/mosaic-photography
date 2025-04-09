@@ -14,7 +14,7 @@ import GoProModal from "@/components/modals/goProModal/GoProModal";
 import styles from "./header.module.css";
 
 const Header = () => {
-  const { toggleView } = useAppContext();
+  const { toggleView, isMosaic } = useAppContext();
   const [showGoProModal, setShowGoProModal] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -24,8 +24,10 @@ const Header = () => {
     if (!isHome) {
       router.push("/");
     }
+    console.log({ view });
     toggleView(view);
   };
+  console.log({ isMosaic });
 
   return (
     <header>
@@ -46,6 +48,7 @@ const Header = () => {
                   className={styles.themeImage}
                   width={0}
                   height={0}
+                  priority // Add this prop to ensure the image is loaded immediately
                 />
               </Link>
             </li>
@@ -64,6 +67,17 @@ const Header = () => {
               <div
                 id="mosaic-images-icon"
                 onClick={() => handleIconClick("mosaic")}
+                style={{
+                  backgroundColor: "transparent",
+                  borderColor: isMosaic ? "lightgray" : "transparent",
+                  borderWidth: "1x",
+                  borderStyle: "solid",
+                  borderRadius: "50%",
+                  padding: "9px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 <Image
                   src="/icons/mosaic-icon-colored.png"
@@ -82,6 +96,17 @@ const Header = () => {
               <div
                 id="authors-list-icon"
                 onClick={() => handleIconClick("authors")}
+                style={{
+                  backgroundColor: "transparent",
+                  borderColor: !isMosaic ? "lightgray" : "transparent",
+                  borderWidth: "1x",
+                  borderStyle: "solid",
+                  borderRadius: "50%",
+                  padding: "9px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
                 <Image
                   src="/icons/authors-list-icon-colored.png"

@@ -1,4 +1,3 @@
-// filepath: /c:/Users/Usuario/Documents/AAA_REPOs/mosaic/src/context/AppContext.tsx
 "use client";
 import { createContext, useContext, useState, ReactNode } from "react";
 
@@ -12,9 +11,10 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [isMosaic, setIsMosaic] = useState(true);
 
   const toggleView = (viewModus: string) => {
-    setIsMosaic(viewModus === "authors");
-  };
+    console.log({ viewModus });
 
+    setIsMosaic(viewModus === "mosaic"); // Fix: Set to true if "mosaic", false otherwise
+  };
   return (
     <AppContext.Provider value={{ isMosaic, toggleView }}>
       {children}

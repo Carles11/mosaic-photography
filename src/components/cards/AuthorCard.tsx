@@ -188,7 +188,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
                 {photographer.biography || "No biography available."}
               </p>
               <p>
-                <strong>Birthdate:</strong>
+                <strong>Birthdate: </strong>
                 {new Date(photographer.birthdate).toLocaleDateString()}
               </p>
               <p>

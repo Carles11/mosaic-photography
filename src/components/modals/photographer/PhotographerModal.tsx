@@ -64,7 +64,12 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
         </button>
         <div className={styles.photographerImageContainer}>
           <Image
-            src={photographer.images[0]?.url || ""}
+            src={
+              photographer.images.find((img) => img.url.startsWith("000_aaa"))
+                ?.url ||
+              photographer.images[0]?.url ||
+              ""
+            }
             alt={`${photographer.name} ${photographer.surname}`}
             width={100}
             height={100}

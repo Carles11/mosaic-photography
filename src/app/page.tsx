@@ -45,7 +45,7 @@ export default function Home() {
     // Simulate database readiness check
     const checkDatabase = async () => {
       // Replace this with actual database readiness logic
-      const dbReady = false; // Set to true when the database is ready
+      const dbReady = true; // Set to true when the database is ready
       setIsDatabaseReady(dbReady);
     };
     checkDatabase();

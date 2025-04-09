@@ -7,7 +7,7 @@ import styles from "./gallery.module.css";
 const Gallery = ({ isMosaic }: { isMosaic: boolean }) => {
   return (
     <div className={styles.galleryGridContainer}>
-      {!isMosaic ? (
+      {isMosaic ? (
         <div className={styles.galleryGrid}>
           <ImageCard />
         </div>
