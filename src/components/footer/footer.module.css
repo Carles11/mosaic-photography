@@ -5,7 +5,7 @@
   height: auto;
   background-color: var(--background-color);
   color: var(--text-color);
-  z-index: 1999; /* Ensure footer is on top but below dropdown author */
+  z-index: 1; /* Ensure footer is on top but below dropdown author */
   border-top: 1px solid lightgrey; /* Add a very thin light-grey line on top */
 }
 

@@ -5,12 +5,13 @@ import { useAppContext } from "@/context/AppContext";
 
 import Gallery from "@/components/gallery/Gallery";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
+import SiteUnderConstruction from "@/components/underConstruction/siteUnderConstruction";
 
 export default function Home() {
   const { isMosaic } = useAppContext();
   const [isMinimumAgeConfirmed, setIsMinimumAgeConfirmed] = useState(false);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
-  const [isDatabaseReady, setIsDatabaseReady] = useState(false);
+  const [isSiteInConstruction, setIsSiteInConstruction] = useState(false);
 
   useEffect(() => {
     // Check sessionStorage for age confirmation
@@ -41,12 +42,12 @@ export default function Home() {
     }
   }, []);
 
+  // Set SITE IN CONSTRUCTION readiness check
   useEffect(() => {
-    // Simulate database readiness check
-    const checkDatabase = async () => {
+    const checkDatabase = () => {
       // Replace this with actual database readiness logic
       const dbReady = true; // Set to true when the database is ready
-      setIsDatabaseReady(dbReady);
+      setIsSiteInConstruction(dbReady);
     };
     checkDatabase();
   }, []);
@@ -55,51 +56,18 @@ export default function Home() {
     return null; // Prevent rendering anything until session check is complete
   }
 
-  if (!isDatabaseReady) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          backgroundColor: "#f8f9fa",
-          color: "#212529",
-          fontFamily: "Arial, sans-serif",
-          textAlign: "center",
-        }}
-      >
-        <div>
-          <h1>Under Construction</h1>
-          <p>
-            We are currently working on the database. Please check back later!
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isMinimumAgeConfirmed) {
-    return (
-      <div style={{ position: "absolute", top: 0, left: 0 }}>
-        <div
-          style={{
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "rgba(0, 0, 0, 0.8)",
-            zIndex: 999,
-          }}
-        />
-        <AgeConsent setIsMinimumAgeConfirmed={handleAgeConfirmation} />
-      </div>
-    );
-  }
-
   return (
     <>
+      {!isSiteInConstruction && <SiteUnderConstruction />}
+
+      <AgeConsent
+        isMinimumAgeConfirmed={isMinimumAgeConfirmed}
+        setIsMinimumAgeConfirmed={handleAgeConfirmation}
+      />
       <div
         style={{
-          display: "flex",
+          display:
+            isSiteInConstruction && isMinimumAgeConfirmed ? "flex" : "none",
           flexDirection: "column",
           minHeight: "100vh",
         }}

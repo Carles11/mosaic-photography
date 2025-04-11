@@ -5,11 +5,21 @@ interface DropdownProps {
   buttonText: string;
   items: { store: string; website: string; affiliate: boolean }[];
   closeBio: React.Dispatch<React.SetStateAction<boolean>>;
+  onToggle?: (isOpen: boolean) => void; // New prop
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, closeBio }) => {
+const Dropdown: React.FC<DropdownProps> = ({
+  buttonText,
+  items,
+  closeBio,
+  onToggle,
+}) => {
+  const handleToggle = (event: React.SyntheticEvent<HTMLDetailsElement>) => {
+    onToggle?.((event.target as HTMLDetailsElement).open);
+  };
+
   return (
-    <details className={styles.dropdown}>
+    <details className={styles.dropdown} onToggle={handleToggle}>
       <summary role="button" onClick={() => closeBio(false)}>
         <a className={styles.button}>{buttonText}</a>
       </summary>

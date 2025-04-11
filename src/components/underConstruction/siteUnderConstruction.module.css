@@ -1,0 +1,10 @@
+.underConstructionContainer {
+  display: "flex";
+  justify-content: "center";
+  align-items: "center";
+  height: "100vh";
+  background-color: "#f8f9fa";
+  color: "#212529";
+  font-family: "Arial; sans-serif";
+  text-align: "center";
+}

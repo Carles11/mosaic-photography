@@ -49,6 +49,15 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
     [onClose, modalRef]
   );
 
+  const handleDropdownToggle = (isOpen: boolean) => {
+    if (isOpen && modalRef.current) {
+      modalRef.current.scrollTo({
+        top: modalRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  };
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -116,9 +125,10 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
           )}
           {stores && stores.length > 0 && (
             <Dropdown
-              buttonText="Buy some stuff!"
+              buttonText="Prints stores"
               items={stores}
               closeBio={setIsBiographyExpanded}
+              onToggle={handleDropdownToggle}
             />
           )}
         </div>
