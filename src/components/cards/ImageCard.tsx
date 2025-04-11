@@ -67,12 +67,12 @@ const ImageCard: React.FC<ImageCardProps> = () => {
             };
           } catch (dimensionError) {
             if (dimensionError instanceof Error) {
-              console.error(
-                "Error getting image dimensions:",
+              console.log(
+                "Failed getting image dimensions:",
                 dimensionError.message
               );
             } else {
-              console.error("Error getting image dimensions:", dimensionError);
+              console.log("Failed getting image dimensions:", dimensionError);
             }
             return {
               ...image,
@@ -124,35 +124,20 @@ const ImageCard: React.FC<ImageCardProps> = () => {
                   original={image.url}
                   thumbnail={image.url}
                   caption={image.author}
-                  width={image.width}
-                  height={image.height}
+                  width={image.width || 800} // Fallback to a default width (e.g., 800px)
+                  height={image.height || 600} // Fallback to a default height (e.g., 600px)
                 >
                   {({ ref, open }) => (
                     <div ref={ref} onClick={open} className={styles.imageItem}>
                       <Image
                         src={image.url}
-                        alt={
-                          image.title ||
-                          "Sepia-toned nude portrait from 1900s, artistic pose"
-                        }
+                        alt={image.title || "Mosaic Gallery Image"}
                         className={styles.image}
                         fill
                         sizes="(max-width: 600px) 100vw, 50vw"
                         loading="lazy"
                         unoptimized
                       />
-
-                      {/*   
-                      UNCOMMENT TO ADD LEGEND TO IMAGES
-                      
-                      <div className={styles.imageInfo}>
-                        <h3 className={styles.imageText}>
-                          fafaf{image.author}
-                        </h3>
-                       <p className={styles.imageDescription}>
-                          {image.description}
-                        </p> 
-                      </div>*/}
                     </div>
                   )}
                 </Item>

@@ -106,13 +106,16 @@ export default function Home() {
       >
         <main>
           <div className="v-margin">
-            <h1 className="center-text">Explore the Beauty and Artistry</h1>
+            <h1 className="center-text">
+              Public Domain Nude Photography Gallery
+            </h1>
             <h2 className="center-text">
-              Iconic Photographers Behind Classic Nude Photography
+              Vintage Nude Photography by Iconic Photographers
             </h2>
             <p className="center-text">
-              Discover our curated gallery of classic nude photography,
-              showcasing the work of iconic photographers.
+              Explore Mosaic&apos;s curated collection of timeless nude
+              photography, featuring classic works from legendary photographers
+              in the public domain.
             </p>
           </div>
 

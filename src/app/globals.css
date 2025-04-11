@@ -71,7 +71,7 @@ a {
 }
 
 .v-margin {
-  margin: 1rem 0;
+  margin: 2rem 0;
 }
 
 h1 {
@@ -90,6 +90,20 @@ p {
   font-size: calc(0.9rem + 0.5vw); /* Scales with viewport width */
   line-height: 1.6;
   margin: 0.5rem 0;
+}
+
+h1.center-text {
+  font-size: 2rem; /* Adjust size */
+  color: #333; /* Match gallery theme */
+  margin-bottom: 20px; /* Add spacing */
+}
+h2.center-text {
+  font-size: 1.5rem;
+  color: #555;
+}
+p.center-text {
+  font-size: 1rem;
+  color: #777;
 }
 
 @media (prefers-color-scheme: dark) {
