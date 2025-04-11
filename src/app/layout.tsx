@@ -23,9 +23,22 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Mosaic | Nude iconic photography",
-    template: "%s | Mosaic Photography",
+    default: "Public Domain Nude Photography | Mosaic Gallery",
+    template: "%s | Vintage Nude Photography by Mosaic",
   },
+  alternates: {
+    canonical: "https://mosaic.photography/",
+    languages: {
+      es: "https://mosaic.photography/es",
+      de: "https://mosaic.photography/de",
+    },
+  },
+  authors: [
+    {
+      name: "Mosaic Photography",
+      url: "https://mosaic.photography/",
+    },
+  ],
   description:
     "Discover Mosaic's curated gallery of iconic nude photography, celebrating the timeless beauty of the human form through the lens of legendary photographers.",
   keywords: [

@@ -173,6 +173,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
   };
 
   return (
+    // <div className={styles.authorCardContainer}>
     <div>
       {loading ? (
         <div className={styles.loaderContainer}>

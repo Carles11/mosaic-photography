@@ -131,7 +131,10 @@ const ImageCard: React.FC<ImageCardProps> = () => {
                     <div ref={ref} onClick={open} className={styles.imageItem}>
                       <Image
                         src={image.url}
-                        alt={image.title || "Mosaic Nude Gallery Image"}
+                        alt={
+                          image.title ||
+                          "Sepia-toned nude portrait from 1900s, artistic pose"
+                        }
                         className={styles.image}
                         fill
                         sizes="(max-width: 600px) 100vw, 50vw"
