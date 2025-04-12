@@ -35,6 +35,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
       ).select(`
         name,
         surname,
+        author,
         biography,
         birthdate,
         deceasedate,
@@ -144,7 +145,6 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
   };
 
   return (
-    // <div className={styles.authorCardContainer}>
     <div>
       {loading ? (
         <div className={styles.loaderContainer}>
@@ -156,38 +156,59 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
           <p className={styles.loaderText}>Loading photographers...</p>
         </div>
       ) : (
-        photographers.map((photographer, index) => (
-          <div key={index} className={styles.authorCard}>
-            <div onClick={() => handleNameClick(photographer)}>
-              <h2 className={styles.authorName}>
-                {`${photographer.name} ${photographer.surname}`.toUpperCase()}
-              </h2>
-              <p className={styles.biography}>
-                {photographer.biography || "No biography available."}
-              </p>
-              <p>
-                <strong>Birthdate: </strong>
-                {new Date(photographer.birthdate).toLocaleDateString()}
-              </p>
-              <p>
-                <strong>Origin:</strong> {photographer.origin}
-              </p>
-              {photographer.deceasedate && (
-                <p>
-                  <strong>Deceasedate:</strong>{" "}
-                  {new Date(photographer.deceasedate).toLocaleDateString()}
-                </p>
-              )}
-            </div>
-            <Gallery withCaption options={galleryOptions}>
-              <div className={styles.imageList}>
-                {photographer.images.map((image, index) => (
-                  <ImageItem key={index} image={image} />
-                ))}
-              </div>
-            </Gallery>
+        <>
+          <div className={styles.authorScrollList}>
+            {photographers.map((photographer, index) => (
+              <button
+                key={index}
+                className={styles.authorButton}
+                onClick={() =>
+                  document
+                    .getElementById(`author-${index}`)
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                {photographer.author}
+              </button>
+            ))}
           </div>
-        ))
+          {photographers.map((photographer, index) => (
+            <div
+              key={index}
+              id={`author-${index}`}
+              className={styles.authorCard}
+            >
+              <div onClick={() => handleNameClick(photographer)}>
+                <h2 className={styles.authorName}>
+                  {`${photographer.name} ${photographer.surname}`.toUpperCase()}
+                </h2>
+                <p className={styles.biography}>
+                  {photographer.biography || "No biography available."}
+                </p>
+                <p>
+                  <strong>Birthdate: </strong>
+                  {new Date(photographer.birthdate).toLocaleDateString()}
+                </p>
+                <p>
+                  <strong>Origin:</strong> {photographer.origin}
+                </p>
+                {photographer.deceasedate && (
+                  <p>
+                    <strong>Deceasedate:</strong>{" "}
+                    {new Date(photographer.deceasedate).toLocaleDateString()}
+                  </p>
+                )}
+              </div>
+              <Gallery withCaption options={galleryOptions}>
+                <div className={styles.imageList}>
+                  {photographer.images.map((image, index) => (
+                    <ImageItem key={index} image={image} />
+                  ))}
+                </div>
+              </Gallery>
+            </div>
+          ))}
+        </>
       )}
       {selectedPhotographer && (
         <PhotographerModal

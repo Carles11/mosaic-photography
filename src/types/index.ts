@@ -1,6 +1,7 @@
 export interface Photographer {
   name: string;
   surname: string;
+  author: string;
   biography: string;
   birthdate: string;
   deceasedate: string | null;

@@ -59,6 +59,37 @@
   z-index: 1000;
 }
 
+.authorScrollList {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px 0;
+  gap: 4px;
+  scrollbar-width: thin;
+}
+
+.authorScrollList::-webkit-scrollbar {
+  height: 6px;
+}
+
+.authorScrollList::-webkit-scrollbar-thumb {
+  background-color: var(--secondary-color);
+  border-radius: 3px;
+}
+
+.authorButton {
+  border: 1px solid var(--secondary-color);
+  border-radius: 5px;
+  background: transparent;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.authorButton:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
 @media (max-width: 768px) {
   .authorCard {
     width: 80%; /* Ensure the card takes full width */
