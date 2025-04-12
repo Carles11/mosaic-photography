@@ -52,12 +52,12 @@ const ImageCard: React.FC<ImageCardProps> = () => {
       const processedImages = await Promise.all(
         images.map(async (image): Promise<ImageData> => {
           try {
-            const encodedUrl = encodeURI(image.url);
-            const dimensions = await getImageDimensions(encodedUrl);
+            // const encodedUrl = encodeURI(image.url);
+            const dimensions = await getImageDimensions(image.url);
 
             return {
               ...image,
-              url: encodedUrl, // Use encoded URL
+              url: image.url, // Use encoded URL
               width: dimensions.width,
               height: dimensions.height,
               className:

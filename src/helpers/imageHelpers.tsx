@@ -3,7 +3,7 @@ export const getImageDimensions = (
 ): Promise<{ width: number; height: number }> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.src = url;
+    img.src = encodeURI(url); // Properly encode the URL
     // console.log({ img });
     img.onload = () => {
       resolve({ width: img.width, height: img.height });

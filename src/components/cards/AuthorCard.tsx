@@ -56,38 +56,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         setError(error.message);
         setLoading(false);
       } else {
-        const processedPhotographers = await Promise.all(
-          photographers.map(async (photographer) => {
-            const processedImages = await Promise.all(
-              photographer.images.map(async (image) => {
-                try {
-                  const encodedUrl = encodeURI(image.url);
-                  const dimensions = await getImageDimensions(encodedUrl);
-                  return {
-                    ...image,
-                    width: dimensions.width,
-                    height: dimensions.height,
-                  };
-                } catch (dimensionError) {
-                  if (dimensionError instanceof Error) {
-                    console.error(
-                      "Error getting image dimensions:",
-                      dimensionError.message
-                    );
-                  } else {
-                    console.error(
-                      "Error getting image dimensions:",
-                      dimensionError
-                    );
-                  }
-                  return { ...image, width: 0, height: 0 };
-                }
-              })
-            );
-            return { ...photographer, images: processedImages };
-          })
-        );
-        const shuffledPhotographers = processedPhotographers.sort(
+        const shuffledPhotographers = photographers.sort(
           () => Math.random() - 0.5
         );
 
@@ -121,17 +90,19 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
       const fetchDimensions = async () => {
         try {
           const encodedUrl = encodeURI(image.url);
-          const dims = await getImageDimensions(encodedUrl);
+          console.log({ encodedUrl });
+          console.log("image.url", image.url);
+          const dims = await getImageDimensions(image.url);
 
           setDimensions(dims);
         } catch (dimensionError) {
           if (dimensionError instanceof Error) {
-            console.error(
-              "Error getting image dimensions:",
+            console.log(
+              "Failed getting image dimensions:",
               dimensionError.message
             );
           } else {
-            console.error("Error getting image dimensions:", dimensionError);
+            console.log("Failed getting image dimensions:", dimensionError);
           }
         }
       };
@@ -145,8 +116,8 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
 
     return (
       <Item
-        original={image.url}
-        thumbnail={image.url}
+        original={encodeURI(image.url)}
+        thumbnail={encodeURI(image.url)}
         caption={image.author}
         width={dimensions.width}
         height={dimensions.height}
@@ -154,8 +125,8 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         {({ ref, open }) => (
           <div ref={ref} onClick={open} className={styles.imageItem}>
             <Image
-              src={image.url}
-              alt={image.title || `Image of the photographer ${image.author}`}
+              src={encodeURI(image.url)}
+              alt={image.title || `Work of the photographer ${image.author}`}
               width={50}
               height={50}
               className={

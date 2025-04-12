@@ -5,10 +5,10 @@
 
 .galleryGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   grid-auto-rows: 200px; /* Ensure consistent row height */
   grid-auto-flow: dense; /* Fill in gaps */
-  gap: 0.2rem;
+  gap: 0;
   width: 100%;
   height: auto;
   min-height: calc(100vh - 8rem); /* Adjust to account for footer height */

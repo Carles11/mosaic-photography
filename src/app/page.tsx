@@ -74,17 +74,36 @@ export default function Home() {
       >
         <main>
           <div className="v-margin">
-            <h1 className="center-text">
-              Public Domain Nude Photography Gallery
-            </h1>
-            <h2 className="center-text">
-              Vintage Nude Photography by Iconic Photographers
-            </h2>
-            <p className="center-text">
-              Explore Mosaic&apos;s curated collection of timeless nude
-              photography, featuring classic works from legendary photographers
-              in the public domain.
-            </p>
+            {isMosaic ? (
+              <>
+                {/* SEO-friendly content for the image gallery */}
+                <h1 className="center-text">
+                  Timeless nude photography in the public domain
+                </h1>
+                <h2 className="center-text">
+                  A curated gallery of vintage nude photography
+                </h2>
+                <p className="center-text">
+                  Discover a stunning collection of classic nude photography
+                  from legendary photographers, now in the public domain.
+                </p>
+              </>
+            ) : (
+              <>
+                {/* SEO-friendly content for the photographers list */}
+                <h1 className="center-text">
+                  Meet the iconic photographers behind mosaic photography
+                </h1>
+                <h2 className="center-text">
+                  Learn about the masters of vintage nude photography
+                </h2>
+                <p className="center-text">
+                  Dive into the lives and works of legendary photographers who
+                  shaped the world of classic nude photography. Discover their
+                  stories and artistic journeys.
+                </p>
+              </>
+            )}
           </div>
 
           {/* Structured data for SEO */}

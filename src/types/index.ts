@@ -18,8 +18,8 @@ export interface ImageData {
   title: string;
   description: string;
   created_at: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   className?: string;
 }
 
