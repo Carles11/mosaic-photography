@@ -111,6 +111,10 @@ const ImageCard: React.FC<ImageCardProps> = () => {
       ) : (
         <Gallery withCaption options={galleryOptions}>
           {images.map((image, index) => {
+            if (!image.width || !image.height) {
+              // Skip rendering if dimensions are missing
+              return null;
+            }
             return (
               <div
                 key={index}
