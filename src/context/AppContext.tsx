@@ -11,7 +11,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [isMosaic, setIsMosaic] = useState(true);
 
   const toggleView = (viewModus: string) => {
-    console.log({ viewModus });
+    // console.log({ viewModus });
 
     setIsMosaic(viewModus === "mosaic"); // Fix: Set to true if "mosaic", false otherwise
   };

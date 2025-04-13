@@ -3,6 +3,7 @@
   margin-top: auto;
   width: 100%;
   height: auto;
+  min-height: 10rem;
   background-color: var(--background-color);
   color: var(--text-color);
   z-index: 1; /* Ensure footer is on top but below dropdown author */

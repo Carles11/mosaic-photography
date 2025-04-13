@@ -90,9 +90,9 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
     useEffect(() => {
       const fetchDimensions = async () => {
         try {
-          const encodedUrl = encodeURI(image.url);
-          console.log({ encodedUrl });
-          console.log("image.url", image.url);
+          // const encodedUrl = encodeURI(image.url);
+          // console.log({ encodedUrl });
+          // console.log("image.url", image.url);
           const dims = await getImageDimensions(image.url);
 
           setDimensions(dims);

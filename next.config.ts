@@ -21,7 +21,7 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 2678400, // 31 days
   },
   async rewrites() {
-    console.log("Applying rewrite rule for sitemap"); // Add this line for logging
+    // console.log("Applying rewrite rule for sitemap"); // Add this line for logging
     return [
       {
         source: "/sitemap.xml",

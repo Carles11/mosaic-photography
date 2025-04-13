@@ -24,10 +24,10 @@ const Header = () => {
     if (!isHome) {
       router.push("/");
     }
-    console.log({ view });
+    // console.log({ view });
     toggleView(view);
   };
-  console.log({ isMosaic });
+  // console.log({ isMosaic });
 
   return (
     <header>
