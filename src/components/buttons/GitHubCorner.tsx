@@ -1,4 +1,4 @@
-import styles from "./GitHubCorner.module.css";
+import styles from "./gitHubCorner.module.css";
 
 const GitHubCorner = ({ url }: { url: string }) => (
   <a
