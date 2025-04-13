@@ -1,13 +1,16 @@
 .footerContainer {
-  position: absolute;
+  position: relative; /* Changed to relative to ensure proper document flow */
   margin-top: auto;
   width: 100%;
   height: auto;
-  min-height: 10rem;
+  min-height: 10rem; /* Reserve space for the footer */
   background-color: var(--background-color);
   color: var(--text-color);
   z-index: 1; /* Ensure footer is on top but below dropdown author */
   border-top: 1px solid lightgrey; /* Add a very thin light-grey line on top */
+  display: flex; /* Add flexbox to align content */
+  flex-direction: column; /* Stack items vertically */
+  justify-content: center; /* Center items vertically */
 }
 
 .footerContent {
@@ -16,10 +19,13 @@
   align-items: center;
   flex-wrap: wrap;
   padding: 2rem;
+  width: 100%;
+  box-sizing: border-box; /* Ensure padding is included in width */
 }
 
 .footerItem {
   padding-left: 10px;
+  text-align: center; /* Center text for each item */
 }
 
 .footerItem p:last-child {
@@ -35,8 +41,35 @@
   text-decoration: underline;
 }
 
+/* Responsive styles */
 @media (max-width: 767px) {
   .footerContainer {
-    height: 11rem;
+    min-height: 8rem; /* Adjust minimum height for tablets */
+    padding: 1rem; /* Reduce padding for smaller devices */
+  }
+
+  .footerContent {
+    flex-direction: column; /* Stack items vertically on smaller screens */
+    align-items: center; /* Center all items */
+  }
+
+  .footerItem {
+    padding-left: 0; /* Remove left padding for centered items */
+    margin-bottom: 1rem; /* Add spacing between items */
+  }
+}
+
+@media (max-width: 480px) {
+  .footerContainer {
+    min-height: 6rem; /* Further adjust minimum height for mobile devices */
+    padding: 0.5rem; /* Reduce padding further for very small devices */
+  }
+
+  .footerContent {
+    padding: 0.5rem; /* Adjust padding in the content area */
+  }
+
+  .footerItem {
+    margin-bottom: 0.5rem; /* Smaller spacing for mobile */
   }
 }
