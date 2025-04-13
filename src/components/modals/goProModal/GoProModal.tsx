@@ -48,6 +48,8 @@ const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
             style={{ border: "0px", height: "36px", margin: "0.5rem auto" }}
             src="https://storage.ko-fi.com/cdn/kofi6.png?v=6"
             alt="Buy Me a Coffee at ko-fi.com"
+            priority={false} // Set to true for critical images
+            loading="lazy"
           />
         </a>
         <p className={styles.goProText}>

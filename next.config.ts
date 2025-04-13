@@ -20,6 +20,21 @@ const nextConfig: NextConfig = {
     ],
     minimumCacheTTL: 2678400, // 31 days
   },
+  webpack: (config, { isServer }) => {
+    // Example: Split chunks further
+    config.optimization.splitChunks = {
+      chunks: "all",
+      minSize: 20000, // Minimum size for a chunk (in bytes)
+      maxSize: 100000, // Maximum size for a chunk (in bytes)
+    };
+
+    // Example: Remove moment.js locales to reduce size
+    if (!isServer) {
+      config.resolve.alias["moment"] = "moment/min/moment-with-locales";
+    }
+
+    return config;
+  },
   async rewrites() {
     // console.log("Applying rewrite rule for sitemap"); // Add this line for logging
     return [

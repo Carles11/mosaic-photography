@@ -84,6 +84,8 @@ const Header = () => {
                   alt="Mosaic Icon"
                   width={32}
                   height={32}
+                  priority={false} // Set to true for critical images
+                  loading="lazy"
                 />
               </div>
               <Tooltip
@@ -113,6 +115,8 @@ const Header = () => {
                   alt="Mosaic Icon"
                   width={32}
                   height={32}
+                  priority={false} // Set to true for critical images
+                  loading="lazy"
                 />
               </div>
               <Tooltip

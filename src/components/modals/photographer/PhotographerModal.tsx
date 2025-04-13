@@ -84,6 +84,8 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
             height={100}
             className={styles.photographerImage}
             unoptimized
+            priority={false} // Set to true for critical images
+            loading="lazy"
           />
         </div>
         <div className={styles.photographerInfo}>

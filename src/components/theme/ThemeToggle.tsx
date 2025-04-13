@@ -38,14 +38,18 @@ const ThemeToggle = () => {
           src="/icons/theme-moon.png"
           width={32}
           height={32}
-          alt="dark mode"
+          alt="dark mode icon"
+          priority={false} // Set to true for critical images
+          loading="lazy"
         />
       ) : (
         <Image
           src="/icons/theme-sun.png"
           width={32}
           height={32}
-          alt="light mode"
+          alt="light mode icon"
+          priority={false} // Set to true for critical images
+          loading="lazy"
         />
       )}
       <Tooltip anchorSelect="#theme-icon" content={`Go ${theOtherTheme}!`} />

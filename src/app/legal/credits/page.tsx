@@ -134,6 +134,8 @@ const Credits: React.FC = () => {
               }}
               src="https://storage.ko-fi.com/cdn/kofi6.png?v=6"
               alt="Buy Me a Coffee at ko-fi.com"
+              priority={false} // Set to true for critical images
+              loading="lazy"
             />
           </a>
         </div>

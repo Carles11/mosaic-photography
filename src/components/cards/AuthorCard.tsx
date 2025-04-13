@@ -135,6 +135,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
                   ? styles.landscape
                   : styles.portrait
               }
+              priority={false} // Set to true for critical images
               loading="lazy"
               unoptimized
             />
