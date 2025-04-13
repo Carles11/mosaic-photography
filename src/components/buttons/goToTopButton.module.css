@@ -23,3 +23,13 @@
   visibility: visible;
   z-index: 99999999;
 }
+
+.visible {
+  display: flex; /* Show button when visible */
+}
+
+.tooltip {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  z-index: 99999;
+}

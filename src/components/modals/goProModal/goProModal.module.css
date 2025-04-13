@@ -27,6 +27,12 @@
   text-decoration: underline;
 }
 
+.kofiImage {
+  border: 0;
+  height: 36px;
+  margin: 0.5rem auto;
+}
+
 @media (max-width: 600px) {
   .goProContainer {
     gap: 0;

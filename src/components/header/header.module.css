@@ -70,6 +70,23 @@
   border: 0;
 }
 
+.iconContainer {
+  background-color: transparent;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 50%;
+  padding: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.iconActive {
+  border-color: lightgray;
+}
+.iconInactive {
+  border-color: transparent;
+}
+
 /* Media query for tablets Portrait and landscape */
 @media (min-width: 768px) and (max-width: 1024px) {
   .themeImage {

@@ -67,17 +67,9 @@ const Header = () => {
               <div
                 id="mosaic-images-icon"
                 onClick={() => handleIconClick("mosaic")}
-                style={{
-                  backgroundColor: "transparent",
-                  borderColor: isMosaic ? "lightgray" : "transparent",
-                  borderWidth: "1x",
-                  borderStyle: "solid",
-                  borderRadius: "50%",
-                  padding: "9px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+                className={`${styles.iconContainer} ${
+                  isMosaic ? styles.iconActive : styles.iconInactive
+                }`}
               >
                 <Image
                   src="/icons/mosaic-icon-colored.png"

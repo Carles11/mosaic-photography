@@ -63,7 +63,7 @@
   display: flex;
   overflow-x: auto;
   padding: 10px 0;
-  gap: 4px;
+  gap: 8px;
   scrollbar-width: thin;
 }
 

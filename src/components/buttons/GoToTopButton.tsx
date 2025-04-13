@@ -37,11 +37,7 @@ const GoToTopButton = () => {
       <Tooltip
         anchorSelect="#go-to-top-button"
         content="Go to top!"
-        style={{
-          backgroundColor: "var(--background-color)",
-          color: "var(--text-color)",
-          zIndex: 99999,
-        }}
+        className={styles.tooltip}
       />
     </>
   );
