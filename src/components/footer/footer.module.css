@@ -1,14 +1,13 @@
 .footerContainer {
-  position: relative; /* Changed to relative to ensure proper document flow */
-  margin-top: auto;
+  margin-top: auto; /* Push the footer to the bottom */
   width: 100%;
   height: auto;
   min-height: 10rem; /* Reserve space for the footer */
   background-color: var(--background-color);
   color: var(--text-color);
-  z-index: 1; /* Ensure footer is on top but below dropdown author */
-  border-top: 1px solid lightgrey; /* Add a very thin light-grey line on top */
-  display: flex; /* Add flexbox to align content */
+  z-index: 1; /* Ensure footer is not overlapped */
+  border-top: 1px solid lightgrey; /* Thin light-grey line on top */
+  display: flex; /* Use flexbox for alignment */
   flex-direction: column; /* Stack items vertically */
   justify-content: center; /* Center items vertically */
 }

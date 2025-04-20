@@ -29,6 +29,12 @@ body {
   --secondary-color: #2c106a;
 }
 
+body {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Allow body to expand to fill remaining height */
+}
+
 header,
 footer {
   background: transparent;

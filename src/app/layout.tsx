@@ -153,10 +153,12 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider defaultTheme="system">
           <AppContextProvider>
-            <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
-            <Header />
-            {children}
-            <Footer />
+            <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+              <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
+              <Header />
+              <main style={{ flex: 1 }}>{children}</main>
+              <Footer />
+            </div>
             <Analytics />
             <SpeedInsights />
           </AppContextProvider>
