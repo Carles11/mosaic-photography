@@ -41,7 +41,7 @@
 }
 
 /* Responsive styles */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .footerContainer {
     min-height: 8rem; /* Adjust minimum height for tablets */
     padding: 1rem; /* Reduce padding for smaller devices */

@@ -1,11 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useAppContext } from "@/context/AppContext";
 
 import Gallery from "@/components/gallery/Gallery";
-import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
+
 import SiteUnderConstruction from "@/components/underConstruction/siteUnderConstruction";
+
+import dynamic from "next/dynamic";
+
+const LazyAgeConsent = dynamic(
+  () =>
+    import("@/components/modals/ageConsent/AgeConsent").then((module) => ({
+      default: module.AgeConsent,
+    })),
+  {
+    ssr: false,
+  }
+);
 
 export default function Home() {
   const { isMosaic } = useAppContext();
@@ -60,10 +72,14 @@ export default function Home() {
     <>
       {!isSiteInConstruction && <SiteUnderConstruction />}
 
-      <AgeConsent
-        isMinimumAgeConfirmed={isMinimumAgeConfirmed}
-        setIsMinimumAgeConfirmed={handleAgeConfirmation}
-      />
+      <Suspense
+        fallback={<div className="center-text">Loading authors...</div>}
+      >
+        <LazyAgeConsent
+          setIsMinimumAgeConfirmed={handleAgeConfirmation}
+          isMinimumAgeConfirmed={isMinimumAgeConfirmed}
+        />
+      </Suspense>
       <div
         style={{
           display:

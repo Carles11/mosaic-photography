@@ -6,7 +6,7 @@ import GoToTopButton from "@/components/buttons/GoToTopButton";
 import styles from "./gallery.module.css";
 
 // lazy load AuthorCard
-const AuthorCard = React.lazy(() => import("../cards/AuthorCard"));
+const LazyAuthorCard = React.lazy(() => import("../cards/AuthorCard"));
 
 const Gallery = ({ isMosaic }: { isMosaic: boolean }) => {
   return (
@@ -19,7 +19,7 @@ const Gallery = ({ isMosaic }: { isMosaic: boolean }) => {
         <Suspense
           fallback={<div className="center-text">Loading authors...</div>}
         >
-          <AuthorCard />
+          <LazyAuthorCard />
         </Suspense>
       )}
       <GoToTopButton />

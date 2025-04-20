@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 
 import styles from "./AgeConsent.module.css";
@@ -16,16 +17,15 @@ export const AgeConsent = ({
         isMinimumAgeConfirmed ? styles.hidden : ""
       }`}
     >
+      <Head>
+        <link rel="preload" as="style" href="./AgeConsent.module.css" />
+      </Head>
       <div className={styles.ageModalOverlay}>
         <div className={styles.ageConfirmationContent}>
           <h2 className={styles.consentTitle}>Age Confirmation</h2>
           <p className={styles.consentText}>
-            By proceeding, you confirm that you are of legal age to access this
-            content based on the laws and regulations of your country or
-            jurisdiction. This page contains content that includes nudity and is
-            intended for mature audiences only. Please ensure compliance with
-            all applicable legal requirements and verify that accessing such
-            content is permissible in your location.
+            By proceeding, you confirm you are of legal age. This page contains
+            nudity for mature audiences.
           </p>
           <PrimaryButton
             id="ageConsentButton"
