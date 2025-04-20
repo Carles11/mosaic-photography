@@ -3,13 +3,18 @@ import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAppContext } from "@/context/AppContext";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
-import { Tooltip } from "react-tooltip";
 
 import ThemeToggle from "../theme/ThemeToggle";
 import ThemeImage from "../theme/ThemeImageDark";
 import GoProModal from "@/components/modals/goProModal/GoProModal";
+
+const Tooltip = dynamic(
+  () => import("react-tooltip").then((mod) => mod.Tooltip),
+  { ssr: false } // Disable server-side rendering
+);
 
 import styles from "./header.module.css";
 
@@ -40,10 +45,10 @@ const Header = () => {
             <li className={styles.navLogo}>
               <Link href="/">
                 <ThemeImage
-                  srcLight="/logos/svg/mosaic-high-resolution-logo-grayscale-transparent.svg"
-                  srcDark="/logos/svg/mosaic-high-resolution-logo-transparent.svg"
-                  srcLightMobile="/logos/svg/mosaic-high-resolution-logo-grayscale-transparent-cropped_.svg"
-                  srcDarkMobile="/logos/svg/mosaic-high-resolution-logo-transparent-cropped_.svg"
+                  srcLight="https://res.cloudinary.com/dktizqbky/image/upload/v1745192713/mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent_ddfgfj.svg"
+                  srcDark="https://res.cloudinary.com/dktizqbky/image/upload/v1745192713/mosaic.photography/logos/mosaic-high-resolution-logo-transparent_g21eyb.svg"
+                  srcLightMobile="https://res.cloudinary.com/dktizqbky/image/upload/v1745192713/mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent-cropped__lusaeh.svg"
+                  srcDarkMobile="https://res.cloudinary.com/dktizqbky/image/upload/v1745192713/mosaic.photography/logos/mosaic-high-resolution-logo-transparent-cropped__nuaklo.svg"
                   alt="Mosaic Logo"
                   className={styles.themeImage}
                   width={0}

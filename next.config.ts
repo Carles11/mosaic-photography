@@ -48,7 +48,7 @@ const nextConfig: NextConfig = {
 };
 
 export default withBundleAnalyzer({
-  enabled: process.env.ANALYZE === "true", // Enable only when ANALYZE=true
+  enabled: process.env.ANALYZE === "false", // Enable only when needed
 })(
   withPWA({
     dest: "public",

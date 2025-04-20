@@ -1,8 +1,14 @@
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
 import Modal from "../mainModal";
 import ShareButtons from "@/components/buttons/ShareButtons";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
-import { Tooltip as ReactTooltip } from "react-tooltip";
+
+const ReactTooltip = dynamic(
+  () => import("react-tooltip").then((mod) => mod.Tooltip),
+  { ssr: false } // Disable server-side rendering
+);
 
 import styles from "./goProModal.module.css";
 

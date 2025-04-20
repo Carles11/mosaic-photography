@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { Tooltip } from "react-tooltip";
+import dynamic from "next/dynamic";
+
+const Tooltip = dynamic(
+  () => import("react-tooltip").then((mod) => mod.Tooltip),
+  { ssr: false } // Disable server-side rendering
+);
 
 import styles from "./goToTopButton.module.css";
 
