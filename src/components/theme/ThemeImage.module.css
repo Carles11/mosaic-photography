@@ -1,5 +1,6 @@
 .themeImage {
   width: 100%;
+  max-width: 90%;
   height: auto;
 }
 
@@ -27,6 +28,8 @@
     display: block;
     max-width: 90%;
     width: 90%; /* Ensure the image scales to container width */
+    height: auto;
+
     justify-self: center;
   }
 }

@@ -80,6 +80,7 @@ export const metadata: Metadata = {
     "timeless nude art photo collection",
 
     // German Keywords (Localized SEO)
+    "Akt foto",
     "Aktfotografie gemeinfrei",
     "klassische Aktfotografie gemeinfrei",
     "Vintage Aktfotografie gemeinfrei",
@@ -150,6 +151,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Preload the LCP image */}
+        {/* Preload mobile logos */}
+        <link
+          rel="preload"
+          as="image"
+          href="https://res.cloudinary.com/dktizqbky/image/upload/v1745192713/mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent-cropped__lusaeh.svg"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="https://res.cloudinary.com/dktizqbky/image/upload/v1745192713/mosaic.photography/logos/mosaic-high-resolution-logo-transparent-cropped__nuaklo.svg"
+          fetchPriority="high"
+        />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider defaultTheme="system">
           <AppContextProvider>
