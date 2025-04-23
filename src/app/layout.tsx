@@ -154,16 +154,17 @@ export default function RootLayout({
       <head>
         {/* Preload the LCP image */}
         {/* Preload mobile logos */}
+
         <link
           rel="preload"
           as="image"
-          href="https://res.cloudinary.com/dktizqbky/image/upload/v1745192713/mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent-cropped__lusaeh.svg"
+          href="https://res.cloudinary.com/dktizqbky/image/upload/v1745435423/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-light_500x353px_fztsew.webp"
           fetchPriority="high"
         />
         <link
           rel="preload"
           as="image"
-          href="https://res.cloudinary.com/dktizqbky/image/upload/v1745192713/mosaic.photography/logos/mosaic-high-resolution-logo-transparent-cropped__nuaklo.svg"
+          href="https://res.cloudinary.com/dktizqbky/image/upload/v1745435436/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-transparent-mobile-dark_d7zqte.webp"
           fetchPriority="high"
         />
       </head>

@@ -22,8 +22,8 @@ const ThemeImage = (props: Props) => {
             key="light-desktop"
             priority={true}
             src={srcLight}
-            width={2000}
-            height={1500}
+            width={766}
+            height={541}
             {...rest}
             className={`${styles.themeImage} ${styles.desktopImage}`}
             alt="Light theme mosaic photography logo"
@@ -33,7 +33,7 @@ const ThemeImage = (props: Props) => {
             priority={true}
             src={srcLightMobile}
             width={500}
-            height={200}
+            height={353}
             {...rest}
             className={`${styles.themeImage} ${styles.mobileImage}`}
             alt="Light theme mosaic photography logo"
@@ -45,8 +45,8 @@ const ThemeImage = (props: Props) => {
             key="dark-desktop"
             priority={true}
             src={srcDark}
-            width={2000}
-            height={1500}
+            width={766}
+            height={541}
             {...rest}
             className={`${styles.themeImage} ${styles.desktopImage}`}
             alt="Dark theme mosaic photography logo"
@@ -56,7 +56,7 @@ const ThemeImage = (props: Props) => {
             priority={true}
             src={srcDarkMobile}
             width={500}
-            height={200}
+            height={353}
             {...rest}
             className={`${styles.themeImage} ${styles.mobileImage}`}
             alt="Dark theme mosaic photography logo"
