@@ -45,14 +45,12 @@ const Header = () => {
             <li className={styles.navLogo}>
               <Link href="/">
                 <ThemeImage
-                  srcLight="https://res.cloudinary.com/dktizqbky/image/upload/v1745192713/mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent_ddfgfj.svg"
-                  srcDark="https://res.cloudinary.com/dktizqbky/image/upload/v1745192713/mosaic.photography/logos/mosaic-high-resolution-logo-transparent_g21eyb.svg"
-                  srcLightMobile="https://res.cloudinary.com/dktizqbky/image/upload/v1745192713/mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent-cropped__lusaeh.svg"
-                  srcDarkMobile="https://res.cloudinary.com/dktizqbky/image/upload/v1745192713/mosaic.photography/logos/mosaic-high-resolution-logo-transparent-cropped__nuaklo.svg"
+                  srcLight="https://res.cloudinary.com/dktizqbky/image/upload/v1745433513/mosaic.photography/logos/WEBPs/mosaic-high-resolution-logo-transparent_desktop-light_kv7mmv.webp"
+                  srcDark="https://res.cloudinary.com/dktizqbky/image/upload/v1745433513/mosaic.photography/logos/WEBPs/mosaic-high-resolution-logo-transparent_desktop-dark_phrfm6.webp"
+                  srcLightMobile="https://res.cloudinary.com/dktizqbky/image/upload/v1745433512/mosaic.photography/logos/WEBPs/mosaic-high-resolution-logo-grayscale-transparent-mobile-light_fafdt9.webp"
+                  srcDarkMobile="https://res.cloudinary.com/dktizqbky/image/upload/v1745433514/mosaic.photography/logos/WEBPs/mosaic-high-resolution-logo-transparent-mobile-dark_gbp5th.webp"
                   alt="Mosaic Logo"
                   className={styles.themeImage}
-                  width={0}
-                  height={0}
                   priority // Add this prop to ensure the image is loaded immediately
                 />
               </Link>
