@@ -169,7 +169,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ThemeProvider defaultTheme="system">
+        <ThemeProvider defaultTheme="dark">
           <AppContextProvider>
             <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
               <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
