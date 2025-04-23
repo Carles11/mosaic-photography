@@ -137,7 +137,8 @@ const ImageCard: React.FC<ImageCardProps> = () => {
                         src={image.url}
                         alt={image.title || "Mosaic Gallery Image"}
                         className={styles.image}
-                        fill
+                        width={100}
+                        height={90}
                         sizes="(max-width: 600px) 100vw, 50vw"
                         loading="lazy"
                         unoptimized
