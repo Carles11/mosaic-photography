@@ -3,8 +3,12 @@
   color: var(--color-white);
   position: absolute;
   top: 0;
-  border: 0;
   right: 0;
+  border: 0;
+}
+
+.githubCorner .octoArm {
+  transform: rotate(0); /* Prevent animation on load */
 }
 
 .githubCorner:hover .octoArm {

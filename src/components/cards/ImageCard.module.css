@@ -7,7 +7,7 @@
 .imageItem {
   position: relative;
   cursor: zoom-in;
-  width: "100%";
+  width: "auto";
   height: 450px;
   overflow: hidden;
 }

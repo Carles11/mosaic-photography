@@ -32,7 +32,12 @@ body {
 body {
   display: flex;
   flex-direction: column;
-  flex: 1; /* Allow body to expand to fill remaining height */
+  min-height: 100vh; /* Ensure the body takes up the full viewport height */
+  margin: 0; /* Remove default margin */
+}
+
+main {
+  flex: 1; /* Allow the main content to grow and fill available space */
 }
 
 header,

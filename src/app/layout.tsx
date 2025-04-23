@@ -8,6 +8,7 @@ import GitHubCorner from "@/components/buttons/GitHubCorner";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Head from "next/head";
 
 import "./globals.css";
 
@@ -151,7 +152,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
+      <Head>
         {/* Preload the LCP image */}
         {/* Preload mobile logos */}
 
@@ -167,7 +168,9 @@ export default function RootLayout({
           href="https://res.cloudinary.com/dktizqbky/image/upload/v1745436069/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-DARK_500x353px_szzmkn.webp"
           fetchPriority="high"
         />
-      </head>
+
+        <script src="main.js" defer></script>
+      </Head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider defaultTheme="dark">
           <AppContextProvider>
