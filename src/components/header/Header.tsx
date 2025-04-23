@@ -45,10 +45,10 @@ const Header = () => {
             <li className={styles.navLogo}>
               <Link href="/">
                 <ThemeImage
-                  srcLight="https://res.cloudinary.com/dktizqbky/image/upload/v1745436285/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-DESKTOP-light_766x541px_ooxukv.webp"
-                  srcDark="https://res.cloudinary.com/dktizqbky/image/upload/v1745436286/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp"
-                  srcLightMobile="https://res.cloudinary.com/dktizqbky/image/upload/v1745436165/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-light_500x353px_v6gwqg.webp"
-                  srcDarkMobile="https://res.cloudinary.com/dktizqbky/image/upload/v1745436069/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-DARK_500x353px_szzmkn.webp"
+                  srcLight="https://res.cloudinary.com/dktizqbky/image/upload/f_auto,q_auto/v1745436285/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-DESKTOP-light_766x541px_ooxukv.webp"
+                  srcDark="https://res.cloudinary.com/dktizqbky/image/upload/f_auto,q_auto/v1745436286/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp"
+                  srcLightMobile="https://res.cloudinary.com/dktizqbky/image/upload/f_auto,q_auto/v1745436165/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-light_500x353px_v6gwqg.webp"
+                  srcDarkMobile="https://res.cloudinary.com/dktizqbky/image/upload/f_auto,q_auto/v1745436069/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-DARK_500x353px_szzmkn.webp"
                   alt="Mosaic Logo"
                   className={styles.themeImage}
                   priority // Add this prop to ensure the image is loaded immediately
