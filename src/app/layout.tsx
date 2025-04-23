@@ -158,13 +158,13 @@ export default function RootLayout({
         <link
           rel="preload"
           as="image"
-          href="https://res.cloudinary.com/dktizqbky/image/upload/v1745435423/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-light_500x353px_fztsew.webp"
+          href="https://res.cloudinary.com/dktizqbky/image/upload/v1745436165/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-light_500x353px_v6gwqg.webp"
           fetchPriority="high"
         />
         <link
           rel="preload"
           as="image"
-          href="https://res.cloudinary.com/dktizqbky/image/upload/v1745435436/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-transparent-mobile-dark_d7zqte.webp"
+          href="https://res.cloudinary.com/dktizqbky/image/upload/v1745436069/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-DARK_500x353px_szzmkn.webp"
           fetchPriority="high"
         />
       </head>
