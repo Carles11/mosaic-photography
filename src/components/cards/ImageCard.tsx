@@ -152,7 +152,8 @@ const ImageCard: React.FC<ImageCardProps> = () => {
                         height={90}
                         sizes="(max-width: 600px) 100vw, 50vw"
                         loading="lazy"
-                        unoptimized
+                        placeholder="blur"
+                        blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
                       />
                     </div>
                   )}

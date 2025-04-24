@@ -26,7 +26,7 @@ const ThemeImage = (props: Props) => {
             height={541}
             {...rest}
             className={`${styles.themeImage} ${styles.desktopImage}`}
-            alt="Light theme mosaic photography logo"
+            alt="Light theme mosaic photography logo desktop"
           />
           <Image
             key="light-mobile"
@@ -36,7 +36,7 @@ const ThemeImage = (props: Props) => {
             height={353}
             {...rest}
             className={`${styles.themeImage} ${styles.mobileImage}`}
-            alt="Light theme mosaic photography logo"
+            alt="Light theme mosaic photography logo mobile"
           />
         </>
       ) : (
@@ -49,7 +49,7 @@ const ThemeImage = (props: Props) => {
             height={541}
             {...rest}
             className={`${styles.themeImage} ${styles.desktopImage}`}
-            alt="Dark theme mosaic photography logo"
+            alt="Dark theme mosaic photography logo desktop"
           />
           <Image
             key="dark-mobile"
@@ -59,7 +59,7 @@ const ThemeImage = (props: Props) => {
             height={353}
             {...rest}
             className={`${styles.themeImage} ${styles.mobileImage}`}
-            alt="Dark theme mosaic photography logo"
+            alt="Dark theme mosaic photography logo mobile"
           />
         </>
       )}

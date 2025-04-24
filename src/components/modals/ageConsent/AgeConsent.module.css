@@ -3,13 +3,15 @@
   top: 0;
   left: 0;
   width: "100vw";
-  height: "100vh";
+  height: calc(100vh - 50px);
   background-color: "rgba(0, 0, 0, 0.8)";
   z-index: 3;
 }
 
 .hidden {
   visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .ageModalOverlay {
@@ -24,6 +26,8 @@
   align-items: center;
   z-index: 999999;
   overflow-y: auto; /* Ensure the overlay itself is scrollable */
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .ageConfirmationContent {
