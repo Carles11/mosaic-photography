@@ -1,19 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { JSX } from "react";
 import ImageCard from "../cards/ImageCard";
 import AuthorCard from "../cards/AuthorCard";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
-import { useAgeConsent } from "@/context/AgeConsentContext";
+import { withClientLogic } from "@/hocs/withClientLogic"; // Import the HOC
 
 import styles from "./gallery.module.css";
 
-const Gallery = ({ isMosaic }: { isMosaic: boolean }) => {
-  const { isMinimumAgeConfirmed } = useAgeConsent();
+interface GalleryProps extends JSX.IntrinsicAttributes {
+  isMosaic: boolean;
+}
 
+const Gallery: React.FC<GalleryProps> = ({ isMosaic }) => {
   return (
     <div className={styles.galleryGridContainer}>
-      {isMosaic && isMinimumAgeConfirmed ? (
+      {isMosaic ? (
         <div className={styles.galleryGrid}>
           <ImageCard />
         </div>
@@ -25,4 +27,4 @@ const Gallery = ({ isMosaic }: { isMosaic: boolean }) => {
   );
 };
 
-export default Gallery;
+export default withClientLogic(Gallery);

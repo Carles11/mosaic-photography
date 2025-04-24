@@ -10,7 +10,6 @@ import React, { JSX } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Head from "next/head";
-import { withClientLogic } from "@/hocs/withClientLogic"; // Import the HOC
 
 import "./globals.css";
 
@@ -193,4 +192,4 @@ function RootLayout({ children }: RootLayoutProps) {
   );
 }
 
-export default withClientLogic(RootLayout);
+export default RootLayout;
