@@ -37,8 +37,7 @@ body {
 }
 
 main {
-  flex: 1 1 auto; /* Allow stable growth */
-  content-visibility: auto;
+  flex: 1; /* Allow the main content to grow and fill available space */
 }
 
 header,
