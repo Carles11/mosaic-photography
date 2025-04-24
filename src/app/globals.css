@@ -103,20 +103,6 @@ p {
   margin: 0.5rem 0;
 }
 
-h1.center-text {
-  font-size: 2rem; /* Adjust size */
-  color: #434343; /* Match gallery theme */
-  margin-bottom: 20px; /* Add spacing */
-}
-h2.center-text {
-  font-size: 1.5rem;
-  color: #555;
-}
-p.center-text {
-  font-size: 1rem;
-  color: #777;
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     background-color: var(--background-color);

@@ -4,12 +4,14 @@ import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import { AppContextProvider } from "@/context/AppContext";
 import { AgeConsentProvider } from "@/context/AgeConsentContext";
+import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
+
 import { ThemeProvider } from "next-themes";
 import GitHubCorner from "@/components/buttons/GitHubCorner";
 import React, { JSX } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Head from "next/head";
+import Script from "next/script";
 
 import "./globals.css";
 
@@ -24,6 +26,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://mosaic.photography"),
   title: {
     default: "Public Domain Nude Photography | Mosaic Gallery",
     template: "%s | Vintage Nude Photography by Mosaic",
@@ -151,39 +154,39 @@ type RootLayoutProps = { children: React.ReactNode } & JSX.IntrinsicAttributes;
 function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <Head>
-        {/* Preload the LCP image */}
-        {/* Preload mobile logos */}
+      <head>
+        <Script id="preload-images" strategy="beforeInteractive">
+          {`
+            const link1 = document.createElement('link');
+            link1.rel = 'preload';
+            link1.as = 'image';
+            link1.href = 'https://res.cloudinary.com/dktizqbky/image/upload/v1745436165/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-light_500x353px_v6gwqg.webp';
+            document.head.appendChild(link1);
 
-        <link
-          rel="preload"
-          as="image"
-          href="https://res.cloudinary.com/dktizqbky/image/upload/v1745436165/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-light_500x353px_v6gwqg.webp"
-          fetchPriority="high"
-        />
-        <link
-          rel="preload"
-          as="image"
-          href="https://res.cloudinary.com/dktizqbky/image/upload/v1745436069/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-DARK_500x353px_szzmkn.webp"
-          fetchPriority="high"
-        />
-
-        <script src="main.js" defer></script>
-      </Head>
+            const link2 = document.createElement('link');
+            link2.rel = 'preload';
+            link2.as = 'image';
+            link2.href = 'https://res.cloudinary.com/dktizqbky/image/upload/v1745436069/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-DARK_500x353px_szzmkn.webp';
+            document.head.appendChild(link2);
+          `}
+        </Script>
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider defaultTheme="dark">
           <AppContextProvider>
             <AgeConsentProvider>
-              <div
-                style={{ display: "flex", flexDirection: "column", flex: 1 }}
-              >
-                <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
-                <Header />
-                <main style={{ flex: 1 }}>{children}</main>
-                <Footer />
-              </div>
-              <Analytics />
-              <SpeedInsights />
+              <ServiceWorkerContext>
+                <div
+                  style={{ display: "flex", flexDirection: "column", flex: 1 }}
+                >
+                  <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
+                  <Header />
+                  <main style={{ flex: 1 }}>{children}</main>
+                  <Footer />
+                </div>
+                <Analytics />
+                <SpeedInsights />
+              </ServiceWorkerContext>
             </AgeConsentProvider>
           </AppContextProvider>
         </ThemeProvider>
