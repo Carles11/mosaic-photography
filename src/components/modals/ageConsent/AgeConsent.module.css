@@ -6,8 +6,8 @@
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.8); /* Dark overlay */
   z-index: 9999; /* Ensure it stays on top */
-  visibility: hidden; /* Start as hidden */
-  opacity: 0; /* Fully transparent initially */
+  visibility: visible; /* Start as hidden */
+  opacity: 1; /* Fully transparent initially */
   transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Smooth transition */
 }
 
