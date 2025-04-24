@@ -1,14 +1,13 @@
 .imageCard {
   position: relative;
   width: 100%;
-  height: 100%;
 }
 
 .imageItem {
   position: relative;
   cursor: zoom-in;
-  width: "auto";
-  height: 450px;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -16,16 +15,17 @@
   grid-column: span 2;
   grid-row: span 2;
   aspect-ratio: 16 / 9;
+  height: 454px;
 }
 
 .portrait {
   grid-column: span 1;
+  height: 222px;
 }
 
 .image {
   object-fit: cover;
   position: relative;
-  z-index: 1; /* Ensure the image is behind the text */
   width: 100%;
   height: 90%;
 }
