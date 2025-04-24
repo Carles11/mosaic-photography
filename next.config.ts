@@ -3,6 +3,8 @@ import withPWA from "next-pwa";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import pwaConfig from "./pwa.config";
 
+const isDev = process.env.NODE_ENV === "development";
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
@@ -59,7 +61,8 @@ export default withBundleAnalyzer({
 })(
   withPWA({
     dest: "public",
-    register: true,
+    register: !isDev, // ⬅️ Don't register in dev
+    disable: isDev, // ⬅️ Fully disable in dev
     skipWaiting: true,
     ...pwaConfig,
   })(nextConfig)
