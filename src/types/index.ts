@@ -37,3 +37,7 @@ export interface Author {
 export type AuthorCardProps = object;
 
 export type ImageCardProps = object;
+
+export type SwipeGalleryProps = {
+  images: { src: string; thumbnail: string; width: number; height: number }[];
+};

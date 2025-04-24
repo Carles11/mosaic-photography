@@ -1,15 +1,28 @@
 import React, { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 import { ImageData, ImageCardProps } from "@/types";
-import { Gallery, Item, GalleryProps } from "react-photoswipe-gallery";
+import { GalleryProps } from "react-photoswipe-gallery";
 import "photoswipe/dist/photoswipe.css";
 import styles from "./ImageCard.module.css";
 import { getImageDimensions } from "@/helpers/imageHelpers";
 import { ClimbingBoxLoader } from "react-spinners";
 
-// Image Gallery to show when isMosaic is true
+// Dynamically import the Gallery and Item components
+const Gallery = dynamic(
+  () => import("react-photoswipe-gallery").then((mod) => mod.Gallery),
+  {
+    ssr: false, // Disable server-side rendering for this component
+  }
+);
+const Item = dynamic(
+  () => import("react-photoswipe-gallery").then((mod) => mod.Item),
+  {
+    ssr: false,
+  }
+);
 
 const ImageCard: React.FC<ImageCardProps> = () => {
   const [images, setImages] = useState<ImageData[]>([]);
@@ -17,9 +30,7 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const galleryOptions: GalleryProps["options"] = {
-    zoom: true, // Enable zoom functionality
-    // initialZoomLevel: 0.8, // Set initial zoom level (e.g., 80% of the image size)
-    // maxZoomLevel: 2, // Set maximum zoom level (e.g., 200% of the image size)
+    zoom: true,
   };
 
   useEffect(() => {
@@ -128,8 +139,8 @@ const ImageCard: React.FC<ImageCardProps> = () => {
                   original={image.url}
                   thumbnail={image.url}
                   caption={image.author}
-                  width={image.width || 800} // Fallback to a default width (e.g., 800px)
-                  height={image.height || 600} // Fallback to a default height (e.g., 600px)
+                  width={image.width || 0} // Fallback to a default width (e.g., 800px)
+                  height={image.height || 0} // Fallback to a default height (e.g., 600px)
                 >
                   {({ ref, open }) => (
                     <div ref={ref} onClick={open} className={styles.imageItem}>

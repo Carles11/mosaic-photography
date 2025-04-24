@@ -1,27 +1,24 @@
-import React, { Suspense } from "react";
+"use client";
+
+import React from "react";
 import ImageCard from "../cards/ImageCard";
-// import AuthorCard from "../cards/AuthorCard";
+import AuthorCard from "../cards/AuthorCard";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
-import dynamic from "next/dynamic";
+import { useAgeConsent } from "@/context/AgeConsentContext";
 
 import styles from "./gallery.module.css";
 
-// lazy load AuthorCard
-const LazyAuthorCard = dynamic(() => import("../cards/AuthorCard"));
-
 const Gallery = ({ isMosaic }: { isMosaic: boolean }) => {
+  const { isMinimumAgeConfirmed } = useAgeConsent();
+
   return (
     <div className={styles.galleryGridContainer}>
-      {isMosaic ? (
+      {isMosaic && isMinimumAgeConfirmed ? (
         <div className={styles.galleryGrid}>
           <ImageCard />
         </div>
       ) : (
-        <Suspense
-          fallback={<div className="center-text">Loading authors...</div>}
-        >
-          <LazyAuthorCard />
-        </Suspense>
+        <AuthorCard />
       )}
       <GoToTopButton />
     </div>

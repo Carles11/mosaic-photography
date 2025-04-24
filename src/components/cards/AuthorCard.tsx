@@ -1,15 +1,29 @@
 import React, { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
 import { supabase } from "@/lib/supabaseClient";
 import Image from "next/image";
 import { Photographer, ImageData, AuthorCardProps } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
-import { Gallery, Item, GalleryProps } from "react-photoswipe-gallery";
+import { GalleryProps } from "react-photoswipe-gallery";
 import "photoswipe/dist/photoswipe.css";
 import { getImageDimensions } from "@/helpers/imageHelpers";
 import { ClimbingBoxLoader } from "react-spinners";
 
 import styles from "./AuthorCard.module.css";
+// Dynamically import the Gallery and Item components
+const Gallery = dynamic(
+  () => import("react-photoswipe-gallery").then((mod) => mod.Gallery),
+  {
+    ssr: false, // Disable server-side rendering for this component
+  }
+);
+const Item = dynamic(
+  () => import("react-photoswipe-gallery").then((mod) => mod.Item),
+  {
+    ssr: false,
+  }
+);
 
 // Author list to show when isMosaic is false
 
@@ -21,9 +35,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
     useState<Photographer | null>(null);
 
   const galleryOptions: GalleryProps["options"] = {
-    zoom: true, // Enable zoom functionality
-    // initialZoomLevel: 0.8, // Set initial zoom level (e.g., 80% of the image size)
-    // maxZoomLevel: 2, // Set maximum zoom level (e.g., 200% of the image size)
+    zoom: true,
   };
 
   useEffect(() => {

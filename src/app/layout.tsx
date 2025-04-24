@@ -3,12 +3,14 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import { AppContextProvider } from "@/context/AppContext";
+import { AgeConsentProvider } from "@/context/AgeConsentContext";
 import { ThemeProvider } from "next-themes";
 import GitHubCorner from "@/components/buttons/GitHubCorner";
-import React from "react";
+import React, { JSX } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Head from "next/head";
+import { withClientLogic } from "@/hocs/withClientLogic"; // Import the HOC
 
 import "./globals.css";
 
@@ -145,11 +147,9 @@ export const viewport = {
   themeColor: "#ffffff",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+type RootLayoutProps = { children: React.ReactNode } & JSX.IntrinsicAttributes;
+
+function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <Head>
@@ -174,17 +174,23 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider defaultTheme="dark">
           <AppContextProvider>
-            <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-              <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
-              <Header />
-              <main style={{ flex: 1 }}>{children}</main>
-              <Footer />
-            </div>
-            <Analytics />
-            <SpeedInsights />
+            <AgeConsentProvider>
+              <div
+                style={{ display: "flex", flexDirection: "column", flex: 1 }}
+              >
+                <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
+                <Header />
+                <main style={{ flex: 1 }}>{children}</main>
+                <Footer />
+              </div>
+              <Analytics />
+              <SpeedInsights />
+            </AgeConsentProvider>
           </AppContextProvider>
         </ThemeProvider>
       </body>
     </html>
   );
 }
+
+export default withClientLogic(RootLayout);
