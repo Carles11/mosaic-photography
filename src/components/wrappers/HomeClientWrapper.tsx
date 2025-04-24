@@ -15,7 +15,7 @@ import styles from "@/app/page.module.css";
 export default function HomeClientWrapper() {
   const { isMosaic } = useAppContext();
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
-  console.log({ isMinimumAgeConfirmed });
+
   return (
     <div className={styles.container}>
       {!isMinimumAgeConfirmed ? (
