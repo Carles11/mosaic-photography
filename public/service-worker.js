@@ -1,4 +1,5 @@
-const CACHE_NAME = "mosaic-cache-v1";
+const CACHE_VERSION = process.env.VERSION || "v1";
+const CACHE_NAME = `mosaic-cache-${CACHE_VERSION}`;
 
 // Static assets to cache
 const STATIC_ASSETS = [
@@ -15,6 +16,7 @@ const STATIC_ASSETS = [
 
 // Install event - precache static assets
 self.addEventListener("install", (event) => {
+  self.skipWaiting(); // Optional: take over immediately
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(STATIC_ASSETS);
@@ -35,22 +37,25 @@ self.addEventListener("activate", (event) => {
       );
     })
   );
+  self.clients.claim(); // Optional: take control of uncontrolled clients
 });
 
-// Fetch event - serve from cache or network
+// Fetch event - use stale-while-revalidate strategy
 self.addEventListener("fetch", (event) => {
+  if (event.request.method !== "GET") return;
+
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      return (
-        cachedResponse ||
-        fetch(event.request).then((networkResponse) => {
-          // Optionally cache new requests
-          return caches.open(CACHE_NAME).then((cache) => {
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.match(event.request).then((cachedResponse) => {
+        const fetchPromise = fetch(event.request)
+          .then((networkResponse) => {
             cache.put(event.request, networkResponse.clone());
             return networkResponse;
-          });
-        })
-      );
+          })
+          .catch(() => cachedResponse); // fallback to cache if network fails
+
+        return cachedResponse || fetchPromise;
+      });
     })
   );
 });

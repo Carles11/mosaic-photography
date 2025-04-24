@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import withPWA from "next-pwa";
 import withBundleAnalyzer from "@next/bundle-analyzer";
+import pwaConfig from "./pwa.config";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -60,5 +61,6 @@ export default withBundleAnalyzer({
     dest: "public",
     register: true,
     skipWaiting: true,
+    ...pwaConfig,
   })(nextConfig)
 );
