@@ -1,16 +1,16 @@
-h1.center-text {
+h1.centerText {
   font-size: 2rem; /* Adjust size */
-  color: #434343; /* Match gallery theme */
+  color: var(--text-color); /* Match gallery theme */
   margin-bottom: 20px; /* Add spacing */
   text-align: center;
 }
-h2.center-text {
+h2.centerText {
   font-size: 1.5rem;
-  color: #555;
+  color: var(--text-color);
   text-align: center;
 }
-p.center-text {
+p.centerText {
   font-size: 1rem;
-  color: #777;
+  color: var(--text-color);
   text-align: center;
 }
