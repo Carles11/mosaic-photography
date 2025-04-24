@@ -1,8 +1,9 @@
 .themeImage {
   width: 100%;
-  max-width: 90%;
+  max-width: 766px;
   height: auto;
   place-self: center;
+  object-fit: contain; /* Ensure the image is not distorted */
 }
 
 .desktopImage {

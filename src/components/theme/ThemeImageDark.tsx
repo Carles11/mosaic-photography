@@ -24,9 +24,12 @@ const ThemeImage = (props: Props) => {
             src={srcLight}
             width={766}
             height={541}
+            layout="intrinsic"
             {...rest}
             className={`${styles.themeImage} ${styles.desktopImage}`}
             alt="Light theme mosaic photography logo desktop"
+            placeholder="blur"
+            blurDataURL="https://dummyimage.com/766x541/000/fff&text=mosaic+photography.png"
           />
           <Image
             key="light-mobile"
@@ -34,9 +37,12 @@ const ThemeImage = (props: Props) => {
             src={srcLightMobile}
             width={500}
             height={353}
+            layout="intrinsic"
             {...rest}
             className={`${styles.themeImage} ${styles.mobileImage}`}
             alt="Light theme mosaic photography logo mobile"
+            placeholder="blur"
+            blurDataURL="https://dummyimage.com/500x353/000/fff&text=mosaic+photography.png"
           />
         </>
       ) : (
@@ -47,9 +53,12 @@ const ThemeImage = (props: Props) => {
             src={srcDark}
             width={766}
             height={541}
+            layout="intrinsic"
             {...rest}
             className={`${styles.themeImage} ${styles.desktopImage}`}
             alt="Dark theme mosaic photography logo desktop"
+            placeholder="blur"
+            blurDataURL="https://dummyimage.com/766x541/000/fff&text=mosaic+photography.png"
           />
           <Image
             key="dark-mobile"
@@ -57,9 +66,12 @@ const ThemeImage = (props: Props) => {
             src={srcDarkMobile}
             width={500}
             height={353}
+            layout="intrinsic"
             {...rest}
             className={`${styles.themeImage} ${styles.mobileImage}`}
             alt="Dark theme mosaic photography logo mobile"
+            placeholder="blur"
+            blurDataURL="https://dummyimage.com/500x353/000/fff&text=mosaic+photography.png"
           />
         </>
       )}
