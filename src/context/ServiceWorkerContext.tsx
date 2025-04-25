@@ -10,7 +10,7 @@ export const ServiceWorkerContext = ({
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker
-        .register("/workbox-e43f5367.js")
+        .register("/service.worker.js")
         .then((registration) => {
           console.log("Service Worker registered successfully:", registration);
         })
