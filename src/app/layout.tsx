@@ -1,17 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-// import Header from "@/components/header/Header";
-// import Footer from "@/components/footer/Footer";
+
 import { AppContextProvider } from "@/context/AppContext";
 import { AgeConsentProvider } from "@/context/AgeConsentContext";
 import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
 
 import { ThemeProvider } from "next-themes";
-// import GitHubCorner from "@/components/buttons/GitHubCorner";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Script from "next/script";
 
 import "./globals.css";
 
@@ -154,7 +151,7 @@ type RootLayoutProps = { children: React.ReactNode };
 function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
+      {/* <head>
         <Script id="preload-images" strategy="beforeInteractive">
           {`
             const link1 = document.createElement('link');
@@ -170,7 +167,7 @@ function RootLayout({ children }: RootLayoutProps) {
             document.head.appendChild(link2);
           `}
         </Script>
-      </head>
+      </head> */}
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider defaultTheme="dark">
           <AppContextProvider>
