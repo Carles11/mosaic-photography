@@ -9,6 +9,9 @@ import { ImageCardTitles } from "@/components/header/titles/ImageCardTitles";
 import { AuthorCardTitles } from "@/components/header/titles/AuthorCardTitles";
 import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
+import GitHubCorner from "@/components/buttons/GitHubCorner";
+import Header from "@/components/header/Header";
+import Footer from "@/components/footer/Footer";
 
 import styles from "./home.module.css";
 
@@ -29,6 +32,8 @@ export default function HomeClientWrapper() {
           }`}
           aria-hidden={!isMinimumAgeConfirmed}
         >
+          <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
+          <Header />
           <div className="v-margin">
             {isMosaic ? <ImageCardTitles /> : <AuthorCardTitles />}
           </div>
@@ -38,6 +43,7 @@ export default function HomeClientWrapper() {
           </script>
 
           <Gallery isMosaic={isMosaic} />
+          <Footer />
         </section>
       )}
     </div>

@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Header from "@/components/header/Header";
-import Footer from "@/components/footer/Footer";
+// import Header from "@/components/header/Header";
+// import Footer from "@/components/footer/Footer";
 import { AppContextProvider } from "@/context/AppContext";
 import { AgeConsentProvider } from "@/context/AgeConsentContext";
 import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
 
 import { ThemeProvider } from "next-themes";
-import GitHubCorner from "@/components/buttons/GitHubCorner";
+// import GitHubCorner from "@/components/buttons/GitHubCorner";
 import React, { JSX } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -176,14 +176,7 @@ function RootLayout({ children }: RootLayoutProps) {
           <AppContextProvider>
             <AgeConsentProvider>
               <ServiceWorkerContext>
-                <div
-                  style={{ display: "flex", flexDirection: "column", flex: 1 }}
-                >
-                  <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
-                  <Header />
-                  <main style={{ flex: 1 }}>{children}</main>
-                  <Footer />
-                </div>
+                <main style={{ flex: 1 }}>{children}</main>
                 <Analytics />
                 <SpeedInsights />
               </ServiceWorkerContext>
