@@ -26,4 +26,11 @@ module.exports = {
       },
     },
   ],
+  // Add a reference to your custom Service Worker
+  customWorkerDir: "src/sw-custom.js", // Path to your custom Service Worker file
+  // Exclude unused service-worker.js from being precached
+  buildExcludes: [/service-worker\.js$/],
+  // General settings to enable seamless updates
+  skipWaiting: true,
+  clientsClaim: true,
 };
