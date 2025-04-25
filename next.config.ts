@@ -28,7 +28,7 @@ const nextConfig: NextConfig = {
         pathname: "/dktizqbky/image/upload/**",
       },
     ],
-    minimumCacheTTL: 2678400, // 31 days
+    minimumCacheTTL: 31536000, // 1 year
   },
   webpack: (config, { isServer }) => {
     // Example: Split chunks further

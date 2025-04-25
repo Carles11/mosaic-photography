@@ -9,7 +9,7 @@ module.exports = {
         cacheName: "cdn-images",
         expiration: {
           maxEntries: 300,
-          maxAgeSeconds: 60 * 60 * 24 * 31, // 31 days
+          maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
         },
       },
     },
@@ -21,7 +21,7 @@ module.exports = {
         cacheName: "cloudinary-images",
         expiration: {
           maxEntries: 100,
-          maxAgeSeconds: 60 * 60 * 24 * 31,
+          maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
         },
       },
     },
