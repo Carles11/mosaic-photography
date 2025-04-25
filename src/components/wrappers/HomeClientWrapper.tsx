@@ -18,12 +18,11 @@ export default function HomeClientWrapper() {
 
   return (
     <div className={styles.container}>
-      {!isMinimumAgeConfirmed ? (
-        <AgeConsent
-          isMinimumAgeConfirmed={isMinimumAgeConfirmed}
-          setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed}
-        />
-      ) : (
+      <AgeConsent
+        isMinimumAgeConfirmed={isMinimumAgeConfirmed}
+        setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed}
+      />
+      {isMinimumAgeConfirmed && (
         <section
           className={`${styles.pageContent} ${
             isMinimumAgeConfirmed ? styles.visible : styles.invisible
