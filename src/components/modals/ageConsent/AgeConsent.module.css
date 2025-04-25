@@ -54,6 +54,11 @@
   font-weight: 700;
 }
 
+.consentSubTitle {
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+
 .consentText {
   font-size: 1.2rem;
 }

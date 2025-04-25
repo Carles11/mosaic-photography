@@ -1,9 +1,9 @@
 import React from "react";
 import Image from "next/image";
-// import PrimaryButton from "@/components/buttons/PrimaryButton";
-// import { Tooltip as ReactTooltip } from "react-tooltip";
 
 import styles from "./credits.module.css";
+
+// overwrwite metadata for this page
 
 export const metadata = {
   title: "Credits - Mosaic Photography",
@@ -27,7 +27,7 @@ export const metadata = {
 
 const Credits: React.FC = () => {
   return (
-    <main className={styles.container}>
+    <section className={styles.container}>
       <h1 className={styles.title}>Thanks</h1>
 
       <h2 className={styles.subtitle}>Logo credits</h2>
@@ -181,7 +181,7 @@ const Credits: React.FC = () => {
           Carles del Río Francés
         </p>
       </div>
-    </main>
+    </section>
   );
 };
 

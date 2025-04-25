@@ -2,7 +2,7 @@
   padding: 20px;
   color: var(--text-color);
   background-color: var(--background-color);
-  min-height: 100vh; /* Change from height to min-height */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }

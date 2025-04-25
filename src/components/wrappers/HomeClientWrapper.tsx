@@ -24,7 +24,7 @@ export default function HomeClientWrapper() {
           setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed}
         />
       ) : (
-        <main>
+        <section>
           <div className="v-margin">
             {isMosaic ? <ImageCardTitles /> : <AuthorCardTitles />}
           </div>
@@ -35,7 +35,7 @@ export default function HomeClientWrapper() {
           </script>
 
           <Gallery isMosaic={isMosaic} />
-        </main>
+        </section>
       )}
     </div>
   );

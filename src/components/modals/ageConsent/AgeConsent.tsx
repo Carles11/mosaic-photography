@@ -24,7 +24,7 @@ export const AgeConsent = ({
           <h1 id="ageConsentTitle" className={styles.consentTitle}>
             Age Confirmation
           </h1>
-          <h2 id="ageConsentTitle" className={styles.consentTitle}>
+          <h2 id="ageConsentTitle" className={styles.consentSubTitle}>
             Read the following before proceeding
           </h2>
           <p id="ageConsentDescription" className={styles.consentText}>

@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./privacy-policy.module.css";
 
+// overwrwite metadata for this page
+
 export const metadata = {
   title: "Privacy Policy - Mosaic Photography",
   description:
@@ -22,7 +24,7 @@ export const metadata = {
 
 const PrivacyPolicy: React.FC = () => {
   return (
-    <main className={styles.container}>
+    <section className={styles.container}>
       <h1 className={styles.title}>Privacy Policy</h1>
 
       <h2 className={styles.subtitle}>Information Collection</h2>
@@ -48,7 +50,7 @@ const PrivacyPolicy: React.FC = () => {
         contact us at <a href="mailto:carles@crix.design">carles@crix.design</a>
         .
       </p>
-    </main>
+    </section>
   );
 };
 

@@ -1,6 +1,6 @@
 import Image, { ImageProps } from "next/image";
 import { useTheme } from "next-themes";
-import useIsMobile from "@/hooks/useIsMobile"; // adjust path as needed
+import useIsMobile from "@/hooks/useIsMobile";
 
 import styles from "./ThemeImage.module.css";
 

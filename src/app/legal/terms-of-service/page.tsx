@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./terms-of-service.module.css";
 
+// overwrwite metadata for this page
 export const metadata = {
   title: "Terms of Service - Mosaic Photography",
   description:
@@ -22,7 +23,7 @@ export const metadata = {
 
 const TermsOfService: React.FC = () => {
   return (
-    <main className={styles.container}>
+    <section className={styles.container}>
       <h1 className={styles.title}>Terms of Service</h1>
       <h2 className={styles.subtitle}>Use of Images</h2>
       <p className={styles.text}>
@@ -56,7 +57,7 @@ const TermsOfService: React.FC = () => {
         contact me at <a href="mailto:carles@crix.design">carles@crix.design</a>
         .
       </p>
-    </main>
+    </section>
   );
 };
 
