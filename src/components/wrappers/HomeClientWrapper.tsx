@@ -10,7 +10,7 @@ import { AuthorCardTitles } from "@/components/header/titles/AuthorCardTitles";
 import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
 
-import styles from "@/app/page.module.css";
+import styles from "./home.module.css";
 
 export default function HomeClientWrapper() {
   const { isMosaic } = useAppContext();
@@ -18,25 +18,29 @@ export default function HomeClientWrapper() {
 
   return (
     <div className={styles.container}>
-      {!isMinimumAgeConfirmed ? (
-        <AgeConsent
-          isMinimumAgeConfirmed={isMinimumAgeConfirmed}
-          setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed}
-        />
-      ) : (
-        <section>
-          <div className="v-margin">
-            {isMosaic ? <ImageCardTitles /> : <AuthorCardTitles />}
-          </div>
+      {/* Always mounted modal, visibility controlled via CSS */}
+      <AgeConsent
+        isMinimumAgeConfirmed={isMinimumAgeConfirmed}
+        setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed}
+      />
 
-          {/* Structured data for SEO */}
-          <script type="application/ld+json">
-            {JSON.stringify(structuredData)}
-          </script>
+      {/* Main content only visible once confirmed */}
+      <section
+        className={`${styles.pageContent} ${
+          isMinimumAgeConfirmed ? styles.visible : styles.invisible
+        }`}
+        aria-hidden={!isMinimumAgeConfirmed}
+      >
+        <div className="v-margin">
+          {isMosaic ? <ImageCardTitles /> : <AuthorCardTitles />}
+        </div>
 
-          <Gallery isMosaic={isMosaic} />
-        </section>
-      )}
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+
+        <Gallery isMosaic={isMosaic} />
+      </section>
     </div>
   );
 }
