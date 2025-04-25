@@ -1,20 +1,20 @@
 .ageModalOverlayContainer {
-  position: fixed; /* Fix the modal to the viewport, ensuring no layout reflow */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.8); /* Dark overlay */
-  z-index: 9999; /* Ensure it stays on top */
-  visibility: visible; /* Start as hidden */
-  opacity: 1; /* Fully transparent initially */
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Smooth transition */
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out, visibility 0s 0.5s; /* Increased fade duration */
 }
 
 .hidden {
-  visibility: hidden; /* Remove from visual rendering */
-  opacity: 0; /* Make it fully transparent */
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out; /* Smooth fade-out */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out, visibility 0s 0.5s; /* Same fade duration, with delayed visibility change */
 }
 
 .ageModalOverlay {
@@ -28,24 +28,24 @@
   justify-content: center;
   align-items: center;
   z-index: 999999;
-  overflow-y: auto; /* Ensure the overlay itself is scrollable */
+  overflow-y: auto;
   opacity: 1;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.5s ease-in-out; /* Adjusted fade duration */
 }
 
 .ageConfirmationContent {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Center the modal */
+  transform: translate(-50%, -50%);
   background: var(--background-color);
   padding: 20px;
   border-radius: 8px;
   width: 90%;
   max-width: 500px;
   height: auto;
-  max-height: 70vh; /* Ensure the modal does not exceed the viewport height */
-  overflow-y: auto; /* Allow scrolling within the modal content */
+  max-height: 70vh;
+  overflow-y: auto;
   text-align: center;
 }
 

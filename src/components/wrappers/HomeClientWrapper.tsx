@@ -18,29 +18,29 @@ export default function HomeClientWrapper() {
 
   return (
     <div className={styles.container}>
-      {/* Always mounted modal, visibility controlled via CSS */}
-      <AgeConsent
-        isMinimumAgeConfirmed={isMinimumAgeConfirmed}
-        setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed}
-      />
+      {!isMinimumAgeConfirmed ? (
+        <AgeConsent
+          isMinimumAgeConfirmed={isMinimumAgeConfirmed}
+          setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed}
+        />
+      ) : (
+        <section
+          className={`${styles.pageContent} ${
+            isMinimumAgeConfirmed ? styles.visible : styles.invisible
+          }`}
+          aria-hidden={!isMinimumAgeConfirmed}
+        >
+          <div className="v-margin">
+            {isMosaic ? <ImageCardTitles /> : <AuthorCardTitles />}
+          </div>
 
-      {/* Main content only visible once confirmed */}
-      <section
-        className={`${styles.pageContent} ${
-          isMinimumAgeConfirmed ? styles.visible : styles.invisible
-        }`}
-        aria-hidden={!isMinimumAgeConfirmed}
-      >
-        <div className="v-margin">
-          {isMosaic ? <ImageCardTitles /> : <AuthorCardTitles />}
-        </div>
+          <script type="application/ld+json">
+            {JSON.stringify(structuredData)}
+          </script>
 
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-
-        <Gallery isMosaic={isMosaic} />
-      </section>
+          <Gallery isMosaic={isMosaic} />
+        </section>
+      )}
     </div>
   );
 }
