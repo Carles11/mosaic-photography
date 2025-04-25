@@ -28,6 +28,7 @@
   font-weight: 700;
   background: var(--text-gradient);
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
   text-align: center;
   cursor: pointer;
