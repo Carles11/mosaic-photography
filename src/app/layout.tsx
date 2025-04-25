@@ -8,7 +8,7 @@ import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
 
 import { ThemeProvider } from "next-themes";
 // import GitHubCorner from "@/components/buttons/GitHubCorner";
-import React, { JSX } from "react";
+import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
