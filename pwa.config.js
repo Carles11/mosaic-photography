@@ -1,4 +1,5 @@
 /** @type {import('workbox-build').GenerateSWOptions} */
+console.log("pwa.config.js is being used!");
 module.exports = {
   runtimeCaching: [
     {
