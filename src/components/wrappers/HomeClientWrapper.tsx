@@ -32,10 +32,10 @@ export default function HomeClientWrapper() {
     if (!isMinimumAgeConfirmed && skipForBots) {
       setCrawlerIsBot(true);
       setIsMinimumAgeConfirmed(true);
+      Cookies.remove("skip_age_modal"); // Cleanup the cookie for bots
     }
   }, [isMinimumAgeConfirmed, setIsMinimumAgeConfirmed]);
 
-  console.log({ isCrawlerBot });
   return (
     <div className={styles.container}>
       {!isCrawlerBot && (
