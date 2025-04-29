@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 
 import { supabase } from "@/lib/supabaseClient";
@@ -23,6 +23,51 @@ const Item = dynamic(
     ssr: false,
   }
 );
+
+const ImageWrapper: React.FC<{ image: ImageData }> = ({ image }) => {
+  const [orientationClass, setOrientationClass] = useState("");
+  const imgRef = useRef<HTMLImageElement | null>(null);
+
+  const handleLoad = () => {
+    if (imgRef.current) {
+      const { naturalWidth, naturalHeight } = imgRef.current;
+      const isLandscape = naturalWidth > naturalHeight;
+      setOrientationClass(isLandscape ? styles.landscape : styles.portrait);
+    }
+  };
+
+  return (
+    <div className={`${styles.imageCard} ${orientationClass}`}>
+      <Item
+        original={image.url}
+        thumbnail={image.url}
+        caption={image.author}
+        width={image.width || 800}
+        height={image.height || 600}
+      >
+        {({ ref, open }) => (
+          <div ref={ref} onClick={open} className={styles.imageItem}>
+            <Image
+              src={image.url}
+              alt={image.title || "Mosaic Gallery Image"}
+              className={styles.image}
+              width={100}
+              height={90}
+              sizes="(max-width: 600px) 100vw, 50vw"
+              loading="lazy"
+              placeholder="blur"
+              blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
+              onLoadingComplete={() => handleLoad()}
+              ref={(node) => {
+                if (node) imgRef.current = node;
+              }}
+            />
+          </div>
+        )}
+      </Item>
+    </div>
+  );
+};
 
 const ImageCard: React.FC<ImageCardProps> = () => {
   const [images, setImages] = useState<ImageData[]>([]);
@@ -121,50 +166,9 @@ const ImageCard: React.FC<ImageCardProps> = () => {
         </div>
       ) : (
         <Gallery withCaption options={galleryOptions}>
-          {images.map((image, index) => {
-            if (!image.width || !image.height) {
-              // Skip rendering if dimensions are missing
-              return null;
-            }
-            return (
-              <div
-                key={index}
-                className={`${styles.imageCard} ${
-                  image.width > image.height
-                    ? styles.landscape
-                    : styles.portrait
-                }`}
-              >
-                <Item
-                  original={image.url}
-                  thumbnail={image.url}
-                  caption={image.author}
-                  width={image.width || 0} // Fallback to a default width (e.g., 800px)
-                  height={image.height || 0} // Fallback to a default height (e.g., 600px)
-                >
-                  {({ ref, open }) => (
-                    <div ref={ref} onClick={open} className={styles.imageItem}>
-                      <Image
-                        src={image.url}
-                        alt={image.title || "Mosaic Gallery Image"}
-                        className={styles.image}
-                        width={100}
-                        height={90}
-                        sizes="(max-width: 600px) 100vw, 50vw"
-                        loading="lazy"
-                        placeholder="blur"
-                        blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
-                      />
-                    </div>
-                  )}
-                </Item>
-                {/* <div>
-                  <h3 className={styles.imageTitle}>{image.author}</h3>
-                  <p className={styles.imageDescription}>{image.description}</p>
-                </div> */}
-              </div>
-            );
-          })}
+          {images.map((image, index) => (
+            <ImageWrapper image={image} key={index} />
+          ))}
         </Gallery>
       )}
     </>
