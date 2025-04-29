@@ -23,22 +23,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mosaic.photography"),
+  metadataBase: new URL("https://www.mosaic.photography"),
   title: {
     default: "Public Domain Nude Photography | Mosaic Gallery",
     template: "%s | Vintage Nude Photography by Mosaic",
   },
   alternates: {
-    canonical: "https://mosaic.photography/",
+    canonical: "https://www.mosaic.photography/",
     languages: {
-      es: "https://mosaic.photography/es",
-      de: "https://mosaic.photography/de",
+      es: "https://www.mosaic.photography/es",
+      de: "https://www.mosaic.photography/de",
     },
   },
   authors: [
     {
       name: "Mosaic Photography",
-      url: "https://mosaic.photography/",
+      url: "https://www.mosaic.photography/",
     },
   ],
   description:
@@ -46,9 +46,11 @@ export const metadata: Metadata = {
   keywords: [
     // High-Priority Core Niche (Low KD, Solid Volume)
     "public domain nude photography",
+    "nude photography",
+    "vintage nude photography ",
     "vintage nude photography public domain",
     "fine art nude photography public domain",
-    "classic nude photography public domain",
+    "classic nude photography ",
     "artistic nudes public domain",
     "vintage nude portraits public domain",
     "archival nude photographs public domain",
@@ -83,12 +85,12 @@ export const metadata: Metadata = {
 
     // German Keywords (Localized SEO)
     "Akt foto",
-    "Aktfotografie gemeinfrei",
-    "klassische Aktfotografie gemeinfrei",
-    "Vintage Aktfotografie gemeinfrei",
+    "Aktfotografie",
+    "klassische Aktfotografie ",
+    "Vintage Aktfotografie ",
     "ästhetische Aktfotos gemeinfrei",
     "Aktfotografie Schwarzweiß gemeinfrei",
-    "historische Aktfotografie gemeinfrei",
+    "historische Aktfotografie ",
     "Platinprint Aktfotografie gemeinfrei",
     "zeitlose Aktfotografie gemeinfrei",
     "Galerie-Aktfotografie gemeinfrei",

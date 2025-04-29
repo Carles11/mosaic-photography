@@ -2,7 +2,7 @@ export const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebPage",
   name: "Public Domain Nude Photography | Mosaic",
-  url: "https://mosaic.photography",
+  url: "https://www.mosaic.photography",
   description:
     "Explore our public domain collection of classic nude photography featuring legendary photographers.",
   mainEntity: {

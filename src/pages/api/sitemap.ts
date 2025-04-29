@@ -34,10 +34,17 @@ export default async function handler(
 
     // Build sitemap entries
     const sitemapEntries = data.map(({ url, last_modified }) => {
+      // Ensure `url` is properly formatted and skip invalid entries
+      if (!url || !url.startsWith("http")) {
+        console.warn("Skipping invalid URL:", url);
+        return "";
+      }
+
       const lastmod = new Date(last_modified).toISOString();
+
       return `
         <url>
-          <loc>${baseUrl}/${url}</loc>
+          <loc>${url}</loc>
           <changefreq>weekly</changefreq>
           <priority>0.8</priority>
           <lastmod>${lastmod}</lastmod>
@@ -45,10 +52,15 @@ export default async function handler(
       `;
     });
 
+    // Filter out any empty entries (invalid URLs)
+    const validSitemapEntries = sitemapEntries.filter(
+      (entry) => entry.trim() !== ""
+    );
+
     // Generate the final sitemap
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
       <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-        ${sitemapEntries.join("")}
+        ${validSitemapEntries.join("")}
       </urlset>`.trim();
 
     // Cache the sitemap

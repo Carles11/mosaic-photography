@@ -7,7 +7,6 @@ import { ImageData, ImageCardProps } from "@/types";
 import { GalleryProps } from "react-photoswipe-gallery";
 import "photoswipe/dist/photoswipe.css";
 import styles from "./ImageCard.module.css";
-// import { getImageDimensions } from "@/helpers/imageHelpers";
 import { ClimbingBoxLoader } from "react-spinners";
 
 // Dynamically import the Gallery and Item components
