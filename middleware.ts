@@ -12,6 +12,8 @@ export function middleware(req: NextRequest) {
 
   console.log({ userAgent, isBot });
   const response = NextResponse.next();
+  response.headers.set("x-middleware-check", "true");
+  // This header is just for debugging purposes
 
   if (isBot) {
     response.cookies.set("skip_age_modal", "1", {

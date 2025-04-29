@@ -27,7 +27,6 @@ export default function HomeClientWrapper() {
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
 
   useEffect(() => {
-    console.log({ Cookies });
     const skipForBots = Cookies.get("skip_age_modal") === "1";
 
     if (!isMinimumAgeConfirmed && skipForBots) {
