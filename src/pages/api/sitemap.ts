@@ -19,8 +19,6 @@ export default async function handler(
     return res.status(200).send(sitemapCache);
   }
 
-  const baseUrl = "https://www.mosaic.photography";
-
   try {
     // Batch fetch all URLs and last modified dates
     const { data, error } = await supabase
