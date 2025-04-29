@@ -23,5 +23,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/"], // Apply middleware only to the root route
+  matcher: "/(.*)", // Simplified matcher to apply middleware to all routes
 };
