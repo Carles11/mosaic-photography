@@ -42,8 +42,8 @@ const ImageWrapper: React.FC<{ image: ImageData }> = ({ image }) => {
         original={image.url}
         thumbnail={image.url}
         caption={image.author}
-        width={image.width || 800}
-        height={image.height || 600}
+        width={imgRef.current?.naturalWidth} // Use actual width
+        height={imgRef.current?.naturalHeight} // Use actual height
       >
         {({ ref, open }) => (
           <div ref={ref} onClick={open} className={styles.imageItem}>
@@ -57,7 +57,7 @@ const ImageWrapper: React.FC<{ image: ImageData }> = ({ image }) => {
               loading="lazy"
               placeholder="blur"
               blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
-              onLoad={() => handleLoad()} // Updated from onLoadingComplete to onLoad
+              onLoad={() => handleLoad()}
               ref={(node) => {
                 if (node) imgRef.current = node;
               }}
