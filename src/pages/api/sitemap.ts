@@ -8,6 +8,16 @@ let cacheTimestamp: number | null = null;
 // Cache duration in milliseconds (e.g., 24 hours)
 const CACHE_DURATION = 24 * 60 * 60 * 1000;
 
+// Utility function to escape special characters in XML
+function escapeXml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -38,11 +48,12 @@ export default async function handler(
         return "";
       }
 
+      const escapedUrl = escapeXml(url); // Escape special characters in the URL
       const lastmod = new Date(last_modified).toISOString();
 
       return `
         <url>
-          <loc>${url}</loc>
+          <loc>${escapedUrl}</loc>
           <changefreq>weekly</changefreq>
           <priority>0.8</priority>
           <lastmod>${lastmod}</lastmod>
