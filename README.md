@@ -22,7 +22,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## SEO and Ranking Positioning
 
-This project includes precision optimizations for SEO and ranking positioning. Below are the measures implemented:
+This project includes precision optimizations for SEO and ranking positioning. Below are some of the measures implemented:
 
 ### Meta Tags
 
@@ -43,7 +43,7 @@ This project includes precision optimizations for SEO and ranking positioning. B
 - **Lazy Loading**: Images and other assets are lazy-loaded to improve page load speed.
 - **Next.js Image Optimization**: The `next/image` component is used to serve optimized images with automatic resizing and format conversion (e.g., WebP).
 - **Code Splitting**: Next.js automatically splits code to reduce initial load time.
-- **Caching and Compression**: Static assets are served with caching headers and gzip compression.
+- **Caching and Compression**: Image assets are served with caching headers and gzip compression using optimized AWS-S3 CDN.
 
 ### Mobile Responsiveness
 

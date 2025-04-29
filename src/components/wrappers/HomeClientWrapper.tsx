@@ -1,14 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAppContext } from "@/context/AppContext";
 import { useAgeConsent } from "@/context/AgeConsentContext";
+import Cookies from "js-cookie";
 
 import Gallery from "@/components/gallery/Gallery";
 import { ImageCardTitles } from "@/components/header/titles/ImageCardTitles";
 import { AuthorCardTitles } from "@/components/header/titles/AuthorCardTitles";
 import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
+
 import GitHubCorner from "@/components/buttons/GitHubCorner";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
@@ -18,13 +20,25 @@ import styles from "./home.module.css";
 export default function HomeClientWrapper() {
   const { isMosaic } = useAppContext();
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
+  const [isCrawlerBot, setCrawlerIsBot] = useState(false);
+
+  useEffect(() => {
+    const skipForBots = Cookies.get("skip_age_modal") === "1";
+
+    if (!isMinimumAgeConfirmed && skipForBots) {
+      setCrawlerIsBot(true);
+      setIsMinimumAgeConfirmed(true);
+    }
+  }, []);
 
   return (
     <div className={styles.container}>
-      <AgeConsent
-        isMinimumAgeConfirmed={isMinimumAgeConfirmed}
-        setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed}
-      />
+      {!isCrawlerBot && (
+        <AgeConsent
+          isMinimumAgeConfirmed={isMinimumAgeConfirmed}
+          setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed}
+        />
+      )}
       {isMinimumAgeConfirmed && (
         <section
           className={`${styles.pageContent} ${
