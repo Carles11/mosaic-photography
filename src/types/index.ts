@@ -41,3 +41,5 @@ export type ImageCardProps = object;
 export type SwipeGalleryProps = {
   images: { src: string; thumbnail: string; width: number; height: number }[];
 };
+
+declare module "js-cookie";

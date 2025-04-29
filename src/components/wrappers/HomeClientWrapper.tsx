@@ -5,6 +5,10 @@ import { useAppContext } from "@/context/AppContext";
 import { useAgeConsent } from "@/context/AgeConsentContext";
 import Cookies from "js-cookie";
 
+// Add a declaration file for 'js-cookie' to avoid TypeScript errors
+// Create a file named `js-cookie.d.ts` in your project (e.g., in a `types` folder) with the following content:
+// declare module 'js-cookie';
+
 import Gallery from "@/components/gallery/Gallery";
 import { ImageCardTitles } from "@/components/header/titles/ImageCardTitles";
 import { AuthorCardTitles } from "@/components/header/titles/AuthorCardTitles";
@@ -23,14 +27,16 @@ export default function HomeClientWrapper() {
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
 
   useEffect(() => {
+    console.log({ Cookies });
     const skipForBots = Cookies.get("skip_age_modal") === "1";
 
     if (!isMinimumAgeConfirmed && skipForBots) {
       setCrawlerIsBot(true);
       setIsMinimumAgeConfirmed(true);
     }
-  }, []);
+  }, [isMinimumAgeConfirmed, setIsMinimumAgeConfirmed]);
 
+  console.log({ isCrawlerBot });
   return (
     <div className={styles.container}>
       {!isCrawlerBot && (
