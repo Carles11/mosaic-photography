@@ -7,7 +7,7 @@ import { ImageData, ImageCardProps } from "@/types";
 import { GalleryProps } from "react-photoswipe-gallery";
 import "photoswipe/dist/photoswipe.css";
 import styles from "./ImageCard.module.css";
-import { getImageDimensions } from "@/helpers/imageHelpers";
+// import { getImageDimensions } from "@/helpers/imageHelpers";
 import { ClimbingBoxLoader } from "react-spinners";
 
 // Dynamically import the Gallery and Item components
@@ -57,7 +57,7 @@ const ImageWrapper: React.FC<{ image: ImageData }> = ({ image }) => {
               loading="lazy"
               placeholder="blur"
               blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
-              onLoadingComplete={() => handleLoad()}
+              onLoad={() => handleLoad()} // Updated from onLoadingComplete to onLoad
               ref={(node) => {
                 if (node) imgRef.current = node;
               }}
@@ -109,17 +109,10 @@ const ImageCard: React.FC<ImageCardProps> = () => {
         images.map(async (image): Promise<ImageData> => {
           try {
             // const encodedUrl = encodeURI(image.url);
-            const dimensions = await getImageDimensions(image.url);
 
             return {
               ...image,
               url: image.url, // Use encoded URL
-              width: dimensions.width,
-              height: dimensions.height,
-              className:
-                dimensions.width > dimensions.height
-                  ? styles.landscape
-                  : styles.portrait,
             };
           } catch (dimensionError) {
             if (dimensionError instanceof Error) {
