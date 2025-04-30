@@ -1,13 +1,13 @@
 export interface Photographer {
   name: string;
   surname: string;
-  author: string;
+  author?: string;
   biography: string;
   birthdate: string;
   deceasedate: string | null;
   origin: string;
-  website: string;
-  instagram: string;
+  website?: string;
+  instagram?: string;
   images: ImageData[];
   store: [];
 }
@@ -31,7 +31,18 @@ export interface Author {
   birthdate: string;
   deceasedate: string | null;
   origin: string;
-  imageUrl: string;
+  author: string;
+  website: string;
+  instagram: string;
+  store: string;
+  images: {
+    id: string;
+    url: string;
+    author: string;
+    title: string;
+    description: string;
+    created_at: string;
+  }[];
 }
 
 export type AuthorCardProps = object;
