@@ -1,16 +1,14 @@
-// pages/404.js
-import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./Error.module.css";
 
+export const metadata = {
+  title: "Oops! Page not found",
+};
+
 export default function Error() {
   return (
     <>
-      <Head>
-        <title>Oops! Page not found</title>
-      </Head>
-
       <main className={styles.errorContainer}>
         <Image
           className={styles.image}
