@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import dynamic from "next/dynamic";
 
 import { supabase } from "@/lib/supabaseClient";
@@ -77,17 +77,24 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
   }, [photographers]);
 
   const ImageItem: React.FC<{ image: ImageData }> = ({ image }) => {
-    // Ensure width and height are defined, fallback to default values if undefined
-    const width = image.width ?? 100; // Default width
-    const height = image.height ?? 100; // Default height
+    const [orientationClass, setOrientationClass] = useState("");
+    const imgRef = useRef<HTMLImageElement | null>(null);
+
+    const handleLoad = () => {
+      if (imgRef.current) {
+        const { naturalWidth, naturalHeight } = imgRef.current;
+        const isLandscape = naturalWidth > naturalHeight;
+        setOrientationClass(isLandscape ? styles.landscape : styles.portrait);
+      }
+    };
 
     return (
       <Item
         original={encodeURI(image.url)}
         thumbnail={encodeURI(image.url)}
         caption={image.author}
-        width={width}
-        height={height}
+        width={imgRef.current?.naturalWidth || 1200} // Set default width
+        height={imgRef.current?.naturalHeight || 800} // Set default height
       >
         {({ ref, open }) => (
           <div ref={ref} onClick={open} className={styles.imageItem}>
@@ -96,10 +103,14 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
               alt={image.title || `Work of the photographer ${image.author}`}
               width={50}
               height={50}
-              className={width > height ? styles.landscape : styles.portrait}
+              className={`${styles.image} ${orientationClass}`}
               priority={false} // Set to true for critical images
               loading="lazy"
               unoptimized
+              ref={(node) => {
+                if (node) imgRef.current = node;
+              }}
+              onLoad={() => handleLoad()}
             />
           </div>
         )}

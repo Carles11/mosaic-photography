@@ -1,7 +1,6 @@
 # *
 User-agent: *
 Allow: /
-Allow: /_next/
 
 # Host
 Host: https://www.mosaic.photography
