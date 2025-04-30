@@ -76,6 +76,9 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
     return photographers.sort(() => Math.random() - 0.5);
   }, [photographers]);
 
+  // Helper function to encode URIs
+  // const getEncodedURI = (url: string) => encodeURI(url);
+
   const ImageItem: React.FC<{ image: ImageData }> = ({ image }) => {
     const [orientationClass, setOrientationClass] = useState("");
     const imgRef = useRef<HTMLImageElement | null>(null);
@@ -90,8 +93,8 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
 
     return (
       <Item
-        original={encodeURI(image.url)}
-        thumbnail={encodeURI(image.url)}
+        original={image.url}
+        thumbnail={image.url}
         caption={image.author}
         width={imgRef.current?.naturalWidth || 1200} // Set default width
         height={imgRef.current?.naturalHeight || 800} // Set default height
@@ -99,7 +102,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         {({ ref, open }) => (
           <div ref={ref} onClick={open} className={styles.imageItem}>
             <Image
-              src={encodeURI(image.url)}
+              src={image.url}
               alt={image.title || `Work of the photographer ${image.author}`}
               width={50}
               height={50}

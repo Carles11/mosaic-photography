@@ -84,7 +84,7 @@ const nextConfig: NextConfig = {
     ];
   },
 };
-
+console.log({ isDev });
 export default withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 })(
