@@ -19,5 +19,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: "/(.*)", // apply middleware to all routes
+  matcher: ["/", "/ImageCard", "/AuthorCard"], // apply middleware only to specific routes
 };

@@ -62,7 +62,8 @@ export default withBundleAnalyzer({
   withPWA({
     dest: "public",
     register: !isDev, // ⬅️ Don't register in dev
-    disable: isDev, // ⬅️ Fully disable in dev
+    disable: true, // Disable PWA entirely for test
+    // disable: isDev, // ⬅️ Fully disable in dev
     ...pwaConfig,
   })(nextConfig)
 );

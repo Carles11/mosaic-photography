@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 
 import { supabase } from "@/lib/supabaseClient";
@@ -42,9 +42,10 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
     const fetchPhotographersWithImages = async () => {
       setLoading(true);
 
-      const { data: photographers, error } = await supabase.from(
-        "photographers"
-      ).select(`
+      const { data: photographers, error } = await supabase
+        .from("photographers")
+        .select(
+          `
         name,
         surname,
         author,
@@ -52,28 +53,21 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         birthdate,
         deceasedate,
         origin,
-        website,
-        instagram,
-        store,
         images (
-        id,
-        url,
-        author,
-        title,
-        description,
-        created_at
+          id,
+          url,
+          author,
+          title
         )
-      `);
+      `
+        )
+        .limit(10); // Fetch only 10 photographers initially
 
       if (error) {
         setError(error.message);
         setLoading(false);
       } else {
-        const shuffledPhotographers = photographers.sort(
-          () => Math.random() - 0.5
-        );
-
-        setPhotographers(shuffledPhotographers);
+        setPhotographers(photographers as Photographer[]);
         setLoading(false);
       }
     };
@@ -81,17 +75,9 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
     fetchPhotographersWithImages();
   }, []);
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  const handleNameClick = (photographer: Photographer) => {
-    setSelectedPhotographer(photographer);
-  };
-
-  const closePhotographerModal = () => {
-    setSelectedPhotographer(null);
-  };
+  const shuffledPhotographers = useMemo(() => {
+    return photographers.sort(() => Math.random() - 0.5);
+  }, [photographers]);
 
   const ImageItem: React.FC<{ image: ImageData }> = ({ image }) => {
     const [dimensions, setDimensions] = useState<{
@@ -102,21 +88,10 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
     useEffect(() => {
       const fetchDimensions = async () => {
         try {
-          // const encodedUrl = encodeURI(image.url);
-          // console.log({ encodedUrl });
-          // console.log("image.url", image.url);
           const dims = await getImageDimensions(image.url);
-
           setDimensions(dims);
         } catch (dimensionError) {
-          if (dimensionError instanceof Error) {
-            console.log(
-              "Failed getting image dimensions:",
-              dimensionError.message
-            );
-          } else {
-            console.log("Failed getting image dimensions:", dimensionError);
-          }
+          console.error("Failed getting image dimensions:", dimensionError);
         }
       };
 
@@ -157,6 +132,26 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
     );
   };
 
+  const handleNameClick = useMemo(() => {
+    return (photographer: Photographer) => {
+      setSelectedPhotographer(photographer);
+    };
+  }, []);
+
+  const debouncedScrollIntoView = useMemo(() => {
+    let timeout: NodeJS.Timeout | null = null;
+    return (id: string) => {
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    };
+  }, []);
+
+  const closePhotographerModal = () => {
+    setSelectedPhotographer(null);
+  };
+
   return (
     <div>
       {loading ? (
@@ -171,21 +166,17 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
       ) : (
         <>
           <div className={styles.authorScrollList}>
-            {photographers.map((photographer, index) => (
+            {shuffledPhotographers.map((photographer, index) => (
               <button
                 key={index}
                 className={styles.authorButton}
-                onClick={() =>
-                  document
-                    .getElementById(`author-${index}`)
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
+                onClick={() => debouncedScrollIntoView(`author-${index}`)}
               >
                 {photographer.author}
               </button>
             ))}
           </div>
-          {photographers.map((photographer, index) => (
+          {shuffledPhotographers.map((photographer, index) => (
             <div
               key={index}
               id={`author-${index}`}
