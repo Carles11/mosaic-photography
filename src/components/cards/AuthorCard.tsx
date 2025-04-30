@@ -7,7 +7,6 @@ import { Photographer, ImageData, AuthorCardProps } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
 import { GalleryProps } from "react-photoswipe-gallery";
 import "photoswipe/dist/photoswipe.css";
-import { getImageDimensions } from "@/helpers/imageHelpers";
 import { ClimbingBoxLoader } from "react-spinners";
 
 import styles from "./AuthorCard.module.css";
@@ -29,7 +28,6 @@ const Item = dynamic(
 
 const AuthorCard: React.FC<AuthorCardProps> = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedPhotographer, setSelectedPhotographer] =
     useState<Photographer | null>(null);
@@ -42,7 +40,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
     const fetchPhotographersWithImages = async () => {
       setLoading(true);
 
-      const { data: photographers, error } = await supabase
+      const { data: photographers } = await supabase
         .from("photographers")
         .select(
           `
@@ -63,8 +61,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         )
         .limit(10); // Fetch only 10 photographers initially
 
-      if (error) {
-        setError(error.message);
+      if (!photographers) {
         setLoading(false);
       } else {
         setPhotographers(photographers as Photographer[]);
@@ -80,35 +77,17 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
   }, [photographers]);
 
   const ImageItem: React.FC<{ image: ImageData }> = ({ image }) => {
-    const [dimensions, setDimensions] = useState<{
-      width: number;
-      height: number;
-    } | null>(null);
-
-    useEffect(() => {
-      const fetchDimensions = async () => {
-        try {
-          const dims = await getImageDimensions(image.url);
-          setDimensions(dims);
-        } catch (dimensionError) {
-          console.error("Failed getting image dimensions:", dimensionError);
-        }
-      };
-
-      fetchDimensions();
-    }, [image.url]);
-
-    if (!dimensions) {
-      return null;
-    }
+    // Ensure width and height are defined, fallback to default values if undefined
+    const width = image.width ?? 100; // Default width
+    const height = image.height ?? 100; // Default height
 
     return (
       <Item
         original={encodeURI(image.url)}
         thumbnail={encodeURI(image.url)}
         caption={image.author}
-        width={dimensions.width}
-        height={dimensions.height}
+        width={width}
+        height={height}
       >
         {({ ref, open }) => (
           <div ref={ref} onClick={open} className={styles.imageItem}>
@@ -117,11 +96,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
               alt={image.title || `Work of the photographer ${image.author}`}
               width={50}
               height={50}
-              className={
-                dimensions.width > dimensions.height
-                  ? styles.landscape
-                  : styles.portrait
-              }
+              className={width > height ? styles.landscape : styles.portrait}
               priority={false} // Set to true for critical images
               loading="lazy"
               unoptimized

@@ -31,22 +31,21 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 31536000, // 1 year
   },
   webpack: (config, { isServer }) => {
-    // Example: Split chunks further
     config.optimization.splitChunks = {
       chunks: "all",
-      minSize: 20000, // Minimum size for a chunk (in bytes)
-      maxSize: 100000, // Maximum size for a chunk (in bytes)
+      minSize: 20000,
+      maxSize: 100000,
     };
 
-    // Example: Remove moment.js locales to reduce size
     if (!isServer) {
       config.resolve.alias["moment"] = "moment/min/moment-with-locales";
     }
 
     return config;
   },
+
+  // ✅ Rewrites (sitemap path)
   async rewrites() {
-    // console.log("Applying rewrite rule for sitemap"); // Add this line for logging
     return [
       {
         source: "/sitemap.xml",
@@ -54,16 +53,45 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+  // ✅ Headers for static asset access and SEO crawling
+  async headers() {
+    return [
+      // Allow bots and tools to access _next static files
+      {
+        source: "/_next/:path*",
+        headers: [
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*",
+          },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      // Optional: Improve preloadability of your manifest file
+      {
+        source: "/favicons/site.webmanifest",
+        headers: [
+          {
+            key: "Content-Type",
+            value: "application/manifest+json",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default withBundleAnalyzer({
-  enabled: process.env.ANALYZE === "true", // Enable only when needed
+  enabled: process.env.ANALYZE === "true",
 })(
   withPWA({
     dest: "public",
-    register: !isDev, // ⬅️ Don't register in dev
-    disable: true, // Disable PWA entirely for test
-    // disable: isDev, // ⬅️ Fully disable in dev
+    register: !isDev,
+    disable: isDev, // Keep disabled unless going full PWA
     ...pwaConfig,
   })(nextConfig)
 );
