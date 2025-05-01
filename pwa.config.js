@@ -26,9 +26,9 @@ module.exports = {
       },
     },
     {
-      // Cache all files under the _next directory (e.g., app-build-manifest.json)
+      // Runtime cache for Next.js static files
       urlPattern: /^https:\/\/www\.mosaic\.photography\/_next\/.*/i,
-      handler: "StaleWhileRevalidate",
+      handler: "NetworkFirst", // Prioritize fresh resources
       options: {
         cacheName: "next-static",
         expiration: {
@@ -40,8 +40,8 @@ module.exports = {
   ],
   // Add a reference to your custom Service Worker
   customWorkerDir: "src/sw-custom.js", // Path to your custom Service Worker file
-  // Exclude unused service-worker.js from being precached
-  buildExcludes: [], // /sw\.js$/, /_next\/.*\.json$/ ------- Exclude JSON files that shouldn't be precached
+  // Exclude JSON files (including app-build-manifest.json) from being precached
+  buildExcludes: [/\/_next\/.*\.json$/],
   // General settings to enable seamless updates
   skipWaiting: true,
   clientsClaim: true,
