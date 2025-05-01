@@ -27,17 +27,21 @@ export default function HomeClientWrapper() {
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
 
   useEffect(() => {
+    // Check for the bot cookie set by the middleware
     const skipForBots = Cookies.get("skip_age_modal") === "1";
+    console.log("Cookie skip_age_modal:", Cookies.get("skip_age_modal"));
+    console.log({ skipForBots });
 
-    if (!isMinimumAgeConfirmed && skipForBots) {
+    if (skipForBots) {
       setCrawlerIsBot(true);
-      setIsMinimumAgeConfirmed(true);
-      Cookies.remove("skip_age_modal"); // Cleanup the cookie for bots
+      setIsMinimumAgeConfirmed(true); // Automatically confirm age for bots
     }
-  }, [isMinimumAgeConfirmed, setIsMinimumAgeConfirmed]);
+  }, [setIsMinimumAgeConfirmed]);
 
+  console.log({ isCrawlerBot });
   return (
     <div className={styles.container}>
+      {/* Show AgeConsent only for real users */}
       {!isCrawlerBot && (
         <AgeConsent
           isMinimumAgeConfirmed={isMinimumAgeConfirmed}

@@ -13,6 +13,8 @@ export function middleware(req: NextRequest) {
     response.cookies.set("skip_age_modal", "1", {
       path: "/",
     });
+  } else {
+    response.cookies.delete("skip_age_modal");
   }
 
   return response;
