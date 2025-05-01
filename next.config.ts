@@ -73,7 +73,7 @@ const nextConfig: NextConfig = {
       },
       // Optional: Improve preloadability of your manifest file
       {
-        source: "/favicons/site.webmanifest",
+        source: "/site.webmanifest",
         headers: [
           {
             key: "Content-Type",

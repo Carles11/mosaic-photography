@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Roboto_Mono } from "next/font/google";
 
 import { AppContextProvider } from "@/context/AppContext";
 import { AgeConsentProvider } from "@/context/AgeConsentContext";
@@ -12,12 +12,12 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import "./globals.css";
 
-const geistSans = Geist({
+const geistSans = Inter({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const geistMono = Roboto_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
@@ -126,7 +126,7 @@ export const metadata: Metadata = {
     ],
     apple: "/favicons/apple-touch-icon.png",
   },
-  manifest: "/favicons/site.webmanifest",
+  manifest: "/site.webmanifest",
   openGraph: {
     title: "Nude photography | Mosaic Photography curated Gallery",
     description:
