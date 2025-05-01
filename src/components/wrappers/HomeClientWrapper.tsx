@@ -29,8 +29,6 @@ export default function HomeClientWrapper() {
   useEffect(() => {
     // Check for the bot cookie set by the middleware
     const skipForBots = Cookies.get("skip_age_modal") === "1";
-    console.log("Cookie skip_age_modal:", Cookies.get("skip_age_modal"));
-    console.log({ skipForBots });
 
     if (skipForBots) {
       setCrawlerIsBot(true);
@@ -38,7 +36,6 @@ export default function HomeClientWrapper() {
     }
   }, [setIsMinimumAgeConfirmed]);
 
-  console.log({ isCrawlerBot });
   return (
     <div className={styles.container}>
       {/* Show AgeConsent only for real users */}
