@@ -10,6 +10,7 @@ export const AgeConsent = ({
   setIsMinimumAgeConfirmed: (value: boolean) => void;
   isMinimumAgeConfirmed: boolean;
 }) => {
+  console.log({ isMinimumAgeConfirmed, setIsMinimumAgeConfirmed });
   return (
     <div
       role="dialog"
