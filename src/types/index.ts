@@ -1,15 +1,15 @@
 export interface Photographer {
   name: string;
   surname: string;
-  author?: string;
-  biography: string;
+  author: string;
+  biography?: string;
   birthdate: string;
-  deceasedate: string | null;
-  origin: string;
+  deceasedate?: string | null;
+  origin?: string;
   website?: string;
   instagram?: string;
   images: ImageData[];
-  store: [];
+  store?: [];
 }
 
 export interface ImageData {
@@ -32,9 +32,9 @@ export interface Author {
   deceasedate: string | null;
   origin: string;
   author: string;
-  website: string;
-  instagram: string;
-  store: string;
+  website?: string;
+  instagram?: string;
+  store?: [];
   images: {
     id: string;
     url: string;
