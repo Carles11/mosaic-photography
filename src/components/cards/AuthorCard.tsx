@@ -38,6 +38,16 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
     return photographers.sort(() => Math.random() - 0.5);
   }, [photographers]);
 
+  const debouncedScrollIntoView = useMemo(() => {
+    let timeout: NodeJS.Timeout | null = null;
+    return (id: string) => {
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    };
+  }, []);
+
   const closePhotographerModal = () => {
     setSelectedPhotographer(null);
   };
@@ -60,11 +70,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
               <button
                 key={index}
                 className={styles.authorButton}
-                onClick={() =>
-                  document
-                    .getElementById(`author-${index}`)
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
+                onClick={() => debouncedScrollIntoView(`author-${index}`)}
               >
                 {photographer.author}
               </button>

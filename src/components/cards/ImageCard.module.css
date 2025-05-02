@@ -1,22 +1,3 @@
-.galleryGridItem {
-  border-radius: 0.3rem;
-  background-color: var(--color-black);
-  overflow: hidden;
-  height: 200px;
-  box-shadow: 0 0 10px var(--color-black);
-  position: relative;
-  cursor: zoom-in;
-}
-
-.galleryGridItem img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
 .loaderContainer {
   display: flex;
   flex-direction: column;
@@ -34,4 +15,12 @@
   background: var(--text-gradient);
   -webkit-background-clip: text;
   color: transparent;
+}
+
+.landscape {
+  aspect-ratio: 16 / 9;
+}
+
+.portrait {
+  aspect-ratio: 3 / 4;
 }
