@@ -41,7 +41,11 @@ module.exports = {
   // Add a reference to your custom Service Worker
   customWorkerDir: "src/sw-custom.js", // Path to your custom Service Worker file
   // Exclude JSON files (including app-build-manifest.json) from being precached
-  buildExcludes: [/\/_next\/.*\.json$/],
+  buildExcludes: [
+    () => {
+      return true;
+    },
+  ],
   // General settings to enable seamless updates
   skipWaiting: true,
   clientsClaim: true,
