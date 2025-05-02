@@ -3,8 +3,8 @@
   padding: 20px;
   border-radius: 8px;
   background-color: var(--background-color);
-  width: 90%; /* Ensure the card takes full width */
-  margin: 1rem auto; /* Center the card horizontally */
+  width: 90%;
+  margin: 1rem auto;
   cursor: pointer;
 }
 
@@ -17,11 +17,6 @@
 .authorCard p {
   margin: 0 0 10px;
   color: var(--text-color);
-}
-
-.authorCard img {
-  border-radius: 50%;
-  margin-right: 10px;
 }
 
 .authorName {
@@ -42,21 +37,6 @@
   gap: 10px;
   overflow-x: auto;
   padding-top: 10px;
-}
-
-.imageItem {
-  cursor: zoom-in;
-}
-
-.customCloseIcon {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  padding: 5px;
-  cursor: pointer;
-  z-index: 1000;
 }
 
 .authorScrollList {
@@ -92,7 +72,7 @@
 
 @media (max-width: 768px) {
   .authorCard {
-    width: 80%; /* Ensure the card takes full width */
+    width: 80%;
   }
 }
 

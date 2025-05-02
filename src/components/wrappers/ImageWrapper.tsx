@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { Item } from "./PhotoSwipeWrapper"; // Import Item from PhotoSwipeWrapper
-import styles from "./ImageWrapper.module.css";
+import styles from "./image.module.css";
 
 interface ImageWrapperProps {
   image: {
