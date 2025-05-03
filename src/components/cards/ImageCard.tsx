@@ -10,6 +10,14 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   const [images, setImages] = useState<ImageData[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [imageOrientations, setImageOrientations] = useState<
+    Record<string, string>
+  >({});
+
+  const handleOrientationChange = (id: string, orientation: string) => {
+    console.log({ id, orientation });
+    setImageOrientations((prev) => ({ ...prev, [id]: orientation }));
+  };
 
   useEffect(() => {
     const fetchImages = async (): Promise<void> => {
@@ -58,7 +66,19 @@ const ImageCard: React.FC<ImageCardProps> = () => {
       ) : (
         <PhotoSwipeWrapper galleryOptions={{ zoom: true }}>
           {images.map((image) => (
-            <ImageWrapper key={image.id} image={image} />
+            <div
+              key={image.id}
+              className={`${styles.gridItem} ${
+                imageOrientations[image.id] || ""
+              }`}
+            >
+              <ImageWrapper
+                image={image}
+                onOrientationChange={(orientation) =>
+                  handleOrientationChange(image.id, orientation)
+                }
+              />
+            </div>
           ))}
         </PhotoSwipeWrapper>
       )}

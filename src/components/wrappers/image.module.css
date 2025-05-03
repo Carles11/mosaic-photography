@@ -8,22 +8,21 @@
   position: relative;
   cursor: zoom-in;
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   overflow: hidden;
 }
 
-.landscape {
+.landscapex {
   aspect-ratio: 16 / 9;
 }
 
-.portrait {
+.portraitss {
   aspect-ratio: 3 / 4;
 }
 
 .image {
   object-fit: cover;
   position: relative;
-  height: 100%;
   width: 100%;
 }
 

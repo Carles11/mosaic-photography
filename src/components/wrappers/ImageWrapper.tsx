@@ -9,9 +9,13 @@ interface ImageWrapperProps {
     author: string;
     title?: string;
   };
+  onOrientationChange?: (orientation: string) => void; // New prop
 }
 
-const ImageWrapper: React.FC<ImageWrapperProps> = ({ image }) => {
+const ImageWrapper: React.FC<ImageWrapperProps> = ({
+  image,
+  onOrientationChange,
+}) => {
   const [orientationClass, setOrientationClass] = useState("");
   const imgRef = useRef<HTMLImageElement | null>(null);
 
@@ -19,7 +23,9 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({ image }) => {
     if (imgRef.current) {
       const { naturalWidth, naturalHeight } = imgRef.current;
       const isLandscape = naturalWidth > naturalHeight;
-      setOrientationClass(isLandscape ? styles.landscape : styles.portrait);
+      const orientation = isLandscape ? styles.landscape : styles.portrait;
+      setOrientationClass(orientation);
+      onOrientationChange?.(orientation); // Notify parent about orientation
     }
   };
 

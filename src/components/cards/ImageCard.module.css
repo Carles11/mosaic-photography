@@ -17,10 +17,23 @@
   color: transparent;
 }
 
-.landscape {
+.landscapes {
   aspect-ratio: 16 / 9;
 }
 
-.portrait {
+.portraito {
   aspect-ratio: 3 / 4;
+}
+
+.gridItem {
+  grid-column: span 1; /* Default span */
+}
+
+.gridItem.landscape {
+  grid-column: span 2; /* Landscape images span 2 columns */
+  grid-row: span 2; /* Landscape images span 2 rows */
+}
+
+.gridItem.portrait {
+  grid-column: span 1; /* Portrait images span 1 column */
 }
