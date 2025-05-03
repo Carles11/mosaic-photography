@@ -66,7 +66,12 @@ const ImageCard: React.FC<ImageCardProps> = () => {
       ) : (
         <PhotoSwipeWrapper galleryOptions={{ zoom: true }}>
           {images.map((image) => (
-            <div key={image.id} className={`${styles.gridItem}`}>
+            <div
+              key={image.id}
+              className={`${styles.gridItem} ${
+                imageOrientations[image.id] || ""
+              }`}
+            >
               <ImageWrapper
                 image={image}
                 onOrientationChange={(orientation) =>
