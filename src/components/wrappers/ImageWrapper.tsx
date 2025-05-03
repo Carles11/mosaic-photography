@@ -48,8 +48,8 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
               src={image.url}
               alt={image.title || "Gallery Image"}
               className={styles.image}
-              width={300}
-              height={200}
+              width={imgRef.current?.naturalWidth || 300} // Use actual width
+              height={imgRef.current?.naturalHeight || 200} // Use actual height// Use actual height
               sizes="(max-width: 600px) 100vw, 50vw"
               placeholder="blur"
               blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
