@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useAppContext } from "@/context/AppContext";
 import { useAgeConsent } from "@/context/AgeConsentContext";
 import Cookies from "js-cookie";
+import { withClientLogic } from "@/hocs/withClientLogic"; // Import the HOC
 
 // Add a declaration file for 'js-cookie' to avoid TypeScript errors
 // Create a file named `js-cookie.d.ts` in your project (e.g., in a `types` folder) with the following content:
@@ -21,7 +22,7 @@ import Footer from "@/components/footer/Footer";
 
 import styles from "./home.module.css";
 
-export default function HomeClientWrapper() {
+function HomeClientWrapper() {
   const { isMosaic } = useAppContext();
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
@@ -69,3 +70,5 @@ export default function HomeClientWrapper() {
     </div>
   );
 }
+
+export default withClientLogic(HomeClientWrapper);

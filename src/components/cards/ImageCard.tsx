@@ -15,7 +15,6 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   >({});
 
   const handleOrientationChange = (id: string, orientation: string) => {
-    console.log({ id, orientation });
     setImageOrientations((prev) => ({ ...prev, [id]: orientation }));
   };
 

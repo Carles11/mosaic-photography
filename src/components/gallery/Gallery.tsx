@@ -4,7 +4,6 @@ import React, { JSX } from "react";
 import ImageCard from "../cards/ImageCard";
 import AuthorCard from "../cards/AuthorCard";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
-import { withClientLogic } from "@/hocs/withClientLogic"; // Import the HOC
 
 import styles from "./gallery.module.css";
 
@@ -27,4 +26,4 @@ const Gallery: React.FC<GalleryProps> = ({ isMosaic }) => {
   );
 };
 
-export default withClientLogic(Gallery);
+export default Gallery;

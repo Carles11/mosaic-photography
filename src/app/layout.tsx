@@ -153,23 +153,6 @@ type RootLayoutProps = { children: React.ReactNode };
 function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      {/* <head>
-        <Script id="preload-images" strategy="beforeInteractive">
-          {`
-            const link1 = document.createElement('link');
-            link1.rel = 'preload';
-            link1.as = 'image';
-            link1.href = 'https://res.cloudinary.com/dktizqbky/image/upload/v1745436165/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-light_500x353px_v6gwqg.webp';
-            document.head.appendChild(link1);
-
-            const link2 = document.createElement('link');
-            link2.rel = 'preload';
-            link2.as = 'image';
-            link2.href = 'https://res.cloudinary.com/dktizqbky/image/upload/v1745436069/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-DARK_500x353px_szzmkn.webp';
-            document.head.appendChild(link2);
-          `}
-        </Script>
-      </head> */}
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider defaultTheme="dark">
           <AppContextProvider>
