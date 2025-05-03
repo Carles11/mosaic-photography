@@ -12,11 +12,11 @@
   overflow: hidden;
 }
 
-.landscapex {
+.landscape {
   aspect-ratio: 16 / 9;
 }
 
-.portraitss {
+.portrait {
   aspect-ratio: 3 / 4;
 }
 
