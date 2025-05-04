@@ -4,7 +4,8 @@ import { Photographer, AuthorCardProps } from "@/types";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
-import { ClimbingBoxLoader } from "react-spinners";
+import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
+
 import styles from "./AuthorCard.module.css";
 
 const AuthorCard: React.FC<AuthorCardProps> = () => {
@@ -53,16 +54,9 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
   };
 
   return (
-    <div>
+    <div className={styles.authorCardContainer}>
       {loading ? (
-        <div className={styles.loaderContainer}>
-          <ClimbingBoxLoader
-            color="var(--color-white)"
-            loading={loading}
-            size={25}
-          />
-          <p className={styles.loaderText}>Loading photographers...</p>
-        </div>
+        ClimbBoxLoaderContainer("var(--color-white)", 25, loading)
       ) : (
         <>
           <div className={styles.authorScrollList}>

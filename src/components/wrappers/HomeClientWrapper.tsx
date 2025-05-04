@@ -40,6 +40,8 @@ function HomeClientWrapper() {
   return (
     <div className={styles.container}>
       {/* Show AgeConsent only for real users */}
+      <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
+      <Header />
       {!isCrawlerBot && (
         <AgeConsent
           isMinimumAgeConfirmed={isMinimumAgeConfirmed}
@@ -47,26 +49,28 @@ function HomeClientWrapper() {
         />
       )}
       {isMinimumAgeConfirmed && (
-        <section
-          className={`${styles.pageContent} ${
-            isMinimumAgeConfirmed ? styles.visible : styles.invisible
-          }`}
-          aria-hidden={!isMinimumAgeConfirmed}
-        >
-          <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
-          <Header />
-          <div className="v-margin">
-            {isMosaic ? <ImageCardTitles /> : <AuthorCardTitles />}
-          </div>
+        <>
+          <section
+            className={`${styles.pageContent} ${
+              isMinimumAgeConfirmed ? styles.visible : styles.invisible
+            }`}
+            aria-hidden={!isMinimumAgeConfirmed}
+          >
+            <div className={styles.content}>
+              <div className="v-margin">
+                {isMosaic ? <ImageCardTitles /> : <AuthorCardTitles />}
+              </div>
 
-          <script type="application/ld+json">
-            {JSON.stringify(structuredData)}
-          </script>
+              <script type="application/ld+json">
+                {JSON.stringify(structuredData)}
+              </script>
 
-          <Gallery isMosaic={isMosaic} />
-          <Footer />
-        </section>
+              <Gallery isMosaic={isMosaic} />
+            </div>
+          </section>
+        </>
       )}
+      <Footer />
     </div>
   );
 }

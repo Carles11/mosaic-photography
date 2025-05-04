@@ -1,6 +1,6 @@
 .imageCard {
   position: relative;
-  height: 100%;
+  height: fit-content;
   width: 100%;
   border: 1px solid red;
 }

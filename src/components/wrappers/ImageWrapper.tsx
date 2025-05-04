@@ -24,7 +24,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({ image }) => {
       setOrientationClass(orientation);
     }
   };
-
+  console.log({ orientationClass });
   return (
     <div className={`${styles.imageCard} ${orientationClass}`}>
       <Item
@@ -43,7 +43,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({ image }) => {
             <Image
               src={image.url}
               alt={image.title || "Gallery Image"}
-              className={`${styles.image} ${orientationClass}`}
+              className={`${styles.image}`}
               width={imgRef.current?.naturalWidth || 300} // Use actual width
               height={imgRef.current?.naturalHeight || 200} // Use actual height// Use actual height
               sizes="(max-width: 600px) 100vw, 50vw"

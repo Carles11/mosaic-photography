@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { ImageData, ImageCardProps } from "@/types";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
-import { ClimbingBoxLoader } from "react-spinners";
+import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import styles from "./ImageCard.module.css";
 
 const ImageCard: React.FC<ImageCardProps> = () => {
@@ -47,14 +47,7 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   return (
     <>
       {loading ? (
-        <div className={styles.loaderContainer}>
-          <ClimbingBoxLoader
-            color="var(--color-white)"
-            loading={loading}
-            size={25}
-          />
-          <p className={styles.loaderText}>Loading images...</p>
-        </div>
+        ClimbBoxLoaderContainer("var(--color-white)", 25, loading)
       ) : (
         <PhotoSwipeWrapper galleryOptions={{ zoom: true }}>
           {images.map((image) => (

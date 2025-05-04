@@ -1,3 +1,9 @@
+.authorCardContainer {
+  height: 100% !important;
+  width: 100% !important;
+  margin-bottom: calc(100vh - 8rem);
+}
+
 .authorScrollList {
   display: flex;
   overflow-x: auto;
@@ -11,6 +17,8 @@
   padding: 20px;
   background-color: var(--background-color);
   width: 90vw;
+  height: auto;
+  min-height: 100%;
   margin: 1rem auto;
   cursor: pointer;
 }
@@ -81,23 +89,4 @@
   .authorCard {
     width: 80%;
   }
-}
-
-.loaderContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  gap: 2rem;
-  margin-top: 4rem;
-  height: 100%;
-}
-
-.loaderText {
-  font-size: 1.1rem;
-  font-weight: 700;
-  background: var(--text-gradient);
-  -webkit-background-clip: text;
-  color: transparent;
 }

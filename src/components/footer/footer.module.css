@@ -1,5 +1,5 @@
 .footerContainer {
-  margin-top: auto; /* Push the footer to the bottom */
+  margin-top: 100%; /* Push the footer to the bottom */
   height: auto;
   min-height: 10rem; /* Reserve space for the footer */
   background-color: var(--background-color);
