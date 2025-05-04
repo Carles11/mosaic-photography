@@ -9,13 +9,10 @@ interface ImageWrapperProps {
     author: string;
     title?: string;
   };
-  onOrientationChange?: (orientation: string) => void; // New prop
+  // New prop
 }
 
-const ImageWrapper: React.FC<ImageWrapperProps> = ({
-  image,
-  onOrientationChange,
-}) => {
+const ImageWrapper: React.FC<ImageWrapperProps> = ({ image }) => {
   const [orientationClass, setOrientationClass] = useState("");
   const imgRef = useRef<HTMLImageElement | null>(null);
 
@@ -25,7 +22,6 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
       const isLandscape = naturalWidth > naturalHeight;
       const orientation = isLandscape ? styles.landscape : styles.portrait;
       setOrientationClass(orientation);
-      onOrientationChange?.(orientation); // Notify parent about orientation
     }
   };
 
@@ -47,7 +43,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
             <Image
               src={image.url}
               alt={image.title || "Gallery Image"}
-              className={styles.image}
+              className={`${styles.image} ${orientationClass}`}
               width={imgRef.current?.naturalWidth || 300} // Use actual width
               height={imgRef.current?.naturalHeight || 200} // Use actual height// Use actual height
               sizes="(max-width: 600px) 100vw, 50vw"

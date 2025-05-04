@@ -13,14 +13,8 @@ interface GalleryProps extends JSX.IntrinsicAttributes {
 
 const Gallery: React.FC<GalleryProps> = ({ isMosaic }) => {
   return (
-    <div className={styles.galleryGridContainer}>
-      {isMosaic ? (
-        <div className={styles.galleryGrid}>
-          <ImageCard />
-        </div>
-      ) : (
-        <AuthorCard />
-      )}
+    <div className={(styles.galleryGridContainer, styles.galleryGrid)}>
+      {isMosaic ? <ImageCard /> : <AuthorCard />}
       <GoToTopButton />
     </div>
   );

@@ -1,36 +1,37 @@
 .imageCard {
   position: relative;
-  width: 100%;
   height: 100%;
+  width: 100%;
+  border: 1px solid red;
 }
 
 .imageItem {
+  height: auto;
+  width: 100%;
+  object-fit: cover;
   position: relative;
   cursor: zoom-in;
-  width: 100%;
-  height: 100%;
   overflow: hidden;
+  border: 1px solid orange;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .image {
-  object-fit: cover;
   position: relative;
   width: 100%;
-  height: 100%;
+  height: auto;
+  overflow: hidden;
 }
 
 .landscape {
   aspect-ratio: 16 / 9;
   grid-column: span 2; /* Landscape images span 2 columns */
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
 }
 
 .portrait {
-  aspect-ratio: 3 / 4;
-  height: 100%;
-  width: 100%;
+  aspect-ratio: 3/4;
   grid-column: span 1; /* Portrait images span 1 column */
 }
 
@@ -50,4 +51,10 @@
 .imageText {
   font-size: 0.8rem;
   margin-left: 5px;
+}
+
+.roundedImage {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
 }

@@ -1,11 +1,24 @@
+.authorScrollList {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px 0;
+  gap: 8px;
+  scrollbar-width: thin;
+  width: 90vw;
+}
 .authorCard {
   border: 1px solid #ccc;
   padding: 20px;
-  border-radius: 8px;
   background-color: var(--background-color);
-  width: 90%;
+  width: 90vw;
   margin: 1rem auto;
   cursor: pointer;
+}
+
+.authorCard img {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
 }
 
 .authorCard h2 {
@@ -37,14 +50,7 @@
   gap: 10px;
   overflow-x: auto;
   padding-top: 10px;
-}
-
-.authorScrollList {
-  display: flex;
-  overflow-x: auto;
-  padding: 10px 0;
-  gap: 8px;
-  scrollbar-width: thin;
+  width: 90vw;
 }
 
 .authorScrollList::-webkit-scrollbar {
@@ -63,6 +69,7 @@
   padding: 5px 10px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
+  font-size: medium;
 }
 
 .authorButton:hover {
