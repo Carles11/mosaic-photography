@@ -22,7 +22,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
         .from("photographers")
         .select(
           `
-          name, surname, author, biography, birthdate, deceasedate, origin,
+          name, surname, author, biography, birthdate, deceasedate, origin, website, store, instagram,
           images (id, url, author, title, description, created_at)
         `
         )

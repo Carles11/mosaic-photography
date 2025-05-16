@@ -24,7 +24,6 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({ image }) => {
       setOrientationClass(orientation);
     }
   };
-  console.log({ orientationClass });
   return (
     <div className={`${styles.imageCard} ${orientationClass}`}>
       <Item

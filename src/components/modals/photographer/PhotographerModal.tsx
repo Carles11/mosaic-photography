@@ -64,7 +64,7 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [handleClickOutside]);
-
+  console.log({ photographer });
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent} ref={modalRef}>
@@ -117,7 +117,7 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
         <div className={styles.externalLinks}>
           {photographer.website && (
             <a href={`${photographer.website}`} className={styles.link}>
-              Official website
+              Official website or wikipedia link
             </a>
           )}
           {photographer.instagram && (
@@ -127,7 +127,7 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
           )}
           {stores && stores.length > 0 && (
             <Dropdown
-              buttonText="Prints stores"
+              buttonText="Prints and books"
               items={stores}
               closeBio={setIsBiographyExpanded}
               onToggle={handleDropdownToggle}
