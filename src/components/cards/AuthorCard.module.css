@@ -83,10 +83,9 @@
 
 .imageListItem {
   flex: 0 0 auto;
-  width: 180px; /* or whatever fixed width you prefer */
-  max-width: 180px;
-  height: 140px; /* adjust as desired */
-  margin-right: 8px;
+  width: 50px; /* or whatever fixed width you prefer */
+  max-width: 50px;
+  height: 50px; /* adjust as desired */
   display: flex;
   align-items: center;
   justify-content: center;
