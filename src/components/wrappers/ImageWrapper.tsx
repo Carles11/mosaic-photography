@@ -24,8 +24,8 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
         original={image.url}
         thumbnail={image.url}
         caption={image.author}
-        width={imgRef?.current?.naturalWidth || 100} // Use actual width
-        height={imgRef?.current?.naturalHeight || 100} // Use actual height
+        width={imgRef?.current?.naturalWidth} // Use actual width
+        height={imgRef?.current?.naturalHeight} // Use actual height
       >
         {(props) => (
           <div

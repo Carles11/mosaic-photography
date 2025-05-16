@@ -3,7 +3,6 @@
   height: 100%;
   width: 100%;
   overflow: hidden;
-  border: 1px solid red;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,7 +15,6 @@
   position: relative;
   cursor: zoom-in;
   overflow: hidden;
-  border: 1px solid orange;
   display: flex;
   justify-content: center;
   align-items: center;
