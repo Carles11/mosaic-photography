@@ -56,9 +56,40 @@
   display: flex;
   flex-direction: row;
   gap: 10px;
-  overflow-x: auto;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-y: hidden; /* Prevent vertical scrolling */
   padding-top: 10px;
-  width: 90vw;
+  width: 100%; /* Ensure the container spans the full width */
+  height: 70px; /* Adjust height to accommodate circular images */
+  scrollbar-width: thin; /* For Firefox scrollbar styling */
+}
+
+.imageList img {
+  flex-shrink: 0; /* Prevent images from shrinking */
+  width: 60px; /* Set a fixed width for images */
+  height: 60px; /* Set a fixed height for images */
+  object-fit: cover; /* Maintain aspect ratio and cover the area */
+  border-radius: 50%; /* Make images circular */
+}
+
+.imageList::-webkit-scrollbar {
+  height: 6px; /* Set scrollbar height */
+}
+
+.imageList::-webkit-scrollbar-thumb {
+  background-color: var(--text-color); /* Style scrollbar thumb */
+  border-radius: 3px; /* Round scrollbar thumb edges */
+}
+
+.imageListItem {
+  flex: 0 0 auto;
+  width: 180px; /* or whatever fixed width you prefer */
+  max-width: 180px;
+  height: 140px; /* adjust as desired */
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .authorScrollList::-webkit-scrollbar {

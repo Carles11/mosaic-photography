@@ -100,7 +100,9 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
               <PhotoSwipeWrapper galleryOptions={{ zoom: true }}>
                 <div className={styles.imageList}>
                   {photographer.images.map((image) => (
-                    <ImageWrapper key={image.id} image={image} />
+                    <div key={image.id} className={styles.imageListItem}>
+                      <ImageWrapper image={image} />
+                    </div>
                   ))}
                 </div>
               </PhotoSwipeWrapper>

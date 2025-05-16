@@ -27,16 +27,6 @@
   overflow: hidden;
 }
 
-.landscape {
-  aspect-ratio: 16 / 9;
-  grid-column: span 2; /* Landscape images span 2 columns */
-}
-
-.portrait {
-  aspect-ratio: 3/4;
-  grid-column: span 1; /* Portrait images span 1 column */
-}
-
 .imageInfo {
   display: flex;
   position: absolute;

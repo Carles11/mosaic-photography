@@ -10,18 +10,22 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   const [images, setImages] = useState<ImageData[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [orientationClass, setOrientationClass] = useState("");
+  const [imageOrientations, setImageOrientations] = useState<
+    Record<string, string>
+  >({});
 
   const imgRef = useRef<HTMLImageElement | null>(null);
 
-  // Function to handle image load and set orientation class
-  const handleLoad = () => {
-    if (imgRef.current) {
-      const { naturalWidth, naturalHeight } = imgRef.current;
-      const isLandscape = naturalWidth > naturalHeight;
-      const orientation = isLandscape ? styles.landscape : styles.portrait;
-      setOrientationClass(orientation);
-    }
+  // Function to handle image load and set orientation class for a specific image
+  const handleLoad = (imgElement: HTMLImageElement, imageId: string) => {
+    const { naturalWidth, naturalHeight } = imgElement;
+    const isLandscape = naturalWidth > naturalHeight;
+    const orientation = isLandscape ? styles.landscape : styles.portrait;
+
+    setImageOrientations((prev) => ({
+      ...prev,
+      [imageId]: orientation,
+    }));
   };
 
   useEffect(() => {
@@ -66,12 +70,14 @@ const ImageCard: React.FC<ImageCardProps> = () => {
           {images.map((image) => (
             <div
               key={image.id}
-              className={`${styles.gridItem} ${orientationClass}`}
+              className={`${styles.gridItem} ${
+                imageOrientations[image.id] || ""
+              }`}
             >
               <ImageWrapper
                 image={image}
                 imgRef={imgRef}
-                handleLoad={handleLoad}
+                handleLoad={(e) => handleLoad(e.currentTarget, image.id)}
               />
             </div>
           ))}

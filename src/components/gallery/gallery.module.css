@@ -15,5 +15,4 @@
   min-height: calc(100vh - 8rem); /* Adjust to account for footer height */
   background-color: var(--background-color);
   position: relative;
-  border: 1px solid white;
 }
