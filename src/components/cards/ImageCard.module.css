@@ -1,8 +1,18 @@
 .gridItem {
-  width: auto;
+  width: 100%;
   height: 100%;
   border: 1px solid green;
 }
 .gridItem img {
   border: 1px solid blue;
+}
+
+.landscape {
+  aspect-ratio: 16 / 9;
+  grid-column: span 2; /* Landscape images span 2 columns */
+}
+
+.portrait {
+  aspect-ratio: 3/4;
+  grid-column: span 1; /* Portrait images span 1 column */
 }

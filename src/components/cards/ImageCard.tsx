@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { ImageData, ImageCardProps } from "@/types";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
@@ -10,6 +10,19 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   const [images, setImages] = useState<ImageData[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [orientationClass, setOrientationClass] = useState("");
+
+  const imgRef = useRef<HTMLImageElement | null>(null);
+
+  // Function to handle image load and set orientation class
+  const handleLoad = () => {
+    if (imgRef.current) {
+      const { naturalWidth, naturalHeight } = imgRef.current;
+      const isLandscape = naturalWidth > naturalHeight;
+      const orientation = isLandscape ? styles.landscape : styles.portrait;
+      setOrientationClass(orientation);
+    }
+  };
 
   useEffect(() => {
     const fetchImages = async (): Promise<void> => {
@@ -51,8 +64,15 @@ const ImageCard: React.FC<ImageCardProps> = () => {
       ) : (
         <PhotoSwipeWrapper galleryOptions={{ zoom: true }}>
           {images.map((image) => (
-            <div key={image.id} className={styles.gridItem}>
-              <ImageWrapper image={image} />
+            <div
+              key={image.id}
+              className={`${styles.gridItem} ${orientationClass}`}
+            >
+              <ImageWrapper
+                image={image}
+                imgRef={imgRef}
+                handleLoad={handleLoad}
+              />
             </div>
           ))}
         </PhotoSwipeWrapper>
