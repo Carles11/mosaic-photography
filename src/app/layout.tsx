@@ -25,7 +25,7 @@ const geistMono = Roboto_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mosaic.photography"),
   title: {
-    default: "Public Domain Nude Photography | Mosaic Gallery",
+    default: "Public Domain Vintage Nude Photography | Mosaic Gallery",
     template: "%s | Vintage Nude Photography by Mosaic",
   },
   alternates: {
@@ -46,6 +46,7 @@ export const metadata: Metadata = {
   keywords: [
     // High-Priority Core Niche (Low KD, Solid Volume)
     "public domain nude photography",
+    "public domain Vintage nude photography",
     "nude photography",
     "vintage nude photography ",
     "vintage nude photography public domain",

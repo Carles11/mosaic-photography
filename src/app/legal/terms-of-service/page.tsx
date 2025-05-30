@@ -27,8 +27,8 @@ const TermsOfService: React.FC = () => {
       <h1 className={styles.title}>Terms of Service</h1>
       <h2 className={styles.subtitle}>Use of Images</h2>
       <p className={styles.text}>
-        This website primarily features images that are in the public domain,
-        sourced from platforms like{" "}
+        This website primarily features vintage nude images that are in the
+        public domain, sourced from platforms like{" "}
         <a
           href="https://commons.wikimedia.org/wiki/Main_Page"
           target="_blank"
