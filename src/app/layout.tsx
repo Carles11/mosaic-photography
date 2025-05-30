@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter, Roboto_Mono } from "next/font/google";
 
 import { AppContextProvider } from "@/context/AppContext";
 import { AgeConsentProvider } from "@/context/AgeConsentContext";
@@ -12,15 +11,15 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import "./globals.css";
 
-const geistSans = Inter({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+// const geistSans = Inter({
+//   variable: "--font-geist-sans",
+//   subsets: ["latin"],
+// });
 
-const geistMono = Roboto_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// const geistMono = Roboto_Mono({
+//   variable: "--font-geist-mono",
+//   subsets: ["latin"],
+// });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mosaic.photography"),
@@ -154,7 +153,8 @@ type RootLayoutProps = { children: React.ReactNode };
 function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
+      <body>
         <ThemeProvider defaultTheme="dark">
           <AppContextProvider>
             <AgeConsentProvider>

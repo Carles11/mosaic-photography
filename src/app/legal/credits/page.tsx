@@ -47,6 +47,19 @@ const Credits: React.FC = () => {
         </a>
         .
       </p>
+      <h2 className={styles.subtitle}>Font Credits</h2>
+      <p className={styles.text}>
+        The font used on this website, Trade Gothic, was downloaded for free
+        from{" "}
+        <a
+          href="https://www.dafontfree.io/download/trade-gothic/"
+          title="Trade Gothic font on dafontfree.io"
+        >
+          dafontfree.io
+        </a>
+        . We would like to thank them for providing this resource.
+      </p>
+
       <h2 className={styles.subtitle}>Icon Credits</h2>
       <p className={styles.text}>
         The icons used on this website are sourced from various free icon

@@ -1,16 +1,13 @@
 h1.centerText {
-  font-size: 2rem; /* Adjust size */
-  color: var(--text-color); /* Match gallery theme */
-  margin-bottom: 20px; /* Add spacing */
+  color: var(--text-color);
+  margin-bottom: 20px;
   text-align: center;
 }
 h2.centerText {
-  font-size: 1.5rem;
   color: var(--text-color);
   text-align: center;
 }
 p.centerText {
-  font-size: 1rem;
   color: var(--text-color);
   text-align: center;
 }

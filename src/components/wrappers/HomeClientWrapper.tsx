@@ -11,8 +11,8 @@ import { withClientLogic } from "@/hocs/withClientLogic"; // Import the HOC
 // declare module 'js-cookie';
 
 import Gallery from "@/components/gallery/Gallery";
-import { ImageCardTitles } from "@/components/header/titles/ImageCardTitles";
-import { AuthorCardTitles } from "@/components/header/titles/AuthorCardTitles";
+// import { ImageCardTitles } from "@/components/header/titles/ImageCardTitles";
+// import { AuthorCardTitles } from "@/components/header/titles/AuthorCardTitles";
 import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
 
@@ -21,6 +21,7 @@ import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 
 import styles from "./home.module.css";
+import { HomeTitles } from "../header/titles/HomeTitles";
 
 function HomeClientWrapper() {
   const { isMosaic } = useAppContext();
@@ -39,9 +40,9 @@ function HomeClientWrapper() {
 
   return (
     <div className={styles.container}>
-      {/* Show AgeConsent only for real users */}
       <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
       <Header />
+      {/* Show AgeConsent only for real users */}
       {!isCrawlerBot && (
         <AgeConsent
           isMinimumAgeConfirmed={isMinimumAgeConfirmed}
@@ -58,7 +59,8 @@ function HomeClientWrapper() {
           >
             <div className={styles.content}>
               <div className="v-margin">
-                {isMosaic ? <ImageCardTitles /> : <AuthorCardTitles />}
+                <HomeTitles />
+                {/* {isMosaic ? <ImageCardTitles /> : <AuthorCardTitles />} */}
               </div>
 
               <script type="application/ld+json">
