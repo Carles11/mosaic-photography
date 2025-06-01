@@ -173,4 +173,28 @@ p {
   .v-margin {
     margin: 0.5rem 0;
   }
+  h1 {
+    padding: 0 0.4rem;
+    margin: 0;
+  }
+
+  h2 {
+    padding: 0 0.4rem;
+    margin: 0;
+  }
+
+  p {
+    padding: 0 0.4rem;
+    margin: 0;
+  }
+}
+
+.image-gallery-left-nav .image-gallery-svg,
+.image-gallery-right-nav .image-gallery-svg {
+  height: 20px !important;
+  width: 10px !important;
+}
+
+.image-gallery-bullets {
+  bottom: -20px !important;
 }

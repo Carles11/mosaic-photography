@@ -10,7 +10,7 @@ const PhotoSwipeWrapper: React.FC<
   PropsWithChildren<PhotoSwipeWrapperProps>
 > = ({ children, galleryOptions }) => {
   return (
-    <Gallery withCaption options={galleryOptions}>
+    <Gallery withCaption withDownloadButton options={galleryOptions}>
       {children}
     </Gallery>
   );

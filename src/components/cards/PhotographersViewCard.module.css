@@ -1,0 +1,148 @@
+.photographersViewCardContainer {
+  height: 100%;
+  width: 100%;
+  margin-bottom: 8rem;
+}
+
+.authorScrollList {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px 0.6rem;
+  gap: 8px;
+  scrollbar-width: thin;
+  width: 90vw;
+}
+.photographersViewCard {
+  border: 1px solid #ccc;
+  padding: 20px;
+  background-color: var(--background-color);
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-height: 100%;
+  margin: 1rem auto;
+  text-align: left;
+  z-index: 1;
+}
+
+.photographersViewCard img {
+  height: 750px;
+  min-height: 750px;
+  max-height: 750px;
+  width: 450px;
+  min-width: 450px;
+  max-width: 450px;
+  object-fit: cover !important;
+}
+
+.photographersViewCard h2 {
+  margin: 0 0 10px;
+  font-size: 1.5em;
+  color: var(--text-color);
+}
+
+.photographersViewCard p {
+  margin: 0 0 10px;
+  color: var(--text-color);
+}
+
+.authorName {
+  cursor: pointer;
+}
+
+.biography {
+  display: -webkit-box; /* Use flexbox-like behavior for truncation */
+  -webkit-line-clamp: 4; /* Limit to 4 lines */
+  -webkit-box-orient: vertical; /* Set box orientation to vertical */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Show ellipsis for truncated text */
+  white-space: normal; /* Allow text wrapping */
+  line-height: 1.5; /* Adjust line height for readability */
+  margin-top: 10px; /* Add spacing above the biography */
+  cursor: pointer; /* Indicate that the text is clickable */
+  padding-top: 2rem;
+}
+.expanded {
+  -webkit-line-clamp: unset; /* Remove line clamp */
+  overflow: visible; /* Show full text */
+  text-overflow: unset; /* Remove ellipsis */
+}
+.imageList {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-y: hidden; /* Prevent vertical scrolling */
+  padding-top: 10px;
+  width: 100%; /* Ensure the container spans the full width */
+  height: 70px; /* Adjust height to accommodate circular images */
+  scrollbar-width: thin; /* For Firefox scrollbar styling */
+  margin: 0 1rem;
+}
+
+.imageList img {
+  flex-shrink: 0; /* Prevent images from shrinking */
+  width: 60px; /* Set a fixed width for images */
+  height: 60px; /* Set a fixed height for images */
+  object-fit: cover; /* Maintain aspect ratio and cover the area */
+  border-radius: 50%; /* Make images circular */
+}
+
+.imageList::-webkit-scrollbar {
+  height: 6px; /* Set scrollbar height */
+}
+
+.imageList::-webkit-scrollbar-thumb {
+  background-color: var(--text-color); /* Style scrollbar thumb */
+  border-radius: 3px; /* Round scrollbar thumb edges */
+}
+
+.imageListItem {
+  flex: 0 0 auto;
+  width: 100%; /* or whatever fixed width you prefer */
+  height: 100%; /* adjust as desired */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.authorScrollList::-webkit-scrollbar {
+  height: 6px;
+}
+
+.authorScrollList::-webkit-scrollbar-thumb {
+  background-color: var(--text-color);
+  border-radius: 3px;
+}
+
+.photographersListButton {
+  border: 1px solid var(--text-color);
+  border-radius: 5px;
+  background: transparent;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: medium;
+}
+
+.photographersListButton:hover {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+@media (max-width: 768px) {
+  .photographersViewCard {
+    width: 80%;
+  }
+  .photographersViewCardContainer {
+    margin-bottom: 3rem;
+  }
+  .photographersViewCard img {
+    height: 400px;
+    min-height: 400px;
+    max-height: 400px;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+  }
+}

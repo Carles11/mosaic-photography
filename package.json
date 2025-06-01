@@ -23,6 +23,7 @@
     "photoswipe": "^5.4.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-image-gallery": "^1.4.0",
     "react-photoswipe-gallery": "^3.0.2",
     "react-share": "^5.2.2",
     "react-spinners": "^0.15.0",

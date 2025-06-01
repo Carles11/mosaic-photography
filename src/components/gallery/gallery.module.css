@@ -16,3 +16,7 @@
   background-color: var(--background-color);
   position: relative;
 }
+
+.subTitle {
+  margin: 4rem 1rem 1rem 1rem !important;
+}

@@ -22,6 +22,7 @@ import Footer from "@/components/footer/Footer";
 
 import styles from "./home.module.css";
 import { HomeTitles } from "../header/titles/HomeTitles";
+import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
 
 function HomeClientWrapper() {
   const { isMosaic } = useAppContext();
@@ -51,6 +52,9 @@ function HomeClientWrapper() {
       )}
       {isMinimumAgeConfirmed && (
         <>
+          <script type="application/ld+json">
+            {JSON.stringify(structuredData)}
+          </script>
           <section
             className={`${styles.pageContent} ${
               isMinimumAgeConfirmed ? styles.visible : styles.invisible
@@ -62,11 +66,7 @@ function HomeClientWrapper() {
                 <HomeTitles />
                 {/* {isMosaic ? <ImageCardTitles /> : <AuthorCardTitles />} */}
               </div>
-
-              <script type="application/ld+json">
-                {JSON.stringify(structuredData)}
-              </script>
-
+              <PhotographersCardsSlide />
               <Gallery id="gallery-section" isMosaic={isMosaic} />
             </div>
           </section>

@@ -2,7 +2,7 @@
 
 import React, { JSX } from "react";
 import ImageCard from "../cards/ImageCard";
-import AuthorCard from "../cards/AuthorCard";
+// import AuthorCard from "../cards/AuthorCard";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
 
 import styles from "./gallery.module.css";
@@ -12,11 +12,13 @@ interface GalleryProps extends JSX.IntrinsicAttributes {
   id: string;
 }
 
-const Gallery: React.FC<GalleryProps> = ({ isMosaic, id }) => {
+const Gallery: React.FC<GalleryProps> = ({ id }) => {
   return (
     <div id={id} className={styles.galleryGridContainer}>
+      <hr />
+      <h2 className={styles.subTitle}>ALL PHOTOS </h2>
       <div className={styles.galleryGrid}>
-        {isMosaic ? <ImageCard /> : <AuthorCard />}
+        <ImageCard />
         <GoToTopButton />
       </div>
     </div>
