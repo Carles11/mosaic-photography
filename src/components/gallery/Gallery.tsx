@@ -9,11 +9,12 @@ import styles from "./gallery.module.css";
 
 interface GalleryProps extends JSX.IntrinsicAttributes {
   isMosaic: boolean;
+  id: string;
 }
 
-const Gallery: React.FC<GalleryProps> = ({ isMosaic }) => {
+const Gallery: React.FC<GalleryProps> = ({ isMosaic, id }) => {
   return (
-    <div className={styles.galleryGridContainer}>
+    <div id={id} className={styles.galleryGridContainer}>
       <div className={styles.galleryGrid}>
         {isMosaic ? <ImageCard /> : <AuthorCard />}
         <GoToTopButton />

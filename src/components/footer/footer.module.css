@@ -30,15 +30,6 @@
   margin: 0.2rem;
 }
 
-.footerItem a {
-  color: var(--link-color);
-  text-decoration: underline;
-}
-
-.footerItem a:hover {
-  text-decoration: underline;
-}
-
 /* Responsive styles */
 @media (max-width: 768px) {
   .footerContainer {

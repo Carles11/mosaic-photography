@@ -67,7 +67,7 @@ function HomeClientWrapper() {
                 {JSON.stringify(structuredData)}
               </script>
 
-              <Gallery isMosaic={isMosaic} />
+              <Gallery id="gallery-section" isMosaic={isMosaic} />
             </div>
           </section>
         </>
