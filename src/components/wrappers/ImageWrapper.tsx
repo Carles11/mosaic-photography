@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Item } from "./PhotoSwipeWrapper"; // Import Item from PhotoSwipeWrapper
+import { Item } from "./PhotoSwipeWrapper";
 import styles from "./image.module.css";
 
 interface ImageWrapperProps {
@@ -9,14 +9,16 @@ interface ImageWrapperProps {
     author: string;
     title?: string;
   };
-  imgRef?: React.RefObject<HTMLImageElement | null>; // Add imgRef property
-  handleLoad?: (e: React.SyntheticEvent<HTMLImageElement>) => void; // Updated parameter name
+  imgRef?: React.RefObject<HTMLImageElement | null>;
+  handleLoad?: (e: React.SyntheticEvent<HTMLImageElement>) => void;
+  onImageClick?: () => void; // Add onImageClick prop
 }
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({
   image,
   imgRef,
   handleLoad,
+  onImageClick,
 }) => {
   return (
     <div className={styles.imageCard}>
@@ -24,30 +26,23 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
         original={image.url}
         thumbnail={image.url}
         caption={image.author}
-        width={imgRef?.current?.naturalWidth} // Use actual width
-        height={imgRef?.current?.naturalHeight} // Use actual height
+        width={imgRef?.current?.naturalWidth || 300}
+        height={imgRef?.current?.naturalHeight || 200}
       >
         {(props) => (
-          <div
-            ref={props.ref}
-            onClick={props.open}
-            className={styles.imageItem}
-          >
+          <div ref={imgRef} onClick={onImageClick} className={styles.imageItem}>
             <Image
               src={image.url}
               alt={image.title || "Gallery Image"}
               className={`${styles.image}`}
-              width={imgRef?.current?.naturalWidth || 300} // Use actual width
-              height={imgRef?.current?.naturalHeight || 200} // Use actual height
+              width={imgRef?.current?.naturalWidth || 300}
+              height={imgRef?.current?.naturalHeight || 200}
               sizes="(max-width: 600px) 100vw, 50vw"
               placeholder="blur"
               blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
               loading="lazy"
-              onLoad={handleLoad} // Pass onLoad to handleLoad
-              ref={(node) => {
-                if (node && imgRef?.current !== undefined)
-                  imgRef.current = node;
-              }}
+              onLoad={handleLoad}
+              ref={imgRef}
             />
           </div>
         )}

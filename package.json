@@ -24,6 +24,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-image-gallery": "^1.4.0",
+    "react-image-lightbox": "^5.1.4",
     "react-photoswipe-gallery": "^3.0.2",
     "react-share": "^5.2.2",
     "react-slick": "^0.30.3",
