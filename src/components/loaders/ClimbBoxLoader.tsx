@@ -10,7 +10,7 @@ export const ClimbBoxLoaderContainer = (
   return (
     <div className={styles.loaderContainer}>
       <ClimbingBoxLoader color={color} loading={loading} size={size} />
-      <p className={styles.loaderText}>Loading images...</p>
+      <p className={styles.loaderText}>Loading...</p>
     </div>
   );
 };

@@ -115,6 +115,30 @@ a:hover::before {
   height: 100%;
 }
 
+.fancy-link {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 700;
+  position: relative;
+}
+
+.fancy-link::before {
+  content: "";
+  background-color: var(--link-color);
+  position: absolute;
+  left: 0;
+  bottom: 3px;
+  width: 100%;
+  height: 8px;
+  z-index: -1;
+  transition: all 0.3s ease-in-out;
+}
+
+.fancy-link:hover::before {
+  bottom: 0;
+  height: 100%;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -145,8 +169,17 @@ h1 {
 }
 
 h2 {
-  font-size: calc(1.2rem + 0.8vw); /* Scales with viewport width */
+  font-size: calc(1.4rem + 0.8vw); /* Scales with viewport width */
   font-weight: 700;
+  color: var(--text-color);
+  line-height: 1.3;
+  padding: 0 1rem;
+  margin: 0 0.4rem;
+}
+
+h3 {
+  font-size: calc(1.2rem + 0.8vw); /* Scales with viewport width */
+  font-weight: 500;
   color: var(--text-color);
   line-height: 1.3;
   padding: 0 1rem;
@@ -189,12 +222,29 @@ p {
   }
 }
 
-.image-gallery-left-nav .image-gallery-svg,
-.image-gallery-right-nav .image-gallery-svg {
-  height: 20px !important;
-  width: 10px !important;
+/* React-slick stlyes */
+.slick-dots {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+  background-color: transparent !important;
 }
 
-.image-gallery-bullets {
-  bottom: -20px !important;
+.slick-dots li {
+  width: fit-content !important;
+  padding-left: 11px !important;
+}
+
+.slick-dots li button {
+  font-size: 22px !important;
+  width: fit-content !important;
+  height: 22px !important;
+  background-color: transparent !important;
+}
+
+.slick-dots li button:before {
+  color: var(--text-color) !important;
+  width: fit-content !important;
+  height: 22px !important;
 }

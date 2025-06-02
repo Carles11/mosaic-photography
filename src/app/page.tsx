@@ -1,5 +1,5 @@
 import React from "react";
-import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper"; // Import the client wrapper directly
+import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
 
 export default function Home() {
   return <HomeClientWrapper />;
