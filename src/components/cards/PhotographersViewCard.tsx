@@ -70,6 +70,7 @@ const PhotographersViewCard = () => {
   const mainSliderSettings = {
     dots: true,
     infinite: true,
+    arrows: false,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
