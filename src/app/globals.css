@@ -222,6 +222,11 @@ p {
   }
 }
 
+/* Photoswipe Gallery zoom stlyes */
+.pswp__img {
+  object-fit: contain !important;
+}
+
 /* React-slick stlyes */
 .slick-dots {
   display: flex !important;
