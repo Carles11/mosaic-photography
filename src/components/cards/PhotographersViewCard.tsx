@@ -92,7 +92,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = () => {
       },
     ],
 
-    // @ts-nocheck
+    // @ts-expect-error: Should expect react-slick element
     appendDots: (dots) => (
       <div
         style={{
