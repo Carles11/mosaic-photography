@@ -229,6 +229,9 @@ p {
   align-items: center !important;
   width: 100% !important;
   background-color: transparent !important;
+  top: -25px !important;
+  bottom: unset !important;
+  margin-bottom: 2rem !important;
 }
 
 .slick-dots li {

@@ -79,13 +79,13 @@ const PhotographersViewCard = () => {
     swipeToSlide: true,
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1025,
         settings: {
           slidesToShow: 2,
         },
       },
       {
-        breakpoint: 768,
+        breakpoint: 769,
         settings: {
           slidesToShow: 1,
         },
@@ -94,12 +94,42 @@ const PhotographersViewCard = () => {
 
     // @ts-expect-error: Should expect react-slick element
     appendDots: (dots) => (
-      <div className={styles.dotsContainer}>
-        <ul className={styles.dotsList}>
+      <div
+        style={{
+          backgroundColor: "#ddd",
+          borderRadius: "10px",
+          padding: "10px",
+        }}
+      >
+        <ul
+          style={{
+            margin: "0px",
+            padding: "0",
+            display: "flex",
+            justifyContent: "center",
+            overflowX: "auto", // Enable horizontal scrolling
+            whiteSpace: "nowrap", // Prevent line breaks
+          }}
+        >
           {photographers.map((photographer, index) => (
-            <li key={index} className={styles.dotItem}>
+            <li
+              key={index}
+              style={{
+                margin: "0 5px",
+                display: "inline-block",
+                listStyle: "none",
+              }}
+            >
               <button
-                className={styles.dotButton}
+                style={{
+                  padding: "5px 10px",
+                  backgroundColor: "#888",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  whiteSpace: "nowrap", // Prevent text wrapping
+                }}
                 onClick={() => {
                   const targetDot =
                     dots[index]?.props?.children?.props?.onClick;
