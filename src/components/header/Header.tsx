@@ -65,7 +65,8 @@ const Header = () => {
             </p>{" "}
           </li>
 
-          <li className={styles.navLinks}>
+          <li>
+            {/* <li className={styles.navLinks}> */}
             {/* <div>
               <div
                 id="mosaic-images-icon"
