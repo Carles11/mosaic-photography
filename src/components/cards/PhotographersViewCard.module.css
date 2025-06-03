@@ -4,20 +4,12 @@
   margin-bottom: 8rem;
 }
 
-.authorScrollList {
-  display: flex;
-  overflow-x: auto;
-  padding: 10px 0.6rem;
-  gap: 8px;
-  scrollbar-width: thin;
-  width: 90vw;
-}
 .photographersViewCard {
   border: 1px solid #ccc;
-  padding: 20px;
+  padding: 22px;
   background-color: var(--background-color);
   width: 100%;
-  max-width: 90%;
+  max-width: 86%;
   height: 100%;
   min-height: 100%;
   margin: 1rem auto;
@@ -32,10 +24,9 @@
   min-width: 450px;
   max-width: 600px;
   object-fit: cover;
-  padding: 20px 11px;
 }
 
-.photographersViewCard h2 {
+.photographersViewCard h3 {
   margin: 0 0 10px;
   font-size: 1.5em;
   color: var(--text-color);
@@ -64,6 +55,17 @@
   cursor: pointer; /* Indicate that the text is clickable */
   padding-top: 2rem;
 }
+.origin {
+  display: -webkit-box; /* Use flexbox-like behavior for truncation */
+  -webkit-line-clamp: 1; /* Limit to 4 lines */
+  -webkit-box-orient: vertical; /* Set box orientation to vertical */
+  overflow: hidden; /* Hide overflowing text */
+  text-overflow: ellipsis; /* Show ellipsis for truncated text */
+  white-space: normal; /* Allow text wrapping */
+  line-height: 1.5; /* Adjust line height for readability */
+
+  cursor: pointer; /* Indicate that the text is clickable */
+}
 
 .expanded {
   -webkit-line-clamp: unset; /* Remove line clamp */
@@ -82,7 +84,8 @@
 
 @media (max-width: 768px) {
   .photographersViewCard {
-    width: 80%;
+    width: 85vw;
+    max-width: 85vw;
   }
   .photographersViewCardContainer {
     margin-bottom: 3rem;

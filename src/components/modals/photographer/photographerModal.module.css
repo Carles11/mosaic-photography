@@ -76,12 +76,12 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+  padding-left: 11px;
 }
 
 .link {
-  color: var(--link-color);
-  text-decoration: underline;
-  cursor: pointer;
+  font-size: calc(0.6rem + 0.5vw);
+  z-index: 1;
 }
 
 .storeDropdown {

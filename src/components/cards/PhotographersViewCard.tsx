@@ -4,8 +4,8 @@ import { Photographer, PhotographersViewCardProps } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import Slider from "react-slick";
-import Lightbox from "react-image-lightbox"; // Import Lightbox
 import "react-image-lightbox/style.css"; // Import Lightbox styles
+import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 
 import "slick-carousel/slick/slick.css"; // Import slick-carousel styles
 import "slick-carousel/slick/slick-theme.css"; // Import slick-carousel theme
@@ -20,9 +20,10 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = () => {
   const [expandedBiography, setExpandedBiography] = useState<number | null>(
     null
   );
+  const [imageOrientations, setImageOrientations] = useState<
+    Record<string, string>
+  >({});
   const [expandedOrigin, setExpandedOrigin] = useState<number | null>(null);
-  const [lightboxOpen, setLightboxOpen] = useState<boolean>(false); // State for Lightbox
-  const [lightboxImage, setLightboxImage] = useState<string>(""); // Current image for Lightbox
   const imgRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
@@ -54,8 +55,21 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = () => {
     setExpandedOrigin((prev) => (prev === index ? null : index));
   };
 
+  // Function to handle image load and set orientation class for a specific image
+  const handleLoad = (imgElement: HTMLImageElement, imageId: string) => {
+    const { naturalWidth, naturalHeight } = imgElement;
+    const isLandscape = naturalWidth > naturalHeight;
+    const orientation = isLandscape ? styles.landscape : styles.portrait;
+
+    setImageOrientations((prev) => ({
+      ...prev,
+      [imageId]: orientation,
+    }));
+  };
+
   const mainSliderSettings = {
     dots: true,
+    arrows: false,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
@@ -141,7 +155,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: false,
-    centerMode: true,
+    centerMode: false,
     autoplaySpeed: 2000,
     swipeToSlide: true,
   };
@@ -151,77 +165,77 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = () => {
       {loading ? (
         ClimbBoxLoaderContainer("var(--color-white)", 25, loading)
       ) : (
-        <Slider {...mainSliderSettings}>
-          {photographers.map((photographer, index) => (
-            <div
-              key={index}
-              id={`author-${index}`}
-              className={styles.photographersViewCard}
-            >
-              <h3
-                className={`fancy-link ${styles.authorName}`}
-                onClick={() => setSelectedPhotographer(photographer)}
-                role="button"
-                tabIndex={0}
+        <PhotoSwipeWrapper galleryOptions={{ zoom: true }}>
+          <Slider {...mainSliderSettings}>
+            {photographers.map((photographer, index) => (
+              <div
+                key={index}
+                id={`author-${index}`}
+                className={styles.photographersViewCard}
               >
-                {`${photographer.name} ${photographer.surname}`.toUpperCase()}
-              </h3>
-              <Slider {...nestedSliderSettings}>
-                {photographer.images.map((image) => (
-                  <div key={image.id} className={styles.imageContainer}>
-                    <ImageWrapper
-                      image={image}
-                      imgRef={imgRef}
-                      onImageClick={() => {
-                        setLightboxImage(image.url);
-                        setLightboxOpen(true);
-                      }}
-                    />
-                  </div>
-                ))}
-              </Slider>
-              <p
-                className={`${styles.biography} ${
-                  expandedBiography === index ? styles.expanded : ""
-                }`}
-                onClick={() => toggleBiography(index)}
-              >
-                <strong>Biography: </strong>
-                <br />
-                {photographer.biography || "No biography available."}
-              </p>
-              <p>
-                <strong>Birthdate: </strong>
-                {new Date(photographer.birthdate).toLocaleDateString()}
-              </p>
-              <p
-                className={`${styles.origin} ${
-                  expandedOrigin === index ? styles.expanded : ""
-                }`}
-                onClick={() => toggleOrigin(index)}
-              >
-                <strong>Origin:</strong> {photographer.origin}
-              </p>
-              {photographer.deceasedate && (
-                <p>
-                  <strong>Deceasedate:</strong>{" "}
-                  {new Date(photographer.deceasedate).toLocaleDateString()}
+                <h3
+                  className={`fancy-link ${styles.authorName}`}
+                  onClick={() => setSelectedPhotographer(photographer)}
+                  role="button"
+                  tabIndex={0}
+                >
+                  {`${photographer.name} ${photographer.surname}`.toUpperCase()}
+                </h3>
+                <Slider {...nestedSliderSettings}>
+                  {photographer.images.map((image) => (
+                    <div
+                      key={image.id}
+                      className={`${styles.imageContainer} ${
+                        imageOrientations[image.id] || ""
+                      }`}
+                    >
+                      <ImageWrapper
+                        image={image}
+                        imgRef={imgRef}
+                        handleLoad={(e) =>
+                          handleLoad(e.currentTarget, image.id)
+                        }
+                      />
+                    </div>
+                  ))}
+                </Slider>
+                <p
+                  className={`${styles.biography} ${
+                    expandedBiography === index ? styles.expanded : ""
+                  }`}
+                  onClick={() => toggleBiography(index)}
+                >
+                  <strong>Biography: </strong>
+                  <br />
+                  {photographer.biography || "No biography available."}
                 </p>
-              )}
-            </div>
-          ))}
-        </Slider>
+                <p>
+                  <strong>Birthdate: </strong>
+                  {new Date(photographer.birthdate).toLocaleDateString()}
+                </p>
+                <p
+                  className={`${styles.origin} ${
+                    expandedOrigin === index ? styles.expanded : ""
+                  }`}
+                  onClick={() => toggleOrigin(index)}
+                >
+                  <strong>Origin:</strong> {photographer.origin}
+                </p>
+                {photographer.deceasedate && (
+                  <p>
+                    <strong>Deceasedate:</strong>{" "}
+                    {new Date(photographer.deceasedate).toLocaleDateString()}
+                  </p>
+                )}
+              </div>
+            ))}
+          </Slider>{" "}
+        </PhotoSwipeWrapper>
       )}
       {selectedPhotographer && (
         <PhotographerModal
           photographer={selectedPhotographer}
           onClose={() => setSelectedPhotographer(null)}
-        />
-      )}
-      {lightboxOpen && (
-        <Lightbox
-          mainSrc={lightboxImage}
-          onCloseRequest={() => setLightboxOpen(false)}
         />
       )}
     </div>

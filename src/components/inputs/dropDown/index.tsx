@@ -4,24 +4,18 @@ import styles from "./Dropdown.module.css";
 interface DropdownProps {
   buttonText: string;
   items: { store: string; website: string; affiliate: boolean }[];
-  closeBio: React.Dispatch<React.SetStateAction<boolean>>;
   onToggle?: (isOpen: boolean) => void; // New prop
 }
 
-const Dropdown: React.FC<DropdownProps> = ({
-  buttonText,
-  items,
-  closeBio,
-  onToggle,
-}) => {
+const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, onToggle }) => {
   const handleToggle = (event: React.SyntheticEvent<HTMLDetailsElement>) => {
     onToggle?.((event.target as HTMLDetailsElement).open);
   };
 
   return (
     <details className={styles.dropdown} onToggle={handleToggle}>
-      <summary role="button" onClick={() => closeBio(false)}>
-        <a className={styles.button}>{buttonText}</a>
+      <summary role="button">
+        <p className={styles.button}>{buttonText.toUpperCase()}</p>
       </summary>
       <ul>
         {items.map((item, index) => (

@@ -13,7 +13,6 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
   photographer,
   onClose,
 }) => {
-  const [isBiographyExpanded, setIsBiographyExpanded] = useState(false);
   const [stores, setStores] = useState<
     { store: string; website: string; affiliate: boolean }[]
   >([]);
@@ -32,10 +31,6 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
       setStores(parsedStores);
     }
   }, [photographer.store]);
-
-  const toggleBiography = () => {
-    setIsBiographyExpanded(!isBiographyExpanded);
-  };
 
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
@@ -92,14 +87,7 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
           <h2>
             {`${photographer.name} ${photographer.surname}`.toUpperCase()}
           </h2>
-          <p
-            className={`${styles.biography} ${
-              isBiographyExpanded ? styles.expanded : ""
-            }`}
-            onClick={toggleBiography}
-          >
-            {photographer.biography || "No biography available."}
-          </p>
+
           <p>
             <strong>Birthdate:</strong>{" "}
             {new Date(photographer.birthdate).toLocaleDateString()}
@@ -116,20 +104,30 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
         </div>
         <div className={styles.externalLinks}>
           {photographer.website && (
-            <a href={`${photographer.website}`} className={styles.link}>
-              Official website or wikipedia link
-            </a>
+            <div className="fancy-link">
+              <a
+                href={`${photographer.website}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.link}
+              >
+                Official website or wikipedia
+              </a>
+            </div>
           )}
           {photographer.instagram && (
-            <a href={`${photographer.instagram}`} className={styles.link}>
+            <a
+              href={`${photographer.instagram}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Official instagram
             </a>
           )}
           {stores && stores.length > 0 && (
             <Dropdown
-              buttonText="Prints and books"
+              buttonText="Stores"
               items={stores}
-              closeBio={setIsBiographyExpanded}
               onToggle={handleDropdownToggle}
             />
           )}

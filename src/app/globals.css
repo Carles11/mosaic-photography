@@ -248,3 +248,10 @@ p {
   width: fit-content !important;
   height: 22px !important;
 }
+
+.slick-next {
+  right: -20px !important;
+}
+.slick-prev {
+  left: -20px !important;
+}

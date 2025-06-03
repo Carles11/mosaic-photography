@@ -3,15 +3,20 @@
   /* Frame */
   display: inline-block;
   padding: 10px 12px;
-  border-radius: 20px;
+  border-radius: 11px;
   box-sizing: border-box;
-
+  font-weight: 600;
   /* Style */
-  border: none;
+  border: 1px solid var(--text-color);
   background: rgb(70, 71, 72);
   color: var(--text-color);
   font-size: 14px;
+
   cursor: pointer;
+}
+
+.summaryButton a::before {
+  background-color: red !important;
 }
 
 .button:active {
@@ -50,7 +55,7 @@
   position: relative;
   margin: 20px 0 0 0;
   padding: 20px 0;
-  width: 160px;
+  width: 100%;
   left: 50%;
   transform: translateX(-50%);
   box-sizing: border-box;
@@ -63,10 +68,11 @@
 
 .dropdown ul li {
   padding: 0;
-  margin: 0;
+  margin: 0.6rem 0;
+  color: var(--text-color);
 }
 
-.dropdown ul li a:link,
+/* .dropdown ul li a:link,
 .dropdown ul li a:visited {
   display: inline-block;
   padding: 10px 0.8rem;
@@ -75,12 +81,12 @@
 
   color: var(--link-color);
   text-decoration: none;
-}
+} */
 
-.dropdown ul li a:hover {
+/* .dropdown ul li a:hover {
   background-color: var(--tertiary-color);
   color: var(--text-color);
-}
+} */
 
 /* Dropdown triangle */
 .dropdown ul::before {
