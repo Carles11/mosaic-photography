@@ -5,7 +5,6 @@ import PhotographerModal from "@/components/modals/photographer/PhotographerModa
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import Slider, { Settings } from "react-slick";
 
-import "react-image-lightbox/style.css"; // Import Lightbox styles
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 
 import "slick-carousel/slick/slick.css"; // Import slick-carousel styles
