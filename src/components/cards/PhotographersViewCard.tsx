@@ -3,7 +3,8 @@ import { supabase } from "@/lib/supabaseClient";
 import { Photographer, PhotographersViewCardProps } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
-import Slider from "react-slick";
+import Slider, { Settings } from "react-slick";
+
 import "react-image-lightbox/style.css"; // Import Lightbox styles
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 
@@ -161,13 +162,15 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = () => {
     swipeToSlide: true,
   };
 
+  const SliderTyped = Slider as unknown as React.ComponentClass<Settings>;
+
   return (
     <div className={styles.photographersViewCardContainer}>
       {loading ? (
         ClimbBoxLoaderContainer("var(--color-white)", 25, loading)
       ) : (
         <PhotoSwipeWrapper galleryOptions={{ zoom: true }}>
-          <Slider {...mainSliderSettings}>
+          <SliderTyped {...mainSliderSettings}>
             {photographers.map((photographer, index) => (
               <div
                 key={index}
@@ -182,7 +185,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = () => {
                 >
                   {`${photographer.name} ${photographer.surname}`.toUpperCase()}
                 </h3>
-                <Slider {...nestedSliderSettings}>
+                <SliderTyped {...nestedSliderSettings}>
                   {photographer.images.map((image) => (
                     <div
                       key={image.id}
@@ -199,7 +202,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = () => {
                       />
                     </div>
                   ))}
-                </Slider>
+                </SliderTyped>
                 <p
                   className={`${styles.biography} ${
                     expandedBiography === index ? styles.expanded : ""
@@ -230,7 +233,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = () => {
                 )}
               </div>
             ))}
-          </Slider>{" "}
+          </SliderTyped>
         </PhotoSwipeWrapper>
       )}
       {selectedPhotographer && (
