@@ -1,37 +1,37 @@
 "use client";
 import { useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { useAppContext } from "@/context/AppContext";
+import { usePathname } from "next/navigation";
+// import { useAppContext } from "@/context/AppContext";
 
-import dynamic from "next/dynamic";
-import Image from "next/image";
+// import dynamic from "next/dynamic";
+// import Image from "next/image";
 import Link from "next/link";
 
 import ThemeToggle from "../theme/ThemeToggle";
 import ThemeImage from "../theme/ThemeImageDark";
 import GoProModal from "@/components/modals/goProModal/GoProModal";
 
-const Tooltip = dynamic(
-  () => import("react-tooltip").then((mod) => mod.Tooltip),
-  { ssr: false } // Disable server-side rendering
-);
+// const Tooltip = dynamic(
+//   () => import("react-tooltip").then((mod) => mod.Tooltip),
+//   { ssr: false } // Disable server-side rendering
+// );
 
 import styles from "./header.module.css";
 
 const Header = () => {
-  const { toggleView, isMosaic } = useAppContext();
+  // const { toggleView, isMosaic } = useAppContext();
   const [showGoProModal, setShowGoProModal] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
+  // const router = useRouter();
   const isHome = pathname === "/";
 
-  const handleIconClick = (view: string) => {
-    if (!isHome) {
-      router.push("/");
-    }
-    // console.log({ view });
-    toggleView(view);
-  };
+  // const handleIconClick = (view: string) => {
+  //   if (!isHome) {
+  //     router.push("/");
+  //   }
+  //   // console.log({ view });
+  //   toggleView(view);
+  // };
   // console.log({ isMosaic });
 
   return (
@@ -66,7 +66,7 @@ const Header = () => {
           </li>
 
           <li className={styles.navLinks}>
-            <div>
+            {/* <div>
               <div
                 id="mosaic-images-icon"
                 onClick={() => handleIconClick("mosaic")}
@@ -118,7 +118,7 @@ const Header = () => {
                 anchorSelect="#authors-list-icon"
                 content="Photographers list"
               />
-            </div>
+            </div> */}
             <div>
               <ThemeToggle />
             </div>
