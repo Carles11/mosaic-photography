@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { Photographer, PhotographersViewCardProps } from "@/types";
+import { Photographer } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import Slider, { Settings } from "react-slick";
@@ -12,7 +12,7 @@ import "slick-carousel/slick/slick-theme.css"; // Import slick-carousel theme
 import styles from "./PhotographersViewCard.module.css";
 import ImageWrapper from "../wrappers/ImageWrapper";
 
-const PhotographersViewCard: React.FC<PhotographersViewCardProps> = () => {
+const PhotographersViewCard = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedPhotographer, setSelectedPhotographer] =
