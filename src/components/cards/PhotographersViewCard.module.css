@@ -82,6 +82,37 @@
   height: 100%;
 }
 
+.dotsContainer {
+  background-color: #ddd;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.dotsList {
+  margin: 0px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  white-space: nowrap; /* Prevent line breaks */
+}
+
+.dotItem {
+  margin: 0 5px;
+  display: inline-block;
+  list-style: none;
+}
+
+.dotButton {
+  padding: 5px 10px;
+  background-color: #888;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
 @media (max-width: 768px) {
   .photographersViewCard {
     width: 85vw;

@@ -44,26 +44,6 @@ export interface Author {
     created_at: string;
   }[];
 }
-export interface PhotographersViewCardProps {
-  name: string;
-  surname: string;
-  biography: string;
-  birthdate: string;
-  deceasedate: string | null;
-  origin: string;
-  author: string;
-  website?: string;
-  instagram?: string;
-  store?: [];
-  images: {
-    id: string;
-    url: string;
-    author: string;
-    title: string;
-    description: string;
-    created_at: string;
-  }[];
-}
 
 export type AuthorCardProps = object;
 

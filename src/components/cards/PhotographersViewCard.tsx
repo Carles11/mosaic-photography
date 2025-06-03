@@ -94,42 +94,12 @@ const PhotographersViewCard = () => {
 
     // @ts-expect-error: Should expect react-slick element
     appendDots: (dots) => (
-      <div
-        style={{
-          backgroundColor: "#ddd",
-          borderRadius: "10px",
-          padding: "10px",
-        }}
-      >
-        <ul
-          style={{
-            margin: "0px",
-            padding: "0",
-            display: "flex",
-            justifyContent: "center",
-            overflowX: "auto", // Enable horizontal scrolling
-            whiteSpace: "nowrap", // Prevent line breaks
-          }}
-        >
+      <div className={styles.dotsContainer}>
+        <ul className={styles.dotsList}>
           {photographers.map((photographer, index) => (
-            <li
-              key={index}
-              style={{
-                margin: "0 5px",
-                display: "inline-block",
-                listStyle: "none",
-              }}
-            >
+            <li key={index} className={styles.dotItem}>
               <button
-                style={{
-                  padding: "5px 10px",
-                  backgroundColor: "#888",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                  whiteSpace: "nowrap", // Prevent text wrapping
-                }}
+                className={styles.dotButton}
                 onClick={() => {
                   const targetDot =
                     dots[index]?.props?.children?.props?.onClick;
