@@ -69,7 +69,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = () => {
 
   const mainSliderSettings = {
     dots: true,
-    arrows: false,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
@@ -92,6 +91,8 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = () => {
         },
       },
     ],
+
+    // @ts-nocheck
     appendDots: (dots) => (
       <div
         style={{
