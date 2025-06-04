@@ -58,29 +58,20 @@
   margin-bottom: 10px;
 }
 
-.biography {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  cursor: pointer;
-}
-
-.biography.expanded {
-  -webkit-line-clamp: unset;
-  overflow: visible;
+.disclaimer {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  margin-top: 10px;
+  line-height: normal;
 }
 
 .externalLinks {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  padding-left: 11px;
 }
 
 .link {
-  font-size: calc(0.6rem + 0.5vw);
   z-index: 1;
 }
 

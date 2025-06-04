@@ -92,6 +92,7 @@ body {
 }
 
 a {
+  font-size: calc(0.9rem + 0.5vw);
   text-decoration: none;
   color: var(--text-color);
   font-weight: 700;
@@ -220,6 +221,10 @@ p {
     padding: 0 0.4rem;
     margin: 0;
   }
+
+  .slick-track {
+    padding-top: 4rem;
+  }
 }
 
 /* Photoswipe Gallery zoom stlyes */
@@ -228,15 +233,20 @@ p {
 }
 
 /* React-slick stlyes */
+
+.slick-track {
+  padding-top: 2rem;
+}
+
 .slick-dots {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  width: 90% !important;
+  width: 100% !important;
+  height: auto !important;
   background-color: transparent !important;
   top: -25px !important;
   bottom: unset !important;
-  margin-bottom: 2rem !important;
 }
 
 .slick-dots li {
@@ -249,6 +259,7 @@ p {
   width: fit-content !important;
   height: 22px !important;
   background-color: transparent !important;
+  color: var(--text-color) !important;
 }
 
 .slick-dots li button:before {

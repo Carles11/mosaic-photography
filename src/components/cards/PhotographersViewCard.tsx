@@ -88,6 +88,12 @@ const PhotographersViewCard = () => {
       {
         breakpoint: 769,
         settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 576,
+        settings: {
           slidesToShow: 1,
         },
       },
@@ -95,23 +101,8 @@ const PhotographersViewCard = () => {
 
     // @ts-expect-error: Should expect react-slick element
     appendDots: (dots) => (
-      <div
-        style={{
-          backgroundColor: "#ddd",
-          borderRadius: "10px",
-          padding: "10px",
-        }}
-      >
-        <ul
-          style={{
-            margin: "0px",
-            padding: "0",
-            display: "flex",
-            justifyContent: "center",
-            overflowX: "auto", // Enable horizontal scrolling
-            whiteSpace: "nowrap", // Prevent line breaks
-          }}
-        >
+      <div className="photographer-list-container">
+        <ul className="photographer-list hide-scrollbar">
           {photographers.map((photographer, index) => (
             <li
               key={index}
@@ -122,15 +113,7 @@ const PhotographersViewCard = () => {
               }}
             >
               <button
-                style={{
-                  padding: "5px 10px",
-                  backgroundColor: "#888",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "5px",
-                  cursor: "pointer",
-                  whiteSpace: "nowrap", // Prevent text wrapping
-                }}
+                className="photographer-list-button"
                 onClick={() => {
                   const targetDot =
                     dots[index]?.props?.children?.props?.onClick;
@@ -167,7 +150,7 @@ const PhotographersViewCard = () => {
   return (
     <div className={styles.photographersViewCardContainer}>
       {loading ? (
-        ClimbBoxLoaderContainer("var(--color-white)", 25, loading)
+        ClimbBoxLoaderContainer("var(--text-color)", 20, loading)
       ) : (
         <PhotoSwipeWrapper galleryOptions={{ zoom: true }}>
           <SliderTyped {...mainSliderSettings}>
@@ -231,6 +214,14 @@ const PhotographersViewCard = () => {
                     {new Date(photographer.deceasedate).toLocaleDateString()}
                   </p>
                 )}
+                <p
+                  className={`fancy-link ${styles.authorCTA}`}
+                  onClick={() => setSelectedPhotographer(photographer)}
+                  role="button"
+                  tabIndex={0}
+                >
+                  Dive Into {photographer.surname}’s Art
+                </p>
               </div>
             ))}
           </SliderTyped>

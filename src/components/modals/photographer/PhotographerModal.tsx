@@ -87,51 +87,48 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
           <h2>
             {`${photographer.name} ${photographer.surname}`.toUpperCase()}
           </h2>
-
           <p>
-            <strong>Birthdate:</strong>{" "}
-            {new Date(photographer.birthdate).toLocaleDateString()}
+            Intrigued by this photographer? Explore their public domain
+            masterpieces and learn more about the artist behind the lens.
           </p>
-          <p>
-            <strong>Origin:</strong> {photographer.origin}
+          <p className={styles.disclaimer}>
+            Some of the links provided under &quot;STORES&quot; may be affiliate
+            links, meaning I may earn a small commission from the store if you
+            make a purchase through them. This helps support my work at no
+            additional cost to you.
           </p>
-          {photographer.deceasedate && (
-            <p>
-              <strong>Deceasedate:</strong>{" "}
-              {new Date(photographer.deceasedate).toLocaleDateString()}
-            </p>
-          )}
         </div>
         <div className={styles.externalLinks}>
           {photographer.website && (
-            <div className="fancy-link">
-              <a
-                href={`${photographer.website}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.link}
-              >
-                Official website or wikipedia
-              </a>
-            </div>
+            <a
+              href={`${photographer.website}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.link}
+            >
+              Website
+            </a>
           )}
           {photographer.instagram && (
             <a
               href={`${photographer.instagram}`}
               target="_blank"
               rel="noopener noreferrer"
+              className={styles.link}
             >
               Official instagram
             </a>
           )}
-          {stores && stores.length > 0 && (
+        </div>
+        {stores && stores.length > 0 && (
+          <div className={styles.externalLinks}>
             <Dropdown
               buttonText="Stores"
               items={stores}
               onToggle={handleDropdownToggle}
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
