@@ -97,26 +97,27 @@
 }
 
 .photographer-list-container {
+  display: flex;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-y: hidden; /* Hide vertical scrolling */
+  white-space: nowrap; /* Prevent wrapping of list items */
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
   background-color: #ddd;
   border-radius: 10px;
+  margin: 0;
+}
+
+.photographer-list-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar in Chrome, Safari, Opera */
 }
 
 .photographer-list {
-  margin: 0px;
-  padding: 0;
-  width: 100%;
   display: flex;
-  justify-content: space-around;
-  overflow-x: auto; /* Allow horizontal scroll */
-  overflow-y: hidden; /* Hide vertical scroll */
-  white-space: nowrap;
-  /* Hide scrollbars - Webkit browsers */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-.photographer-list.hide-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  white-space: nowrap; /* Prevent wrapping of list items */
 }
 
 .photographer-list-item {

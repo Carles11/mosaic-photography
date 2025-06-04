@@ -64,7 +64,7 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   return (
     <>
       {loading ? (
-        ClimbBoxLoaderContainer("var(--color-white)", 20, loading)
+        ClimbBoxLoaderContainer("var(--color-white)", 18, loading)
       ) : (
         <PhotoSwipeWrapper galleryOptions={{ zoom: true }}>
           {images.map((image) => (

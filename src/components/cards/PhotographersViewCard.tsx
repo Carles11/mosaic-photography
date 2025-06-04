@@ -101,8 +101,28 @@ const PhotographersViewCard = () => {
 
     // @ts-expect-error: Should expect react-slick element
     appendDots: (dots) => (
-      <div className="photographer-list-container">
-        <ul className="photographer-list hide-scrollbar">
+      <div
+        style={{
+          display: "flex",
+          overflowX: "auto" /* Enable horizontal scrolling */,
+          overflowY: "hidden" /* Hide vertical scrolling */,
+          whiteSpace: "nowrap" /* Prevent wrapping of list items */,
+          scrollbarWidth: "none" /* Hide scrollbar in Firefox */,
+          msOverflowStyle: "none" /* Hide scrollbar in IE and Edge */,
+          backgroundColor: "#ddd",
+          borderRadius: "10px",
+        }}
+      >
+        <ul
+          style={{
+            display: "flex",
+            margin: 0,
+            padding: 0,
+            listStyle: "none",
+            whiteSpace: "nowrap",
+            width: "100vw",
+          }}
+        >
           {photographers.map((photographer, index) => (
             <li
               key={index}
@@ -150,7 +170,7 @@ const PhotographersViewCard = () => {
   return (
     <div className={styles.photographersViewCardContainer}>
       {loading ? (
-        ClimbBoxLoaderContainer("var(--text-color)", 20, loading)
+        ClimbBoxLoaderContainer("var(--text-color)", 18, loading)
       ) : (
         <PhotoSwipeWrapper galleryOptions={{ zoom: true }}>
           <SliderTyped {...mainSliderSettings}>

@@ -221,10 +221,8 @@ p {
     padding: 0 0.4rem;
     margin: 0;
   }
-
-  .slick-track {
-    padding-top: 4rem;
-  }
+}
+@media only screen and (max-width: 361px) {
 }
 
 /* Photoswipe Gallery zoom stlyes */
@@ -233,10 +231,6 @@ p {
 }
 
 /* React-slick stlyes */
-
-.slick-track {
-  padding-top: 2rem;
-}
 
 .slick-dots {
   display: flex !important;
@@ -273,4 +267,11 @@ p {
 }
 .slick-prev {
   left: -20px !important;
+}
+
+.slick-next:before {
+  color: var(--text-color) !important;
+}
+.slick-prev:before {
+  color: var(--text-color) !important;
 }
