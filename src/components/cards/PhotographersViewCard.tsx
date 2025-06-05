@@ -5,7 +5,9 @@ import PhotographerModal from "@/components/modals/photographer/PhotographerModa
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import Slider, { Settings } from "react-slick";
 
-import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
+import PhotoSwipeWrapper, {
+  Item,
+} from "@/components/wrappers/PhotoSwipeWrapper";
 
 import "slick-carousel/slick/slick.css"; // Import slick-carousel styles
 import "slick-carousel/slick/slick-theme.css"; // Import slick-carousel theme
@@ -22,23 +24,9 @@ const PhotographersViewCard = () => {
   const [expandedBiography, setExpandedBiography] = useState<number | null>(
     null
   );
-  const [imageOrientations, setImageOrientations] = useState<
-    Record<string, string>
-  >({});
+
   const [expandedOrigin, setExpandedOrigin] = useState<number | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
-
-  // Function to handle image load and set orientation class for a specific image
-  const handleLoad = (imgElement: HTMLImageElement, imageId: string) => {
-    const { naturalWidth, naturalHeight } = imgElement;
-    const isLandscape = naturalWidth > naturalHeight;
-    const orientation = isLandscape ? styles.landscape : styles.portrait;
-
-    setImageOrientations((prev) => ({
-      ...prev,
-      [imageId]: orientation,
-    }));
-  };
 
   useEffect(() => {
     const fetchPhotographersWithImages = async () => {
@@ -218,19 +206,8 @@ const PhotographersViewCard = () => {
                 </h3>
                 <SliderTyped {...nestedSliderSettings}>
                   {photographer.images.map((image) => (
-                    <div
-                      key={image.id}
-                      className={`${styles.imageContainer} ${
-                        imageOrientations[image.id] || ""
-                      }`}
-                    >
-                      <ImageWrapper
-                        image={image}
-                        imgRef={imgRef}
-                        handleLoad={(e) =>
-                          handleLoad(e.currentTarget, image.id)
-                        }
-                      />
+                    <div key={image.id} className={styles.imageContainer}>
+                      <ImageWrapper image={image} imgRef={imgRef} />
                     </div>
                   ))}
                 </SliderTyped>
