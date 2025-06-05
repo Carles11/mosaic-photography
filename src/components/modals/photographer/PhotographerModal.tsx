@@ -92,10 +92,10 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
             masterpieces and learn more about the artist behind the lens.
           </p>
           <p className={styles.disclaimer}>
-            Some of the links provided under &quot;STORES&quot; may be affiliate
-            links, meaning I may earn a small commission from the store if you
-            make a purchase through them. This helps support my work at no
-            additional cost to you.
+            Some of the links provided under STORES may be affiliate links,
+            meaning I may earn a small commission from the store if you make a
+            purchase through them. This helps support my work at no additional
+            cost to you.
           </p>
         </div>
         <div className={styles.externalLinks}>

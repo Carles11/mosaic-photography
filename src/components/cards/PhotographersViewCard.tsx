@@ -14,6 +14,8 @@ import ImageWrapper from "../wrappers/ImageWrapper";
 
 const PhotographersViewCard = () => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedPhotographer, setSelectedPhotographer] =
     useState<Photographer | null>(null);
@@ -26,35 +28,6 @@ const PhotographersViewCard = () => {
   const [expandedOrigin, setExpandedOrigin] = useState<number | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
 
-  useEffect(() => {
-    const fetchPhotographersWithImages = async () => {
-      setLoading(true);
-
-      const { data: photographers } = await supabase
-        .from("photographers")
-        .select(
-          `
-          name, surname, author, biography, birthdate, deceasedate, origin, website, store, instagram,
-          images (id, url, author, title, description, created_at)
-        `
-        )
-        .limit(10);
-
-      setPhotographers(photographers || []);
-      setLoading(false);
-    };
-
-    fetchPhotographersWithImages();
-  }, []);
-
-  const toggleBiography = (index: number) => {
-    setExpandedBiography((prev) => (prev === index ? null : index));
-  };
-
-  const toggleOrigin = (index: number) => {
-    setExpandedOrigin((prev) => (prev === index ? null : index));
-  };
-
   // Function to handle image load and set orientation class for a specific image
   const handleLoad = (imgElement: HTMLImageElement, imageId: string) => {
     const { naturalWidth, naturalHeight } = imgElement;
@@ -65,6 +38,53 @@ const PhotographersViewCard = () => {
       ...prev,
       [imageId]: orientation,
     }));
+  };
+
+  useEffect(() => {
+    const fetchPhotographersWithImages = async () => {
+      setLoading(true);
+
+      const { data: photographers, error } = await supabase
+        .from("photographers")
+        .select(
+          `
+          name, surname, author, biography, birthdate, deceasedate, origin, website, store, instagram,
+          images (id, url, author, title, description, created_at)
+        `
+        )
+        .limit(10);
+
+      if (error) {
+        setError(error.message);
+
+        setLoading(false);
+        return;
+      }
+
+      if (!photographers) {
+        setError("No images found.");
+
+        setLoading(false);
+        return;
+      }
+
+      setPhotographers(photographers || []);
+      setLoading(false);
+    };
+
+    fetchPhotographersWithImages();
+  }, []);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  const toggleBiography = (index: number) => {
+    setExpandedBiography((prev) => (prev === index ? null : index));
+  };
+
+  const toggleOrigin = (index: number) => {
+    setExpandedOrigin((prev) => (prev === index ? null : index));
   };
 
   const mainSliderSettings = {
@@ -170,9 +190,17 @@ const PhotographersViewCard = () => {
   return (
     <div className={styles.photographersViewCardContainer}>
       {loading ? (
-        ClimbBoxLoaderContainer("var(--text-color)", 18, loading)
+        ClimbBoxLoaderContainer("var(--text-color)", 16, loading)
       ) : (
-        <PhotoSwipeWrapper galleryOptions={{ zoom: true }}>
+        <PhotoSwipeWrapper
+          galleryOptions={{
+            zoom: true,
+            maxSpreadZoom: 1,
+            fullscreenEl: true,
+            bgOpacity: 1,
+            wheelToZoom: true,
+          }}
+        >
           <SliderTyped {...mainSliderSettings}>
             {photographers.map((photographer, index) => (
               <div

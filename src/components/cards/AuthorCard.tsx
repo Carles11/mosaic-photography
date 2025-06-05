@@ -56,7 +56,7 @@ const AuthorCard: React.FC<AuthorCardProps> = () => {
   return (
     <div className={styles.authorCardContainer}>
       {loading ? (
-        ClimbBoxLoaderContainer("var(--color-white)", 25, loading)
+        ClimbBoxLoaderContainer("var(--text-color)", 16, loading)
       ) : (
         <>
           <div className={styles.authorScrollList}>

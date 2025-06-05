@@ -64,9 +64,17 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   return (
     <>
       {loading ? (
-        ClimbBoxLoaderContainer("var(--color-white)", 18, loading)
+        ClimbBoxLoaderContainer("var(--text-color)", 16, loading)
       ) : (
-        <PhotoSwipeWrapper galleryOptions={{ zoom: true }}>
+        <PhotoSwipeWrapper
+          galleryOptions={{
+            zoom: true,
+            maxSpreadZoom: 1,
+            fullscreenEl: true,
+            bgOpacity: 1,
+            wheelToZoom: true,
+          }}
+        >
           {images.map((image) => (
             <div
               key={image.id}
