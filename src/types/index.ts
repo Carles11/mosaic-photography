@@ -24,6 +24,10 @@ export interface ImageData {
   className?: string;
 }
 
+export type ImageWithOrientation = ImageData & {
+  orientation: "landscape" | "portrait";
+};
+
 export interface Author {
   name: string;
   surname: string;
