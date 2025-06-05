@@ -5,9 +5,7 @@ import PhotographerModal from "@/components/modals/photographer/PhotographerModa
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import Slider, { Settings } from "react-slick";
 
-import PhotoSwipeWrapper, {
-  Item,
-} from "@/components/wrappers/PhotoSwipeWrapper";
+import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 
 import "slick-carousel/slick/slick.css"; // Import slick-carousel styles
 import "slick-carousel/slick/slick-theme.css"; // Import slick-carousel theme
@@ -180,77 +178,77 @@ const PhotographersViewCard = () => {
       {loading ? (
         ClimbBoxLoaderContainer("var(--text-color)", 16, loading)
       ) : (
-        <PhotoSwipeWrapper
-          galleryOptions={{
-            zoom: true,
-            maxSpreadZoom: 1,
-            fullscreenEl: true,
-            bgOpacity: 1,
-            wheelToZoom: true,
-          }}
-        >
-          <SliderTyped {...mainSliderSettings}>
-            {photographers.map((photographer, index) => (
-              <div
-                key={index}
-                id={`author-${index}`}
-                className={styles.photographersViewCard}
+        <SliderTyped {...mainSliderSettings}>
+          {photographers.map((photographer, index) => (
+            <div
+              key={index}
+              id={`author-${index}`}
+              className={styles.photographersViewCard}
+            >
+              <h3
+                className={`fancy-link ${styles.authorName}`}
+                onClick={() => setSelectedPhotographer(photographer)}
+                role="button"
+                tabIndex={0}
               >
-                <h3
-                  className={`fancy-link ${styles.authorName}`}
-                  onClick={() => setSelectedPhotographer(photographer)}
-                  role="button"
-                  tabIndex={0}
-                >
-                  {`${photographer.name} ${photographer.surname}`.toUpperCase()}
-                </h3>
+                {`${photographer.name} ${photographer.surname}`.toUpperCase()}
+              </h3>
+              <PhotoSwipeWrapper
+                galleryOptions={{
+                  zoom: true,
+                  maxSpreadZoom: 1,
+                  fullscreenEl: true,
+                  bgOpacity: 1,
+                  wheelToZoom: true,
+                }}
+              >
                 <SliderTyped {...nestedSliderSettings}>
                   {photographer.images.map((image) => (
                     <div key={image.id} className={styles.imageContainer}>
-                      <ImageWrapper image={image} imgRef={imgRef} />
+                      <ImageWrapper image={image} imgRef={imgRef} />{" "}
                     </div>
                   ))}
                 </SliderTyped>
-                <p
-                  className={`${styles.biography} ${
-                    expandedBiography === index ? styles.expanded : ""
-                  }`}
-                  onClick={() => toggleBiography(index)}
-                >
-                  <strong>Biography: </strong>
-                  <br />
-                  {photographer.biography || "No biography available."}
-                </p>
+              </PhotoSwipeWrapper>
+              <p
+                className={`${styles.biography} ${
+                  expandedBiography === index ? styles.expanded : ""
+                }`}
+                onClick={() => toggleBiography(index)}
+              >
+                <strong>Biography: </strong>
+                <br />
+                {photographer.biography || "No biography available."}
+              </p>
+              <p>
+                <strong>Birthdate: </strong>
+                {new Date(photographer.birthdate).toLocaleDateString()}
+              </p>
+              <p
+                className={`${styles.origin} ${
+                  expandedOrigin === index ? styles.expanded : ""
+                }`}
+                onClick={() => toggleOrigin(index)}
+              >
+                <strong>Origin:</strong> {photographer.origin}
+              </p>
+              {photographer.deceasedate && (
                 <p>
-                  <strong>Birthdate: </strong>
-                  {new Date(photographer.birthdate).toLocaleDateString()}
+                  <strong>Deceasedate:</strong>{" "}
+                  {new Date(photographer.deceasedate).toLocaleDateString()}
                 </p>
-                <p
-                  className={`${styles.origin} ${
-                    expandedOrigin === index ? styles.expanded : ""
-                  }`}
-                  onClick={() => toggleOrigin(index)}
-                >
-                  <strong>Origin:</strong> {photographer.origin}
-                </p>
-                {photographer.deceasedate && (
-                  <p>
-                    <strong>Deceasedate:</strong>{" "}
-                    {new Date(photographer.deceasedate).toLocaleDateString()}
-                  </p>
-                )}
-                <p
-                  className={`fancy-link ${styles.authorCTA}`}
-                  onClick={() => setSelectedPhotographer(photographer)}
-                  role="button"
-                  tabIndex={0}
-                >
-                  Dive Into {photographer.surname}’s Art
-                </p>
-              </div>
-            ))}
-          </SliderTyped>
-        </PhotoSwipeWrapper>
+              )}
+              <p
+                className={`fancy-link ${styles.authorCTA}`}
+                onClick={() => setSelectedPhotographer(photographer)}
+                role="button"
+                tabIndex={0}
+              >
+                Dive Into {photographer.surname}’s Art
+              </p>
+            </div>
+          ))}
+        </SliderTyped>
       )}
       {selectedPhotographer && (
         <PhotographerModal
