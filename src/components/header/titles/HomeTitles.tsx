@@ -9,8 +9,8 @@ export const HomeTitles = () => {
 
       <div className={styles.homeTitleGrid}>
         <h2 className={styles.subTitle}>
-          Explore iconic works by legendary photographers who shaped the history
-          of nude art and nude photography.
+          Iconic works by legendary photographers who shaped the history of nude
+          art and nude photography.
         </h2>
         <div className={styles.homeTitleGridItemRight}>
           <h2 className={styles.subTitle}>

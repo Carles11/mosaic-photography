@@ -18,9 +18,8 @@ const Gallery: React.FC<GalleryProps> = ({ id }) => {
       <h2 className={styles.subTitle}>ALL PHOTOS </h2>
       <p className={styles.sectionIntro}>
         Browse the complete collection of vintage nude photography—featuring
-        public domain, copyright-free, and open access images. Discover
-        high-resolution classic nude art and timeless photographs, all available
-        for download and personal or commercial use.
+        public domain, copyright-free, and open access images. All available for
+        download and personal or commercial use.
       </p>
       <div className={styles.galleryGrid}>
         <ImageCard />
