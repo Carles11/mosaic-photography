@@ -2,6 +2,10 @@
   border-top: 1px solid lightgrey; /* Thin light-grey line on top */
 }
 
-h2.subTitle {
-  margin: 2rem 1rem;
+.subTitle {
+  margin: 2rem 0 0 0;
+}
+
+.sectionIntro {
+  margin: 0 0 2rem 0;
 }

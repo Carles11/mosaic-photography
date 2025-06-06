@@ -2,8 +2,14 @@ h1.mainTitle {
   margin: 0;
 }
 h2.subTitle {
-  margin: 0;
+  margin: 1rem 0;
 }
+
+p.subTitle {
+  margin: 0;
+  padding: 0;
+}
+
 p.mainText {
   margin: 0 20px;
 }
@@ -16,10 +22,6 @@ p.mainText {
   align-items: center;
   gap: 20px;
   margin: 20px;
-}
-
-.homeTitleGridItemLeft {
-  justify-self: flex-start;
 }
 
 .homeTitleGridItemRight {
@@ -45,5 +47,8 @@ p.centerText {
   .homeTitleGrid {
     grid-template-columns: 1fr;
     grid-auto-flow: row;
+  }
+  .homeTitleGrid {
+    margin: 6px;
   }
 }

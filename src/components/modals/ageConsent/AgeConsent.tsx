@@ -22,14 +22,17 @@ export const AgeConsent = ({
       <div className={styles.ageModalOverlay}>
         <div className={styles.ageConfirmationContent}>
           <h1 id="ageConsentTitle" className={styles.consentTitle}>
-            Age Confirmation
+            Age Confirmation Required
           </h1>
-          <h2 id="ageConsentTitle" className={styles.consentSubTitle}>
-            Read the following before proceeding
+          <h2 id="ageConsentSubtitle" className={styles.consentSubTitle}>
+            Please Review Before Entering the Gallery
           </h2>
           <p id="ageConsentDescription" className={styles.consentText}>
-            By proceeding, you confirm you are of legal age. This page contains
-            nudity for mature audiences.
+            By continuing, you confirm that you are of legal age to view
+            artistic nude photography. This curated gallery features vintage and
+            classic nude images intended for mature audiences only. All
+            photographs are public domain, copyright-free, and presented for
+            artistic and historical appreciation.
           </p>
           <PrimaryButton
             id="ageConsentButton"
