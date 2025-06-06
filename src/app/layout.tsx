@@ -37,6 +37,7 @@ export const metadata: Metadata = {
     "public domain Vintage nude photography",
     "public domain art",
     "nude photography",
+    "nude art",
     "vintage nude photography ",
     "vintage nude photography public domain",
     "vintage art photography",

@@ -8,8 +8,9 @@ const PhotographersCardsSlide = () => {
         VINTAGE NUDE ART PHOTOGRAPHERS
       </h2>
       <p className={styles.sectionIntro}>
-        Discover iconic nude art photographers and their copyright free
-        contributions.
+        iscover legendary nude art photographers, explore their fascinating
+        lives, and view their copyright-free contributions to vintage and
+        classic nude photography.
       </p>
       <PhotographersViewCard />
     </div>
