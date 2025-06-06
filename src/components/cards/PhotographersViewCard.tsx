@@ -47,13 +47,37 @@ const PhotographersViewCard = () => {
       }
 
       if (!photographers) {
-        setError("No images found.");
+        setError("No artists found.");
 
         setLoading(false);
         return;
       }
+      // After fetching and shuffling photographers:
+      const processedPhotographers = (
+        photographers.sort(() => Math.random() - 0.5) || []
+      ).map((photographer) => {
+        if (!photographer.images) return photographer;
 
-      setPhotographers(photographers || []);
+        const featuredIndex = photographer.images.findIndex((img) => {
+          const fileName = img.url.split("/").pop()?.toLowerCase(); // Extract the file name and normalize case
+          return fileName?.startsWith("000_aaa");
+        });
+
+        console.log(
+          "Image URLs:",
+          photographer.images.map((img) => img.url)
+        );
+        console.log({ featuredIndex });
+
+        if (featuredIndex > -1) {
+          // Place the found image at the start
+          const [featured] = photographer.images.splice(featuredIndex, 1);
+          photographer.images.unshift(featured);
+        }
+
+        return photographer;
+      });
+      setPhotographers(processedPhotographers);
       setLoading(false);
     };
 
