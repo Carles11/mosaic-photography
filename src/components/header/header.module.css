@@ -38,19 +38,6 @@
   color: var(--text-color);
 }
 
-/* .navLinks {
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  align-items: center;
-  justify-items: center;
-  gap: 4rem;
-  margin: 2rem 0;
-}
-
-.navLinks img {
-  cursor: pointer;
-} */
-
 .themeImage {
   width: 100%;
   height: 100%;

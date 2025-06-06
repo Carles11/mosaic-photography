@@ -1,18 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAppContext } from "@/context/AppContext";
 import { useAgeConsent } from "@/context/AgeConsentContext";
 import Cookies from "js-cookie";
-import { withClientLogic } from "@/hocs/withClientLogic"; // Import the HOC
-
-// Add a declaration file for 'js-cookie' to avoid TypeScript errors
-// Create a file named `js-cookie.d.ts` in your project (e.g., in a `types` folder) with the following content:
-// declare module 'js-cookie';
+import { withClientLogic } from "@/hocs/withClientLogic";
 
 import Gallery from "@/components/gallery/Gallery";
-// import { ImageCardTitles } from "@/components/header/titles/ImageCardTitles";
-// import { AuthorCardTitles } from "@/components/header/titles/AuthorCardTitles";
+
 import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
 
@@ -25,7 +19,6 @@ import { HomeTitles } from "../header/titles/HomeTitles";
 import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
 
 function HomeClientWrapper() {
-  const { isMosaic } = useAppContext();
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
 
@@ -64,10 +57,9 @@ function HomeClientWrapper() {
             <div className={styles.content}>
               <div className="v-margin">
                 <HomeTitles />
-                {/* {isMosaic ? <ImageCardTitles /> : <AuthorCardTitles />} */}
               </div>
               <PhotographersCardsSlide />
-              <Gallery id="gallery-section" isMosaic={isMosaic} />
+              <Gallery id="gallery-section" />
             </div>
           </section>
         </>

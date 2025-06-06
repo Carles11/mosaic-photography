@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 
-import { AppContextProvider } from "@/context/AppContext";
 import { AgeConsentProvider } from "@/context/AgeConsentContext";
 import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
 
@@ -10,16 +9,6 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import "./globals.css";
-
-// const geistSans = Inter({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Roboto_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mosaic.photography"),
@@ -153,18 +142,15 @@ type RootLayoutProps = { children: React.ReactNode };
 function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
       <body>
         <ThemeProvider defaultTheme="dark">
-          <AppContextProvider>
-            <AgeConsentProvider>
-              <ServiceWorkerContext>
-                <main style={{ flex: 1 }}>{children}</main>
-                <Analytics />
-                <SpeedInsights />
-              </ServiceWorkerContext>
-            </AgeConsentProvider>
-          </AppContextProvider>
+          <AgeConsentProvider>
+            <ServiceWorkerContext>
+              <main style={{ flex: 1 }}>{children}</main>
+              <Analytics />
+              <SpeedInsights />
+            </ServiceWorkerContext>
+          </AgeConsentProvider>
         </ThemeProvider>
       </body>
     </html>

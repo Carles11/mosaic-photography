@@ -8,7 +8,6 @@ import GoToTopButton from "@/components/buttons/GoToTopButton";
 import styles from "./gallery.module.css";
 
 interface GalleryProps extends JSX.IntrinsicAttributes {
-  isMosaic: boolean;
   id: string;
 }
 
