@@ -13,10 +13,11 @@ const ImageCard: React.FC<ImageCardProps> = () => {
   const [imageOrientations, setImageOrientations] = useState<
     Record<string, string>
   >({});
+  const [offset, setOffset] = useState<number>(0); // Tracks the current offset for pagination
+  const [hasMore, setHasMore] = useState<boolean>(true); // Tracks if there are more images to load
 
   const imgRef = useRef<HTMLImageElement | null>(null);
 
-  // Function to handle image load and set orientation class for a specific image
   const handleLoad = (imgElement: HTMLImageElement, imageId: string) => {
     const { naturalWidth, naturalHeight } = imgElement;
     const isLandscape = naturalWidth > naturalHeight;
@@ -28,33 +29,41 @@ const ImageCard: React.FC<ImageCardProps> = () => {
     }));
   };
 
-  useEffect(() => {
-    const fetchImages = async (): Promise<void> => {
-      setLoading(true);
+  const fetchImages = async (newOffset: number): Promise<void> => {
+    setLoading(true);
 
-      const { data: images, error } = await supabase.from("images").select(
+    const { data: images, error } = await supabase
+      .from("images")
+      .select(
         `
           id, url, author, title, description, created_at
         `
-      );
+      )
+      .range(newOffset, newOffset + 49); // Fetch 50 images at a time
 
-      if (error) {
-        setError(error.message);
-        setLoading(false);
-        return;
-      }
-
-      if (!images) {
-        setError("No images found.");
-        setLoading(false);
-        return;
-      }
-
-      setImages(images.sort(() => Math.random() - 0.5)); // Shuffle images
+    if (error) {
+      setError(error.message);
       setLoading(false);
-    };
+      return;
+    }
 
-    fetchImages();
+    if (!images || images.length === 0) {
+      setHasMore(false); // No more images to load
+      setLoading(false);
+      setError("No images found.");
+      return;
+    }
+
+    // Replace images on initial load, append on subsequent loads
+    setImages((prevImages) =>
+      newOffset === 0 ? images : [...prevImages, ...images]
+    );
+    setOffset(newOffset + 50); // Update the offset for the next batch
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchImages(0); // Load the first 50 images on initial render
   }, []);
 
   if (error) {
@@ -63,33 +72,45 @@ const ImageCard: React.FC<ImageCardProps> = () => {
 
   return (
     <>
-      {loading ? (
+      {loading && offset === 0 ? (
         ClimbBoxLoaderContainer("var(--text-color)", 16, loading)
       ) : (
-        <PhotoSwipeWrapper
-          galleryOptions={{
-            zoom: true,
-            maxSpreadZoom: 1,
-            fullscreenEl: true,
-            bgOpacity: 1,
-            wheelToZoom: true,
-          }}
-        >
-          {images.map((image) => (
-            <div
-              key={image.id}
-              className={`${styles.gridItem} ${
-                imageOrientations[image.id] || ""
-              }`}
+        <>
+          <PhotoSwipeWrapper
+            galleryOptions={{
+              zoom: true,
+              initialZoomLevel: "fill",
+              secondaryZoomLevel: 1,
+              maxZoomLevel: 2,
+              fullscreenEl: true,
+              bgOpacity: 1,
+            }}
+          >
+            {images.map((image) => (
+              <div
+                key={image.id}
+                className={`${styles.gridItem} ${
+                  imageOrientations[image.id] || ""
+                }`}
+              >
+                <ImageWrapper
+                  image={image}
+                  imgRef={imgRef}
+                  handleLoad={(e) => handleLoad(e.currentTarget, image.id)}
+                />
+              </div>
+            ))}
+          </PhotoSwipeWrapper>
+          {hasMore && (
+            <button
+              className={styles.loadMoreButton}
+              onClick={() => fetchImages(offset)}
+              disabled={loading}
             >
-              <ImageWrapper
-                image={image}
-                imgRef={imgRef}
-                handleLoad={(e) => handleLoad(e.currentTarget, image.id)}
-              />
-            </div>
-          ))}
-        </PhotoSwipeWrapper>
+              {loading ? "Loading..." : "Load More"}
+            </button>
+          )}
+        </>
       )}
     </>
   );

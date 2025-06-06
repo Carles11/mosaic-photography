@@ -24,7 +24,7 @@ const Header = () => {
         <ul className={styles.navGrid}>
           {isHome && (
             <li className={styles.navLogo}>
-              <Link href="/">
+              <Link href="/" className="no-fancy-link">
                 <ThemeImage
                   srcLight="https://res.cloudinary.com/dktizqbky/image/upload/f_auto,q_auto/v1745436285/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-DESKTOP-light_766x541px_ooxukv.webp"
                   srcDark="https://res.cloudinary.com/dktizqbky/image/upload/f_auto,q_auto/v1745436286/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp"

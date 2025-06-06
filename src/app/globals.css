@@ -116,6 +116,31 @@ a:hover::before {
   height: 100%;
 }
 
+.no-fancy-link {
+  font-size: unset;
+  text-decoration: unset;
+  color: unset;
+  font-weight: unset;
+  position: unset;
+}
+
+.no-fancy-link::before {
+  content: unset;
+  background-color: unset;
+  position: unset;
+  left: unset;
+  bottom: unset;
+  width: unset;
+  height: unset;
+  z-index: unset;
+  transition: unset;
+}
+
+.no-fancy-link:hover::before {
+  bottom: unset;
+  height: unset;
+}
+
 .fancy-link {
   text-decoration: none;
   color: var(--text-color);

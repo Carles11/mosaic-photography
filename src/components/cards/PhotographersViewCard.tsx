@@ -37,8 +37,7 @@ const PhotographersViewCard = () => {
           name, surname, author, biography, birthdate, deceasedate, origin, website, store, instagram,
           images (id, url, author, title, description, created_at)
         `
-        )
-        .limit(10);
+        );
 
       if (error) {
         setError(error.message);
@@ -196,10 +195,11 @@ const PhotographersViewCard = () => {
               <PhotoSwipeWrapper
                 galleryOptions={{
                   zoom: true,
-                  maxSpreadZoom: 1,
+                  initialZoomLevel: "fill",
+                  secondaryZoomLevel: 1,
+                  maxZoomLevel: 2,
                   fullscreenEl: true,
                   bgOpacity: 1,
-                  wheelToZoom: true,
                 }}
               >
                 <SliderTyped {...nestedSliderSettings}>
