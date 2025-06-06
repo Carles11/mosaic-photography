@@ -63,12 +63,6 @@ const PhotographersViewCard = () => {
           return fileName?.startsWith("000_aaa");
         });
 
-        console.log(
-          "Image URLs:",
-          photographer.images.map((img) => img.url)
-        );
-        console.log({ featuredIndex });
-
         if (featuredIndex > -1) {
           // Place the found image at the start
           const [featured] = photographer.images.splice(featuredIndex, 1);

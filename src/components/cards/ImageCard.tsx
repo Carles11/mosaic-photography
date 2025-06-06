@@ -50,7 +50,13 @@ const ImageCard: React.FC<ImageCardProps> = () => {
         return;
       }
 
-      setImages(images.sort(() => Math.random() - 0.5)); // Shuffle images
+      // Filter out images that start with "000_aaa"
+      const filteredImages = images.filter((img) => {
+        const fileName = img.url.split("/").pop()?.toLowerCase(); // Extract the file name and normalize case
+        return !fileName?.startsWith("000_aaa");
+      });
+
+      setImages(filteredImages.sort(() => Math.random() - 0.5)); // Shuffle images
       setLoading(false);
     };
 
