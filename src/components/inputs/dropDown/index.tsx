@@ -1,4 +1,6 @@
 import React from "react";
+import { sendGTMEvent } from "@next/third-parties/google";
+
 import styles from "./Dropdown.module.css";
 
 interface DropdownProps {
@@ -27,6 +29,12 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, onToggle }) => {
               target="_blank"
               rel="noopener noreferrer"
               className={styles.link}
+              onClick={() =>
+                sendGTMEvent({
+                  event: "storeClicked",
+                  value: item.store,
+                })
+              }
             >
               {item.store}
             </a>

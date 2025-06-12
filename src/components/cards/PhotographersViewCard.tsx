@@ -4,6 +4,7 @@ import { Photographer } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import Slider, { Settings } from "react-slick";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 
@@ -204,7 +205,13 @@ const PhotographersViewCard = () => {
             >
               <h3
                 className={`fancy-link ${styles.authorName}`}
-                onClick={() => setSelectedPhotographer(photographer)}
+                onClick={() => {
+                  setSelectedPhotographer(photographer);
+                  sendGTMEvent({
+                    event: "photographerSelected",
+                    value: photographer.surname,
+                  });
+                }}
                 role="button"
                 tabIndex={0}
               >
@@ -258,7 +265,13 @@ const PhotographersViewCard = () => {
               )}
               <p
                 className={`fancy-link ${styles.authorCTA}`}
-                onClick={() => setSelectedPhotographer(photographer)}
+                onClick={() => {
+                  setSelectedPhotographer(photographer);
+                  sendGTMEvent({
+                    event: "photographerSelected",
+                    value: photographer.surname,
+                  });
+                }}
                 role="button"
                 tabIndex={0}
               >

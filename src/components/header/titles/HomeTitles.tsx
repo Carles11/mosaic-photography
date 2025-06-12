@@ -1,3 +1,5 @@
+import { sendGTMEvent } from "@next/third-parties/google";
+
 import styles from "./Titles.module.css";
 
 export const HomeTitles = () => {
@@ -17,6 +19,12 @@ export const HomeTitles = () => {
             <a
               href="#gallery-section"
               title="View the full collection of vintage nude photos"
+              onClick={() =>
+                sendGTMEvent({
+                  event: "browseAllPhotosClicked",
+                  value: "gallery-section",
+                })
+              }
             >
               BROWSE ALL PHOTOS
             </a>

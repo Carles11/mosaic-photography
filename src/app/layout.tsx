@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { AgeConsentProvider } from "@/context/AgeConsentContext";
 import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 import { ThemeProvider } from "next-themes";
 import React from "react";
@@ -182,6 +183,7 @@ type RootLayoutProps = { children: React.ReactNode };
 function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <GoogleTagManager gtmId="GTM-N74Q9JC5" />
       <body>
         <ThemeProvider defaultTheme="dark">
           <AgeConsentProvider>

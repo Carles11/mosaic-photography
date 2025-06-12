@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
-import styles from "./photographerModal.module.css";
+import { sendGTMEvent } from "@next/third-parties/google";
+
 import { Photographer } from "@/types";
 import Dropdown from "@/components/inputs/dropDown";
+
+import styles from "./photographerModal.module.css";
 
 interface PhotographerModalProps {
   photographer: Photographer;
@@ -50,6 +53,7 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
         top: modalRef.current.scrollHeight,
         behavior: "smooth",
       });
+      sendGTMEvent({ event: "storesDropdownOpened", value: photographer.name });
     }
   };
 
@@ -105,6 +109,12 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               className={styles.link}
+              onClick={() =>
+                sendGTMEvent({
+                  event: "websiteClicked",
+                  value: photographer.website,
+                })
+              }
             >
               Website
             </a>
