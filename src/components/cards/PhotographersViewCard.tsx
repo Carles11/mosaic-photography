@@ -208,7 +208,7 @@ const PhotographersViewCard = () => {
                 onClick={() => {
                   setSelectedPhotographer(photographer);
                   sendGTMEvent({
-                    event: "photographerSelected",
+                    event: "photographerSelected-top",
                     value: photographer.surname,
                   });
                 }}
@@ -268,7 +268,7 @@ const PhotographersViewCard = () => {
                 onClick={() => {
                   setSelectedPhotographer(photographer);
                   sendGTMEvent({
-                    event: "photographerSelected",
+                    event: "photographerSelected-bottom",
                     value: photographer.surname,
                   });
                 }}
