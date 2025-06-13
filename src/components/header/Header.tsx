@@ -3,6 +3,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 
 import Link from "next/link";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 import ThemeToggle from "../theme/ThemeToggle";
 import ThemeImage from "../theme/ThemeImageDark";
@@ -40,14 +41,27 @@ const Header = () => {
           <li>
             <p
               className={styles.goProText}
-              onClick={() => setShowGoProModal(true)}
+              onClick={() => {
+                setShowGoProModal(true);
+                sendGTMEvent({
+                  event: "goProText",
+                  value: "Go Pro clicked from header",
+                });
+              }}
             >
               Go Pro
             </p>
           </li>
 
           <li>
-            <div>
+            <div
+              onClick={() =>
+                sendGTMEvent({
+                  event: "ThemeToggleClicked",
+                  value: "Theme toggle clicked from header",
+                })
+              }
+            >
               <ThemeToggle />
             </div>
           </li>
