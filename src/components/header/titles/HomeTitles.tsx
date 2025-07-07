@@ -4,7 +4,7 @@ import styles from "./Titles.module.css";
 
 export const HomeTitles = () => {
   return (
-    <div>
+    <div className={styles.mainTitleContainer}>
       <h1 className={styles.mainTitle}>
         Vintage Nude Photography Gallery – Public Domain & Copyright-Free Art
       </h1>
