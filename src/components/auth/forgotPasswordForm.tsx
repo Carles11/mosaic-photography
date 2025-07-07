@@ -21,7 +21,7 @@ export default function ForgotPasswordForm({ onSwitchToLogin, initialEmail }: Fo
     setSuccess(null);
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: typeof window !== "undefined"
-        ? `${window.location.origin}/reset-password`
+        ? `${window.location.origin}/?modal=auth&type=reset-password`
         : undefined,
     });
     if (error) setError(error.message);
