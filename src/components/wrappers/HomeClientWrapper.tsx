@@ -72,8 +72,8 @@ function HomeClientWrapper({ showLoginButton = false, onLoginClick, onLogoutClic
               <div className="v-margin">
                 <HomeTitles />
               </div>
-              <PhotographersCardsSlide />
-              <Gallery id="gallery-section" />
+              <PhotographersCardsSlide onLoginRequired={onLoginClick} />
+              <Gallery id="gallery-section" onLoginRequired={onLoginClick} />
             </div>
           </section>
         </>

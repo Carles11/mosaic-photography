@@ -9,9 +9,10 @@ import styles from "./gallery.module.css";
 
 interface GalleryProps extends JSX.IntrinsicAttributes {
   id: string;
+  onLoginRequired?: () => void;
 }
 
-const Gallery: React.FC<GalleryProps> = ({ id }) => {
+const Gallery: React.FC<GalleryProps> = ({ id, onLoginRequired }) => {
   return (
     <div id={id} className={styles.galleryGridContainer}>
       <hr />
@@ -22,7 +23,7 @@ const Gallery: React.FC<GalleryProps> = ({ id }) => {
         download and personal or commercial use.
       </p>
       <div className={styles.galleryGrid}>
-        <ImageCard />
+        <ImageCard onLoginRequired={onLoginRequired} />
         <GoToTopButton />
       </div>
     </div>

@@ -13,7 +13,13 @@ import "slick-carousel/slick/slick-theme.css"; // Import slick-carousel theme
 import styles from "./PhotographersViewCard.module.css";
 import ImageWrapper from "../wrappers/ImageWrapper";
 
-const PhotographersViewCard = () => {
+interface PhotographersViewCardProps {
+  onLoginRequired?: () => void;
+}
+
+const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
+  onLoginRequired,
+}) => {
   const [photographers, setPhotographers] = useState<Photographer[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -230,7 +236,11 @@ const PhotographersViewCard = () => {
                 <SliderTyped {...nestedSliderSettings}>
                   {photographer.images.map((image) => (
                     <div key={image.id} className={styles.imageContainer}>
-                      <ImageWrapper image={image} imgRef={imgRef} />{" "}
+                      <ImageWrapper 
+                        image={image} 
+                        imgRef={imgRef}
+                        onLoginRequired={onLoginRequired}
+                      />
                     </div>
                   ))}
                 </SliderTyped>

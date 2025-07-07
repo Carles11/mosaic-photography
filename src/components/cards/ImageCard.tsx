@@ -6,7 +6,7 @@ import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import styles from "./ImageCard.module.css";
 
-const ImageCard: React.FC<ImageCardProps> = () => {
+const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
   const [images, setImages] = useState<ImageData[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -92,6 +92,7 @@ const ImageCard: React.FC<ImageCardProps> = () => {
                 image={image}
                 imgRef={imgRef}
                 handleLoad={(e) => handleLoad(e.currentTarget, image.id)}
+                onLoginRequired={onLoginRequired}
               />
             </div>
           ))}

@@ -1,25 +1,33 @@
 import React from "react";
 import Image from "next/image";
 import { Item } from "./PhotoSwipeWrapper"; // Import Item from PhotoSwipeWrapper
+import HeartButton from "@/components/buttons/HeartButton";
 import styles from "./image.module.css";
 
 interface ImageWrapperProps {
   image: {
+    id: string;
     url: string;
     author: string;
     title?: string;
   };
   imgRef?: React.RefObject<HTMLImageElement | null>; // Add imgRef property
   handleLoad?: (e: React.SyntheticEvent<HTMLImageElement>) => void; // Updated parameter name
+  onLoginRequired?: () => void; // Callback when user needs to login
 }
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({
   image,
   imgRef,
   handleLoad,
+  onLoginRequired,
 }) => {
   return (
-    <div className={styles.imageCard}>
+    <div className={`${styles.imageCard} ${styles.imageContainer}`}>
+      <HeartButton 
+        imageId={image.id} 
+        onLoginRequired={onLoginRequired}
+      />
       <Item
         original={image.url}
         thumbnail={image.url}

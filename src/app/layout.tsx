@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { AgeConsentProvider } from "@/context/AgeConsentContext";
 import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
 import { AuthSessionProvider } from "@/context/AuthSessionContext";
+import { FavoritesProvider } from "@/context/FavoritesContext";
 
 import { GoogleTagManager } from "@next/third-parties/google";
 
@@ -191,9 +192,11 @@ function RootLayout({ children }: RootLayoutProps) {
           <AgeConsentProvider>
             <ServiceWorkerContext>
             <AuthSessionProvider>
-              <main style={{ flex: 1 }}>{children}</main>
-              <Analytics />
-              <SpeedInsights />
+              <FavoritesProvider>
+                <main style={{ flex: 1 }}>{children}</main>
+                <Analytics />
+                <SpeedInsights />
+              </FavoritesProvider>
             </AuthSessionProvider>
             </ServiceWorkerContext>
           </AgeConsentProvider>

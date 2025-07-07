@@ -1,0 +1,68 @@
+.heartButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.heartButton:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+.heartButton:active {
+  transform: scale(0.95);
+}
+
+.heartButton.liked {
+  color: #ff4757;
+}
+
+.heartButton.liked:hover {
+  color: #ff3742;
+}
+
+.heartButton.unliked {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.heartButton.unliked:hover {
+  color: #ff4757;
+}
+
+.heartButton svg {
+  transition: all 0.2s ease;
+}
+
+.heartButton.liked svg {
+  fill: currentColor;
+}
+
+.heartButton.unliked svg {
+  fill: none;
+}
+
+/* For zoomed/modal view */
+.heartButton.modalView {
+  top: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.heartButton.modalView svg {
+  width: 28px;
+  height: 28px;
+}
