@@ -99,3 +99,26 @@
     height: auto;
   }
 }
+
+.loginButton {
+  background: var(--accent-color, #f4d35e);
+  color: var(--background-color, #232323);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.loginButton:hover {
+  background: var(--tertiary-color, #e06c75);
+  transform: translateY(-1px);
+}
+
+.welcomeText {
+  color: var(--text-color, #fff);
+  font-size: 0.9rem;
+  font-weight: 500;
+}

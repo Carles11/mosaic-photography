@@ -10,9 +10,10 @@ interface LoginFormProps {
   onForgotPassword?: () => void;
   onEmailChange?: (email: string) => void;
   initialEmail?: string;
+  onSuccess?: () => void;
 }
 
-export default function LoginForm({ onSwitchToSignup, onForgotPassword, onEmailChange, initialEmail }: LoginFormProps) {
+export default function LoginForm({ onSwitchToSignup, onForgotPassword, onEmailChange, initialEmail, onSuccess }: LoginFormProps) {
   const [email, setEmail] = useState(initialEmail || "");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -27,7 +28,11 @@ export default function LoginForm({ onSwitchToSignup, onForgotPassword, onEmailC
       email,
       password,
     });
-    if (error) setError(error.message);
+    if (error) {
+      setError(error.message);
+    } else {
+      onSuccess?.();
+    }
     setLoading(false);
   };
 

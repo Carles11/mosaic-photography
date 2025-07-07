@@ -8,9 +8,10 @@ interface SignupFormProps {
   onSwitchToLogin?: () => void;
   initialEmail?: string;
   onEmailChange?: (email: string) => void;
+  onSuccess?: () => void;
 }
 
-export default function SignupForm({ onSwitchToLogin, initialEmail, onEmailChange }: SignupFormProps) {
+export default function SignupForm({ onSwitchToLogin, initialEmail, onEmailChange, onSuccess }: SignupFormProps) {
   const [email, setEmail] = useState(initialEmail || "");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -26,8 +27,12 @@ export default function SignupForm({ onSwitchToLogin, initialEmail, onEmailChang
       email,
       password,
     });
-    if (error) setError(error.message);
-    else setSuccess("Check your email for a confirmation link!");
+    if (error) {
+      setError(error.message);
+    } else {
+      setSuccess("Check your email for a confirmation link!");
+      onSuccess?.();
+    }
     setLoading(false);
   };
 

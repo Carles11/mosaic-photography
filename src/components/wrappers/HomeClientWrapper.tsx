@@ -18,7 +18,14 @@ import styles from "./home.module.css";
 import { HomeTitles } from "../header/titles/HomeTitles";
 import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
 
-function HomeClientWrapper() {
+interface HomeClientWrapperProps {
+  showLoginButton?: boolean;
+  onLoginClick?: () => void;
+  onLogoutClick?: () => void;
+  user?: any; // You can type this more specifically based on your User type
+}
+
+function HomeClientWrapper({ showLoginButton = false, onLoginClick, onLogoutClick, user }: HomeClientWrapperProps) {
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
 
@@ -37,7 +44,12 @@ function HomeClientWrapper() {
     <div className={styles.container}>
       
       <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
-      <Header />
+      <Header 
+        showLoginButton={showLoginButton}
+        onLoginClick={onLoginClick}
+        onLogoutClick={onLogoutClick}
+        user={user}
+      />
       {/* Show AgeConsent only for real users */}
       {!isCrawlerBot && (
         <AgeConsent
@@ -71,4 +83,4 @@ function HomeClientWrapper() {
   );
 }
 
-export default withClientLogic(HomeClientWrapper);
+export default HomeClientWrapper;

@@ -11,7 +11,14 @@ import GoProModal from "@/components/modals/goProModal/GoProModal";
 
 import styles from "./header.module.css";
 
-const Header = () => {
+interface HeaderProps {
+  showLoginButton?: boolean;
+  onLoginClick?: () => void;
+  user?: any;
+  onLogoutClick?: () => void;
+}
+
+const Header = ({ showLoginButton = false, onLoginClick, user, onLogoutClick }: HeaderProps) => {
   const [showGoProModal, setShowGoProModal] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -52,6 +59,36 @@ const Header = () => {
               Go Pro
             </p>
           </li>
+
+          {showLoginButton && (
+            <li>
+              <button
+                className={styles.loginButton}
+                onClick={onLoginClick}
+              >
+                Login
+              </button>
+            </li>
+          )}
+
+          {user && (
+            <li>
+              <span className={styles.welcomeText}>
+                Welcome, {user.email}
+              </span>
+            </li>
+          )}
+
+          {user && (
+            <li>
+              <button
+                className={styles.loginButton}
+                onClick={onLogoutClick}
+              >
+                Logout
+              </button>
+            </li>
+          )}
 
           <li>
             <div
