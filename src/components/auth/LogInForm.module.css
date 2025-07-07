@@ -1,0 +1,92 @@
+.loginFormContainer {
+  max-width: 350px;
+  margin: 4rem auto 2rem auto;
+  background: var(--background-color, #232323);
+  border-radius: 18px;
+  box-shadow: 0 2px 32px rgba(0,0,0,0.12), 0 1.5px 6px rgba(0,0,0,0.08);
+  padding: 2.5rem 2rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loginFormTitle {
+  font-size: 2rem;
+  color: var(--text-color, #fff);
+  letter-spacing: 1px;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  background: var(--background-color, #181818);
+  border: 1.5px solid var(--tertiary-color, #444);
+  border-radius: 9px;
+  color: var(--text-color, #fff);
+  outline: none;
+  transition: border 0.2s;
+}
+.input:focus {
+  border-color: var(--accent-color, #f4d35e);
+}
+
+.error {
+  color: #ff5252;
+  background: rgba(255,82,82,0.07);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.98rem;
+  text-align: center;
+}
+
+.success {
+  color: #3ed37c;
+  background: rgba(62,211,124,0.07);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.98rem;
+  text-align: center;
+}
+
+.buttonRow {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.linksRow {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: 100%;
+  align-items: center;
+}
+
+.link {
+  color: var(--accent-color, #f4d35e);
+  text-decoration: none;
+  font-size: 0.98rem;
+  letter-spacing: 0.3px;
+  transition: text-decoration 0.2s, color 0.2s;
+  cursor: pointer;
+}
+.link:hover,
+.link:focus {
+  text-decoration: underline;
+  color: var(--tertiary-color, #e06c75);
+}
+
