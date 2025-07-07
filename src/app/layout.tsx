@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 
 import { AgeConsentProvider } from "@/context/AgeConsentContext";
 import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
+import { AuthSessionProvider } from "@/context/AuthSessionContext";
+
 import { GoogleTagManager } from "@next/third-parties/google";
 
 import { ThemeProvider } from "next-themes";
@@ -188,9 +190,11 @@ function RootLayout({ children }: RootLayoutProps) {
         <ThemeProvider defaultTheme="dark">
           <AgeConsentProvider>
             <ServiceWorkerContext>
+            <AuthSessionProvider>
               <main style={{ flex: 1 }}>{children}</main>
               <Analytics />
               <SpeedInsights />
+            </AuthSessionProvider>
             </ServiceWorkerContext>
           </AgeConsentProvider>
         </ThemeProvider>
