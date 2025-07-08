@@ -45,61 +45,57 @@ const Header = ({ showLoginButton = false, onLoginClick, user, onLogoutClick }: 
               </Link>
             </li>
           )}
-          <li>
-            <p
-              className={styles.goProText}
-              onClick={() => {
-                setShowGoProModal(true);
-                sendGTMEvent({
-                  event: "goProText",
-                  value: "Go Pro clicked from header",
-                });
-              }}
-            >
-              Go Pro
-            </p>
-          </li>
-
-          {showLoginButton && (
-            <li>
-              <button
-                className={styles.loginButton}
-                onClick={onLoginClick}
+          <li className={styles.actionSection}>
+            <div className={styles.leftActions}>
+              <p
+                className={styles.goProText}
+                onClick={() => {
+                  setShowGoProModal(true);
+                  sendGTMEvent({
+                    event: "goProText",
+                    value: "Go Pro clicked from header",
+                  });
+                }}
               >
-                Login
-              </button>
-            </li>
-          )}
+                Go Pro
+              </p>
+            </div>
+            
+            <div className={styles.rightActions}>
+              {showLoginButton && (
+                <button
+                  className={styles.loginButton}
+                  onClick={onLoginClick}
+                >
+                  Login
+                </button>
+              )}
 
-          {user && (
-            <li>
-              <span className={styles.welcomeText}>
-                Welcome, {user.email}
-              </span>
-            </li>
-          )}
+              {user && (
+                <span className={styles.welcomeText}>
+                  Welcome, {user.email}
+                </span>
+              )}
 
-          {user && (
-            <li>
-              <button
-                className={styles.loginButton}
-                onClick={onLogoutClick}
+              {user && (
+                <button
+                  className={styles.loginButton}
+                  onClick={onLogoutClick}
+                >
+                  Logout
+                </button>
+              )}
+
+              <div
+                onClick={() =>
+                  sendGTMEvent({
+                    event: "ThemeToggleClicked",
+                    value: "Theme toggle clicked from header",
+                  })
+                }
               >
-                Logout
-              </button>
-            </li>
-          )}
-
-          <li>
-            <div
-              onClick={() =>
-                sendGTMEvent({
-                  event: "ThemeToggleClicked",
-                  value: "Theme toggle clicked from header",
-                })
-              }
-            >
-              <ThemeToggle />
+                <ThemeToggle />
+              </div>
             </div>
           </li>
         </ul>

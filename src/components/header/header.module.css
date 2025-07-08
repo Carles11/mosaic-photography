@@ -98,6 +98,22 @@
     max-width: 100%;
     height: auto;
   }
+
+  .actionSection {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .leftActions,
+  .rightActions {
+    justify-content: center;
+  }
+
+  .rightActions {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
 }
 
 .loginButton {
@@ -110,7 +126,9 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
+  transition:
+    background-color 0.2s,
+    transform 0.1s;
 }
 
 .loginButton:hover {
@@ -122,4 +140,25 @@
   color: var(--text-color, #fff);
   font-size: 0.9rem;
   font-weight: 500;
+}
+
+.actionSection {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.leftActions {
+  display: flex;
+  align-items: center;
+  padding-left: 0.5rem;
+}
+
+.rightActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-right: 0.5rem;
 }
