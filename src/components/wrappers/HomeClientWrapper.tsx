@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useAgeConsent } from "@/context/AgeConsentContext";
 import Cookies from "js-cookie";
-import { withClientLogic } from "@/hocs/withClientLogic";
+import { SupabaseUser } from "@/lib/supabaseClient";
 
 import Gallery from "@/components/gallery/Gallery";
 
@@ -22,10 +22,15 @@ interface HomeClientWrapperProps {
   showLoginButton?: boolean;
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
-  user?: any; // You can type this more specifically based on your User type
+  user?: SupabaseUser | null;
 }
 
-function HomeClientWrapper({ showLoginButton = false, onLoginClick, onLogoutClick, user }: HomeClientWrapperProps) {
+function HomeClientWrapper({
+  showLoginButton = false,
+  onLoginClick,
+  onLogoutClick,
+  user,
+}: HomeClientWrapperProps) {
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
 
@@ -39,12 +44,10 @@ function HomeClientWrapper({ showLoginButton = false, onLoginClick, onLogoutClic
     }
   }, [setIsMinimumAgeConfirmed]);
 
-
   return (
     <div className={styles.container}>
-      
       <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
-      <Header 
+      <Header
         showLoginButton={showLoginButton}
         onLoginClick={onLoginClick}
         onLogoutClick={onLogoutClick}

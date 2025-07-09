@@ -58,7 +58,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     };
 
     loadFavorites();
-  }, [user?.id]); // Only trigger when user ID changes
+  }, [user]); // Only trigger when user changes
 
   const toggleFavorite = async (imageId: string) => {
     if (!user) {

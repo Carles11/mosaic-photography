@@ -44,7 +44,7 @@ export default function FavoritesList() {
           Your Favorites ({favoriteImages.length})
         </h3>
         <p className={styles.subtitle}>
-          Images you've saved to your collection
+          Images you&apos;ve saved to your collection
         </p>
       </div>
 

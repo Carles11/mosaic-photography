@@ -8,13 +8,14 @@ import { sendGTMEvent } from "@next/third-parties/google";
 import ThemeToggle from "../theme/ThemeToggle";
 import ThemeImage from "../theme/ThemeImageDark";
 import GoProModal from "@/components/modals/goProModal/GoProModal";
+import { SupabaseUser } from "@/lib/supabaseClient";
 
 import styles from "./header.module.css";
 
 interface HeaderProps {
   showLoginButton?: boolean;
   onLoginClick?: () => void;
-  user?: any;
+  user?: SupabaseUser | null;
   onLogoutClick?: () => void;
 }
 

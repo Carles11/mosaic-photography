@@ -59,5 +59,6 @@ export const sessionDebug = {
 
 // Add this to window for debugging in dev mode
 if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
-  (window as any).sessionDebug = sessionDebug;
+  (window as unknown as { sessionDebug: typeof sessionDebug }).sessionDebug =
+    sessionDebug;
 }

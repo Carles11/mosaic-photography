@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase, SupabaseUser } from "@/lib/supabaseClient";
 import { useFavorites } from "@/context/FavoritesContext";
 import type { UserProfile } from "@/types";
@@ -29,11 +29,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
 
   const [databaseError, setDatabaseError] = useState(false);
 
-  useEffect(() => {
-    loadProfile();
-  }, [user.id]);
-
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -77,7 +73,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user.id, databaseError]);
 
   const createInitialProfile = async () => {
     // Don't try to create profile if we know the database table doesn't exist
@@ -121,6 +117,10 @@ export default function ProfileForm({ user }: ProfileFormProps) {
       console.error("Error creating initial profile:", error);
     }
   };
+
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({
@@ -218,7 +218,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
               <li>
                 Copy and paste the SQL from <code>DATABASE_SETUP.md</code>
               </li>
-              <li>Click "Run" to execute the SQL</li>
+              <li>Click &quot;Run&quot; to execute the SQL</li>
               <li>Refresh this page</li>
             </ol>
             <p>
