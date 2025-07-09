@@ -29,6 +29,49 @@ export default function ProfileForm({ user }: ProfileFormProps) {
 
   const [databaseError, setDatabaseError] = useState(false);
 
+  const createInitialProfile = useCallback(async () => {
+    // Don't try to create profile if we know the database table doesn't exist
+    if (databaseError) {
+      return;
+    }
+
+    try {
+      const newProfile = {
+        id: user.id,
+        name: "",
+        instagram: "",
+        website: "",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      const { data, error } = await supabase
+        .from("user_profiles")
+        .insert([newProfile])
+        .select()
+        .single();
+
+      if (error) {
+        console.error("Error creating profile:", error);
+        if (error.code === "42P01") {
+          // relation does not exist
+          console.warn(
+            "user_profiles table doesn't exist yet. Please run the database migrations.",
+          );
+          setDatabaseError(true);
+          setMessage({
+            type: "error",
+            text: "Database setup required. Please see instructions below.",
+          });
+        }
+      } else if (data) {
+        setProfile(data);
+      }
+    } catch (error) {
+      console.error("Error creating initial profile:", error);
+    }
+  }, [databaseError, user.id]);
+
   const loadProfile = useCallback(async () => {
     try {
       setLoading(true);
@@ -73,50 +116,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     } finally {
       setLoading(false);
     }
-  }, [user.id, databaseError]);
-
-  const createInitialProfile = async () => {
-    // Don't try to create profile if we know the database table doesn't exist
-    if (databaseError) {
-      return;
-    }
-
-    try {
-      const newProfile = {
-        id: user.id,
-        name: "",
-        instagram: "",
-        website: "",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-
-      const { data, error } = await supabase
-        .from("user_profiles")
-        .insert([newProfile])
-        .select()
-        .single();
-
-      if (error) {
-        console.error("Error creating profile:", error);
-        if (error.code === "42P01") {
-          // relation does not exist
-          console.warn(
-            "user_profiles table doesn't exist yet. Please run the database migrations.",
-          );
-          setDatabaseError(true);
-          setMessage({
-            type: "error",
-            text: "Database setup required. Please see instructions below.",
-          });
-        }
-      } else if (data) {
-        setProfile(data);
-      }
-    } catch (error) {
-      console.error("Error creating initial profile:", error);
-    }
-  };
+  }, [user.id, databaseError, createInitialProfile]);
 
   useEffect(() => {
     loadProfile();
