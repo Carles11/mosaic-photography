@@ -8,6 +8,7 @@ type FavoritesContextType = {
   loading: boolean;
   toggleFavorite: (imageId: string) => Promise<void>;
   isFavorite: (imageId: string) => boolean;
+  isUserLoggedIn: () => boolean;
 };
 
 const FavoritesContext = createContext<FavoritesContextType>({
@@ -15,6 +16,7 @@ const FavoritesContext = createContext<FavoritesContextType>({
   loading: true,
   toggleFavorite: async () => {},
   isFavorite: () => false,
+  isUserLoggedIn: () => false,
 });
 
 export function useFavorites() {
@@ -38,47 +40,47 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
       setLoading(true);
       try {
         const { data, error } = await supabase
-          .from('favorites')
-          .select('image_id')
-          .eq('user_id', user.id);
+          .from("favorites")
+          .select("image_id")
+          .eq("user_id", user.id);
 
         if (error) {
-          console.error('Error loading favorites:', error);
+          console.error("Error loading favorites:", error);
         } else if (data) {
-          const favoriteIds = new Set(data.map(fav => fav.image_id));
+          const favoriteIds = new Set(data.map((fav) => fav.image_id));
           setFavorites(favoriteIds);
         }
       } catch (error) {
-        console.error('Error loading favorites:', error);
+        console.error("Error loading favorites:", error);
       } finally {
         setLoading(false);
       }
     };
 
     loadFavorites();
-  }, [user]);
+  }, [user?.id]); // Only trigger when user ID changes
 
   const toggleFavorite = async (imageId: string) => {
     if (!user) {
-      console.log('User must be logged in to favorite images');
+      console.log("User must be logged in to favorite images");
       return;
     }
 
     try {
       const isFavorited = favorites.has(imageId);
-      
+
       if (isFavorited) {
         // Remove from favorites
         const { error } = await supabase
-          .from('favorites')
+          .from("favorites")
           .delete()
-          .eq('user_id', user.id)
-          .eq('image_id', imageId);
+          .eq("user_id", user.id)
+          .eq("image_id", imageId);
 
         if (error) {
-          console.error('Error removing favorite:', error);
+          console.error("Error removing favorite:", error);
         } else {
-          setFavorites(prev => {
+          setFavorites((prev) => {
             const newFavorites = new Set(prev);
             newFavorites.delete(imageId);
             return newFavorites;
@@ -87,13 +89,13 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
       } else {
         // Add to favorites
         const { error } = await supabase
-          .from('favorites')
+          .from("favorites")
           .insert([{ user_id: user.id, image_id: imageId }]);
 
         if (error) {
-          console.error('Error adding favorite:', error);
+          console.error("Error adding favorite:", error);
         } else {
-          setFavorites(prev => {
+          setFavorites((prev) => {
             const newFavorites = new Set(prev);
             newFavorites.add(imageId);
             return newFavorites;
@@ -101,7 +103,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
         }
       }
     } catch (error) {
-      console.error('Error toggling favorite:', error);
+      console.error("Error toggling favorite:", error);
     }
   };
 
@@ -109,8 +111,14 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     return favorites.has(imageId);
   };
 
+  const isUserLoggedIn = () => {
+    return !!user;
+  };
+
   return (
-    <FavoritesContext.Provider value={{ favorites, loading, toggleFavorite, isFavorite }}>
+    <FavoritesContext.Provider
+      value={{ favorites, loading, toggleFavorite, isFavorite, isUserLoggedIn }}
+    >
       {children}
     </FavoritesContext.Provider>
   );

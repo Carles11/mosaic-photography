@@ -189,17 +189,17 @@ function RootLayout({ children }: RootLayoutProps) {
       <GoogleTagManager gtmId="GTM-N74Q9JC5" />
       <body>
         <ThemeProvider defaultTheme="dark">
-          <AgeConsentProvider>
-            <ServiceWorkerContext>
+          <ServiceWorkerContext>
             <AuthSessionProvider>
-              <FavoritesProvider>
-                <main style={{ flex: 1 }}>{children}</main>
-                <Analytics />
-                <SpeedInsights />
-              </FavoritesProvider>
+              <AgeConsentProvider>
+                <FavoritesProvider>
+                  <main style={{ flex: 1 }}>{children}</main>
+                  <Analytics />
+                  <SpeedInsights />
+                </FavoritesProvider>
+              </AgeConsentProvider>
             </AuthSessionProvider>
-            </ServiceWorkerContext>
-          </AgeConsentProvider>
+          </ServiceWorkerContext>
         </ThemeProvider>
       </body>
     </html>

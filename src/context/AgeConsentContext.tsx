@@ -25,17 +25,21 @@ export const AgeConsentProvider = ({
   const [isCheckingSession, setIsCheckingSession] = useState(true);
 
   useEffect(() => {
-    // Check sessionStorage for age confirmation
-    const ageConfirmed = sessionStorage.getItem("isMinimumAgeConfirmed");
-    if (ageConfirmed === "true") {
-      setIsMinimumAgeConfirmed(true);
+    // Check sessionStorage for age confirmation (only on client-side)
+    if (typeof window !== "undefined") {
+      const ageConfirmed = sessionStorage.getItem("isMinimumAgeConfirmed");
+      if (ageConfirmed === "true") {
+        setIsMinimumAgeConfirmed(true);
+      }
     }
     setIsCheckingSession(false); // Ensure the modal doesn't disappear prematurely
   }, []);
 
   const handleAgeConfirmation = (value: boolean) => {
     setIsMinimumAgeConfirmed(value);
-    sessionStorage.setItem("isMinimumAgeConfirmed", value.toString());
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("isMinimumAgeConfirmed", value.toString());
+    }
   };
 
   if (isCheckingSession) {

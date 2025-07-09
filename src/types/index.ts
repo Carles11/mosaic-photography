@@ -59,4 +59,21 @@ export type SwipeGalleryProps = {
   images: { src: string; thumbnail: string; width: number; height: number }[];
 };
 
+// User Profile Types
+export interface UserProfile {
+  id: string;
+  name: string;
+  instagram: string;
+  website: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Favorite {
+  id: string;
+  user_id: string;
+  image_id: string;
+  created_at: string;
+}
+
 declare module "js-cookie";

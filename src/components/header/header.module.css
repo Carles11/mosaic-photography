@@ -136,6 +136,30 @@
   transform: translateY(-1px);
 }
 
+.profileButton {
+  background: var(--primary-color, #007bff);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition:
+    background-color 0.2s,
+    transform 0.1s;
+}
+
+.profileButton:hover {
+  background: var(--primary-hover, #0056b3);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
 .welcomeText {
   color: var(--text-color, #fff);
   font-size: 0.9rem;

@@ -18,7 +18,12 @@ interface HeaderProps {
   onLogoutClick?: () => void;
 }
 
-const Header = ({ showLoginButton = false, onLoginClick, user, onLogoutClick }: HeaderProps) => {
+const Header = ({
+  showLoginButton = false,
+  onLoginClick,
+  user,
+  onLogoutClick,
+}: HeaderProps) => {
   const [showGoProModal, setShowGoProModal] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -60,13 +65,10 @@ const Header = ({ showLoginButton = false, onLoginClick, user, onLogoutClick }: 
                 Go Pro
               </p>
             </div>
-            
+
             <div className={styles.rightActions}>
               {showLoginButton && (
-                <button
-                  className={styles.loginButton}
-                  onClick={onLoginClick}
-                >
+                <button className={styles.loginButton} onClick={onLoginClick}>
                   Login
                 </button>
               )}
@@ -78,10 +80,13 @@ const Header = ({ showLoginButton = false, onLoginClick, user, onLogoutClick }: 
               )}
 
               {user && (
-                <button
-                  className={styles.loginButton}
-                  onClick={onLogoutClick}
-                >
+                <Link href="/profile" className={styles.profileButton}>
+                  Profile
+                </Link>
+              )}
+
+              {user && (
+                <button className={styles.loginButton} onClick={onLogoutClick}>
                   Logout
                 </button>
               )}
