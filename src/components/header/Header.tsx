@@ -35,7 +35,7 @@ const Header = ({
       </h2>
       <nav className={styles.navContainer}>
         <ul className={styles.navGrid}>
-          {isHome && (
+          {isHome ? (
             <li className={styles.navLogo}>
               <Link href="/" className="no-fancy-link">
                 <ThemeImage
@@ -47,6 +47,12 @@ const Header = ({
                   className={styles.themeImage}
                   priority // ensure the image is loaded immediately
                 />
+              </Link>
+            </li>
+          ) : (
+            <li className={styles.navLogo}>
+              <Link href="/" className={styles.backToHomeButton}>
+                ← Back to Home
               </Link>
             </li>
           )}
