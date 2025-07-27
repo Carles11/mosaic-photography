@@ -8,7 +8,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   grid-auto-rows: minmax(225px, auto); /* Allow rows to grow as needed */
-  grid-auto-flow: dense; /* Fill in gaps */
+  grid-auto-flow: dense; /* Fill in gaps for mosaic effect */
   gap: 0.5rem;
   width: 100%;
   height: 100%;

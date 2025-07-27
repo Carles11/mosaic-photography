@@ -94,11 +94,31 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
       });
 
       // Initially set all images as portrait to prevent layout shifts
+      // Add mosaic logic for more dynamic gallery layout
       const initialImages: ImageWithOrientation[] = filteredImages.map(
-        (img) => ({
-          ...img,
-          orientation: "portrait" as const,
-        }),
+        (img, index) => {
+          let mosaicType: "normal" | "large" | "wide" | "tall" = "normal";
+
+          // Create mosaic variations for portrait images with better distribution
+          // Use different intervals for different mosaic types to create more variety
+          const isLargeMosaic = index > 0 && index % 11 === 0; // Every 11th image
+          const isWideMosaic = index > 0 && index % 13 === 7; // Every 13th image, offset by 7
+          const isTallMosaic = index > 0 && index % 17 === 5; // Every 17th image, offset by 5
+
+          if (isLargeMosaic) {
+            mosaicType = "large";
+          } else if (isWideMosaic) {
+            mosaicType = "wide";
+          } else if (isTallMosaic) {
+            mosaicType = "tall";
+          }
+
+          return {
+            ...img,
+            orientation: "portrait" as const,
+            mosaicType,
+          };
+        },
       );
 
       setImages(initialImages.sort(() => Math.random() - 0.5)); // Shuffle images
@@ -135,22 +155,39 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
               wheelToZoom: true,
             }}
           >
-            {images.map((image) => (
-              <div
-                key={image.id}
-                className={`${styles.gridItem} ${
-                  image.orientation === "landscape"
-                    ? styles.landscape
-                    : styles.portrait
-                }`}
-              >
-                <ImageWrapper
-                  image={image}
-                  imgRef={imgRef}
-                  onLoginRequired={onLoginRequired}
-                />
-              </div>
-            ))}
+            {images.map((image) => {
+              // Determine CSS class based on orientation and mosaic type
+              let cssClass = styles.gridItem;
+
+              if (image.orientation === "landscape") {
+                cssClass += ` ${styles.landscape}`;
+              } else {
+                // Portrait image - check for mosaic type (only for portrait images)
+                switch (image.mosaicType) {
+                  case "large":
+                    cssClass += ` ${styles.mosaicLarge}`;
+                    break;
+                  case "wide":
+                    cssClass += ` ${styles.mosaicWide}`;
+                    break;
+                  case "tall":
+                    cssClass += ` ${styles.mosaicTall}`;
+                    break;
+                  default:
+                    cssClass += ` ${styles.portrait}`;
+                }
+              }
+
+              return (
+                <div key={image.id} className={cssClass}>
+                  <ImageWrapper
+                    image={image}
+                    imgRef={imgRef}
+                    onLoginRequired={onLoginRequired}
+                  />
+                </div>
+              );
+            })}
           </PhotoSwipeWrapper>
         </>
       )}

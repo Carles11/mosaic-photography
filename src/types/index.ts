@@ -26,6 +26,7 @@ export interface ImageData {
 
 export type ImageWithOrientation = ImageData & {
   orientation: "landscape" | "portrait";
+  mosaicType?: "normal" | "large" | "wide" | "tall";
 };
 
 export interface Author {

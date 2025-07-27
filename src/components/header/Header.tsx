@@ -53,7 +53,7 @@ const Header = ({
           ) : (
             <li className={styles.navLogo}>
               <Link href="/" className={styles.backToHomeButton}>
-                ← Back to Home
+                ← Return to Mosaic
               </Link>
             </li>
           )}
