@@ -12,22 +12,17 @@ interface ImageWrapperProps {
     title?: string;
   };
   imgRef?: React.RefObject<HTMLImageElement | null>; // Add imgRef property
-  handleLoad?: (e: React.SyntheticEvent<HTMLImageElement>) => void; // Updated parameter name
   onLoginRequired?: () => void; // Callback when user needs to login
 }
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({
   image,
   imgRef,
-  handleLoad,
   onLoginRequired,
 }) => {
   return (
     <div className={`${styles.imageCard} ${styles.imageContainer}`}>
-      <HeartButton 
-        imageId={image.id} 
-        onLoginRequired={onLoginRequired}
-      />
+      <HeartButton imageId={image.id} onLoginRequired={onLoginRequired} />
       <Item
         original={image.url}
         thumbnail={image.url}
@@ -46,7 +41,6 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
             placeholder="blur"
             blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
             loading="lazy"
-            onLoad={handleLoad} // Pass onLoad to handleLoad
             ref={props.ref}
             onClick={props.open}
             // ref={(node) => {
