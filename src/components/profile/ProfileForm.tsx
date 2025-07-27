@@ -276,7 +276,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
 
         <div className={styles.field}>
           <label htmlFor="instagram" className={styles.label}>
-            Instagram Handle
+            Instagram
           </label>
           <div className={styles.inputWrapper}>
             <span className={styles.prefix}>@</span>
