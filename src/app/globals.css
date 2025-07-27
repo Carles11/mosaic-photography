@@ -1,4 +1,5 @@
 /* filepath: /C:/Users/Usuario/Documents/AAA_REPOs/mosaic/styles/globals.css */
+/* Critical CSS only - everything else moved to non-critical.css */
 
 @font-face {
   font-family: "Trade Gothic";
@@ -47,19 +48,10 @@ body {
   --text-color: #1d1d1d;
   --secondary-color: #cccaca;
   --tertiary-color: #fd6c6c;
-
   --text-gradient: linear-gradient(135deg, #4cf6c3 30%, #1faef0 70%);
   --color-white: #fff;
   --color-black: #1d1d1d;
-
   --link-color: rgb(107, 154, 192);
-}
-
-[data-theme="dark"] {
-  --background-color: #1d1d1d;
-  --text-color: #fff;
-  --headfoot-background-gradient: linear-gradient(135deg, #555555, #999999);
-  --secondary-color: #2c106a;
 }
 
 body {
@@ -67,164 +59,14 @@ body {
   flex-direction: column;
   min-height: 100vh; /* Ensure the body takes up the full viewport height */
   margin: 0; /* Remove default margin */
-}
-
-main {
-  flex: 1; /* Allow the main content to grow and fill available space */
-}
-
-header,
-footer {
-  background: transparent;
-}
-
-footer {
-  margin-top: auto;
-}
-
-body {
   position: relative;
   height: 100%;
   font-family: "Trade Gothic", sans-serif;
   font-weight: 400; /* Default weight */
-  margin: 0;
   padding: 0;
   box-sizing: border-box;
   background-color: var(--background-color);
   color: var(--text-color);
-  transition:
-    background-color 0.3s,
-    color 0.3s;
-}
-
-a {
-  font-size: calc(0.9rem + 0.5vw);
-  text-decoration: none;
-  color: var(--text-color);
-  font-weight: 700;
-  position: relative;
-}
-
-a::before {
-  content: "";
-  background-color: var(--link-color);
-  position: absolute;
-  left: 0;
-  bottom: 3px;
-  width: 100%;
-  height: 8px;
-  z-index: -1;
-  transition: all 0.3s ease-in-out;
-}
-
-a:hover::before {
-  bottom: 0;
-  height: 100%;
-}
-
-.no-fancy-link {
-  font-size: unset;
-  text-decoration: unset;
-  color: unset;
-  font-weight: unset;
-  position: unset;
-}
-
-.no-fancy-link::before {
-  content: unset;
-  background-color: unset;
-  position: unset;
-  left: unset;
-  bottom: unset;
-  width: unset;
-  height: unset;
-  z-index: unset;
-  transition: unset;
-}
-
-.no-fancy-link:hover::before {
-  bottom: unset;
-  height: unset;
-}
-
-.fancy-link {
-  text-decoration: none;
-  color: var(--text-color);
-  font-weight: 700;
-  position: relative;
-}
-
-.fancy-link::before {
-  content: "";
-  background-color: var(--link-color);
-  position: absolute;
-  left: 0;
-  bottom: 3px;
-  width: 100%;
-  height: 8px;
-  z-index: -1;
-  transition: all 0.3s ease-in-out;
-}
-
-.fancy-link:hover::before {
-  bottom: 0;
-  height: 100%;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.center-text {
-  text-align: center;
-}
-
-.v-margin {
-  margin: 2rem 0;
-}
-
-h1 {
-  font-size: calc(1.8rem + 1vw); /* Scales with viewport width */
-  font-weight: 700;
-  color: var(--text-color);
-  line-height: 1.2;
-  padding: 0 1rem;
-  margin: 0 0.4rem;
-}
-
-h2 {
-  font-size: calc(1.4rem + 0.8vw); /* Scales with viewport width */
-  font-weight: 700;
-  color: var(--text-color);
-  line-height: 1.3;
-  padding: 0 1rem;
-  margin: 0 0.4rem;
-}
-
-h3 {
-  font-size: calc(1.2rem + 0.8vw); /* Scales with viewport width */
-  font-weight: 500;
-  color: var(--text-color);
-  line-height: 1.3;
-  padding: 0 1rem;
-  margin: 0 0.4rem;
-}
-
-p {
-  font-size: calc(0.9rem + 0.5vw); /* Scales with viewport width */
-  font-weight: 400;
-  color: var(--text-color);
-  line-height: 1.6;
-  padding: 0 1rem;
-  margin: 0.4rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -232,77 +74,4 @@ p {
     background-color: var(--background-color);
     color: var(--text-color);
   }
-}
-
-@media only screen and (max-width: 600px) {
-  .v-margin {
-    margin: 0.5rem 0;
-  }
-  h1 {
-    padding: 0 0.4rem;
-    margin: 0;
-  }
-
-  h2 {
-    padding: 0 0.4rem;
-    margin: 0;
-  }
-
-  p {
-    padding: 0 0.4rem;
-    margin: 0;
-  }
-}
-@media only screen and (max-width: 361px) {
-}
-
-/* Photoswipe Gallery zoom stlyes */
-.pswp__img {
-  object-fit: contain !important;
-}
-
-/* React-slick stlyes */
-
-.slick-dots {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100% !important;
-  height: auto !important;
-  background-color: transparent !important;
-  top: -25px !important;
-  bottom: unset !important;
-}
-
-.slick-dots li {
-  width: fit-content !important;
-  padding-left: 11px !important;
-}
-
-.slick-dots li button {
-  font-size: 22px !important;
-  width: fit-content !important;
-  height: 22px !important;
-  background-color: transparent !important;
-  color: var(--text-color) !important;
-}
-
-.slick-dots li button:before {
-  color: var(--text-color) !important;
-  width: fit-content !important;
-  height: 22px !important;
-}
-
-.slick-next {
-  right: -20px !important;
-}
-.slick-prev {
-  left: -20px !important;
-}
-
-.slick-next:before {
-  color: var(--text-color) !important;
-}
-.slick-prev:before {
-  color: var(--text-color) !important;
 }

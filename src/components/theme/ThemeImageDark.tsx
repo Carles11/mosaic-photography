@@ -23,8 +23,8 @@ const ThemeImage = (props: Props) => {
         ? srcLightMobile
         : srcLight
       : isMobile
-      ? srcDarkMobile
-      : srcDark;
+        ? srcDarkMobile
+        : srcDark;
 
   const dynamicBlurDataBlur = isMobile
     ? "https://dummyimage.com/500x353/000/fff&text=mosaic+photography.png"
@@ -39,7 +39,6 @@ const ThemeImage = (props: Props) => {
       src={src}
       width={width}
       height={height}
-      layout="intrinsic"
       {...rest}
       className={styles.themeImage}
       alt={`${
