@@ -147,6 +147,7 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
       ) : (
         <>
           <PhotoSwipeWrapper
+            images={images} // Pass images array to PhotoSwipeWrapper
             onLoginRequired={onLoginRequired}
             galleryOptions={{
               zoom: true,

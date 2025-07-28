@@ -224,6 +224,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                 {`${photographer.name} ${photographer.surname}`.toUpperCase()}
               </h3>
               <PhotoSwipeWrapper
+                images={photographer.images} // Pass photographer's images array
                 onLoginRequired={onLoginRequired}
                 galleryOptions={{
                   zoom: true,
