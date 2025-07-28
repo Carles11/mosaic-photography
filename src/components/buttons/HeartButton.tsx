@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFavorites } from "@/context/FavoritesContext";
 import styles from "./HeartButton.module.css";
 
@@ -16,16 +16,48 @@ const HeartButton: React.FC<HeartButtonProps> = ({
 }) => {
   const { isFavorite, toggleFavorite, isUserLoggedIn } = useFavorites();
 
+  // Add effect to listen for PhotoSwipe close events and refresh state
+  useEffect(() => {
+    const handlePhotoSwipeClose = (event: CustomEvent) => {
+      if (event.detail?.imageId === imageId) {
+        console.log(
+          "HeartButton: PhotoSwipe closed for image",
+          imageId,
+          "forcing re-check",
+        );
+        // Force a re-render by checking favorite status again
+        // The component will automatically re-render when we call isFavorite
+      }
+    };
+
+    document.addEventListener(
+      "photoswipe-closed",
+      handlePhotoSwipeClose as EventListener,
+    );
+
+    return () => {
+      document.removeEventListener(
+        "photoswipe-closed",
+        handlePhotoSwipeClose as EventListener,
+      );
+    };
+  }, [imageId]);
+
   const handleClick = async (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering image click/zoom
 
-    if (!isUserLoggedIn()) {
-      // User is not logged in, trigger login modal
-      onLoginRequired?.();
-      return;
-    }
+    try {
+      if (!isUserLoggedIn()) {
+        // User is not logged in, trigger login modal
+        onLoginRequired?.();
+        return;
+      }
 
-    await toggleFavorite(imageId);
+      await toggleFavorite(imageId);
+    } catch (error) {
+      console.error("HeartButton: Error toggling favorite:", error);
+      // Optionally show a user-friendly error message
+    }
   };
 
   const isLiked = isFavorite(imageId);

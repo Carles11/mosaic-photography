@@ -7,7 +7,11 @@ if (!supabaseUrl || !supabaseKey) {
   throw new Error("Missing Supabase environment variables.");
 }
 
-console.log("Supabase URL:", supabaseUrl);
+// Only log in development
+if (process.env.NODE_ENV === "development") {
+  console.log("Supabase URL:", supabaseUrl);
+}
+
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
 export type SupabaseUser = User;

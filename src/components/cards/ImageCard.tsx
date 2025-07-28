@@ -147,6 +147,7 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
       ) : (
         <>
           <PhotoSwipeWrapper
+            onLoginRequired={onLoginRequired}
             galleryOptions={{
               zoom: true,
               maxSpreadZoom: 1,

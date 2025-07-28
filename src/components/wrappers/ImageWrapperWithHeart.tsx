@@ -1,10 +1,10 @@
 import React from "react";
 import Image from "next/image";
-import { Item } from "./PhotoSwipeWrapper"; // Import Item from PhotoSwipeWrapper
+import { Item } from "./PhotoSwipeWrapperWithHeart"; // Import Item from PhotoSwipeWrapperWithHeart
 import HeartButton from "@/components/buttons/HeartButton";
 import styles from "./image.module.css";
 
-interface ImageWrapperProps {
+interface ImageWrapperWithHeartProps {
   image: {
     id: string;
     url: string;
@@ -15,25 +15,22 @@ interface ImageWrapperProps {
   onLoginRequired?: () => void; // Callback when user needs to login
 }
 
-const ImageWrapper: React.FC<ImageWrapperProps> = ({
+const ImageWrapperWithHeart: React.FC<ImageWrapperWithHeartProps> = ({
   image,
   imgRef,
   onLoginRequired,
 }) => {
-  // Ensure ID is always a string (database might return number)
-  const imageIdString = String(image.id);
-
   return (
     <div className={`${styles.imageCard} ${styles.imageContainer}`}>
-      <HeartButton imageId={imageIdString} onLoginRequired={onLoginRequired} />
+      <HeartButton imageId={image.id} onLoginRequired={onLoginRequired} />
       <Item
         original={image.url}
         thumbnail={image.url}
         caption={image.author}
         width={imgRef?.current?.naturalWidth} // Use actual width
         height={imgRef?.current?.naturalHeight} // Use actual height
-        id={imageIdString} // Pass image ID to PhotoSwipe for hash navigation and identification
-        alt={imageIdString} // Also pass as alt for fallback access
+        // Pass imageId to PhotoSwipe data
+        data={{ imageId: image.id }}
       >
         {(props) => (
           <Image
@@ -46,13 +43,8 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
             placeholder="blur"
             blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
             loading="lazy"
-            data-image-id={imageIdString} // Add image ID as data attribute for PhotoSwipe
             ref={props.ref}
             onClick={props.open}
-            // ref={(node) => {
-            //   if (node && imgRef?.current !== undefined)
-            //     imgRef.current = node;
-            // }}
           />
         )}
       </Item>
@@ -60,4 +52,4 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   );
 };
 
-export default ImageWrapper;
+export default ImageWrapperWithHeart;

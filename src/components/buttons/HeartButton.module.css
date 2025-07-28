@@ -55,11 +55,14 @@
 
 /* For zoomed/modal view */
 .heartButton.modalView {
-  top: 20px;
-  right: 20px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
   width: 48px;
   height: 48px;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(255, 0, 0, 0.8) !important; /* Temporary red for debugging */
+  z-index: 9999 !important;
+  border: 2px solid yellow !important; /* Temporary border for debugging */
 }
 
 .heartButton.modalView svg {

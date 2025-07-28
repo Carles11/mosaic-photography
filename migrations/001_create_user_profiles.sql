@@ -17,26 +17,29 @@ ALTER TABLE public.user_profiles ENABLE ROW LEVEL SECURITY;
 -- Create policies
 -- Users can view their own profile
 CREATE POLICY "Users can view own profile" ON public.user_profiles
-    FOR SELECT USING (auth.uid() = id);
+    FOR SELECT USING ((select auth.uid()) = id);
 
 -- Users can insert their own profile
 CREATE POLICY "Users can insert own profile" ON public.user_profiles
-    FOR INSERT WITH CHECK (auth.uid() = id);
+    FOR INSERT WITH CHECK ((select auth.uid()) = id);
 
 -- Users can update their own profile
 CREATE POLICY "Users can update own profile" ON public.user_profiles
-    FOR UPDATE USING (auth.uid() = id);
+    FOR UPDATE USING ((select auth.uid()) = id);
 
 -- Users can delete their own profile
 CREATE POLICY "Users can delete own profile" ON public.user_profiles
-    FOR DELETE USING (auth.uid() = id);
+    FOR DELETE USING ((select auth.uid()) = id);
 
 -- Create an index on the primary key for better performance
 CREATE INDEX IF NOT EXISTS user_profiles_id_idx ON public.user_profiles(id);
 
 -- Function to automatically update the updated_at timestamp
 CREATE OR REPLACE FUNCTION public.handle_updated_at()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER 
+SECURITY DEFINER
+SET search_path = public
+AS $$
 BEGIN
     NEW.updated_at = NOW();
     RETURN NEW;

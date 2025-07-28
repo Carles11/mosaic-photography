@@ -27,7 +27,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
   const [selectedPhotographer, setSelectedPhotographer] =
     useState<Photographer | null>(null);
   const [expandedBiography, setExpandedBiography] = useState<number | null>(
-    null
+    null,
   );
 
   const [expandedOrigin, setExpandedOrigin] = useState<number | null>(null);
@@ -43,7 +43,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
           `
           name, surname, author, biography, birthdate, deceasedate, origin, website, store, instagram,
           images (id, url, author, title, description, created_at)
-        `
+        `,
         );
 
       if (error) {
@@ -224,6 +224,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                 {`${photographer.name} ${photographer.surname}`.toUpperCase()}
               </h3>
               <PhotoSwipeWrapper
+                onLoginRequired={onLoginRequired}
                 galleryOptions={{
                   zoom: true,
                   initialZoomLevel: "fill",
@@ -236,8 +237,8 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                 <SliderTyped {...nestedSliderSettings}>
                   {photographer.images.map((image) => (
                     <div key={image.id} className={styles.imageContainer}>
-                      <ImageWrapper 
-                        image={image} 
+                      <ImageWrapper
+                        image={image}
                         imgRef={imgRef}
                         onLoginRequired={onLoginRequired}
                       />
