@@ -4,7 +4,7 @@ import { useFavorites } from "@/context/FavoritesContext";
 import styles from "./HeartButton.module.css";
 
 interface HeartButtonProps {
-  imageId: string;
+  imageId: string | number;
   className?: string;
   onLoginRequired?: () => void; // Callback when user needs to login
 }

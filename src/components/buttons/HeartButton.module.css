@@ -1,7 +1,7 @@
 .heartButton {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 50px;
+  right: 11px;
   background: rgba(0, 0, 0, 0.7);
   border: none;
   border-radius: 50%;
@@ -60,9 +60,7 @@
   right: 0px;
   width: 48px;
   height: 48px;
-  background: rgba(255, 0, 0, 0.8) !important; /* Temporary red for debugging */
-  z-index: 9999 !important;
-  border: 2px solid yellow !important; /* Temporary border for debugging */
+  z-index: 9999;
 }
 
 .heartButton.modalView svg {

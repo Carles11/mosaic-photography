@@ -6,8 +6,8 @@ import { useAuthSession } from "./AuthSessionContext";
 type FavoritesContextType = {
   favorites: Set<string>;
   loading: boolean;
-  toggleFavorite: (imageId: string) => Promise<void>;
-  isFavorite: (imageId: string) => boolean;
+  toggleFavorite: (imageId: string | number) => Promise<void>;
+  isFavorite: (imageId: string | number) => boolean;
   isUserLoggedIn: () => boolean;
 };
 
@@ -47,7 +47,12 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
         if (error) {
           console.error("Error loading favorites:", error);
         } else if (data) {
-          const favoriteIds = new Set(data.map((fav) => fav.image_id));
+          // Convert numeric image_id to string for consistent state management
+          const favoriteIds = new Set(data.map((fav) => String(fav.image_id)));
+          console.log("FavoritesContext: Loaded favorites from database:", {
+            rawData: data,
+            favoriteIds: Array.from(favoriteIds),
+          });
           setFavorites(favoriteIds);
         }
       } catch (error) {
@@ -60,14 +65,26 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     loadFavorites();
   }, [user]); // Only trigger when user changes
 
-  const toggleFavorite = async (imageId: string) => {
+  const toggleFavorite = async (imageId: string | number) => {
     if (!user) {
       console.log("User must be logged in to favorite images");
       return;
     }
 
     try {
-      const isFavorited = favorites.has(imageId);
+      // Convert imageId to number for database operations (since image_id is int8)
+      const numericImageId =
+        typeof imageId === "string" ? parseInt(imageId, 10) : imageId;
+      const stringImageId = String(imageId); // For local state management
+
+      console.log("FavoritesContext: toggleFavorite called with:", {
+        originalImageId: imageId,
+        numericImageId,
+        stringImageId,
+        currentlyFavorited: favorites.has(stringImageId),
+      });
+
+      const isFavorited = favorites.has(stringImageId);
 
       if (isFavorited) {
         // Remove from favorites
@@ -75,14 +92,21 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
           .from("favorites")
           .delete()
           .eq("user_id", user.id)
-          .eq("image_id", imageId);
+          .eq("image_id", numericImageId);
 
         if (error) {
           console.error("Error removing favorite:", error);
         } else {
+          console.log(
+            "FavoritesContext: Successfully removed favorite from database",
+          );
           setFavorites((prev) => {
             const newFavorites = new Set(prev);
-            newFavorites.delete(imageId);
+            newFavorites.delete(stringImageId);
+            console.log(
+              "FavoritesContext: Updated local state, removed:",
+              stringImageId,
+            );
             return newFavorites;
           });
         }
@@ -90,14 +114,21 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
         // Add to favorites
         const { error } = await supabase
           .from("favorites")
-          .insert([{ user_id: user.id, image_id: imageId }]);
+          .insert([{ user_id: user.id, image_id: numericImageId }]);
 
         if (error) {
           console.error("Error adding favorite:", error);
         } else {
+          console.log(
+            "FavoritesContext: Successfully added favorite to database",
+          );
           setFavorites((prev) => {
             const newFavorites = new Set(prev);
-            newFavorites.add(imageId);
+            newFavorites.add(stringImageId);
+            console.log(
+              "FavoritesContext: Updated local state, added:",
+              stringImageId,
+            );
             return newFavorites;
           });
         }
@@ -107,8 +138,8 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const isFavorite = (imageId: string) => {
-    return favorites.has(imageId);
+  const isFavorite = (imageId: string | number) => {
+    return favorites.has(String(imageId));
   };
 
   const isUserLoggedIn = () => {
