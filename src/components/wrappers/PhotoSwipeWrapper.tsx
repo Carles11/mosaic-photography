@@ -27,23 +27,19 @@ const PhotoSwipeWrapper: React.FC<
     }
 
     const slideData = pswpInstance.currSlide.data;
-    console.log("PhotoSwipe: Getting image ID from slide data:", slideData);
 
     // The ID should be in slideData.id (passed from our Item component)
     if (slideData && slideData.id) {
       const imageId = String(slideData.id);
-      console.log("PhotoSwipe: Found image ID in slide data:", imageId);
       return imageId;
     }
 
     // Fallback: try to get from alt attribute
     if (slideData && slideData.alt) {
       const imageId = String(slideData.alt);
-      console.log("PhotoSwipe: Using alt as image ID:", imageId);
       return imageId;
     }
 
-    console.warn("PhotoSwipe: Could not extract image ID from slide data");
     return null;
   };
 
@@ -54,7 +50,6 @@ const PhotoSwipeWrapper: React.FC<
     }
 
     isPhotoSwipeHandlerActive = true;
-    console.log("PhotoSwipe: This instance will handle PhotoSwipe detection");
 
     // Create heart button container when PhotoSwipe opens
     const createHeartButtonContainer = (pswpElement: HTMLElement) => {
@@ -113,19 +108,7 @@ const PhotoSwipeWrapper: React.FC<
         }
       }
 
-      console.log("PhotoSwipe: setupPhotoSwipeListeners called", {
-        pswpElement,
-        pswpInstance: !!pswpInstance,
-        pswpType: pswpInstance ? typeof pswpInstance : "undefined",
-        elementProps: Object.keys(pswpElement).filter((key) =>
-          key.includes("pswp"),
-        ),
-        windowPswp: !!(window as any).pswp,
-      });
-
       if (pswpInstance) {
-        console.log("PhotoSwipe: Found instance, setting up listeners");
-
         // Set initial image ID
         const initialImageId = getImageIdFromPhotoSwipe(pswpInstance);
         if (initialImageId) {
@@ -135,7 +118,6 @@ const PhotoSwipeWrapper: React.FC<
         // Listen for slide changes
         pswpInstance.on("change", () => {
           const newImageId = getImageIdFromPhotoSwipe(pswpInstance);
-          console.log("PhotoSwipe: Slide changed, new image ID:", newImageId);
 
           if (newImageId) {
             setCurrentImageId(newImageId);
@@ -144,7 +126,6 @@ const PhotoSwipeWrapper: React.FC<
 
         // Clean up when PhotoSwipe closes
         pswpInstance.on("destroy", () => {
-          console.log("PhotoSwipe: Modal closing");
           setCurrentImageId(null);
           setPhotoSwipeContainer(null);
         });
@@ -165,8 +146,6 @@ const PhotoSwipeWrapper: React.FC<
             const element = node as Element;
 
             if (element.classList?.contains("pswp")) {
-              console.log("PhotoSwipe: Modal opened");
-
               // Create heart button container
               createHeartButtonContainer(element as HTMLElement);
 
@@ -177,9 +156,6 @@ const PhotoSwipeWrapper: React.FC<
 
               const trySetupListeners = () => {
                 attemptCount++;
-                console.log(
-                  `PhotoSwipe: Attempt ${attemptCount} to setup listeners`,
-                );
 
                 const success = setupPhotoSwipeListeners(
                   element as HTMLElement,
@@ -188,13 +164,6 @@ const PhotoSwipeWrapper: React.FC<
                 if (!success && attemptCount < maxAttempts) {
                   setTimeout(trySetupListeners, attemptInterval);
                 } else if (!success) {
-                  console.warn(
-                    "PhotoSwipe: Failed to setup listeners after all attempts",
-                  );
-                  console.log(
-                    "PhotoSwipe: Using fallback method - showing heart button without instance tracking",
-                  );
-
                   // Fallback: Try to extract image ID from DOM or first image
                   let fallbackImageId = null;
 
@@ -203,29 +172,10 @@ const PhotoSwipeWrapper: React.FC<
                     ".pswp__img",
                   ) as HTMLImageElement;
 
-                  console.log("PhotoSwipe: Fallback - looking for image ID", {
-                    currentImg: !!currentImg,
-                    imgSrc: currentImg?.src,
-                    imgAlt: currentImg?.alt,
-                    dataImageId: currentImg?.dataset?.imageId,
-                    imagesArray: images?.map((img) => ({
-                      id: img.id,
-                      url: img.url,
-                    })),
-                  });
-
                   if (currentImg && currentImg.dataset.imageId) {
                     fallbackImageId = currentImg.dataset.imageId;
-                    console.log(
-                      "PhotoSwipe: Found image ID in dataset:",
-                      fallbackImageId,
-                    );
                   } else if (currentImg && currentImg.alt) {
                     fallbackImageId = currentImg.alt;
-                    console.log(
-                      "PhotoSwipe: Using alt as image ID:",
-                      fallbackImageId,
-                    );
                   } else if (
                     currentImg &&
                     currentImg.src &&
@@ -248,27 +198,15 @@ const PhotoSwipeWrapper: React.FC<
 
                     if (matchingImage) {
                       fallbackImageId = String(matchingImage.id);
-                      console.log(
-                        "PhotoSwipe: Matched image by URL:",
-                        fallbackImageId,
-                      );
                     }
                   }
 
                   if (!fallbackImageId && images && images.length > 0) {
                     // Last resort: use first image ID
                     fallbackImageId = String(images[0].id);
-                    console.log(
-                      "PhotoSwipe: Using first image as fallback:",
-                      fallbackImageId,
-                    );
                   }
 
                   if (fallbackImageId) {
-                    console.log(
-                      "PhotoSwipe: Using fallback image ID:",
-                      fallbackImageId,
-                    );
                     setCurrentImageId(fallbackImageId);
 
                     // Set up responsive checking for slide changes
@@ -282,30 +220,6 @@ const PhotoSwipeWrapper: React.FC<
 
                       // Also try to find all images in the current slide
                       const allImages = element.querySelectorAll(".pswp__img");
-
-                      // Log all images for debugging (only occasionally to avoid spam)
-                      if (Math.random() < 0.2) {
-                        // 20% chance to log
-                        console.log("PhotoSwipe: All images found:", {
-                          totalImages: allImages.length,
-                          images: Array.from(allImages).map((img, index) => {
-                            const imgEl = img as HTMLImageElement;
-                            const rect = imgEl.getBoundingClientRect();
-                            return {
-                              index,
-                              src: imgEl.src
-                                ? imgEl.src.split("/").pop()
-                                : "no-src",
-                              alt: imgEl.alt || "no-alt",
-                              dataImageId:
-                                imgEl.dataset.imageId || "no-data-id",
-                              visible: rect.width > 0 && rect.height > 0,
-                              size: `${Math.round(rect.width)}x${Math.round(rect.height)}`,
-                              position: `x:${Math.round(rect.x)} y:${Math.round(rect.y)}`,
-                            };
-                          }),
-                        });
-                      }
 
                       const visibleImg = Array.from(allImages).find((img) => {
                         const rect = img.getBoundingClientRect();
@@ -351,52 +265,18 @@ const PhotoSwipeWrapper: React.FC<
                         }
                       }
 
-                      // Only log target image selection occasionally or when debugging
-                      // console.log("PhotoSwipe: Selected target image:", {
-                      //   method: visibleImg
-                      //     ? "centered"
-                      //     : targetImg
-                      //       ? "largest"
-                      //       : "fallback",
-                      //   targetSrc: targetImg?.src
-                      //     ? targetImg.src.split("/").pop()
-                      //     : "no-src",
-                      //   targetAlt: targetImg?.alt || "no-alt",
-                      //   targetDataId:
-                      //     targetImg?.dataset?.imageId || "no-data-id",
-                      // });
-
                       let newImageId = null;
 
                       if (targetImg && targetImg.dataset.imageId) {
                         newImageId = targetImg.dataset.imageId;
-                        // console.log(
-                        //   "PhotoSwipe: Found ID via dataset:",
-                        //   newImageId,
-                        // );
                       } else if (targetImg && targetImg.alt) {
                         newImageId = targetImg.alt;
-                        // console.log(
-                        //   "PhotoSwipe: Found ID via alt:",
-                        //   newImageId,
-                        // );
                       } else if (
                         targetImg &&
                         targetImg.src &&
                         images &&
                         images.length > 0
                       ) {
-                        // Only log URL matching when there's actually a change attempt
-                        // console.log("PhotoSwipe: Trying to match by URL:", {
-                        //   targetSrc: targetImg.src.split("/").pop(),
-                        //   availableImages: images.map((img) => ({
-                        //     id: img.id,
-                        //     urlPart: String(img.url || "")
-                        //       .split("/")
-                        //       .pop(),
-                        //   })),
-                        // });
-
                         const matchingImage = images.find(
                           (img) =>
                             targetImg.src.includes(String(img.id)) ||
@@ -412,13 +292,7 @@ const PhotoSwipeWrapper: React.FC<
 
                         if (matchingImage) {
                           newImageId = String(matchingImage.id);
-                          // Only log when we actually find a match
-                          // console.log(
-                          //   "PhotoSwipe: Matched by URL to ID:",
-                          //   newImageId,
-                          // );
                         }
-                        // Remove else logging to prevent spam
                       }
 
                       return {
@@ -450,26 +324,12 @@ const PhotoSwipeWrapper: React.FC<
                         (newImageId && newImageId !== lastImageId) ||
                         (currentImgSrc && currentImgSrc !== lastImageSrc)
                       ) {
-                        console.log("PhotoSwipe: DETECTED SLIDE CHANGE", {
-                          newImageId,
-                          lastImageId,
-                          currentImgSrc: currentImgSrc.split("/").pop(),
-                          lastImageSrc: lastImageSrc.split("/").pop(),
-                          totalImages,
-                          visibleImages,
-                          changeType:
-                            newImageId !== lastImageId
-                              ? "ID_CHANGE"
-                              : "SRC_CHANGE",
-                        });
-
                         if (newImageId) {
                           setCurrentImageId(newImageId);
                           lastImageId = newImageId;
                         }
                         lastImageSrc = currentImgSrc;
                       }
-                      // No else logging - prevents spam when nothing changes
                     };
 
                     // Use more reasonable interval
@@ -529,9 +389,6 @@ const PhotoSwipeWrapper: React.FC<
                     // Listen for keyboard events (more targeted)
                     const handleKeyDown = (e: KeyboardEvent) => {
                       if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-                        console.log(
-                          `PhotoSwipe: ${e.key} pressed, checking immediately`,
-                        );
                         // Check immediately and then again after delays
                         checkForSlideChanges();
                         setTimeout(checkForSlideChanges, 50);
@@ -548,9 +405,6 @@ const PhotoSwipeWrapper: React.FC<
                         mutations.forEach((mutation) => {
                           mutation.removedNodes.forEach((node) => {
                             if (node === element) {
-                              console.log(
-                                "PhotoSwipe: Cleaning up slide detection",
-                              );
                               clearInterval(slideCheckInterval);
                               slideObserver.disconnect();
                               cleanupObserver.disconnect();
@@ -572,7 +426,6 @@ const PhotoSwipeWrapper: React.FC<
                     });
                   } else {
                     // Last resort: show heart button with generic ID
-                    console.log("PhotoSwipe: Using generic fallback ID");
                     setCurrentImageId("unknown");
                   }
                 }
@@ -595,7 +448,6 @@ const PhotoSwipeWrapper: React.FC<
     return () => {
       observer.disconnect();
       isPhotoSwipeHandlerActive = false;
-      console.log("PhotoSwipe: Handler instance unmounted");
     };
   }, []); // No dependencies to prevent re-running
 
@@ -605,23 +457,16 @@ const PhotoSwipeWrapper: React.FC<
         {children}
       </Gallery>
       {/* Render HeartButton when PhotoSwipe modal is open and we have the image ID */}
-      {photoSwipeContainer && currentImageId && (
-        <>
-          {console.log("PhotoSwipe: Rendering HeartButton", {
-            photoSwipeContainer: !!photoSwipeContainer,
-            currentImageId,
-            isPhotoSwipeHandlerActive,
-          })}
-          {createPortal(
-            <HeartButton
-              imageId={currentImageId}
-              onLoginRequired={onLoginRequired}
-              className="modalView"
-            />,
-            photoSwipeContainer,
-          )}
-        </>
-      )}
+      {photoSwipeContainer &&
+        currentImageId &&
+        createPortal(
+          <HeartButton
+            imageId={currentImageId}
+            onLoginRequired={onLoginRequired}
+            className="modalView"
+          />,
+          photoSwipeContainer,
+        )}
     </>
   );
 };

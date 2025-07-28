@@ -49,10 +49,6 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
         } else if (data) {
           // Convert numeric image_id to string for consistent state management
           const favoriteIds = new Set(data.map((fav) => String(fav.image_id)));
-          console.log("FavoritesContext: Loaded favorites from database:", {
-            rawData: data,
-            favoriteIds: Array.from(favoriteIds),
-          });
           setFavorites(favoriteIds);
         }
       } catch (error) {
@@ -67,7 +63,6 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
 
   const toggleFavorite = async (imageId: string | number) => {
     if (!user) {
-      console.log("User must be logged in to favorite images");
       return;
     }
 
@@ -76,13 +71,6 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
       const numericImageId =
         typeof imageId === "string" ? parseInt(imageId, 10) : imageId;
       const stringImageId = String(imageId); // For local state management
-
-      console.log("FavoritesContext: toggleFavorite called with:", {
-        originalImageId: imageId,
-        numericImageId,
-        stringImageId,
-        currentlyFavorited: favorites.has(stringImageId),
-      });
 
       const isFavorited = favorites.has(stringImageId);
 
@@ -97,16 +85,9 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
         if (error) {
           console.error("Error removing favorite:", error);
         } else {
-          console.log(
-            "FavoritesContext: Successfully removed favorite from database",
-          );
           setFavorites((prev) => {
             const newFavorites = new Set(prev);
             newFavorites.delete(stringImageId);
-            console.log(
-              "FavoritesContext: Updated local state, removed:",
-              stringImageId,
-            );
             return newFavorites;
           });
         }
@@ -119,16 +100,9 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
         if (error) {
           console.error("Error adding favorite:", error);
         } else {
-          console.log(
-            "FavoritesContext: Successfully added favorite to database",
-          );
           setFavorites((prev) => {
             const newFavorites = new Set(prev);
             newFavorites.add(stringImageId);
-            console.log(
-              "FavoritesContext: Updated local state, added:",
-              stringImageId,
-            );
             return newFavorites;
           });
         }
