@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 
 import styles from "./AgeConsent.module.css";
@@ -10,6 +10,16 @@ export const AgeConsent = ({
   setIsMinimumAgeConfirmed: (value: boolean) => void;
   isMinimumAgeConfirmed: boolean;
 }) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Don't render until mounted to prevent hydration mismatch
+  if (!isMounted) {
+    return null;
+  }
   return (
     <div
       role="dialog"

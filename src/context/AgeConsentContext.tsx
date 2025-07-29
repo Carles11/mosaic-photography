@@ -43,7 +43,16 @@ export const AgeConsentProvider = ({
   };
 
   if (isCheckingSession) {
-    return null; // Don't render anything until session check is complete
+    return (
+      <AgeConsentContext.Provider
+        value={{
+          isMinimumAgeConfirmed: false,
+          setIsMinimumAgeConfirmed: () => {},
+        }}
+      >
+        {children}
+      </AgeConsentContext.Provider>
+    ); // Provide context even during initial check
   }
 
   return (

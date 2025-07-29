@@ -33,6 +33,11 @@ function HomeClientWrapper({
 }: HomeClientWrapperProps) {
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     // Check for the bot cookie set by the middleware
@@ -43,6 +48,11 @@ function HomeClientWrapper({
       setIsMinimumAgeConfirmed(true); // Automatically confirm age for bots
     }
   }, [setIsMinimumAgeConfirmed]);
+
+  // Don't render until mounted to prevent hydration mismatch
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div className={styles.container}>
