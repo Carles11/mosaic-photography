@@ -2,6 +2,8 @@ import React, { PropsWithChildren, useEffect, useState } from "react";
 import { Gallery, Item } from "react-photoswipe-gallery";
 import { createPortal } from "react-dom";
 import HeartButton from "@/components/buttons/HeartButton";
+import CommentsButton from "@/components/buttons/CommentsButton";
+import CommentsModal from "@/components/modals/comments/CommentsModal";
 import "photoswipe/dist/photoswipe.css";
 
 interface PhotoSwipeWrapperProps {
@@ -19,6 +21,15 @@ const PhotoSwipeWrapper: React.FC<
   const [currentImageId, setCurrentImageId] = useState<string | null>(null);
   const [photoSwipeContainer, setPhotoSwipeContainer] =
     useState<HTMLElement | null>(null);
+  const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
+
+  const handleOpenCommentsModal = () => {
+    setIsCommentsModalOpen(true);
+  };
+
+  const handleCloseCommentsModal = () => {
+    setIsCommentsModalOpen(false);
+  };
 
   // Extract image ID directly from PhotoSwipe's slide data
   const getImageIdFromPhotoSwipe = (pswpInstance: any): string | null => {
@@ -65,16 +76,15 @@ const PhotoSwipeWrapper: React.FC<
         bottom: 20px;
         right: 20px;
         border: none;
-        border-radius: 50%;
-        width: 28px;
-        height: 28px;
+        width: auto;
+        height: auto;
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
         transition: all 0.2s ease;
         z-index: 10;
         backdrop-filter: blur(4px);
+        gap: 10px;
       `;
 
       pswpElement.appendChild(container);
@@ -456,17 +466,34 @@ const PhotoSwipeWrapper: React.FC<
       <Gallery withCaption withDownloadButton options={galleryOptions}>
         {children}
       </Gallery>
-      {/* Render HeartButton when PhotoSwipe modal is open and we have the image ID */}
+      {/* Render HeartButton and CommentsButton when PhotoSwipe modal is open and we have the image ID */}
       {photoSwipeContainer &&
         currentImageId &&
         createPortal(
-          <HeartButton
-            imageId={currentImageId}
-            onLoginRequired={onLoginRequired}
-            className="modalView"
-          />,
+          <>
+            <HeartButton
+              imageId={currentImageId}
+              onLoginRequired={onLoginRequired}
+              className="modalView"
+            />
+            <CommentsButton
+              imageId={currentImageId}
+              onOpenModal={handleOpenCommentsModal}
+              className="modalView"
+            />
+          </>,
           photoSwipeContainer,
         )}
+
+      {/* Comments Modal */}
+      {currentImageId && (
+        <CommentsModal
+          imageId={currentImageId}
+          isOpen={isCommentsModalOpen}
+          onClose={handleCloseCommentsModal}
+          onLoginRequired={onLoginRequired}
+        />
+      )}
     </>
   );
 };

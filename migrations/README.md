@@ -51,6 +51,29 @@ Creates the `favorites` table to store user's favorite images:
 
 Includes RLS policies and proper indexing for performance.
 
+### 003_setup_comments_rls.sql
+
+Sets up Row Level Security (RLS) policies for the `comments` table:
+
+- Enables RLS on the comments table
+- Allows anyone to read comments (public access)
+- Allows only authenticated users to create comments
+- Allows users to edit/delete only their own comments
+- Creates performance indexes
+
+**Note**: This migration assumes the `comments` table already exists. You need to create it manually first:
+
+```sql
+CREATE TABLE IF NOT EXISTS public.comments (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    image_id INT8 NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
 ## Verification
 
 After running the migrations, you can verify they worked by checking:

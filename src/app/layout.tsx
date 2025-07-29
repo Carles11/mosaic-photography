@@ -4,6 +4,7 @@ import { AgeConsentProvider } from "@/context/AgeConsentContext";
 import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
 import { AuthSessionProvider } from "@/context/AuthSessionContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
+import { CommentsProvider } from "@/context/CommentsContext";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
 
 import { GoogleTagManager } from "@next/third-parties/google";
@@ -215,9 +216,11 @@ function RootLayout({ children }: RootLayoutProps) {
             <AuthSessionProvider>
               <AgeConsentProvider>
                 <FavoritesProvider>
-                  <main style={{ flex: 1 }}>{children}</main>
-                  <Analytics />
-                  <SpeedInsights />
+                  <CommentsProvider>
+                    <main style={{ flex: 1 }}>{children}</main>
+                    <Analytics />
+                    <SpeedInsights />
+                  </CommentsProvider>
                 </FavoritesProvider>
               </AgeConsentProvider>
             </AuthSessionProvider>

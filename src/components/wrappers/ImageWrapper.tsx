@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Item } from "./PhotoSwipeWrapper"; // Import Item from PhotoSwipeWrapper
 import HeartButton from "@/components/buttons/HeartButton";
+import CommentsButton from "@/components/buttons/CommentsButton";
+import CommentsModal from "@/components/modals/comments/CommentsModal";
 import styles from "./image.module.css";
 
 interface ImageWrapperProps {
@@ -22,41 +24,67 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
 }) => {
   // Ensure ID is always a string (database might return number)
   const imageIdString = String(image.id);
+  const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
+
+  const handleOpenCommentsModal = () => {
+    setIsCommentsModalOpen(true);
+  };
+
+  const handleCloseCommentsModal = () => {
+    setIsCommentsModalOpen(false);
+  };
 
   return (
-    <div className={`${styles.imageCard} ${styles.imageContainer}`}>
-      <HeartButton imageId={imageIdString} onLoginRequired={onLoginRequired} />
-      <Item
-        original={image.url}
-        thumbnail={image.url}
-        caption={image.author}
-        width={imgRef?.current?.naturalWidth} // Use actual width
-        height={imgRef?.current?.naturalHeight} // Use actual height
-        id={imageIdString} // Pass image ID to PhotoSwipe for hash navigation and identification
-        alt={imageIdString} // Also pass as alt for fallback access
-      >
-        {(props) => (
-          <Image
-            src={image.url}
-            alt={image.title || "Gallery Image"}
-            className={`${styles.imageItem} ${styles.image}`}
-            width={imgRef?.current?.naturalWidth || 300} // Use actual width
-            height={imgRef?.current?.naturalHeight || 200} // Use actual height
-            sizes="(max-width: 600px) 100vw, 50vw"
-            placeholder="blur"
-            blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
-            loading="lazy"
-            data-image-id={imageIdString} // Add image ID as data attribute for PhotoSwipe
-            ref={props.ref}
-            onClick={props.open}
-            // ref={(node) => {
-            //   if (node && imgRef?.current !== undefined)
-            //     imgRef.current = node;
-            // }}
-          />
-        )}
-      </Item>
-    </div>
+    <>
+      <div className={`${styles.imageCard} ${styles.imageContainer}`}>
+        <HeartButton
+          imageId={imageIdString}
+          onLoginRequired={onLoginRequired}
+        />
+        <CommentsButton
+          imageId={imageIdString}
+          onOpenModal={handleOpenCommentsModal}
+        />
+        <Item
+          original={image.url}
+          thumbnail={image.url}
+          caption={image.author}
+          width={imgRef?.current?.naturalWidth} // Use actual width
+          height={imgRef?.current?.naturalHeight} // Use actual height
+          id={imageIdString} // Pass image ID to PhotoSwipe for hash navigation and identification
+          alt={imageIdString} // Also pass as alt for fallback access
+        >
+          {(props) => (
+            <Image
+              src={image.url}
+              alt={image.title || "Gallery Image"}
+              className={`${styles.imageItem} ${styles.image}`}
+              width={imgRef?.current?.naturalWidth || 300} // Use actual width
+              height={imgRef?.current?.naturalHeight || 200} // Use actual height
+              sizes="(max-width: 600px) 100vw, 50vw"
+              placeholder="blur"
+              blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
+              loading="lazy"
+              data-image-id={imageIdString} // Add image ID as data attribute for PhotoSwipe
+              ref={props.ref}
+              onClick={props.open}
+              // ref={(node) => {
+              //   if (node && imgRef?.current !== undefined)
+              //     imgRef.current = node;
+              // }}
+            />
+          )}
+        </Item>
+      </div>
+
+      {/* Comments Modal */}
+      <CommentsModal
+        imageId={imageIdString}
+        isOpen={isCommentsModalOpen}
+        onClose={handleCloseCommentsModal}
+        onLoginRequired={onLoginRequired}
+      />
+    </>
   );
 };
 

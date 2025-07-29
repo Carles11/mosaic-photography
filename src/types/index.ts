@@ -77,4 +77,26 @@ export interface Favorite {
   created_at: string;
 }
 
+// Comment Types
+export interface Comment {
+  id: string;
+  user_id: string;
+  image_id: string;
+  content: string;
+  created_at: string;
+  updated_at?: string;
+  user_email?: string; // For display purposes, fetched via join
+}
+
+export interface CommentFormData {
+  content: string;
+}
+
+export type CommentsModalProps = {
+  imageId: string;
+  isOpen: boolean;
+  onClose: () => void;
+  onLoginRequired?: () => void;
+};
+
 declare module "js-cookie";

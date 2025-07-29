@@ -1,0 +1,149 @@
+.commentForm {
+  background: var(--background-secondary, #fff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.inputGroup {
+  margin-bottom: 0.75rem;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: vertical;
+  background: var(--input-background, white);
+  color: var(--text-color, #333);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--primary-color, #007bff);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.textarea:disabled {
+  background: var(--disabled-background, #f8f9fa);
+  color: var(--text-muted, #6c757d);
+  cursor: not-allowed;
+}
+
+.textarea::placeholder {
+  color: var(--text-muted, #6c757d);
+}
+
+.error {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(220, 53, 69, 0.1);
+  border-radius: 4px;
+  border-left: 3px solid #dc3545;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submitSection {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.submitButton,
+.clearButton,
+.loginButton {
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+}
+
+.submitButton {
+  background: var(--primary-color, #007bff);
+  color: white;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: var(--primary-hover, #0056b3);
+  transform: translateY(-1px);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.clearButton {
+  background: var(--secondary-color, #6c757d);
+  color: white;
+}
+
+.clearButton:hover:not(:disabled) {
+  background: var(--secondary-hover, #545b62);
+}
+
+.clearButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loginButton {
+  background: var(--accent-color, #28a745);
+  color: white;
+  min-width: 150px;
+}
+
+.loginButton:hover {
+  background: var(--accent-hover, #218838);
+  transform: translateY(-1px);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .commentForm {
+    padding: 0.75rem;
+  }
+
+  .textarea {
+    padding: 0.625rem;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .submitSection {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .submitButton,
+  .clearButton,
+  .loginButton {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+}
