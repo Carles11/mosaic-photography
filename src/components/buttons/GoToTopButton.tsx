@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 
 const Tooltip = dynamic(
   () => import("react-tooltip").then((mod) => mod.Tooltip),
-  { ssr: false } // Disable server-side rendering
+  { ssr: false }, // Disable server-side rendering
 );
 
 import styles from "./goToTopButton.module.css";
@@ -26,7 +26,10 @@ const GoToTopButton = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
