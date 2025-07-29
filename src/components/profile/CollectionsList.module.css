@@ -178,7 +178,8 @@
 }
 
 .editButton,
-.deleteButton {
+.deleteButton,
+.viewButton {
   width: 32px;
   height: 32px;
   border: none;
@@ -189,6 +190,16 @@
   justify-content: center;
   font-size: 0.875rem;
   transition: all 0.2s ease;
+}
+
+.viewButton {
+  background: var(--background-secondary);
+  color: var(--foreground-muted);
+}
+
+.viewButton:hover {
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
 }
 
 .editButton {

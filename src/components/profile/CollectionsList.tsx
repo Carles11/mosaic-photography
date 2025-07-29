@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { Collection } from "@/types";
@@ -14,6 +15,7 @@ export interface CollectionsListRef {
 
 const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   const { user } = useAuthSession();
+  const router = useRouter();
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -195,6 +197,15 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
               <div className={styles.cardHeader}>
                 <h4 className={styles.collectionName}>{collection.name}</h4>
                 <div className={styles.cardActions}>
+                  <button
+                    onClick={() =>
+                      router.push(`/profile/collections/${collection.id}`)
+                    }
+                    className={styles.viewButton}
+                    title="View collection"
+                  >
+                    👁️
+                  </button>
                   <button
                     onClick={() => setEditingCollection(collection)}
                     className={styles.editButton}
