@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { CommentsModalProps } from "@/types";
 import { useComments } from "@/context/CommentsContext";
 import { useAuthSession } from "@/context/AuthSessionContext";
@@ -54,7 +55,7 @@ const CommentsModal: React.FC<CommentsModalProps> = ({
     }
   };
 
-  return (
+  const modalContent = (
     <div className={styles.modalOverlay} onClick={handleBackdropClick}>
       <div className={styles.modalContent}>
         <div className={styles.modalHeader}>
@@ -107,6 +108,11 @@ const CommentsModal: React.FC<CommentsModalProps> = ({
       </div>
     </div>
   );
+
+  // Use portal to render modal at document body level to avoid container overflow issues
+  return typeof window !== "undefined"
+    ? createPortal(modalContent, document.body)
+    : null;
 };
 
 export default CommentsModal;

@@ -36,7 +36,7 @@
   position: absolute;
   top: -5px;
   right: -5px;
-  background: #ff4444;
+  background: var(--tertiary-color, #dc3545);
   color: white;
   border-radius: 10px;
   min-width: 18px;
@@ -68,7 +68,7 @@
 }
 
 .modalView .badge {
-  background: #ff4444;
+  background: var(--tertiary-color, #dc3545);
   border: 2px solid rgba(255, 255, 255, 0.8);
 }
 

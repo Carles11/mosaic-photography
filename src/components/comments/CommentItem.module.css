@@ -59,6 +59,7 @@
   line-height: 1.5;
   color: var(--text-color, #333);
   word-wrap: break-word;
+  font-size: medium;
   white-space: pre-wrap; /* Preserve line breaks */
 }
 
@@ -78,7 +79,7 @@
   font-size: 0.9rem;
   resize: vertical;
   background: var(--input-background, white);
-  color: var(--text-color, #333);
+  color: var(--secondary-color, #333);
 }
 
 .editTextarea:focus {

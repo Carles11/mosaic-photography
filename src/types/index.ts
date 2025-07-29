@@ -99,4 +99,39 @@ export type CommentsModalProps = {
   onLoginRequired?: () => void;
 };
 
+export interface UserCommentWithImage extends Comment {
+  image_title?: string;
+  image_url?: string;
+  image_author?: string;
+}
+
+// Collections Types
+export interface Collection {
+  id: string;
+  user_id: string;
+  name: string;
+  description?: string;
+  privacy: "private" | "public";
+  created_at: string;
+  image_count?: number; // Computed field for display
+  preview_images?: string[]; // First 4 image URLs for preview
+}
+
+export interface CollectionFavorite {
+  collection_id: string;
+  favorite_id: number;
+  added_at: string;
+}
+
+export interface CollectionWithImages extends Collection {
+  images: Array<{
+    favorite_id: number;
+    image_id: string;
+    image_url: string;
+    image_title: string;
+    image_author: string;
+    added_at: string;
+  }>;
+}
+
 declare module "js-cookie";

@@ -53,7 +53,7 @@
 .section {
   margin-bottom: 2.5rem;
   padding: 1.5rem;
-  background: var(--background-tertiary, #f8f9fa);
+  background: var(--background-color, #f8f9fa);
   border-radius: 8px;
   border: 1px solid var(--border-color, #e0e0e0);
 }
@@ -62,7 +62,7 @@
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: var(--text-primary, #333);
+  color: var(--text-color, #333);
   border-bottom: 2px solid var(--primary-color, #007bff);
   padding-bottom: 0.5rem;
 }
@@ -80,7 +80,7 @@
 }
 
 .form {
-  background: var(--background-secondary, #fff);
+  background: var(--background-color, #fff);
   padding: 2rem;
   border-radius: 8px;
   border: 1px solid var(--border-color, #e0e0e0);
@@ -95,7 +95,7 @@
   display: block;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: var(--text-primary, #333);
+  color: var(--text-color, #333);
 }
 
 .infoItem .label {
@@ -105,7 +105,7 @@
 
 .value {
   font-weight: 500;
-  color: var(--text-primary, #333);
+  color: var(--text-color, #333);
 }
 
 .input {
@@ -118,7 +118,7 @@
     border-color 0.3s ease,
     box-shadow 0.3s ease;
   background: var(--background-secondary, #fff);
-  color: var(--text-primary, #333);
+  color: var(--text-color, #333);
 }
 
 .input:focus {

@@ -1,0 +1,287 @@
+"use client";
+
+import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { useAuthSession } from "@/context/AuthSessionContext";
+import { Collection } from "@/types";
+import CreateCollectionModal from "./CreateCollectionModal";
+import EditCollectionModal from "./EditCollectionModal";
+import styles from "./CollectionsList.module.css";
+
+export interface CollectionsListRef {
+  refreshCollections: () => void;
+}
+
+const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
+  const { user } = useAuthSession();
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [editingCollection, setEditingCollection] = useState<Collection | null>(
+    null,
+  );
+
+  // Expose refresh function to parent components
+  useImperativeHandle(ref, () => ({
+    refreshCollections: loadCollections,
+  }));
+
+  const loadCollections = async () => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Get collections with image counts
+      const { data: collectionsData, error: collectionsError } = await supabase
+        .from("collections")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (collectionsError) {
+        console.error("Error loading collections:", collectionsError);
+        if (collectionsError.code === "42P01") {
+          console.warn("collections table doesn't exist yet");
+        }
+        return;
+      }
+
+      if (collectionsData) {
+        // For each collection, get the count and preview images
+        const collectionsWithCounts = await Promise.all(
+          collectionsData.map(async (collection) => {
+            // Get image count
+            const { count } = await supabase
+              .from("collection_favorites")
+              .select("*", { count: "exact", head: true })
+              .eq("collection_id", collection.id);
+
+            // Get preview images (first 4)
+            const { data: previewData } = await supabase
+              .from("collection_favorites")
+              .select(
+                `
+                favorites!inner(
+                  images!inner(url)
+                )
+              `,
+              )
+              .eq("collection_id", collection.id)
+              .order("added_at", { ascending: false })
+              .limit(4);
+
+            const preview_images =
+              previewData?.map((item: any) => item.favorites.images.url) || [];
+
+            return {
+              ...collection,
+              image_count: count || 0,
+              preview_images,
+            };
+          }),
+        );
+
+        setCollections(collectionsWithCounts);
+      }
+    } catch (error) {
+      console.error("Error loading collections:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCollections();
+  }, [user]);
+
+  const handleCreateCollection = (newCollection: Collection) => {
+    setCollections((prev) => [
+      { ...newCollection, image_count: 0, preview_images: [] },
+      ...prev,
+    ]);
+    setShowCreateModal(false);
+  };
+
+  const handleEditCollection = (updatedCollection: Collection) => {
+    setCollections((prev) =>
+      prev.map((col) =>
+        col.id === updatedCollection.id
+          ? { ...col, ...updatedCollection }
+          : col,
+      ),
+    );
+    setEditingCollection(null);
+  };
+
+  const handleDeleteCollection = async (collectionId: string) => {
+    if (
+      !confirm(
+        "Are you sure you want to delete this collection? This action cannot be undone.",
+      )
+    ) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("collections")
+        .delete()
+        .eq("id", collectionId);
+
+      if (error) {
+        console.error("Error deleting collection:", error);
+        alert("Failed to delete collection. Please try again.");
+      } else {
+        setCollections((prev) => prev.filter((col) => col.id !== collectionId));
+      }
+    } catch (error) {
+      console.error("Error deleting collection:", error);
+      alert("Failed to delete collection. Please try again.");
+    }
+  };
+
+  if (!user) {
+    return null;
+  }
+
+  if (loading) {
+    return (
+      <div className={styles.loading}>
+        <div className={styles.spinner}></div>
+        <p>Loading collections...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.headerContent}>
+          <h3 className={styles.title}>
+            My Collections ({collections.length})
+          </h3>
+          <p className={styles.subtitle}>
+            Organize your favorite images into themed collections
+          </p>
+        </div>
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className={styles.createButton}
+        >
+          <span className={styles.plusIcon}>+</span>
+          New Collection
+        </button>
+      </div>
+
+      {collections.length === 0 ? (
+        <div className={styles.emptyState}>
+          <div className={styles.emptyIcon}>📚</div>
+          <h3>No collections yet</h3>
+          <p>Create your first collection to organize your favorite images</p>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className={styles.emptyCreateButton}
+          >
+            Create Collection
+          </button>
+        </div>
+      ) : (
+        <div className={styles.grid}>
+          {collections.map((collection) => (
+            <div key={collection.id} className={styles.collectionCard}>
+              <div className={styles.cardHeader}>
+                <h4 className={styles.collectionName}>{collection.name}</h4>
+                <div className={styles.cardActions}>
+                  <button
+                    onClick={() => setEditingCollection(collection)}
+                    className={styles.editButton}
+                    title="Edit collection"
+                  >
+                    ✏️
+                  </button>
+                  <button
+                    onClick={() => handleDeleteCollection(collection.id)}
+                    className={styles.deleteButton}
+                    title="Delete collection"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </div>
+
+              <div className={styles.previewContainer}>
+                {collection.preview_images &&
+                collection.preview_images.length > 0 ? (
+                  <div className={styles.imageGrid}>
+                    {collection.preview_images
+                      .slice(0, 4)
+                      .map((imageUrl, index) => (
+                        <div key={index} className={styles.previewImage}>
+                          <img
+                            src={imageUrl}
+                            alt={`Preview ${index + 1}`}
+                            loading="lazy"
+                          />
+                        </div>
+                      ))}
+                  </div>
+                ) : (
+                  <div className={styles.emptyPreview}>
+                    <span className={styles.emptyPreviewIcon}>📷</span>
+                    <p>No images yet</p>
+                  </div>
+                )}
+              </div>
+
+              <div className={styles.cardFooter}>
+                <div className={styles.collectionInfo}>
+                  <span className={styles.imageCount}>
+                    {collection.image_count}{" "}
+                    {collection.image_count === 1 ? "image" : "images"}
+                  </span>
+                  <span
+                    className={`${styles.privacyBadge} ${styles[collection.privacy]}`}
+                  >
+                    {collection.privacy === "private" ? "🔒" : "🌐"}{" "}
+                    {collection.privacy}
+                  </span>
+                </div>
+                {collection.description && (
+                  <p className={styles.description}>{collection.description}</p>
+                )}
+                <span className={styles.createdDate}>
+                  Created {new Date(collection.created_at).toLocaleDateString()}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Modals */}
+      {showCreateModal && (
+        <CreateCollectionModal
+          isOpen={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+          onCreateCollection={handleCreateCollection}
+        />
+      )}
+
+      {editingCollection && (
+        <EditCollectionModal
+          isOpen={!!editingCollection}
+          collection={editingCollection}
+          onClose={() => setEditingCollection(null)}
+          onUpdateCollection={handleEditCollection}
+        />
+      )}
+    </div>
+  );
+});
+
+CollectionsList.displayName = "CollectionsList";
+
+export default CollectionsList;

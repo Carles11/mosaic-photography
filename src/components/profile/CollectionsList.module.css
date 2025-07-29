@@ -1,0 +1,345 @@
+.container {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.headerContent {
+  flex: 1;
+  min-width: 200px;
+}
+
+.title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--foreground-muted);
+  line-height: 1.4;
+}
+
+.createButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.createButton:hover {
+  background: var(--button-primary-hover);
+  transform: translateY(-1px);
+}
+
+.plusIcon {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  gap: 1rem;
+  color: var(--foreground-muted);
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border-color);
+  border-top: 3px solid var(--button-primary-bg);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  background: var(--card-background);
+  border: 2px dashed var(--border-color);
+  border-radius: 12px;
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.emptyState h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: var(--secondary-color);
+}
+
+.emptyState p {
+  margin: 0 0 1.5rem 0;
+  color: var(--secondary-color);
+  max-width: 300px;
+}
+
+.emptyCreateButton {
+  padding: 0.75rem 1.5rem;
+  background: var(--tertiary-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.emptyCreateButton:hover {
+  background: var(--secondary-color);
+  transform: translateY(-1px);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.collectionCard {
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  height: fit-content;
+}
+
+.collectionCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--button-primary-bg);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1rem 0.5rem 1rem;
+}
+
+.collectionName {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+.cardActions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.editButton,
+.deleteButton {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.editButton {
+  background: var(--background-secondary);
+  color: var(--foreground-muted);
+}
+
+.editButton:hover {
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+}
+
+.deleteButton {
+  background: var(--background-secondary);
+  color: var(--foreground-muted);
+}
+
+.deleteButton:hover {
+  background: #dc3545;
+  color: white;
+}
+
+.previewContainer {
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 1;
+  background: var(--background-secondary);
+}
+
+.previewImage {
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.previewImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.previewImage:hover img {
+  transform: scale(1.05);
+}
+
+.emptyPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  background: var(--background-secondary);
+  border-radius: 8px;
+  color: var(--foreground-muted);
+}
+
+.emptyPreviewIcon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.emptyPreview p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.cardFooter {
+  padding: 0 1rem 1rem 1rem;
+}
+
+.collectionInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.imageCount {
+  font-size: 0.875rem;
+  color: var(--foreground-muted);
+  font-weight: 500;
+}
+
+.privacyBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.privacyBadge.private {
+  background: rgba(108, 117, 125, 0.1);
+  color: #6c757d;
+}
+
+.privacyBadge.public {
+  background: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+.description {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  color: var(--foreground-muted);
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.createdDate {
+  font-size: 0.75rem;
+  color: var(--foreground-muted);
+  opacity: 0.7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .createButton {
+    align-self: flex-start;
+  }
+
+  .collectionInfo {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

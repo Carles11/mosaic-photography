@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase, SupabaseUser } from "@/lib/supabaseClient";
 import { useFavorites } from "@/context/FavoritesContext";
 import type { UserProfile } from "@/types";
 import FavoritesList from "./FavoritesList";
+import UserCommentsList from "./UserCommentsList";
+import CollectionsList, { type CollectionsListRef } from "./CollectionsList";
 import styles from "./ProfileForm.module.css";
 
 interface ProfileFormProps {
@@ -13,6 +15,7 @@ interface ProfileFormProps {
 
 export default function ProfileForm({ user }: ProfileFormProps) {
   const { favorites } = useFavorites();
+  const collectionsListRef = useRef<CollectionsListRef>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -28,6 +31,10 @@ export default function ProfileForm({ user }: ProfileFormProps) {
   });
 
   const [databaseError, setDatabaseError] = useState(false);
+
+  const handleCollectionRefresh = () => {
+    collectionsListRef.current?.refreshCollections();
+  };
 
   const createInitialProfile = useCallback(async () => {
     // Don't try to create profile if we know the database table doesn't exist
@@ -324,8 +331,18 @@ export default function ProfileForm({ user }: ProfileFormProps) {
       </form>
 
       <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Favorites Collection</h2>
-        <FavoritesList />
+        <h2 className={styles.sectionTitle}>Favorites</h2>
+        <FavoritesList onCollectionUpdate={handleCollectionRefresh} />
+      </div>
+
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>Collections</h2>
+        <CollectionsList ref={collectionsListRef} />
+      </div>
+
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>Comments</h2>
+        <UserCommentsList />
       </div>
     </div>
   );
