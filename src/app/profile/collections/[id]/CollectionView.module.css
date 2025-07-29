@@ -257,6 +257,12 @@
   transform: rotate(5deg);
 }
 
+.imageCard.dragOver {
+  border-color: var(--primary-color, #007bff);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+  transform: scale(1.02);
+}
+
 .selectCheckbox {
   position: absolute;
   top: 0.75rem;

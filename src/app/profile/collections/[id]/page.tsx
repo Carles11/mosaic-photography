@@ -24,6 +24,7 @@ export default function CollectionView() {
   const [selectedImages, setSelectedImages] = useState<Set<number>>(new Set());
   const [isReordering, setIsReordering] = useState(false);
   const [draggedItem, setDraggedItem] = useState<number | null>(null);
+  const [dragOverItem, setDragOverItem] = useState<number | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
 
@@ -434,19 +435,57 @@ export default function CollectionView() {
 
   const handleDragStart = (e: React.DragEvent, favoriteId: number) => {
     if (!isReordering) return;
+
     setDraggedItem(favoriteId);
     e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", favoriteId.toString());
+
+    // Add some visual feedback
+    const target = e.target as HTMLElement;
+    target.style.opacity = "0.5";
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragEnd = (e: React.DragEvent) => {
     if (!isReordering) return;
+
+    // Reset visual state
+    const target = e.target as HTMLElement;
+    target.style.opacity = "1";
+
+    setDraggedItem(null);
+    setDragOverItem(null);
+  };
+
+  const handleDragOver = (e: React.DragEvent, favoriteId: number) => {
+    if (!isReordering || !draggedItem) return;
+
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
+
+    // Only update if we're over a different item
+    if (favoriteId !== draggedItem && favoriteId !== dragOverItem) {
+      setDragOverItem(favoriteId);
+    }
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    if (!isReordering) return;
+
+    // Only clear dragOverItem if we're leaving the container entirely
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const x = e.clientX;
+    const y = e.clientY;
+
+    if (x < rect.left || x >= rect.right || y < rect.top || y >= rect.bottom) {
+      setDragOverItem(null);
+    }
   };
 
   const handleDrop = async (e: React.DragEvent, targetFavoriteId: number) => {
     if (!isReordering || !draggedItem || !collection || !user) return;
+
     e.preventDefault();
+    setDragOverItem(null);
 
     if (draggedItem === targetFavoriteId) {
       setDraggedItem(null);
@@ -665,10 +704,15 @@ export default function CollectionView() {
                   selectedImages.has(image.favorite_id) ? styles.selected : ""
                 } ${isReordering ? styles.reordering : ""} ${
                   draggedItem === image.favorite_id ? styles.dragging : ""
-                }`}
+                } ${dragOverItem === image.favorite_id ? styles.dragOver : ""}`}
                 draggable={isReordering}
                 onDragStart={(e) => handleDragStart(e, image.favorite_id)}
-                onDragOver={handleDragOver}
+                onDragEnd={handleDragEnd}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setDragOverItem(image.favorite_id);
+                }}
+                onDragLeave={handleDragLeave}
                 onDrop={(e) => handleDrop(e, image.favorite_id)}
               >
                 {collection.user_id === user?.id && (

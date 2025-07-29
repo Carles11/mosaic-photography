@@ -152,10 +152,6 @@ export default function AddToCollectionModal({
       if (onAddToCollection) {
         onAddToCollection(collectionId);
       }
-
-      // Show success message
-      const collection = collections.find((c) => c.id === collectionId);
-      alert(`Added "${imageTitle}" to "${collection?.name}"!`);
     } catch (error) {
       console.error("Error adding to collection:", error);
       alert("Failed to add image to collection. Please try again.");
