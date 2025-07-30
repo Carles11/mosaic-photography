@@ -63,7 +63,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
       setIsLoading(false);
     }
   };
-
   return (
     <div className={styles.commentItem}>
       <div className={styles.commentHeader}>

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import styles from "./SignUpForm.module.css";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
@@ -9,14 +10,22 @@ interface SignupFormProps {
   initialEmail?: string;
   onEmailChange?: (email: string) => void;
   onSuccess?: () => void;
+  redirectTo?: string;
 }
 
-export default function SignupForm({ onSwitchToLogin, initialEmail, onEmailChange, onSuccess }: SignupFormProps) {
+export default function SignupForm({
+  onSwitchToLogin,
+  initialEmail,
+  onEmailChange,
+  onSuccess,
+  redirectTo = "/auth/login?message=check-email",
+}: SignupFormProps) {
   const [email, setEmail] = useState(initialEmail || "");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +40,14 @@ export default function SignupForm({ onSwitchToLogin, initialEmail, onEmailChang
       setError(error.message);
     } else {
       setSuccess("Check your email for a confirmation link!");
-      onSuccess?.();
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        // Redirect to login with success message after 2 seconds
+        setTimeout(() => {
+          router.push(redirectTo);
+        }, 2000);
+      }
     }
     setLoading(false);
   };
@@ -46,7 +62,7 @@ export default function SignupForm({ onSwitchToLogin, initialEmail, onEmailChang
           placeholder="Email"
           value={email}
           autoComplete="email"
-          onChange={e => {
+          onChange={(e) => {
             setEmail(e.target.value);
             onEmailChange?.(e.target.value);
           }}
@@ -58,7 +74,7 @@ export default function SignupForm({ onSwitchToLogin, initialEmail, onEmailChang
           placeholder="Password"
           value={password}
           autoComplete="new-password"
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
         {error && <div className={styles.error}>{error}</div>}
@@ -72,6 +88,7 @@ export default function SignupForm({ onSwitchToLogin, initialEmail, onEmailChang
           />
         </div>
       </form>
+      {/* Only show internal links when used in modal (when callback is provided) */}
       {onSwitchToLogin && (
         <div className={styles.linksRow}>
           <span>

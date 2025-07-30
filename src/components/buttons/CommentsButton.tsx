@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useComments } from "@/context/CommentsContext";
 import styles from "./CommentsButton.module.css";
 
@@ -15,21 +15,27 @@ const CommentsButton: React.FC<CommentsButtonProps> = ({
   className = "",
   onOpenModal,
 }) => {
-  const { getCommentCount, loadCommentsForImage } = useComments();
-  const [commentCount, setCommentCount] = useState(0);
+  const { getCommentCount, loadCommentCount, loadCommentsForImage } =
+    useComments();
 
+  // Load lightweight comment count on mount to show badge
   useEffect(() => {
-    // Load comments for this image when component mounts
-    loadCommentsForImage(imageId);
-  }, [imageId, loadCommentsForImage]);
+    // Use a small random delay to spread out requests when many buttons mount
+    const timeoutId = setTimeout(() => {
+      loadCommentCount(imageId);
+    }, Math.random() * 200); // Random delay between 0-200ms
 
-  useEffect(() => {
-    // Update comment count when comments change
-    setCommentCount(getCommentCount(imageId));
-  }, [imageId, getCommentCount]);
+    return () => clearTimeout(timeoutId);
+  }, [imageId, loadCommentCount]);
 
-  const handleClick = (e: React.MouseEvent) => {
+  // Get comment count for badge display
+  const commentCount = getCommentCount(imageId);
+
+  const handleClick = async (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent triggering image click/zoom
+
+    // Load full comments when user actually wants to see them
+    await loadCommentsForImage(imageId);
     onOpenModal();
   };
 
@@ -37,8 +43,8 @@ const CommentsButton: React.FC<CommentsButtonProps> = ({
     <button
       className={`${styles.commentsButton} ${className}`}
       onClick={handleClick}
-      aria-label={`View comments (${commentCount})`}
-      title={`View comments (${commentCount})`}
+      aria-label={`View comments${commentCount > 0 ? ` (${commentCount})` : ""}`}
+      title={`View comments${commentCount > 0 ? ` (${commentCount})` : ""}`}
     >
       <svg
         width="24"

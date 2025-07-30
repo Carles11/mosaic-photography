@@ -11,9 +11,17 @@ interface LoginFormProps {
   onEmailChange?: (email: string) => void;
   initialEmail?: string;
   onSuccess?: () => void;
+  redirectTo?: string;
 }
 
-export default function LoginForm({ onSwitchToSignup, onForgotPassword, onEmailChange, initialEmail, onSuccess }: LoginFormProps) {
+export default function LoginForm({
+  onSwitchToSignup,
+  onForgotPassword,
+  onEmailChange,
+  initialEmail,
+  onSuccess,
+  redirectTo = "/",
+}: LoginFormProps) {
   const [email, setEmail] = useState(initialEmail || "");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +39,11 @@ export default function LoginForm({ onSwitchToSignup, onForgotPassword, onEmailC
     if (error) {
       setError(error.message);
     } else {
-      onSuccess?.();
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        router.push(redirectTo);
+      }
     }
     setLoading(false);
   };
@@ -47,7 +59,7 @@ export default function LoginForm({ onSwitchToSignup, onForgotPassword, onEmailC
           placeholder="Email"
           value={email}
           autoComplete="email"
-          onChange={e => {
+          onChange={(e) => {
             setEmail(e.target.value);
             onEmailChange?.(e.target.value);
           }}
@@ -60,7 +72,7 @@ export default function LoginForm({ onSwitchToSignup, onForgotPassword, onEmailC
           placeholder="Password"
           value={password}
           autoComplete="current-password"
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
         {error && <div className={styles.error}>{error}</div>}
@@ -73,27 +85,35 @@ export default function LoginForm({ onSwitchToSignup, onForgotPassword, onEmailC
           />
         </div>
       </form>
-      <div className={styles.linksRow}>
-        <span>
-          Don&apos;t have an account?{" "}
-          <a
-            className={styles.link}
-            onClick={() => onSwitchToSignup ? onSwitchToSignup() : router.push("/signUpForm")}
-            tabIndex={0}
-            role="button"
-          >
-            Sign up
-          </a>
-        </span><br />
-        <a            
-          className={styles.link}
-          onClick={() => onForgotPassword ? onForgotPassword() : router.push("/forgotPasswordForm")}
-          tabIndex={0}
-          role="button"
-        >
-          Forgot your password?
-        </a>
-      </div>
+      {/* Only show internal links when used in modal (when callbacks are provided) */}
+      {(onSwitchToSignup || onForgotPassword) && (
+        <div className={styles.linksRow}>
+          {onSwitchToSignup && (
+            <span>
+              Don&apos;t have an account?{" "}
+              <a
+                className={styles.link}
+                onClick={onSwitchToSignup}
+                tabIndex={0}
+                role="button"
+              >
+                Sign up
+              </a>
+            </span>
+          )}
+          {onSwitchToSignup && onForgotPassword && <br />}
+          {onForgotPassword && (
+            <a
+              className={styles.link}
+              onClick={onForgotPassword}
+              tabIndex={0}
+              role="button"
+            >
+              Forgot your password?
+            </a>
+          )}
+        </div>
+      )}
     </div>
   );
 }

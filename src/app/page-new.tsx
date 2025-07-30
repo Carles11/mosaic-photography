@@ -18,16 +18,16 @@ export default function Home() {
   const searchParams = useSearchParams();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authView, setAuthView] = useState<AuthView>("login");
+  const [userEmail, setUserEmail] = useState<string>("");
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Handle URL parameters for backward compatibility (email redirects, etc.)
+  // Handle URL parameters on initial load
   useEffect(() => {
     if (!isInitialized && searchParams) {
       const modal = searchParams.get("modal");
       const type = searchParams.get("type");
 
       if (modal === "auth") {
-        // For backward compatibility, show modal for email redirects
         setShowAuthModal(true);
         if (type === "reset-password") {
           setAuthView("reset-password");
@@ -45,6 +45,7 @@ export default function Home() {
   useEffect(() => {
     if (isInitialized && !showAuthModal) {
       setAuthView("login");
+      setUserEmail("");
       // Clear URL parameters when modal is closed
       if (typeof window !== "undefined") {
         const url = new URL(window.location.href);
@@ -55,11 +56,6 @@ export default function Home() {
     }
   }, [showAuthModal, router, isInitialized]);
 
-  // Navigate to login page instead of opening modal
-  const handleLoginClick = () => {
-    router.push("/auth/login");
-  };
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -68,17 +64,16 @@ export default function Home() {
     <>
       <HomeClientWrapper
         showLoginButton={!user}
-        onLoginClick={handleLoginClick}
+        onLoginClick={() => setShowAuthModal(true)}
         onLogoutClick={logout}
         user={user}
       />
 
-      {/* Keep modal for backward compatibility with email redirects */}
       <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         initialView={authView}
-        initialEmail=""
+        initialEmail={userEmail}
       />
     </>
   );

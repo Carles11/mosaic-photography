@@ -85,7 +85,7 @@ export interface Comment {
   content: string;
   created_at: string;
   updated_at?: string;
-  user_email?: string; // For display purposes, fetched via join
+  user_email?: string; // For display purposes - contains display name (not actual email for privacy)
 }
 
 export interface CommentFormData {

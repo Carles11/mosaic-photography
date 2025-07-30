@@ -1,12 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+import {
+  isProtectedRoute,
+  isAuthRoute,
+  getLoginRedirect,
+  getAuthenticatedRedirect,
+} from "@/lib/auth/auth-guards";
 
-// Middleware to set a cookie for bots
-export function middleware(req: NextRequest) {
+// Middleware to handle bot cookies and auth protection
+export async function middleware(req: NextRequest) {
   const userAgent = req.headers.get("user-agent") || "";
   const isBot = /bot|crawl|slurp|spider|google/i.test(userAgent);
+  const { pathname, searchParams } = req.nextUrl;
 
+  // Create response
   const response = NextResponse.next();
 
+  // Handle bot cookie logic
   if (isBot) {
     response.cookies.set("skip_age_modal", "1", {
       path: "/",
@@ -15,9 +25,86 @@ export function middleware(req: NextRequest) {
     response.cookies.delete("skip_age_modal");
   }
 
+  // Skip auth checks for static files and API routes
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api") ||
+    pathname.includes(".") ||
+    pathname.startsWith("/favicon")
+  ) {
+    return response;
+  }
+
+  // Skip auth checks for non-protected routes to avoid unnecessary redirects
+  if (!isProtectedRoute(pathname)) {
+    return response;
+  }
+
+  // Get auth token from cookies
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.error("Missing Supabase environment variables in middleware");
+    return response;
+  }
+
+  try {
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false,
+      },
+    });
+
+    // Get session from the current request
+    let isAuthenticated = false;
+
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      isAuthenticated = !!session?.user;
+    } catch (sessionError) {
+      // If session check fails, try with cookies
+      const accessToken = req.cookies.get("sb-access-token")?.value;
+      if (accessToken) {
+        const {
+          data: { user },
+          error,
+        } = await supabase.auth.getUser(accessToken);
+        isAuthenticated = !error && !!user;
+      }
+    }
+
+    // Temporarily disable auth checks in middleware - let client-side handle it
+    // Handle protected routes - temporarily disabled for debugging
+    // if (isProtectedRoute(pathname) && !isAuthenticated) {
+    //   console.log(`Middleware: Redirecting ${pathname} - authenticated: ${isAuthenticated}`);
+    //   const loginUrl = new URL(getLoginRedirect(pathname), req.url);
+    //   return NextResponse.redirect(loginUrl);
+    // }
+
+    // Handle auth routes for authenticated users
+    if (isAuthRoute(pathname) && isAuthenticated) {
+      const redirectTo = searchParams.get("redirect");
+      const homeUrl = new URL(
+        getAuthenticatedRedirect(redirectTo || undefined),
+        req.url,
+      );
+      return NextResponse.redirect(homeUrl);
+    }
+  } catch (error) {
+    console.error("Middleware auth check error:", error);
+    // Continue without auth check if there's an error
+  }
+
   return response;
 }
 
 export const config = {
-  matcher: ["/", "/ImageCard", "/AuthorCard"], // apply middleware only to specific routes
+  matcher: [
+    // Apply to all routes except static files and API
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 };

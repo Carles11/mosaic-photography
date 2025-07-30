@@ -137,7 +137,7 @@
 }
 
 .profileButton {
-  background: var(--primary-color, #007bff);
+  background: transparent;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -149,13 +149,10 @@
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  transition:
-    background-color 0.2s,
-    transform 0.1s;
 }
 
 .profileButton:hover {
-  background: var(--primary-hover, #0056b3);
+  background: transparent;
   transform: translateY(-1px);
   text-decoration: none;
 }

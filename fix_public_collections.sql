@@ -30,6 +30,8 @@ CREATE POLICY "Users can view relevant favorites" ON public.favorites
     );
 
 -- Ensure images table is publicly readable
+-- Drop both possible policy names to avoid duplicates
+DROP POLICY IF EXISTS "Allow everyone to read images" ON public.images;
 DROP POLICY IF EXISTS "Anyone can view images" ON public.images;
 CREATE POLICY "Anyone can view images" ON public.images 
     FOR SELECT USING (true);
