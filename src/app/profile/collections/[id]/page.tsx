@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import JSZip from "jszip";
 import { supabase } from "@/lib/supabaseClient";
@@ -15,6 +15,7 @@ import styles from "./CollectionView.module.css";
 export default function CollectionView() {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { user } = useAuthSession();
   const [collection, setCollection] = useState<CollectionWithImages | null>(
     null,
@@ -27,12 +28,28 @@ export default function CollectionView() {
   const [dragOverItem, setDragOverItem] = useState<number | null>(null);
   const [showShareModal, setShowShareModal] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [touchStartTime, setTouchStartTime] = useState(0);
+  const [touchStartPos, setTouchStartPos] = useState({ x: 0, y: 0 });
 
   const collectionId = params?.id as string;
+  const isEmbedded = searchParams?.get("embed") === "true";
 
   useEffect(() => {
     loadCollection();
   }, [collectionId, user]);
+
+  useEffect(() => {
+    // Detect mobile device
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768 || "ontouchstart" in window);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const loadCollection = async () => {
     if (!collectionId) {
@@ -445,6 +462,89 @@ export default function CollectionView() {
     target.style.opacity = "0.5";
   };
 
+  // Touch event handlers for mobile drag and drop
+  const handleTouchStart = (e: React.TouchEvent, favoriteId: number) => {
+    if (!isReordering || !isMobile) return;
+
+    const touch = e.touches[0];
+    setTouchStartTime(Date.now());
+    setTouchStartPos({ x: touch.clientX, y: touch.clientY });
+
+    // Start drag after a small delay to differentiate from scrolling
+    setTimeout(() => {
+      if (Date.now() - touchStartTime >= 200) {
+        setDraggedItem(favoriteId);
+        // Add visual feedback
+        const target = e.currentTarget as HTMLElement;
+        target.style.opacity = "0.5";
+        target.style.transform = "scale(1.05)";
+        target.style.zIndex = "1000";
+      }
+    }, 200);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isReordering || !isMobile || !draggedItem) return;
+
+    e.preventDefault(); // Prevent scrolling while dragging
+
+    const touch = e.touches[0];
+    const elementBelow = document.elementFromPoint(
+      touch.clientX,
+      touch.clientY,
+    );
+
+    // Find the closest image card
+    const imageCard = elementBelow?.closest(
+      "[data-favorite-id]",
+    ) as HTMLElement;
+    if (imageCard) {
+      const favoriteId = parseInt(imageCard.dataset.favoriteId || "0");
+      if (favoriteId && favoriteId !== draggedItem) {
+        setDragOverItem(favoriteId);
+      }
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!isReordering || !isMobile) return;
+
+    const target = e.currentTarget as HTMLElement;
+    target.style.opacity = "1";
+    target.style.transform = "scale(1)";
+    target.style.zIndex = "auto";
+
+    if (draggedItem && dragOverItem && draggedItem !== dragOverItem) {
+      // Perform the drop operation
+      handleDrop(e as any, dragOverItem);
+    }
+
+    setDraggedItem(null);
+    setDragOverItem(null);
+    setTouchStartTime(0);
+  };
+
+  // Swipe gesture for quick selection on mobile
+  const handleSwipeGesture = (e: React.TouchEvent, favoriteId: number) => {
+    if (isReordering || !isMobile) return;
+
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - touchStartPos.x;
+    const deltaY = Math.abs(touch.clientY - touchStartPos.y);
+    const swipeTime = Date.now() - touchStartTime;
+
+    // Detect horizontal swipe (at least 50px horizontal, less than 30px vertical, under 300ms)
+    if (Math.abs(deltaX) > 50 && deltaY < 30 && swipeTime < 300) {
+      e.preventDefault();
+      handleImageSelect(favoriteId);
+
+      // Add haptic feedback if available
+      if ("vibrate" in navigator) {
+        navigator.vibrate(50);
+      }
+    }
+  };
+
   const handleDragEnd = (e: React.DragEvent) => {
     if (!isReordering) return;
 
@@ -600,93 +700,111 @@ export default function CollectionView() {
 
   return (
     <>
-      <Header
-        showLoginButton={!user}
-        onLoginClick={() => router.push("/?modal=auth")}
-        user={user}
-        onLogoutClick={handleLogout}
-      />
-      <div className={styles.container}>
+      {!isEmbedded && (
+        <Header
+          showLoginButton={!user}
+          onLoginClick={() => router.push("/?modal=auth")}
+          user={user}
+          onLogoutClick={handleLogout}
+        />
+      )}
+      <div
+        className={`${styles.container} ${isEmbedded ? styles.embedded : ""}`}
+      >
         {/* Header */}
-        <div className={styles.header}>
-          <div className={styles.breadcrumb}>
-            {user ? (
-              <>
-                <button
-                  onClick={() => router.push("/profile")}
-                  className={styles.breadcrumbLink}
-                >
-                  Profile
-                </button>
-                <span className={styles.breadcrumbSeparator}>→</span>
-                <span className={styles.breadcrumbCurrent}>Collections</span>
-                <span className={styles.breadcrumbSeparator}>→</span>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={() => router.push("/")}
-                  className={styles.breadcrumbLink}
-                >
-                  Home
-                </button>
-                <span className={styles.breadcrumbSeparator}>→</span>
-                <span className={styles.breadcrumbCurrent}>Collection</span>
-                <span className={styles.breadcrumbSeparator}>→</span>
-              </>
-            )}
-            <span className={styles.breadcrumbCurrent}>{collection.name}</span>
-          </div>
+        {!isEmbedded && (
+          <div className={styles.header}>
+            <div className={styles.breadcrumb}>
+              {user ? (
+                <>
+                  <button
+                    onClick={() => router.push("/profile")}
+                    className={styles.breadcrumbLink}
+                  >
+                    Profile
+                  </button>
+                  <span className={styles.breadcrumbSeparator}>→</span>
+                  <span className={styles.breadcrumbCurrent}>Collections</span>
+                  <span className={styles.breadcrumbSeparator}>→</span>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => router.push("/")}
+                    className={styles.breadcrumbLink}
+                  >
+                    Home
+                  </button>
+                  <span className={styles.breadcrumbSeparator}>→</span>
+                  <span className={styles.breadcrumbCurrent}>Collection</span>
+                  <span className={styles.breadcrumbSeparator}>→</span>
+                </>
+              )}
+              <span className={styles.breadcrumbCurrent}>
+                {collection.name}
+              </span>
+            </div>
 
+            <div className={styles.collectionInfo}>
+              <h1 className={styles.title}>{collection.name}</h1>
+              {collection.description && (
+                <p className={styles.description}>{collection.description}</p>
+              )}
+              <div className={styles.meta}>
+                <span className={styles.imageCount}>
+                  {collection.images.length} image
+                  {collection.images.length !== 1 ? "s" : ""}
+                </span>
+                <span className={styles.privacy}>
+                  {collection.privacy === "public" ? "🌐 Public" : "🔒 Private"}
+                </span>
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            {collection.user_id === user?.id && (
+              <div className={styles.actions}>
+                {selectedImages.size > 0 && (
+                  <button
+                    onClick={handleRemoveImages}
+                    className={styles.removeButton}
+                  >
+                    Remove Selected ({selectedImages.size})
+                  </button>
+                )}
+                <button
+                  onClick={() => setIsReordering(!isReordering)}
+                  className={styles.reorderButton}
+                >
+                  {isReordering ? "Done Reordering" : "Reorder Images"}
+                </button>
+                <button
+                  onClick={() => setShowShareModal(true)}
+                  className={styles.shareButton}
+                >
+                  Share Collection
+                </button>
+                <button
+                  onClick={handleExportZip}
+                  className={styles.exportButton}
+                  disabled={isExporting}
+                >
+                  {isExporting ? "Creating ZIP..." : "Export as ZIP"}
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Collection Info for Embedded View */}
+        {isEmbedded && (
           <div className={styles.collectionInfo}>
             <h1 className={styles.title}>{collection.name}</h1>
             {collection.description && (
               <p className={styles.description}>{collection.description}</p>
             )}
-            <div className={styles.meta}>
-              <span className={styles.imageCount}>
-                {collection.images.length} image
-                {collection.images.length !== 1 ? "s" : ""}
-              </span>
-              <span className={styles.privacy}>
-                {collection.privacy === "public" ? "🌐 Public" : "🔒 Private"}
-              </span>
-            </div>
           </div>
-
-          {/* Action buttons */}
-          {collection.user_id === user?.id && (
-            <div className={styles.actions}>
-              {selectedImages.size > 0 && (
-                <button
-                  onClick={handleRemoveImages}
-                  className={styles.removeButton}
-                >
-                  Remove Selected ({selectedImages.size})
-                </button>
-              )}
-              <button
-                onClick={() => setIsReordering(!isReordering)}
-                className={styles.reorderButton}
-              >
-                {isReordering ? "Done Reordering" : "Reorder Images"}
-              </button>
-              <button
-                onClick={() => setShowShareModal(true)}
-                className={styles.shareButton}
-              >
-                Share Collection
-              </button>
-              <button
-                onClick={handleExportZip}
-                className={styles.exportButton}
-                disabled={isExporting}
-              >
-                {isExporting ? "Creating ZIP..." : "Export as ZIP"}
-              </button>
-            </div>
-          )}
-        </div>
+        )}
 
         {/* Images Grid */}
         {collection.images.length === 0 ? (
@@ -696,54 +814,91 @@ export default function CollectionView() {
             <p>Add some images from your favorites to get started!</p>
           </div>
         ) : (
-          <div className={styles.grid}>
-            {collection.images.map((image) => (
-              <div
-                key={image.favorite_id}
-                className={`${styles.imageCard} ${
-                  selectedImages.has(image.favorite_id) ? styles.selected : ""
-                } ${isReordering ? styles.reordering : ""} ${
-                  draggedItem === image.favorite_id ? styles.dragging : ""
-                } ${dragOverItem === image.favorite_id ? styles.dragOver : ""}`}
-                draggable={isReordering}
-                onDragStart={(e) => handleDragStart(e, image.favorite_id)}
-                onDragEnd={handleDragEnd}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  setDragOverItem(image.favorite_id);
-                }}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, image.favorite_id)}
-              >
-                {collection.user_id === user?.id && (
-                  <div className={styles.selectCheckbox}>
-                    <input
-                      type="checkbox"
-                      checked={selectedImages.has(image.favorite_id)}
-                      onChange={() => handleImageSelect(image.favorite_id)}
+          <>
+            {/* Mobile reordering instructions */}
+            {isReordering && isMobile && (
+              <div className={styles.mobileInstructions}>
+                <p>
+                  📱 <strong>Touch and hold</strong> an image for 0.2 seconds to
+                  start dragging.
+                  <br />
+                  💡 <strong>Swipe left or right</strong> on images to select
+                  them quickly.
+                </p>
+              </div>
+            )}
+
+            <div className={styles.grid}>
+              {collection.images.map((image) => (
+                <div
+                  key={image.favorite_id}
+                  data-favorite-id={image.favorite_id}
+                  className={`${styles.imageCard} ${
+                    selectedImages.has(image.favorite_id) ? styles.selected : ""
+                  } ${isReordering ? styles.reordering : ""} ${
+                    draggedItem === image.favorite_id ? styles.dragging : ""
+                  } ${dragOverItem === image.favorite_id ? styles.dragOver : ""} ${
+                    isMobile ? styles.mobile : ""
+                  }`}
+                  draggable={isReordering && !isMobile}
+                  onDragStart={(e) => handleDragStart(e, image.favorite_id)}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setDragOverItem(image.favorite_id);
+                  }}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, image.favorite_id)}
+                  onTouchStart={(e) => {
+                    if (isReordering) {
+                      handleTouchStart(e, image.favorite_id);
+                    } else {
+                      const touch = e.touches[0];
+                      setTouchStartTime(Date.now());
+                      setTouchStartPos({ x: touch.clientX, y: touch.clientY });
+                    }
+                  }}
+                  onTouchMove={isReordering ? handleTouchMove : undefined}
+                  onTouchEnd={(e) => {
+                    if (isReordering) {
+                      handleTouchEnd(e);
+                    } else {
+                      handleSwipeGesture(e, image.favorite_id);
+                    }
+                  }}
+                >
+                  {collection.user_id === user?.id && (
+                    <div className={styles.selectCheckbox}>
+                      <input
+                        type="checkbox"
+                        checked={selectedImages.has(image.favorite_id)}
+                        onChange={() => handleImageSelect(image.favorite_id)}
+                      />
+                    </div>
+                  )}
+
+                  <div className={styles.imageWrapper}>
+                    <Image
+                      src={image.image_url}
+                      alt={image.image_title}
+                      fill
+                      className={styles.image}
+                      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                     />
                   </div>
-                )}
 
-                <div className={styles.imageWrapper}>
-                  <Image
-                    src={image.image_url}
-                    alt={image.image_title}
-                    fill
-                    className={styles.image}
-                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                  />
+                  <div className={styles.imageInfo}>
+                    <h4 className={styles.imageTitle}>{image.image_title}</h4>
+                    <p className={styles.imageAuthor}>
+                      by {image.image_author}
+                    </p>
+                  </div>
+
+                  {isReordering && <div className={styles.dragHandle}>⋮⋮</div>}
                 </div>
-
-                <div className={styles.imageInfo}>
-                  <h4 className={styles.imageTitle}>{image.image_title}</h4>
-                  <p className={styles.imageAuthor}>by {image.image_author}</p>
-                </div>
-
-                {isReordering && <div className={styles.dragHandle}>⋮⋮</div>}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </>
         )}
 
         {/* Share Modal */}
@@ -755,7 +910,7 @@ export default function CollectionView() {
           />
         )}
       </div>
-      <Footer />
+      {!isEmbedded && <Footer />}
     </>
   );
 }

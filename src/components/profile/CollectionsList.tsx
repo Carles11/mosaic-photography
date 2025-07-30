@@ -22,6 +22,19 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   const [editingCollection, setEditingCollection] = useState<Collection | null>(
     null,
   );
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768 || "ontouchstart" in window);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Expose refresh function to parent components
   useImperativeHandle(ref, () => ({
@@ -171,7 +184,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className={styles.createButton}
+          className={`${styles.createButton} ${isMobile ? styles.mobile : ""}`}
         >
           <span className={styles.plusIcon}>+</span>
           New Collection
@@ -193,7 +206,10 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
       ) : (
         <div className={styles.grid}>
           {collections.map((collection) => (
-            <div key={collection.id} className={styles.collectionCard}>
+            <div
+              key={collection.id}
+              className={`${styles.collectionCard} ${isMobile ? styles.mobile : ""}`}
+            >
               <div className={styles.cardHeader}>
                 <h4 className={styles.collectionName}>{collection.name}</h4>
                 <div className={styles.cardActions}>
