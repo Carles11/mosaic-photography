@@ -42,9 +42,6 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   }));
 
   const loadCollections = async () => {
-    console.log("🔍 [DEBUG] loadCollections called");
-    console.log("🔍 [DEBUG] User ID:", user?.id);
-
     if (!user) {
       setLoading(false);
       return;
@@ -56,15 +53,8 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
       // Check current session
       const { data: sessionData, error: sessionError } =
         await supabase.auth.getSession();
-      console.log("🔍 [DEBUG] Session user ID:", sessionData.session?.user?.id);
-      console.log("🔍 [DEBUG] Context user ID:", user.id);
-      console.log(
-        "🔍 [DEBUG] IDs match:",
-        sessionData.session?.user?.id === user.id,
-      );
 
       // Try the known collection IDs directly
-      console.log("🔍 [DEBUG] Testing known collection IDs...");
       const { data: knownCollections, error: knownError } = await supabase
         .from("collections")
         .select("*")
@@ -73,18 +63,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
           "960305af-8088-4254-86f3-0f88a06edd34",
         ]);
 
-      console.log("🔍 [DEBUG] Known collections result:", {
-        data: knownCollections,
-        error: knownError,
-        count: knownCollections?.length || 0,
-      });
-
       if (knownError) {
-        console.error("❌ [DEBUG] RLS Policy Error:", knownError);
-        console.error("❌ [DEBUG] This confirms RLS is blocking access");
-        console.error(
-          "❌ [DEBUG] Check your collections table RLS policies in Supabase dashboard",
-        );
         alert(
           "Database access blocked by security policies. Check Supabase RLS settings for collections table.",
         );
@@ -98,17 +77,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
-      console.log("🔍 [DEBUG] Regular query result:", {
-        data: collectionsData,
-        error: collectionsError,
-        count: collectionsData?.length || 0,
-      });
-
       if (collectionsError) {
-        console.error(
-          "❌ [DEBUG] Error loading collections:",
-          collectionsError,
-        );
         return;
       }
 
@@ -127,7 +96,6 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
               .from("collection_favorites")
               .select("favorites!inner(images!inner(url))")
               .eq("collection_id", collection.id)
-              .order("added_at", { ascending: false })
               .limit(4);
 
             const preview_images =
@@ -141,56 +109,28 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
           }),
         );
 
-        console.log(
-          "✅ [DEBUG] Found",
-          collectionsWithCounts.length,
-          "collections",
-        );
         setCollections(collectionsWithCounts);
       } else {
-        console.log("⚠️ [DEBUG] No collections found");
         setCollections([]);
       }
     } catch (error) {
-      console.error("❌ [DEBUG] Unexpected error:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    console.log("🔍 [DEBUG] useEffect triggered - loadCollections");
-    console.log(
-      "🔍 [DEBUG] User in useEffect:",
-      user ? "User exists" : "No user",
-    );
     loadCollections();
   }, [user]);
 
   const handleCreateCollection = (newCollection: Collection) => {
-    console.log(
-      "🔍 [DEBUG] handleCreateCollection called with:",
-      newCollection,
-    );
-    console.log(
-      "🔍 [DEBUG] Current collections before adding:",
-      collections.length,
-    );
-
-    setCollections((prev) => {
-      const updated = [
-        { ...newCollection, image_count: 0, preview_images: [] },
-        ...prev,
-      ];
-      console.log("🔍 [DEBUG] Updated collections state:", updated.length);
-      return updated;
-    });
+    setCollections((prev) => [
+      { ...newCollection, image_count: 0, preview_images: [] },
+      ...prev,
+    ]);
     setShowCreateModal(false);
 
-    console.log("🔍 [DEBUG] Collection creation completed, refreshing...");
-    // Refresh collections from database to verify it was saved
     setTimeout(() => {
-      console.log("🔍 [DEBUG] Triggering refresh after collection creation");
       loadCollections();
     }, 1000);
   };
@@ -207,42 +147,26 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   };
 
   const handleDeleteCollection = async (collectionId: string) => {
-    console.log("🔍 [DEBUG] handleDeleteCollection called for:", collectionId);
-
     if (
       !confirm(
         "Are you sure you want to delete this collection? This action cannot be undone.",
       )
     ) {
-      console.log("🔍 [DEBUG] Collection deletion cancelled by user");
       return;
     }
 
     try {
-      console.log(
-        "🔍 [DEBUG] Attempting to delete collection from database...",
-      );
       const { error } = await supabase
         .from("collections")
         .delete()
         .eq("id", collectionId);
 
       if (error) {
-        console.error("❌ [DEBUG] Error deleting collection:", error);
         alert("Failed to delete collection. Please try again.");
       } else {
-        console.log("✅ [DEBUG] Collection deleted successfully from database");
-        setCollections((prev) => {
-          const updated = prev.filter((col) => col.id !== collectionId);
-          console.log(
-            "🔍 [DEBUG] Updated collections after deletion:",
-            updated.length,
-          );
-          return updated;
-        });
+        setCollections((prev) => prev.filter((col) => col.id !== collectionId));
       }
     } catch (error) {
-      console.error("❌ [DEBUG] Unexpected error deleting collection:", error);
       alert("Failed to delete collection. Please try again.");
     }
   };
@@ -252,7 +176,6 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   }
 
   if (loading) {
-    console.log("🔍 [DEBUG] Rendering loading state");
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
@@ -288,9 +211,6 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
           <p>Create your first collection to organize your favorite images</p>
           <button
             onClick={() => {
-              console.log(
-                "🔍 [DEBUG] Create Collection button clicked from empty state",
-              );
               setShowCreateModal(true);
             }}
             className={styles.emptyCreateButton}

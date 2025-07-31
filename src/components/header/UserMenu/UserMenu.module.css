@@ -18,7 +18,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   min-width: 80px;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .menuButton:hover {

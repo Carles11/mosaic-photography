@@ -33,11 +33,6 @@
   transition: all 0.2s ease;
 }
 
-.backToHomeButton:hover {
-  background: var(--tertiary-color, rgba(255, 255, 255, 0.1));
-  transform: translateY(-1px);
-}
-
 .themeImage {
   width: 100%;
   height: 100%;

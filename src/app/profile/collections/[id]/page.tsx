@@ -708,7 +708,12 @@ export default function CollectionView() {
                     Profile
                   </button>
                   <span className={styles.breadcrumbSeparator}>→</span>
-                  <span className={styles.breadcrumbCurrent}>Collections</span>
+                  <button
+                    onClick={() => router.push("/my-content?tab=collections")}
+                    className={styles.breadcrumbLink}
+                  >
+                    Collections
+                  </button>
                   <span className={styles.breadcrumbSeparator}>→</span>
                 </>
               ) : (
