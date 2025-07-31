@@ -44,6 +44,14 @@ const PrivacyPolicy: React.FC = () => {
         Vercel Analytics may share non-personal information with third parties
         for the purpose of improving our website.
       </p>
+      <h2 className={styles.subtitle}>Google Tag Manager</h2>
+      <p className={styles.text}>
+        We use Google Tag Manager to help manage analytics and tracking on our
+        website. Google Tag Manager itself does not collect personal
+        information, but it may deploy tags that collect data for analytics
+        purposes and help us improve the user experience. For more information,
+        please review Google's privacy policy.
+      </p>
       <h2 className={styles.subtitle}>Contact</h2>
       <p className={styles.text}>
         If you have any questions or concerns about our privacy policy, please
