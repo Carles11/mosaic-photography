@@ -62,7 +62,6 @@ const CommentForm: React.FC<CommentFormProps> = ({
               : "Please log in to leave a comment"
           }
           className={styles.textarea}
-          disabled={!isUserLoggedIn() || isSubmitting}
           rows={3}
         />
         {error && <div className={styles.error}>{error}</div>}

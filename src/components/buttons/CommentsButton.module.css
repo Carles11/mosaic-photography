@@ -34,20 +34,20 @@
 
 .badge {
   position: absolute;
-  top: -5px;
+  top: -11px;
   right: -5px;
   background: var(--tertiary-color, #dc3545);
   color: white;
   border-radius: 10px;
-  min-width: 18px;
-  height: 18px;
+  min-width: 11px;
+  height: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 11px;
   font-weight: 600;
   line-height: 1;
-  padding: 0 4px;
+  padding: 4px;
   border: 2px solid white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -74,13 +74,6 @@
 
 /* Ensure proper spacing on mobile */
 @media (max-width: 768px) {
-  .commentsButton {
-    width: 36px;
-    height: 36px;
-    top: 8px;
-    left: 44px;
-  }
-
   .icon {
     width: 18px;
     height: 18px;
@@ -92,5 +85,23 @@
     font-size: 10px;
     top: -4px;
     right: -4px;
+  }
+
+  .modalView {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    left: auto;
+    bottom: auto;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    /* Add box-shadow for visibility */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .commentsButton {
+    z-index: 101;
   }
 }
