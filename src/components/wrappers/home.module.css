@@ -3,6 +3,15 @@
   flex-direction: column;
   height: 100%;
   min-height: 100%;
+  /* Add bottom padding for mobile bottom nav */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Mobile spacing for bottom navigation */
+@media (max-width: 768px) {
+  .container {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  }
 }
 
 .pageContent {

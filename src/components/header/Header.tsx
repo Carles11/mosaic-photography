@@ -65,7 +65,7 @@ const Header = ({
               </Link>
             </li>
           )}
-          <li className={styles.actionSection}>
+          <li className={`${styles.actionSection} ${styles.desktopOnly}`}>
             <div className={styles.rightActions}>
               <UserMenu
                 user={user}

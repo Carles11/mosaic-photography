@@ -250,7 +250,7 @@ export default function UserCommentsList() {
                 <div className={styles.imageThumbnail}>
                   <img
                     src={comment.image_url}
-                    alt={comment.image_title || "Gallery image"}
+                    alt={comment.image_title || "Mosaic Gallery image"}
                     loading="lazy"
                   />
                 </div>

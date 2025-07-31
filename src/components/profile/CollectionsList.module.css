@@ -254,6 +254,7 @@
 }
 
 .emptyPreview {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -468,7 +469,7 @@
   }
 
   .emptyPreview {
-    height: 100px;
+    height: 250px;
   }
 
   .description {

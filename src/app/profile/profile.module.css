@@ -2,6 +2,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  /* Add bottom padding for mobile bottom nav */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .main {
@@ -39,7 +41,12 @@
   color: var(--text-secondary, #666);
 }
 
+/* Mobile spacing for bottom navigation */
 @media (max-width: 768px) {
+  .container {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  }
+
   .main {
     padding: 1rem;
   }

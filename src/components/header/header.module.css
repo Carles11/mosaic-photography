@@ -90,6 +90,11 @@
   padding-right: 0.5rem;
 }
 
+/* Desktop only class - hide user menu on mobile */
+.desktopOnly {
+  display: flex;
+}
+
 /* Media query for tablets Portrait and landscape */
 @media (min-width: 768px) and (max-width: 1024px) {
   .themeImage {
@@ -112,6 +117,11 @@
     width: 100%;
     max-width: 100%;
     height: auto;
+  }
+
+  /* Hide desktop user menu on mobile */
+  .desktopOnly {
+    display: none !important;
   }
 
   .actionSection {

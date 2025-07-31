@@ -13,6 +13,7 @@ import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
 import GitHubCorner from "@/components/buttons/GitHubCorner";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
+import BottomNav from "@/components/navigation/BottomNav/BottomNav";
 
 import styles from "./home.module.css";
 import { HomeTitles } from "../header/titles/HomeTitles";
@@ -23,6 +24,7 @@ interface HomeClientWrapperProps {
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
   user?: SupabaseUser | null;
+  onGoProClick?: () => void;
 }
 
 function HomeClientWrapper({
@@ -30,6 +32,7 @@ function HomeClientWrapper({
   onLoginClick,
   onLogoutClick,
   user,
+  onGoProClick,
 }: HomeClientWrapperProps) {
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
@@ -92,6 +95,14 @@ function HomeClientWrapper({
         </>
       )}
       <Footer />
+
+      {/* Mobile Bottom Navigation */}
+      <BottomNav
+        user={user}
+        onLoginClick={onLoginClick}
+        onLogoutClick={onLogoutClick}
+        onGoProClick={onGoProClick}
+      />
     </div>
   );
 }

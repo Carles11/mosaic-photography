@@ -5,10 +5,19 @@ import { ProtectedRoute } from "@/components/auth/guards/ProtectedRoute";
 import ProfileForm from "@/components/profile/ProfileForm";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
+import BottomNav from "@/components/navigation/BottomNav/BottomNav";
+import { sendGTMEvent } from "@next/third-parties/google";
 import styles from "./profile.module.css";
 
 function ProfileContent() {
   const { user, logout } = useAuth();
+
+  const handleGoProClick = () => {
+    sendGTMEvent({
+      event: "goProText",
+      value: "Go Pro clicked from profile bottom nav",
+    });
+  };
 
   if (!user) {
     return null; // ProtectedRoute will handle redirect
@@ -24,6 +33,13 @@ function ProfileContent() {
         </div>
       </main>
       <Footer />
+
+      {/* Mobile Bottom Navigation */}
+      <BottomNav
+        user={user}
+        onLogoutClick={logout}
+        onGoProClick={handleGoProClick}
+      />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
 import AuthModal from "@/components/auth/AuthModal";
 import { AuthView } from "@/lib/auth/auth-types";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 // Import session debug for development
 if (process.env.NODE_ENV === "development") {
@@ -60,6 +61,13 @@ export default function Home() {
     router.push("/auth/login");
   };
 
+  const handleGoProClick = () => {
+    sendGTMEvent({
+      event: "goProText",
+      value: "Go Pro clicked from bottom nav",
+    });
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -71,6 +79,7 @@ export default function Home() {
         onLoginClick={handleLoginClick}
         onLogoutClick={logout}
         user={user}
+        onGoProClick={handleGoProClick}
       />
 
       {/* Keep modal for backward compatibility with email redirects */}
