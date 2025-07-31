@@ -62,7 +62,7 @@ const UserMenuDropdown = ({
           </Link>
 
           <button
-            className={styles.menuItem}
+            className={`no-fancy-link ${styles.menuItem}`}
             onClick={() => handleActionAndClose(onGoProClick!)}
           >
             <span className={styles.menuIcon}>⭐</span>
@@ -72,7 +72,7 @@ const UserMenuDropdown = ({
           <div className={styles.menuDivider} />
 
           <button
-            className={`${styles.menuItem} ${styles.logoutItem}`}
+            className={`no-fancy-link ${styles.menuItem} ${styles.logoutItem}`}
             onClick={() => handleActionAndClose(onLogoutClick!)}
           >
             <span className={styles.menuIcon}>🚪</span>
@@ -82,20 +82,24 @@ const UserMenuDropdown = ({
       ) : (
         <>
           <button
-            className={styles.menuItem}
+            className={`no-fancy-link ${styles.menuItem}`}
             onClick={() => handleActionAndClose(onLoginClick!)}
           >
             <span className={styles.menuIcon}>🔑</span>
             <span className={styles.menuLabel}>Login</span>
           </button>
 
-          <Link href="/faq" className={styles.menuItem} onClick={onClose}>
+          <Link
+            href="/faq"
+            className={`no-fancy-link ${styles.menuItem}`}
+            onClick={onClose}
+          >
             <span className={styles.menuIcon}>❓</span>
             <span className={styles.menuLabel}>FAQ</span>
           </Link>
 
           <button
-            className={styles.menuItem}
+            className={`no-fancy-link ${styles.menuItem}`}
             onClick={() => handleActionAndClose(onGoProClick!)}
           >
             <span className={styles.menuIcon}>⭐</span>

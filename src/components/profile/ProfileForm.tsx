@@ -316,7 +316,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           />
         </div>
 
-        <div className={styles.field}>
+        {/* <div className={styles.field}>
           <label htmlFor="own_store_name" className={styles.label}>
             Store Name
           </label>
@@ -347,7 +347,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
             placeholder="https://yourstore.com"
             disabled={databaseError}
           />
-        </div>
+        </div> */}
 
         <button
           type="submit"
