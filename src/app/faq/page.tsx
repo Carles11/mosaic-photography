@@ -251,7 +251,7 @@ const FAQPage: React.FC = () => {
           ))}
         </main>
 
-        <footer className={styles.faqFooter}>
+        <section className={styles.faqFooter}>
           <div className={styles.callToAction}>
             <h2>Still Have Questions?</h2>
             <p>
@@ -269,7 +269,7 @@ const FAQPage: React.FC = () => {
               </p>
             </div>
           </div>
-        </footer>
+        </section>
       </div>
 
       {/* Simple Go to Top Button - CSS only, no JavaScript needed */}
