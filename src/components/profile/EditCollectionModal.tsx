@@ -21,7 +21,7 @@ export default function EditCollectionModal({
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    privacy: "private" as "private" | "public",
+    // privacy: "private" as "private" | "public",
   });
   const [loading, setLoading] = useState(false);
   const [showPrivacyWarning, setShowPrivacyWarning] = useState(false);
@@ -34,7 +34,7 @@ export default function EditCollectionModal({
       setFormData({
         name: collection.name,
         description: collection.description || "",
-        privacy: collection.privacy,
+        // privacy: collection.privacy,
       });
       // Reset warning states when collection changes
       setShowPrivacyWarning(false);
@@ -50,11 +50,11 @@ export default function EditCollectionModal({
     }
 
     // Show privacy warning if changing privacy setting
-    const isPrivacyChanging = formData.privacy !== collection.privacy;
-    if (isPrivacyChanging && !showPrivacyWarning) {
-      setPrivacyChangeDirection(
-        formData.privacy === "public" ? "toPublic" : "toPrivate",
-      );
+    // const isPrivacyChanging = formData.privacy !== collection.privacy;
+    if (!showPrivacyWarning) {
+      // setPrivacyChangeDirection(
+      //   formData.privacy === "public" ? "toPublic" : "toPrivate",
+      // );
       setShowPrivacyWarning(true);
       return;
     }
@@ -67,7 +67,7 @@ export default function EditCollectionModal({
         .update({
           name: formData.name.trim(),
           description: formData.description.trim() || null,
-          privacy: formData.privacy,
+          // privacy: formData.privacy,
         })
         .eq("id", collection.id)
         .select()
@@ -80,8 +80,8 @@ export default function EditCollectionModal({
       }
 
       onUpdateCollection(data);
-      setShowPrivacyWarning(false);
-      setPrivacyChangeDirection(null);
+      // setShowPrivacyWarning(false);
+      // setPrivacyChangeDirection(null);
       console.log(
         "Collection updated successfully, loading should be false now",
       );
@@ -95,24 +95,25 @@ export default function EditCollectionModal({
 
   const handleClose = () => {
     if (!loading) {
-      setShowPrivacyWarning(false);
-      setPrivacyChangeDirection(null);
+      // setShowPrivacyWarning(false);
+      // setPrivacyChangeDirection(null);
       onClose();
     }
   };
 
   const handlePrivacyChange = (privacy: "private" | "public") => {
     setFormData((prev) => ({ ...prev, privacy }));
-    setShowPrivacyWarning(false);
-    setPrivacyChangeDirection(null);
+    // setShowPrivacyWarning(false);
+    // setPrivacyChangeDirection(null);
   };
 
   if (!isOpen || !collection) return null;
 
   const hasChanges =
     formData.name !== collection.name ||
-    formData.description !== (collection.description || "") ||
-    formData.privacy !== collection.privacy;
+    formData.description !== (collection.description || "");
+  // ||
+  // formData.privacy !== collection.privacy;
 
   return (
     <div className={styles.overlay} onClick={handleClose}>
@@ -164,7 +165,7 @@ export default function EditCollectionModal({
             />
           </div>
 
-          <div className={styles.field}>
+          {/* <div className={styles.field}>
             <label className={styles.label}>Privacy Setting</label>
             <div className={styles.privacyOptions}>
               <label className={styles.radioOption}>
@@ -208,8 +209,8 @@ export default function EditCollectionModal({
               </label>
             </div>
           </div>
-
-          {showPrivacyWarning && (
+ */}
+          {/* {showPrivacyWarning && (
             <div className={styles.privacyWarning}>
               <div className={styles.warningIcon}>
                 {privacyChangeDirection === "toPublic" ? "⚠️" : "🔒"}
@@ -253,7 +254,7 @@ export default function EditCollectionModal({
                 </div>
               </div>
             </div>
-          )}
+          )} */}
 
           <div className={styles.actions}>
             <button
