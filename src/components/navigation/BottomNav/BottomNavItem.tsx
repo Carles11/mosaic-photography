@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./BottomNav.module.css";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 interface BottomNavItemProps {
   icon: string;
@@ -28,7 +29,19 @@ const BottomNavItem = ({
   }
 
   return (
-    <button className={className} onClick={onClick}>
+    <button
+      className={className}
+      onClick={() => {
+        sendGTMEvent({
+          event: "Mobile-Navigation-Click",
+          value: `Mobile-Navigation-${label}`,
+          icon,
+        });
+        if (onClick) {
+          onClick();
+        }
+      }}
+    >
       <span className={styles.navIcon}>{icon}</span>
       <span className={styles.navLabel}>{label}</span>
     </button>

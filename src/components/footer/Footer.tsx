@@ -1,4 +1,5 @@
-import React from "react";
+import { sendGTMEvent } from "@next/third-parties/google";
+
 import styles from "./footer.module.css";
 
 const Footer: React.FC = () => {
@@ -21,6 +22,12 @@ const Footer: React.FC = () => {
               href="https://www.rio-frances.com"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() =>
+                sendGTMEvent({
+                  event: "rio-frances-websiteClicked-FOOTER",
+                  value: "rio-frances-websiteClicked-FOOTER",
+                })
+              }
             >
               Carles del Río Francés
             </a>{" "}

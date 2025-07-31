@@ -22,6 +22,11 @@ function LoginContent() {
             Forgot your password?
           </Link>
         </p>
+        <p>
+          <Link href="/" className={styles.authLink}>
+            Or continue to homepage
+          </Link>
+        </p>
       </div>
     </div>
   );
