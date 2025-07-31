@@ -76,16 +76,6 @@ export default function CollectionView() {
         return;
       }
 
-      // Check if user can access this collection
-      if (
-        collectionData.privacy === "private" &&
-        collectionData.user_id !== user?.id
-      ) {
-        setError("You don't have permission to view this collection");
-        setLoading(false);
-        return;
-      }
-
       // Get collection images with details
       // We need to handle this differently because favorites.image_id is TEXT (like "4960")
       // and we need to match it with images.id
@@ -120,18 +110,12 @@ export default function CollectionView() {
         if (favoritesError) {
           console.error("Error loading favorites:", favoritesError);
           // If we can't access favorites (anonymous user), still show empty collection
-          if (collectionData.privacy === "public") {
-            setCollection({
-              ...collectionData,
-              images: [],
-            });
-            setLoading(false);
-            return;
-          } else {
-            setError("Error loading collection images");
-            setLoading(false);
-            return;
-          }
+          setCollection({
+            ...collectionData,
+            images: [],
+          });
+          setLoading(false);
+          return;
         }
 
         if (favoritesData && favoritesData.length > 0) {
@@ -172,8 +156,8 @@ export default function CollectionView() {
         }
       }
 
-      if (imagesData.length === 0 && collectionData.privacy === "public") {
-        // Public collection with no images or access issues
+      if (imagesData.length === 0) {
+        // Collection with no images or access issues
         setCollection({
           ...collectionData,
           images: [],
@@ -754,9 +738,6 @@ export default function CollectionView() {
                 <span className={styles.imageCount}>
                   {collection.images.length} image
                   {collection.images.length !== 1 ? "s" : ""}
-                </span>
-                <span className={styles.privacy}>
-                  {collection.privacy === "public" ? "🌐 Public" : "🔒 Private"}
                 </span>
               </div>
             </div>

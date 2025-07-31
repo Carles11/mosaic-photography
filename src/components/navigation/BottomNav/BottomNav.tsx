@@ -33,33 +33,25 @@ const BottomNav = ({
       <nav className={styles.bottomNav}>
         <div className={styles.navContainer}>
           <BottomNavItem
-            icon="⌂" // Alternative: house with garden
+            icon="⌂"
             label="Home"
             href="/"
             isActive={pathname === "/"}
           />
-          {/* Other subtle home icon options:
-              icon="⌂" // House symbol
-              icon="🛖" // Hut
-              icon="🗝️" // Key (symbolic for home)
-              icon="🏠" // Original
-          */}
 
           {user ? (
             <>
               <BottomNavItem
-                icon="⦿" // Bust in silhouette (slight, classic)
-                // Alternatives:
-                // icon="👤" // Two people (group/profile)
-                // icon="👥" // Two people (group/profile)
-                // icon="🧑" // Slight person (current)
-                // icon="🪪" // ID card (profile/identity)
-                // icon="⚪" // Simple circle (minimal profile)
-                // icon="◉" // Filled circle (minimal profile)
-                // icon="⦿" // Circled dot (minimal profile)
-                label="Profile"
-                href="/profile"
-                isActive={pathname === "/profile"}
+                icon="📋" // Content/library icon
+                // Alternative icons:
+                // icon="📚" // Books (collections)
+                // icon="📂" // Folder
+                // icon="🗂️" // Card file box
+                // icon="📋" // Clipboard (current choice)
+                // icon="⭐" // Star (favorites focused)
+                label="Content"
+                href="/my-content"
+                isActive={pathname?.startsWith("/my-content") ?? false}
               />
               <BottomNavItem
                 icon="⋯"

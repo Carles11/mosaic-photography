@@ -16,7 +16,7 @@ const Gallery: React.FC<GalleryProps> = ({ id, onLoginRequired }) => {
   return (
     <div id={id} className={styles.galleryGridContainer}>
       <hr />
-      <h2 className={styles.subTitle}>ALL PHOTOS </h2>
+      <h2 className={styles.subTitle}>THE MOSAIC COLLECTION </h2>
       <p className={styles.sectionIntro}>
         Browse the complete collection of vintage nude photography—featuring
         public domain, copyright-free, and open access images. All available for

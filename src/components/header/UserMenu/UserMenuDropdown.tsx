@@ -1,6 +1,7 @@
+"use client";
+
 import Link from "next/link";
 import { SupabaseUser } from "@/lib/supabaseClient";
-import ThemeToggle from "../../theme/ThemeToggle";
 import styles from "./UserMenu.module.css";
 
 interface UserMenuDropdownProps {
@@ -18,53 +19,82 @@ const UserMenuDropdown = ({
   onGoProClick,
   onClose,
 }: UserMenuDropdownProps) => {
+  const handleActionAndClose = (action: () => void) => {
+    action();
+    onClose();
+  };
+
   return (
     <div className={styles.dropdown}>
-      <div className={styles.dropdownContent}>
-        {user ? (
-          <>
-            <div className={styles.userInfo}>
-              <span className={styles.welcomeText}>Welcome, {user.email}</span>
-            </div>
+      {user ? (
+        <>
+          <div className={styles.userInfo}>
+            <span className={styles.userEmail}>{user.email}</span>
+          </div>
 
-            <div className={styles.menuDivider} />
+          <div className={styles.menuDivider} />
 
-            <button className={styles.menuItem} onClick={onGoProClick}>
-              <span className={styles.menuItemIcon}>⭐</span>
-              Go Pro
-            </button>
+          <Link href="/profile" className={styles.menuItem} onClick={onClose}>
+            <span className={styles.menuIcon}>⦿</span>
+            <span className={styles.menuLabel}>Profile</span>
+          </Link>
 
-            <Link href="/profile" className={styles.menuItem} onClick={onClose}>
-              <span className={styles.menuItemIcon}>👤</span>
-              Profile
-            </Link>
+          <Link
+            href="/my-content"
+            className={styles.menuItem}
+            onClick={onClose}
+          >
+            <span className={styles.menuIcon}>📋</span>
+            <span className={styles.menuLabel}>My Content</span>
+          </Link>
 
-            <button className={styles.menuItem} onClick={onLogoutClick}>
-              <span className={styles.menuItemIcon}>🚪</span>
-              Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <button className={styles.menuItem} onClick={onLoginClick}>
-              <span className={styles.menuItemIcon}>🔑</span>
-              Login
-            </button>
+          <Link href="/faq" className={styles.menuItem} onClick={onClose}>
+            <span className={styles.menuIcon}>❓</span>
+            <span className={styles.menuLabel}>FAQ</span>
+          </Link>
 
-            <button className={styles.menuItem} onClick={onGoProClick}>
-              <span className={styles.menuItemIcon}>⭐</span>
-              Go Pro
-            </button>
-          </>
-        )}
+          <button
+            className={styles.menuItem}
+            onClick={() => handleActionAndClose(onGoProClick!)}
+          >
+            <span className={styles.menuIcon}>⭐</span>
+            <span className={styles.menuLabel}>Go Pro</span>
+          </button>
 
-        <div className={styles.menuDivider} />
+          <div className={styles.menuDivider} />
 
-        <div className={styles.themeToggleWrapper}>
-          <span className={styles.themeLabel}>Theme</span>
-          <ThemeToggle />
-        </div>
-      </div>
+          <button
+            className={`${styles.menuItem} ${styles.logoutItem}`}
+            onClick={() => handleActionAndClose(onLogoutClick!)}
+          >
+            <span className={styles.menuIcon}>🚪</span>
+            <span className={styles.menuLabel}>Logout</span>
+          </button>
+        </>
+      ) : (
+        <>
+          <button
+            className={styles.menuItem}
+            onClick={() => handleActionAndClose(onLoginClick!)}
+          >
+            <span className={styles.menuIcon}>🔑</span>
+            <span className={styles.menuLabel}>Login</span>
+          </button>
+
+          <Link href="/faq" className={styles.menuItem} onClick={onClose}>
+            <span className={styles.menuIcon}>❓</span>
+            <span className={styles.menuLabel}>FAQ</span>
+          </Link>
+
+          <button
+            className={styles.menuItem}
+            onClick={() => handleActionAndClose(onGoProClick!)}
+          >
+            <span className={styles.menuIcon}>⭐</span>
+            <span className={styles.menuLabel}>Go Pro</span>
+          </button>
+        </>
+      )}
     </div>
   );
 };

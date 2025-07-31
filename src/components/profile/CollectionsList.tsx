@@ -42,48 +42,90 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   }));
 
   const loadCollections = async () => {
+    console.log("🔍 [DEBUG] loadCollections called");
+    console.log("🔍 [DEBUG] User ID:", user?.id);
+
     if (!user) {
       setLoading(false);
       return;
     }
 
     setLoading(true);
+
     try {
-      // Get collections with image counts
+      // Check current session
+      const { data: sessionData, error: sessionError } =
+        await supabase.auth.getSession();
+      console.log("🔍 [DEBUG] Session user ID:", sessionData.session?.user?.id);
+      console.log("🔍 [DEBUG] Context user ID:", user.id);
+      console.log(
+        "🔍 [DEBUG] IDs match:",
+        sessionData.session?.user?.id === user.id,
+      );
+
+      // Try the known collection IDs directly
+      console.log("🔍 [DEBUG] Testing known collection IDs...");
+      const { data: knownCollections, error: knownError } = await supabase
+        .from("collections")
+        .select("*")
+        .in("id", [
+          "1de09a36-8180-496e-823a-e2ce80b6cf45",
+          "960305af-8088-4254-86f3-0f88a06edd34",
+        ]);
+
+      console.log("🔍 [DEBUG] Known collections result:", {
+        data: knownCollections,
+        error: knownError,
+        count: knownCollections?.length || 0,
+      });
+
+      if (knownError) {
+        console.error("❌ [DEBUG] RLS Policy Error:", knownError);
+        console.error("❌ [DEBUG] This confirms RLS is blocking access");
+        console.error(
+          "❌ [DEBUG] Check your collections table RLS policies in Supabase dashboard",
+        );
+        alert(
+          "Database access blocked by security policies. Check Supabase RLS settings for collections table.",
+        );
+        return;
+      }
+
+      // If known collections work, try the regular query
       const { data: collectionsData, error: collectionsError } = await supabase
         .from("collections")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
+      console.log("🔍 [DEBUG] Regular query result:", {
+        data: collectionsData,
+        error: collectionsError,
+        count: collectionsData?.length || 0,
+      });
+
       if (collectionsError) {
-        console.error("Error loading collections:", collectionsError);
-        if (collectionsError.code === "42P01") {
-          console.warn("collections table doesn't exist yet");
-        }
+        console.error(
+          "❌ [DEBUG] Error loading collections:",
+          collectionsError,
+        );
         return;
       }
 
-      if (collectionsData) {
-        // For each collection, get the count and preview images
+      if (collectionsData && collectionsData.length > 0) {
+        // Process collections for image counts and previews
         const collectionsWithCounts = await Promise.all(
           collectionsData.map(async (collection) => {
             // Get image count
-            const { count } = await supabase
+            const { count, error: countError } = await supabase
               .from("collection_favorites")
               .select("*", { count: "exact", head: true })
               .eq("collection_id", collection.id);
 
             // Get preview images (first 4)
-            const { data: previewData } = await supabase
+            const { data: previewData, error: previewError } = await supabase
               .from("collection_favorites")
-              .select(
-                `
-                favorites!inner(
-                  images!inner(url)
-                )
-              `,
-              )
+              .select("favorites!inner(images!inner(url))")
               .eq("collection_id", collection.id)
               .order("added_at", { ascending: false })
               .limit(4);
@@ -99,25 +141,58 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
           }),
         );
 
+        console.log(
+          "✅ [DEBUG] Found",
+          collectionsWithCounts.length,
+          "collections",
+        );
         setCollections(collectionsWithCounts);
+      } else {
+        console.log("⚠️ [DEBUG] No collections found");
+        setCollections([]);
       }
     } catch (error) {
-      console.error("Error loading collections:", error);
+      console.error("❌ [DEBUG] Unexpected error:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    console.log("🔍 [DEBUG] useEffect triggered - loadCollections");
+    console.log(
+      "🔍 [DEBUG] User in useEffect:",
+      user ? "User exists" : "No user",
+    );
     loadCollections();
   }, [user]);
 
   const handleCreateCollection = (newCollection: Collection) => {
-    setCollections((prev) => [
-      { ...newCollection, image_count: 0, preview_images: [] },
-      ...prev,
-    ]);
+    console.log(
+      "🔍 [DEBUG] handleCreateCollection called with:",
+      newCollection,
+    );
+    console.log(
+      "🔍 [DEBUG] Current collections before adding:",
+      collections.length,
+    );
+
+    setCollections((prev) => {
+      const updated = [
+        { ...newCollection, image_count: 0, preview_images: [] },
+        ...prev,
+      ];
+      console.log("🔍 [DEBUG] Updated collections state:", updated.length);
+      return updated;
+    });
     setShowCreateModal(false);
+
+    console.log("🔍 [DEBUG] Collection creation completed, refreshing...");
+    // Refresh collections from database to verify it was saved
+    setTimeout(() => {
+      console.log("🔍 [DEBUG] Triggering refresh after collection creation");
+      loadCollections();
+    }, 1000);
   };
 
   const handleEditCollection = (updatedCollection: Collection) => {
@@ -132,28 +207,42 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   };
 
   const handleDeleteCollection = async (collectionId: string) => {
+    console.log("🔍 [DEBUG] handleDeleteCollection called for:", collectionId);
+
     if (
       !confirm(
         "Are you sure you want to delete this collection? This action cannot be undone.",
       )
     ) {
+      console.log("🔍 [DEBUG] Collection deletion cancelled by user");
       return;
     }
 
     try {
+      console.log(
+        "🔍 [DEBUG] Attempting to delete collection from database...",
+      );
       const { error } = await supabase
         .from("collections")
         .delete()
         .eq("id", collectionId);
 
       if (error) {
-        console.error("Error deleting collection:", error);
+        console.error("❌ [DEBUG] Error deleting collection:", error);
         alert("Failed to delete collection. Please try again.");
       } else {
-        setCollections((prev) => prev.filter((col) => col.id !== collectionId));
+        console.log("✅ [DEBUG] Collection deleted successfully from database");
+        setCollections((prev) => {
+          const updated = prev.filter((col) => col.id !== collectionId);
+          console.log(
+            "🔍 [DEBUG] Updated collections after deletion:",
+            updated.length,
+          );
+          return updated;
+        });
       }
     } catch (error) {
-      console.error("Error deleting collection:", error);
+      console.error("❌ [DEBUG] Unexpected error deleting collection:", error);
       alert("Failed to delete collection. Please try again.");
     }
   };
@@ -163,6 +252,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   }
 
   if (loading) {
+    console.log("🔍 [DEBUG] Rendering loading state");
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
@@ -197,7 +287,12 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
           <h3>No collections yet</h3>
           <p>Create your first collection to organize your favorite images</p>
           <button
-            onClick={() => setShowCreateModal(true)}
+            onClick={() => {
+              console.log(
+                "🔍 [DEBUG] Create Collection button clicked from empty state",
+              );
+              setShowCreateModal(true);
+            }}
             className={styles.emptyCreateButton}
           >
             Create Collection

@@ -277,6 +277,100 @@
   opacity: 0.6;
 }
 
+.quickAccess {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.quickAccessItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--text-color);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-color);
+  transition: all 0.2s ease;
+}
+
+.quickAccessItem:hover {
+  border-color: var(--text-color);
+  /* background-color: rgba(var(--tertiary-color), 0.05); */
+  transform: translateY(-2px);
+}
+
+.quickAccessIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.quickAccessContent h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.quickAccessContent p {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.quickAccessFullLink {
+  text-align: center;
+}
+
+.viewAllButton {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--tertiary-color);
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.viewAllButton:hover {
+  background-color: var(--accent-color);
+}
+
+@media (max-width: 768px) {
+  .section,
+  .form {
+    padding: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.25rem;
+  }
+
+  .infoItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .input {
+    width: 91%;
+  }
+
+  .quickAccess {
+    grid-template-columns: 1fr;
+  }
+
+  .quickAccessItem {
+    padding: 0.75rem;
+  }
+
+  .quickAccessIcon {
+    font-size: 1.5rem;
+  }
+}
+
 /* Dark theme support */
 @media (prefers-color-scheme: dark) {
   .container {
@@ -301,26 +395,5 @@
     background-color: #742a2a;
     color: #feb2b2;
     border: 1px solid #e53e3e;
-  }
-}
-
-@media (max-width: 768px) {
-  .section,
-  .form {
-    padding: 1rem;
-  }
-
-  .sectionTitle {
-    font-size: 1.25rem;
-  }
-
-  .infoItem {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
-
-  .input {
-    width: 91%;
   }
 }

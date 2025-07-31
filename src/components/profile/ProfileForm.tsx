@@ -1,12 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { supabase, SupabaseUser } from "@/lib/supabaseClient";
 import { useFavorites } from "@/context/FavoritesContext";
 import type { UserProfile } from "@/types";
-import FavoritesList from "./FavoritesList";
-import UserCommentsList from "./UserCommentsList";
-import CollectionsList, { type CollectionsListRef } from "./CollectionsList";
 import styles from "./ProfileForm.module.css";
 
 interface ProfileFormProps {
@@ -15,7 +13,6 @@ interface ProfileFormProps {
 
 export default function ProfileForm({ user }: ProfileFormProps) {
   const { favorites } = useFavorites();
-  const collectionsListRef = useRef<CollectionsListRef>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -33,10 +30,6 @@ export default function ProfileForm({ user }: ProfileFormProps) {
   });
 
   const [databaseError, setDatabaseError] = useState(false);
-
-  const handleCollectionRefresh = () => {
-    collectionsListRef.current?.refreshCollections();
-  };
 
   const createInitialProfile = useCallback(async () => {
     // Don't try to create profile if we know the database table doesn't exist
@@ -369,19 +362,49 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         </button>
       </form>
 
+      {/* Quick Access Section */}
       <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Favorites</h2>
-        <FavoritesList onCollectionUpdate={handleCollectionRefresh} />
-      </div>
+        <h2 className={styles.sectionTitle}>Quick Access</h2>
+        <div className={styles.quickAccess}>
+          <Link
+            href="/my-content?tab=favorites"
+            className={styles.quickAccessItem}
+          >
+            <span className={styles.quickAccessIcon}>♡</span>
+            <div className={styles.quickAccessContent}>
+              <h3>My Favorites</h3>
+              <p>{favorites.size} saved images</p>
+            </div>
+          </Link>
 
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Collections</h2>
-        <CollectionsList ref={collectionsListRef} />
-      </div>
+          <Link
+            href="/my-content?tab=collections"
+            className={styles.quickAccessItem}
+          >
+            <span className={styles.quickAccessIcon}>📚</span>
+            <div className={styles.quickAccessContent}>
+              <h3>My Collections</h3>
+              <p>Organized image sets</p>
+            </div>
+          </Link>
 
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Comments</h2>
-        <UserCommentsList />
+          <Link
+            href="/my-content?tab=comments"
+            className={styles.quickAccessItem}
+          >
+            <span className={styles.quickAccessIcon}>💬</span>
+            <div className={styles.quickAccessContent}>
+              <h3>My Comments</h3>
+              <p>Your gallery interactions</p>
+            </div>
+          </Link>
+        </div>
+
+        <div className={styles.quickAccessFullLink}>
+          <Link href="/my-content" className={styles.viewAllButton}>
+            View All My Content →
+          </Link>
+        </div>
       </div>
     </div>
   );
