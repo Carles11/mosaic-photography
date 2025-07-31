@@ -34,21 +34,29 @@ const UserMenuDropdown = ({
 
           <div className={styles.menuDivider} />
 
-          <Link href="/profile" className={styles.menuItem} onClick={onClose}>
+          <Link
+            href="/profile"
+            className={`no-fancy-link ${styles.menuItem}`}
+            onClick={onClose}
+          >
             <span className={styles.menuIcon}>⦿</span>
             <span className={styles.menuLabel}>Profile</span>
           </Link>
 
           <Link
             href="/my-content"
-            className={styles.menuItem}
+            className={`no-fancy-link ${styles.menuItem}`}
             onClick={onClose}
           >
             <span className={styles.menuIcon}>📋</span>
             <span className={styles.menuLabel}>My Content</span>
           </Link>
 
-          <Link href="/faq" className={styles.menuItem} onClick={onClose}>
+          <Link
+            href="/faq"
+            className={`no-fancy-link ${styles.menuItem}`}
+            onClick={onClose}
+          >
             <span className={styles.menuIcon}>❓</span>
             <span className={styles.menuLabel}>FAQ</span>
           </Link>

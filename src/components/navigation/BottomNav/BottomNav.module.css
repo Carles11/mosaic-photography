@@ -66,6 +66,36 @@
 }
 
 /* Menu Modal Styles */
+.menuContainer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  z-index: 1000;
+  background: var(--menu-bg, #fff);
+  box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.12);
+  /* Optional: add padding or border-radius as needed */
+}
+
+.menu {
+  background: var(--background-color, #232323);
+}
+
+.closeButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  color: var(--text-color, #fff);
+  background-color: #555;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin: 1rem;
+}
+
 .menuBackdrop {
   position: fixed;
   top: 0;
@@ -94,6 +124,7 @@
   max-height: 80vh;
   overflow-y: auto;
   padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  position: relative;
 }
 
 .userInfo {

@@ -38,19 +38,15 @@ const BottomNavMenu = ({
   };
 
   return (
-    <>
+    <div className={styles.menuContainer}>
       <div className={styles.backdrop} onClick={onClose} />
       <div className={styles.menu}>
-        <div className={styles.menuHeader}>
-          <h3 className={styles.menuTitle}>Menu</h3>
-          <button className={styles.closeButton} onClick={onClose}>
-            ×
-          </button>
-        </div>
-
         <div className={styles.menuContent}>
           {user ? (
             <>
+              <button className={styles.closeButton} onClick={onClose}>
+                ×
+              </button>
               <Link
                 href="/profile"
                 className={styles.menuItem}
@@ -85,6 +81,9 @@ const BottomNavMenu = ({
             </>
           ) : (
             <>
+              <button className={styles.closeButton} onClick={onClose}>
+                ×
+              </button>
               <button
                 className={styles.menuItem}
                 onClick={() => handleActionAndClose(onLoginClick!)}
@@ -109,7 +108,7 @@ const BottomNavMenu = ({
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

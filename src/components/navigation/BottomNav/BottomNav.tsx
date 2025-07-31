@@ -42,13 +42,7 @@ const BottomNav = ({
           {user ? (
             <>
               <BottomNavItem
-                icon="📋" // Content/library icon
-                // Alternative icons:
-                // icon="📚" // Books (collections)
-                // icon="📂" // Folder
-                // icon="🗂️" // Card file box
-                // icon="📋" // Clipboard (current choice)
-                // icon="⭐" // Star (favorites focused)
+                icon="≡"
                 label="Content"
                 href="/my-content"
                 isActive={pathname?.startsWith("/my-content") ?? false}

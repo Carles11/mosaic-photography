@@ -82,9 +82,6 @@
   opacity: 0;
   transform: translateY(-10px);
   animation: fadeInSlide 0.2s ease forwards;
-}
-
-.dropdownContent {
   background: var(--background-color, #232323);
   border: 1px solid var(--text-color, rgba(255, 255, 255, 0.2));
   border-radius: 8px;
