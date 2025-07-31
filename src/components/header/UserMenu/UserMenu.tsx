@@ -5,6 +5,7 @@ import { SupabaseUser } from "@/lib/supabaseClient";
 import UserMenuButton from "./UserMenuButton";
 import UserMenuDropdown from "./UserMenuDropdown";
 import styles from "./UserMenu.module.css";
+import { useRouter } from "next/navigation";
 
 interface UserMenuProps {
   user?: SupabaseUser | null;
@@ -21,6 +22,7 @@ const UserMenu = ({
 }: UserMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const router = useRouter(); // Add this line
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -62,9 +64,21 @@ const UserMenu = ({
     setIsOpen(!isOpen);
   };
 
-  const handleMenuAction = (action: () => void) => {
-    action();
+  const handleMenuAction = (action: (() => void) | undefined) => {
+    if (typeof action === "function") {
+      action();
+    }
     setIsOpen(false);
+  };
+
+  // Provide a fallback login handler
+  const handleLogin = () => {
+    if (onLoginClick) {
+      handleMenuAction(onLoginClick);
+    } else {
+      router.push("/auth/login");
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -76,7 +90,7 @@ const UserMenu = ({
           <div className={styles.backdrop} onClick={() => setIsOpen(false)} />
           <UserMenuDropdown
             user={user}
-            onLoginClick={() => handleMenuAction(onLoginClick!)}
+            onLoginClick={handleLogin}
             onLogoutClick={() => handleMenuAction(onLogoutClick!)}
             onGoProClick={() => handleMenuAction(onGoProClick!)}
             onClose={() => setIsOpen(false)}

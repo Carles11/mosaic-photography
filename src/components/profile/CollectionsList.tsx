@@ -233,16 +233,21 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                       router.push(`/profile/collections/${collection.id}`)
                     }
                     className={styles.viewButton}
-                    title="View collection"
+                    title="Share collection"
                   >
-                    👁️
+                    {/* Options for share icon similar in style to ⌂: */}
+                    {/* 1. ⎋ (Escape) */}
+                    {/* 2. ⎙ (Print) */}
+                    {/* 3. ⎘ (Insert) */}
+                    {/* 4. ⎗ (Copy) */}
+                    {/* 5. ⎌ (Return) */}⎙
                   </button>
                   <button
                     onClick={() => setEditingCollection(collection)}
                     className={styles.editButton}
                     title="Edit collection"
                   >
-                    ✏️
+                    ⎌
                   </button>
                   <button
                     onClick={() => handleDeleteCollection(collection.id)}

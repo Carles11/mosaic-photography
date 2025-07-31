@@ -650,8 +650,11 @@ export default function CollectionView() {
           <div className={styles.error}>
             <h2>Error</h2>
             <p>{error}</p>
-            <button onClick={() => router.back()} className={styles.backButton}>
-              Go Back
+            <button
+              onClick={() => router.push("/")}
+              className={styles.backButton}
+            >
+              Start at home
             </button>
           </div>
         </div>
@@ -672,8 +675,11 @@ export default function CollectionView() {
         <div className={styles.container}>
           <div className={styles.error}>
             <h2>Collection Not Found</h2>
-            <button onClick={() => router.back()} className={styles.backButton}>
-              Go Back
+            <button
+              onClick={() => router.push("/")}
+              className={styles.backButton}
+            >
+              Start at home
             </button>
           </div>
         </div>
