@@ -26,7 +26,7 @@
   font-weight: bold;
   margin-bottom: 2rem;
   text-align: center;
-  color: var(--text-primary, #333);
+  color: var(--text-color, #333);
 }
 
 .loadingContainer {
@@ -48,11 +48,12 @@
   }
 
   .main {
+    width: 90%;
     padding: 1rem;
   }
 
   .content {
-    padding: 1.5rem;
+    padding: 1rem 0.5rem;
   }
 
   .title {
