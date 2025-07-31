@@ -23,19 +23,19 @@
   margin: 0;
 }
 
-.goProText {
-  font-size: 1.2rem;
-  font-weight: 700;
-  background: var(--text-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-align: center;
-  cursor: pointer;
+.backToHomeButton {
+  color: var(--text-color, #fff);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
-.goProText:hover {
-  text-decoration: underline;
-  color: var(--text-color);
+
+.backToHomeButton:hover {
+  background: var(--tertiary-color, rgba(255, 255, 255, 0.1));
+  transform: translateY(-1px);
 }
 
 .themeImage {
@@ -75,6 +75,21 @@
   border-color: transparent;
 }
 
+.actionSection {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.rightActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-right: 0.5rem;
+}
+
 /* Media query for tablets Portrait and landscape */
 @media (min-width: 768px) and (max-width: 1024px) {
   .themeImage {
@@ -100,20 +115,28 @@
   }
 
   .actionSection {
-    flex-direction: column;
-    gap: 1.5rem;
-    text-align: center;
-  }
-
-  .leftActions,
-  .rightActions {
     justify-content: center;
   }
 
   .rightActions {
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    justify-content: center;
   }
+}
+
+/* Legacy styles - keeping for backward compatibility but may be unused now */
+.goProText {
+  font-size: 1.2rem;
+  font-weight: 700;
+  background: var(--text-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-align: center;
+  cursor: pointer;
+}
+.goProText:hover {
+  text-decoration: underline;
+  color: var(--text-color);
 }
 
 .loginButton {
@@ -163,23 +186,8 @@
   font-weight: 500;
 }
 
-.actionSection {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
 .leftActions {
   display: flex;
   align-items: center;
   padding-left: 0.5rem;
-}
-
-.rightActions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding-right: 0.5rem;
 }

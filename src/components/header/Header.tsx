@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { sendGTMEvent } from "@next/third-parties/google";
 
-import ThemeToggle from "../theme/ThemeToggle";
 import ThemeImage from "../theme/ThemeImageDark";
 import GoProModal from "@/components/modals/goProModal/GoProModal";
+import UserMenu from "./UserMenu/UserMenu";
 import { SupabaseUser } from "@/lib/supabaseClient";
 
 import styles from "./header.module.css";
@@ -28,6 +28,14 @@ const Header = ({
   const [showGoProModal, setShowGoProModal] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
+
+  const handleGoProClick = () => {
+    setShowGoProModal(true);
+    sendGTMEvent({
+      event: "goProText",
+      value: "Go Pro clicked from user menu",
+    });
+  };
 
   return (
     <header>
@@ -58,56 +66,13 @@ const Header = ({
             </li>
           )}
           <li className={styles.actionSection}>
-            <div className={styles.leftActions}>
-              <p
-                className={styles.goProText}
-                onClick={() => {
-                  setShowGoProModal(true);
-                  sendGTMEvent({
-                    event: "goProText",
-                    value: "Go Pro clicked from header",
-                  });
-                }}
-              >
-                Go Pro
-              </p>
-            </div>
-
             <div className={styles.rightActions}>
-              {showLoginButton && (
-                <button className={styles.loginButton} onClick={onLoginClick}>
-                  Login
-                </button>
-              )}
-
-              {user && (
-                <span className={styles.welcomeText}>
-                  Welcome, {user.email}
-                </span>
-              )}
-
-              {user && (
-                <Link href="/profile" className={styles.profileButton}>
-                  Profile
-                </Link>
-              )}
-
-              {user && (
-                <button className={styles.loginButton} onClick={onLogoutClick}>
-                  Logout
-                </button>
-              )}
-
-              <div
-                onClick={() =>
-                  sendGTMEvent({
-                    event: "ThemeToggleClicked",
-                    value: "Theme toggle clicked from header",
-                  })
-                }
-              >
-                <ThemeToggle />
-              </div>
+              <UserMenu
+                user={user}
+                onLoginClick={onLoginClick}
+                onLogoutClick={onLogoutClick}
+                onGoProClick={handleGoProClick}
+              />
             </div>
           </li>
         </ul>

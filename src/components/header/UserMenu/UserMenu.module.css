@@ -1,0 +1,250 @@
+.userMenu {
+  position: relative;
+  display: inline-block;
+}
+
+/* Menu Button Styles */
+.menuButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-color, #fff);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+  justify-content: space-between;
+}
+
+.menuButton:hover {
+  background: var(--tertiary-color, rgba(255, 255, 255, 0.1));
+  border-color: var(--accent-color, #f4d35e);
+  transform: translateY(-1px);
+}
+
+.menuButtonOpen {
+  background: var(--tertiary-color, rgba(255, 255, 255, 0.1));
+  border-color: var(--accent-color, #f4d35e);
+}
+
+.userAvatar {
+  width: 24px;
+  height: 24px;
+  background: var(--accent-color, #f4d35e);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userInitial {
+  color: var(--background-color, #232323);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.menuLabel {
+  font-size: 0.9rem;
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+/* Backdrop for mobile */
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  display: none;
+}
+
+/* Dropdown Styles */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: fadeInSlide 0.2s ease forwards;
+}
+
+.dropdownContent {
+  background: var(--background-color, #232323);
+  border: 1px solid var(--text-color, rgba(255, 255, 255, 0.2));
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  min-width: 220px;
+  overflow: hidden;
+}
+
+/* User Info */
+.userInfo {
+  padding: 1rem;
+  background: var(--background-secondary, rgba(255, 255, 255, 0.05));
+}
+
+.welcomeText {
+  color: var(--text-color, #fff);
+  font-size: 0.85rem;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+/* Menu Items */
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  color: var(--text-color, #fff);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.menuItem:hover {
+  background: var(--tertiary-color, rgba(255, 255, 255, 0.1));
+}
+
+.menuItemIcon {
+  font-size: 1rem;
+  width: 16px;
+  text-align: center;
+}
+
+/* Divider */
+.menuDivider {
+  height: 1px;
+  background: var(--text-color, rgba(255, 255, 255, 0.1));
+  margin: 0.25rem 0;
+}
+
+/* Theme Toggle Wrapper */
+.themeToggleWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+}
+
+.themeLabel {
+  color: var(--text-color, #fff);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Animations */
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .backdrop {
+    display: block;
+  }
+
+  .dropdown {
+    position: fixed;
+    top: auto;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateY(100%);
+    animation: slideUp 0.3s ease forwards;
+    border-radius: 0;
+  }
+
+  .dropdownContent {
+    border-radius: 16px 16px 0 0;
+    min-width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .menuItem {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    min-height: 48px;
+  }
+
+  .menuItemIcon {
+    font-size: 1.2rem;
+    width: 20px;
+  }
+
+  .userInfo {
+    padding: 1.5rem;
+  }
+
+  .welcomeText {
+    font-size: 0.95rem;
+  }
+
+  .themeToggleWrapper {
+    padding: 1rem 1.5rem;
+  }
+
+  .themeLabel {
+    font-size: 1rem;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Desktop-specific styles */
+@media (min-width: 769px) {
+  .dropdown {
+    /* Desktop dropdown stays as originally positioned */
+  }
+
+  .backdrop {
+    display: none !important;
+  }
+}
