@@ -7,6 +7,7 @@ import Slider, { Settings } from "react-slick";
 import { sendGTMEvent } from "@next/third-parties/google";
 
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
+import Dropdown from "@/components/inputs/dropDown";
 
 import "slick-carousel/slick/slick.css"; // Import slick-carousel styles
 import "slick-carousel/slick/slick-theme.css"; // Import slick-carousel theme
@@ -289,6 +290,48 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
               >
                 Dive Into {photographer.surname}’s Art
               </p>
+              {/* Add Make it yours Dropdown below */}
+              {photographer.store &&
+                photographer.store.length > 0 &&
+                (() => {
+                  // Parse stores as in PhotographerModal
+                  const parsedStores = photographer.store
+                    .map((storeString: string) => {
+                      try {
+                        const store = JSON.parse(storeString);
+                        return {
+                          store: String(store.store),
+                          website: String(store.website),
+                          affiliate: Boolean(store.affiliate),
+                        };
+                      } catch {
+                        return null;
+                      }
+                    })
+                    .filter(
+                      (
+                        item,
+                      ): item is {
+                        store: string;
+                        website: string;
+                        affiliate: boolean;
+                      } => item !== null,
+                    );
+                  return parsedStores.length > 0 ? (
+                    <div style={{ marginTop: 8 }}>
+                      <Dropdown
+                        buttonText="Make it yours"
+                        items={parsedStores}
+                        onToggle={() => {
+                          sendGTMEvent({
+                            event: "HOME-storesDropdownOpened",
+                            value: photographer.name,
+                          });
+                        }}
+                      />
+                    </div>
+                  ) : null;
+                })()}
             </div>
           ))}
         </SliderTyped>

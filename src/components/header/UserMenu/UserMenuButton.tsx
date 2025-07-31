@@ -1,3 +1,4 @@
+"use client";
 import { SupabaseUser } from "@/lib/supabaseClient";
 import styles from "./UserMenu.module.css";
 import { sendGTMEvent } from "@next/third-parties/google";
@@ -16,7 +17,15 @@ const UserMenuButton = ({ user, isOpen, onClick }: UserMenuButtonProps) => {
   return (
     <button
       className={`${styles.menuButton} ${isOpen ? styles.menuButtonOpen : ""}`}
-      onClick={onClick}
+      onClick={() => {
+        if (!user) {
+          sendGTMEvent({
+            event: "Desktop-Menu-Click",
+            value: "Desktop-UserMenuButton",
+          });
+        }
+        onClick();
+      }}
       aria-expanded={isOpen}
       aria-haspopup="true"
       aria-label={user ? `User menu for ${user.email}` : "Login menu"}
@@ -28,17 +37,7 @@ const UserMenuButton = ({ user, isOpen, onClick }: UserMenuButtonProps) => {
           </span>
         </div>
       ) : (
-        <span
-          className={styles.menuLabel}
-          onClick={() =>
-            sendGTMEvent({
-              event: "Desktop-Menu-Click",
-              value: "Desktop-UserMenuButton",
-            })
-          }
-        >
-          Menu
-        </span>
+        <span className={styles.menuLabel}>Menu</span>
       )}
 
       <svg

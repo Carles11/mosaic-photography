@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { sendGTMEvent } from "@next/third-parties/google";
 
 import styles from "./credits.module.css";
 
@@ -179,16 +178,7 @@ const Credits: React.FC = () => {
         </p>
         <p>
           <strong>Official Website:</strong>{" "}
-          <a
-            href="https://www.rio-frances.com"
-            title="Official Website"
-            onClick={() =>
-              sendGTMEvent({
-                event: "rio-frances-websiteClicked-CREDITS",
-                value: "rio-credits-section",
-              })
-            }
-          >
+          <a href="https://www.rio-frances.com" title="Official Website">
             www.rio-frances.com
           </a>
         </p>

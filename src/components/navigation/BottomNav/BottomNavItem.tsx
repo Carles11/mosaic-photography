@@ -21,7 +21,20 @@ const BottomNavItem = ({
 
   if (href) {
     return (
-      <Link href={href} className={className}>
+      <Link
+        href={href}
+        className={className}
+        onClick={() => {
+          sendGTMEvent({
+            event: "Mobile-Navigation-Click",
+            value: `Mobile-Navigation-${label}`,
+            icon,
+          });
+          if (onClick) {
+            onClick();
+          }
+        }}
+      >
         <span className={styles.navIcon}>{icon}</span>
         <span className={styles.navLabel}>{label}</span>
       </Link>

@@ -1,4 +1,4 @@
-import { sendGTMEvent } from "@next/third-parties/google";
+import RioFrancesLink from "./RioFrancesLink";
 
 import styles from "./footer.module.css";
 
@@ -18,20 +18,7 @@ const Footer: React.FC = () => {
         <div className={styles.footerItem}>
           <p>Created by </p>
           <p>
-            <a
-              href="https://www.rio-frances.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() =>
-                sendGTMEvent({
-                  event: "rio-frances-websiteClicked-FOOTER",
-                  value: "rio-frances-websiteClicked-FOOTER",
-                })
-              }
-            >
-              Carles del Río Francés
-            </a>{" "}
-            |{" "}
+            <RioFrancesLink /> |{" "}
             <a
               href="https://github.com/Carles11"
               target="_blank"
