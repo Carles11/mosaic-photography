@@ -28,6 +28,8 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     name: "",
     instagram: "",
     website: "",
+    own_store_name: "",
+    own_store_url: "",
   });
 
   const [databaseError, setDatabaseError] = useState(false);
@@ -48,6 +50,8 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         name: "",
         instagram: "",
         website: "",
+        own_store_name: "",
+        own_store_url: "",
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
@@ -112,6 +116,8 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           name: data.name || "",
           instagram: data.instagram || "",
           website: data.website || "",
+          own_store_name: data.own_store_name || "",
+          own_store_url: data.own_store_url || "",
         });
       } else {
         // No profile exists yet, create a basic one
@@ -313,6 +319,39 @@ export default function ProfileForm({ user }: ProfileFormProps) {
             value={formData.website}
             onChange={(e) => handleInputChange("website", e.target.value)}
             placeholder="https://yourwebsite.com"
+            disabled={databaseError}
+          />
+        </div>
+
+        <div className={styles.field}>
+          <label htmlFor="own_store_name" className={styles.label}>
+            Store Name
+          </label>
+          <input
+            type="text"
+            id="own_store_name"
+            className={styles.input}
+            value={formData.own_store_name}
+            onChange={(e) =>
+              handleInputChange("own_store_name", e.target.value)
+            }
+            placeholder="Enter your store name"
+            maxLength={100}
+            disabled={databaseError}
+          />
+        </div>
+
+        <div className={styles.field}>
+          <label htmlFor="own_store_url" className={styles.label}>
+            Store URL
+          </label>
+          <input
+            type="url"
+            id="own_store_url"
+            className={styles.input}
+            value={formData.own_store_url}
+            onChange={(e) => handleInputChange("own_store_url", e.target.value)}
+            placeholder="https://yourstore.com"
             disabled={databaseError}
           />
         </div>

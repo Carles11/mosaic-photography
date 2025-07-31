@@ -259,6 +259,10 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                   <div className={styles.emptyPreview}>
                     <span className={styles.emptyPreviewIcon}>📷</span>
                     <p>No images yet</p>
+                    <p>
+                      To add images to this collection, go to your favorites
+                      above and click the yellow folder icon over the image.
+                    </p>
                   </div>
                 )}
               </div>
