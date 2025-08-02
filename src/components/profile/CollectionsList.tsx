@@ -240,14 +240,14 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                     {/* 2. ⎙ (Print) */}
                     {/* 3. ⎘ (Insert) */}
                     {/* 4. ⎗ (Copy) */}
-                    {/* 5. ⎌ (Return) */}⎙
+                    {/* 5. ⎌ (Return) */}Share
                   </button>
                   <button
                     onClick={() => setEditingCollection(collection)}
                     className={styles.editButton}
                     title="Edit collection"
                   >
-                    ⎌
+                    Edit
                   </button>
                   <button
                     onClick={() => handleDeleteCollection(collection.id)}

@@ -56,7 +56,7 @@ const BottomNav = ({
             </>
           ) : (
             <>
-              <BottomNavItem icon="🔑" label="Login" onClick={onLoginClick} />
+              <BottomNavItem icon="☰" label="Login" onClick={onLoginClick} />
               <BottomNavItem
                 icon="⋯"
                 label="Menu"

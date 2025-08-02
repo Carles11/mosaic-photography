@@ -569,7 +569,7 @@
 }
 
 .mobileInstructions {
-  background: var(--primary-color, #007bff);
+  background: var(--secondary-color, #007bff);
   color: white;
   padding: 1rem;
   border-radius: 8px;

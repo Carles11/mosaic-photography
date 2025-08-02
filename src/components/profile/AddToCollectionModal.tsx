@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { Collection } from "@/types";
+import { toast } from "react-hot-toast";
 import styles from "./AddToCollectionModal.module.css";
 
 interface AddToCollectionModalProps {
@@ -114,7 +115,7 @@ export default function AddToCollectionModal({
 
       if (favoriteError || !favoriteData) {
         console.error("Error finding favorite:", favoriteError);
-        alert(
+        toast.error(
           "You must favorite this image first before adding it to a collection!",
         );
         return;
@@ -129,7 +130,7 @@ export default function AddToCollectionModal({
         .single();
 
       if (existing) {
-        alert("Image is already in this collection!");
+        toast("Image is already in this collection!", { icon: "⚠️" });
         return;
       }
 
@@ -141,7 +142,7 @@ export default function AddToCollectionModal({
 
       if (error) {
         console.error("Error adding to collection:", error);
-        alert("Failed to add image to collection. Please try again.");
+        toast.error("Failed to add image to collection. Please try again.");
         return;
       }
 
@@ -154,7 +155,7 @@ export default function AddToCollectionModal({
       }
     } catch (error) {
       console.error("Error adding to collection:", error);
-      alert("Failed to add image to collection. Please try again.");
+      toast.error("Failed to add image to collection. Please try again.");
     } finally {
       setAdding(null);
     }
@@ -187,7 +188,9 @@ export default function AddToCollectionModal({
 
       if (error) {
         console.error("Error removing from collection:", error);
-        alert("Failed to remove image from collection. Please try again.");
+        toast.error(
+          "Failed to remove image from collection. Please try again.",
+        );
         return;
       }
 
@@ -200,10 +203,10 @@ export default function AddToCollectionModal({
 
       // Show success message
       const collection = collections.find((c) => c.id === collectionId);
-      alert(`Removed "${imageTitle}" from "${collection?.name}"`);
+      toast.success(`Removed "${imageTitle}" from "${collection?.name}"`);
     } catch (error) {
       console.error("Error removing from collection:", error);
-      alert("Failed to remove image from collection. Please try again.");
+      toast.error("Failed to remove image from collection. Please try again.");
     } finally {
       setAdding(null);
     }

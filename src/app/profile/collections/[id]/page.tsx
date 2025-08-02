@@ -11,6 +11,7 @@ import ShareCollectionModal from "@/components/profile/ShareCollectionModal";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import styles from "./CollectionView.module.css";
+import { toast } from "react-hot-toast";
 
 export default function CollectionView() {
   const params = useParams();
@@ -289,88 +290,12 @@ export default function CollectionView() {
       if (successCount === 0) {
         setIsExporting(false);
 
-        const userChoice = confirm(
-          `Unable to download images directly due to CORS restrictions.\n\n` +
-            `Would you like to:\n` +
-            `• OK - Create a list of image URLs to copy\n` +
-            `• Cancel - Create a ZIP with image URLs only`,
+        // Use a toast to ask for user choice instead of confirm
+        toast(
+          "Unable to download images directly due to CORS restrictions. Creating a ZIP with image URLs only.",
+          { icon: "⚠️", duration: 8000 },
         );
-
-        if (userChoice) {
-          // Create a popup window with all image URLs for easy copying
-          const imageUrlsList = collection.images
-            .map(
-              (image, index) =>
-                `${index + 1}. ${image.image_title} - ${image.image_url}`,
-            )
-            .join("\n");
-
-          const popupContent = `
-            <html>
-              <head>
-                <title>Collection Image URLs - ${collection.name}</title>
-                <style>
-                  body { font-family: Arial, sans-serif; padding: 20px; }
-                  h1 { color: #333; }
-                  .url-list { background: #f5f5f5; padding: 15px; border-radius: 5px; }
-                  .image-link { display: block; margin: 10px 0; padding: 10px; background: white; border-radius: 3px; text-decoration: none; color: #0066cc; }
-                  .image-link:hover { background: #e6f3ff; }
-                  .copy-btn { margin: 10px 0; padding: 10px 15px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
-                  .copy-btn:hover { background: #0056b3; }
-                </style>
-              </head>
-              <body>
-                <h1>Collection: ${collection.name}</h1>
-                <p>Click on any image URL below to open it in a new tab, or use the copy button to copy all URLs:</p>
-                <button class="copy-btn" onclick="copyAllUrls()">Copy All URLs</button>
-                <div class="url-list">
-                  ${collection.images
-                    .map(
-                      (image, index) =>
-                        `<a href="${image.image_url}" target="_blank" class="image-link">
-                      ${index + 1}. ${image.image_title}<br>
-                      <small>${image.image_url}</small>
-                    </a>`,
-                    )
-                    .join("")}
-                </div>
-                <script>
-                  function copyAllUrls() {
-                    const urls = ${JSON.stringify(collection.images.map((img) => img.image_url))};
-                    navigator.clipboard.writeText(urls.join('\\n')).then(() => {
-                      alert('All URLs copied to clipboard!');
-                    }).catch(() => {
-                      // Fallback for older browsers
-                      const textArea = document.createElement('textarea');
-                      textArea.value = urls.join('\\n');
-                      document.body.appendChild(textArea);
-                      textArea.select();
-                      document.execCommand('copy');
-                      document.body.removeChild(textArea);
-                      alert('All URLs copied to clipboard!');
-                    });
-                  }
-                </script>
-              </body>
-            </html>
-          `;
-
-          const popup = window.open(
-            "",
-            "_blank",
-            "width=800,height=600,scrollbars=yes",
-          );
-          if (popup) {
-            popup.document.write(popupContent);
-            popup.document.close();
-          } else {
-            alert(
-              "Popup blocked! Please allow popups for this site and try again.",
-            );
-          }
-          return;
-        }
-        // If user chose Cancel, continue with URL-only ZIP below
+        // Continue with URL-only ZIP below
       }
 
       // Create a text file with all image information
@@ -414,21 +339,23 @@ export default function CollectionView() {
       URL.revokeObjectURL(link.href);
 
       if (successCount === collection.images.length) {
-        alert(
+        toast.success(
           `Successfully exported all ${successCount} images as ${zipFileName}!`,
         );
       } else if (successCount > 0) {
-        alert(
+        toast(
           `Exported ${successCount} images successfully. ${failCount} images failed due to CORS restrictions. Check the _Image_URLs_and_Info.txt file for missing images.`,
+          { icon: "⚠️", duration: 8000 },
         );
       } else {
-        alert(
+        toast(
           `Created ZIP with image URLs and info. No images could be downloaded directly due to CORS restrictions.`,
+          { icon: "⚠️", duration: 8000 },
         );
       }
     } catch (error) {
       console.error("Error creating ZIP:", error);
-      alert("Error creating ZIP file. Please try again.");
+      toast.error("Error creating ZIP file. Please try again.");
     } finally {
       setIsExporting(false);
     }
@@ -811,11 +738,11 @@ export default function CollectionView() {
             {isReordering && isMobile && (
               <div className={styles.mobileInstructions}>
                 <p>
-                  📱 <strong>Touch and hold</strong> an image for 0.2 seconds to
+                  <strong>Touch and hold</strong> an image for 0.2 seconds to
                   start dragging.
                   <br />
-                  💡 <strong>Swipe left or right</strong> on images to select
-                  them quickly.
+                  <strong>Swipe left or right</strong> on images to select them
+                  quickly.
                 </p>
               </div>
             )}
@@ -834,7 +761,6 @@ export default function CollectionView() {
                   }`}
                   draggable={isReordering && !isMobile}
                   onDragStart={(e) => handleDragStart(e, image.favorite_id)}
-                  onDragEnd={handleDragEnd}
                   onDragOver={(e) => {
                     e.preventDefault();
                     setDragOverItem(image.favorite_id);

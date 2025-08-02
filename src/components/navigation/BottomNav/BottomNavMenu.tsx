@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { SupabaseUser } from "@/lib/supabaseClient";
 import styles from "./BottomNav.module.css";
+import ThemeToggle from "@/components/theme/ThemeToggle"; // Add import
 
 interface BottomNavMenuProps {
   user?: SupabaseUser | null;
@@ -52,12 +53,12 @@ const BottomNavMenu = ({
                 className={styles.menuItem}
                 onClick={onClose}
               >
-                <span className={styles.menuIcon}>⦿</span>
+                {/* <span className={styles.menuIcon}>⦿</span> */}
                 <span className={styles.menuLabel}>Profile</span>
               </Link>
 
               <Link href="/faq" className={styles.menuItem} onClick={onClose}>
-                <span className={styles.menuIcon}>❓</span>
+                {/* <span className={styles.menuIcon}>❓</span> */}
                 <span className={styles.menuLabel}>FAQ</span>
               </Link>
 
@@ -65,9 +66,17 @@ const BottomNavMenu = ({
                 className={styles.menuItem}
                 onClick={() => handleActionAndClose(onGoProClick!)}
               >
-                <span className={styles.menuIcon}>⭐</span>
+                {/* <span className={styles.menuIcon}>⭐</span> */}
                 <span className={styles.menuLabel}>Go Pro</span>
               </button>
+
+              {/* Theme toggle button */}
+              <div className={styles.themeToggleWrapper}>
+                <span className={styles.themeLabel}>
+                  Change theme <span style={{ marginLeft: 4 }}>→</span>
+                </span>
+                <ThemeToggle />
+              </div>
 
               <div className={styles.menuDivider} />
 
@@ -88,12 +97,12 @@ const BottomNavMenu = ({
                 className={styles.menuItem}
                 onClick={() => handleActionAndClose(onLoginClick!)}
               >
-                <span className={styles.menuIcon}>🔑</span>
+                {/* <span className={styles.menuIcon}>🔑</span> */}
                 <span className={styles.menuLabel}>Login</span>
               </button>
 
               <Link href="/faq" className={styles.menuItem} onClick={onClose}>
-                <span className={styles.menuIcon}>❓</span>
+                {/* <span className={styles.menuIcon}>❓</span> */}
                 <span className={styles.menuLabel}>FAQ</span>
               </Link>
 
@@ -101,9 +110,17 @@ const BottomNavMenu = ({
                 className={styles.menuItem}
                 onClick={() => handleActionAndClose(onGoProClick!)}
               >
-                <span className={styles.menuIcon}>⭐</span>
+                {/* <span className={styles.menuIcon}>⭐</span> */}
                 <span className={styles.menuLabel}>Go Pro</span>
               </button>
+
+              {/* Theme toggle button */}
+              <div className={styles.themeToggleWrapper}>
+                <span className={styles.themeLabel}>
+                  Change theme <span style={{ marginLeft: 4 }}>→</span>
+                </span>
+                <ThemeToggle />
+              </div>
             </>
           )}
         </div>

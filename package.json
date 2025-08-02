@@ -27,6 +27,7 @@
     "qrcode": "^1.5.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-hot-toast": "^2.5.2",
     "react-photoswipe-gallery": "^3.0.2",
     "react-share": "^5.2.2",
     "react-slick": "^0.30.3",

@@ -83,6 +83,7 @@ const UserMenu = ({
 
   return (
     <div className={styles.userMenu} ref={menuRef}>
+      {/* Add the theme toggle icon here */}
       <UserMenuButton user={user} isOpen={isOpen} onClick={handleToggle} />
 
       {isOpen && (

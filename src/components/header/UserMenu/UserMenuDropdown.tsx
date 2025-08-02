@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { SupabaseUser } from "@/lib/supabaseClient";
+import ThemeToggle from "@/components/theme/ThemeToggle"; // Add import
+
 import styles from "./UserMenu.module.css";
 
 interface UserMenuDropdownProps {
@@ -69,6 +71,13 @@ const UserMenuDropdown = ({
             <span className={styles.menuLabel}>Go Pro</span>
           </button>
 
+          <div className={styles.themeToggleWrapper}>
+            <span className={styles.themeLabel}>
+              Change theme <span style={{ marginLeft: 4 }}>→</span>
+            </span>{" "}
+            <ThemeToggle />
+          </div>
+
           <div className={styles.menuDivider} />
 
           <button
@@ -85,7 +94,7 @@ const UserMenuDropdown = ({
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={() => handleActionAndClose(onLoginClick!)}
           >
-            <span className={styles.menuIcon}>🔑</span>
+            {/* <span className={styles.menuIcon}>🔑</span> */}
             <span className={styles.menuLabel}>Login</span>
           </button>
 
@@ -94,7 +103,7 @@ const UserMenuDropdown = ({
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={onClose}
           >
-            <span className={styles.menuIcon}>❓</span>
+            {/* <span className={styles.menuIcon}>❓</span> */}
             <span className={styles.menuLabel}>FAQ</span>
           </Link>
 
@@ -102,9 +111,15 @@ const UserMenuDropdown = ({
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={() => handleActionAndClose(onGoProClick!)}
           >
-            <span className={styles.menuIcon}>⭐</span>
+            {/* <span className={styles.menuIcon}>⭐</span> */}
             <span className={styles.menuLabel}>Go Pro</span>
           </button>
+          <div className={styles.themeToggleWrapper}>
+            <span className={styles.themeLabel}>
+              Change theme <span style={{ marginLeft: 4 }}>→</span>
+            </span>{" "}
+            <ThemeToggle />
+          </div>
         </>
       )}
     </div>

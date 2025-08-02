@@ -13,6 +13,7 @@ import { ThemeProvider } from "next-themes";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Toaster } from "react-hot-toast";
 
 import "./globals.css";
 
@@ -211,6 +212,7 @@ function RootLayout({ children }: RootLayoutProps) {
       <GoogleTagManager gtmId="GTM-N74Q9JC5" />
       <body>
         <NonCriticalCSSLoader />
+        <Toaster position="top-center" />
         <ThemeProvider defaultTheme="dark">
           <ServiceWorkerContext>
             <AuthSessionProvider>
