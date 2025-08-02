@@ -239,7 +239,7 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
             ]) || [],
           );
 
-          console.log({ userProfiles });
+          // console.log({ userProfiles });
 
           const transformedComments: Comment[] = commentsData.map((comment) => {
             // Get display name from profile, fallback to abbreviated user ID
