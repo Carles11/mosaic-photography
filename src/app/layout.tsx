@@ -11,8 +11,6 @@ import { GoogleTagManager } from "@next/third-parties/google";
 
 import { ThemeProvider } from "next-themes";
 import React from "react";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Toaster } from "react-hot-toast";
 
 import "./globals.css";
@@ -230,8 +228,6 @@ function RootLayout({ children }: RootLayoutProps) {
                 <FavoritesProvider>
                   <CommentsProvider>
                     <main style={{ flex: 1 }}>{children}</main>
-                    <Analytics />
-                    <SpeedInsights />
                   </CommentsProvider>
                 </FavoritesProvider>
               </AgeConsentProvider>
