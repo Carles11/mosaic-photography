@@ -4,6 +4,7 @@ import { ImageCardProps, ImageWithOrientation } from "@/types";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import styles from "./ImageCard.module.css";
 
 const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
@@ -146,6 +147,31 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
         ClimbBoxLoaderContainer("var(--text-color)", 16, loading)
       ) : (
         <>
+          {/* Add structured data for the image gallery */}
+          <JsonLdSchema
+            type="ImageGallery"
+            name="Mosaic Photography Gallery"
+            description="A curated collection of high-quality vintage photography from our archives"
+            images={images.map((image) => ({
+              contentUrl: image.url,
+              name: image.title || "Untitled Image",
+              description:
+                image.description ||
+                "Vintage photography from Mosaic's archives",
+              creditText: image.author || "Unknown Photographer",
+              width: typeof image.width === "number" ? image.width : 1200,
+              height: typeof image.height === "number" ? image.height : 800,
+              encodingFormat:
+                image.url.endsWith(".jpg") || image.url.endsWith(".jpeg")
+                  ? "image/jpeg"
+                  : image.url.endsWith(".png")
+                    ? "image/png"
+                    : "image/jpeg",
+              license: "https://creativecommons.org/publicdomain/mark/1.0/",
+              acquireLicensePage: "https://www.mosaic.photography/license",
+            }))}
+          />
+
           <PhotoSwipeWrapper
             images={images} // Pass images array to PhotoSwipeWrapper
             onLoginRequired={onLoginRequired}

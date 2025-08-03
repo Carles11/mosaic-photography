@@ -38,10 +38,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://www.mosaic.photography/",
-    languages: {
-      es: "https://www.mosaic.photography/es",
-      de: "https://www.mosaic.photography/de",
-    },
+    // languages: {
+    //   es: "https://www.mosaic.photography/es",
+    //   de: "https://www.mosaic.photography/de",
+    // },
   },
   authors: [
     {
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     },
   ],
   description:
-    "Discover Mosaic's curated gallery of iconic nude photography, celebrating the timeless beauty of the human form through the lens of legendary photographers.",
+    "Discover Mosaic's curated gallery of public domain nude photography, celebrating the timeless beauty of the human form through the lens of legendary photographers.",
   keywords: [
     // High-Priority Core Niche (Low KD, Solid Volume)
     "public domain nude photography",
@@ -58,6 +58,7 @@ export const metadata: Metadata = {
     "public domain art",
     "public domain nudes",
     "nude photography",
+    "vintage nudes",
     "nude art",
     "vintage nude photography ",
     "vintage nude photography public domain",
@@ -181,14 +182,23 @@ export const metadata: Metadata = {
     title: "Nude photography | Mosaic Photography curated Gallery",
     description:
       "Meet the iconic photographers behind the stunning classic nude photography in our collection.",
-    images: ["/favicons/favicon-32x32.png"],
+    images: [
+      {
+        url: "/images/og-image.jpg", // Create a high-quality OG image
+        width: 1200,
+        height: 630,
+        alt: "Mosaic Photography Gallery featuring vintage nude photography",
+      },
+    ],
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Nude photography | Mosaic Photography curated Gallery",
     description:
       "Explore our stunning image gallery featuring classic nude photography by iconic photographers.",
-    images: ["/favicons/favicon-32x32.png"],
+    images: ["/images/og-image.jpg"],
+    creator: "@mosaicphotography",
   },
 };
 

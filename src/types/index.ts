@@ -25,7 +25,7 @@ export interface ImageData {
 }
 
 export type ImageWithOrientation = ImageData & {
-  orientation: "landscape" | "portrait";
+  orientation: "vertical" | "horizontal" | "square";
   mosaicType?: "normal" | "large" | "wide" | "tall";
 };
 
