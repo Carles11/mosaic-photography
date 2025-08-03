@@ -37,6 +37,17 @@ module.exports = {
         },
       },
     },
+    {
+      urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/v1\/.*/i,
+      handler: "StaleWhileRevalidate",
+      options: {
+        cacheName: "supabase-api",
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 300, // 5 minutes
+        },
+      },
+    },
   ],
   // Add a reference to your custom Service Worker
   customWorkerDir: "src/sw-custom.js", // Path to your custom Service Worker file
@@ -50,3 +61,6 @@ module.exports = {
   skipWaiting: true,
   clientsClaim: true,
 };
+// This configuration file is used to set up the PWA with Workbox
+// It includes runtime caching strategies for various resources
+// and ensures that the Service Worker is properly registered and activated.
