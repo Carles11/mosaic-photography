@@ -63,6 +63,9 @@ const CommentForm: React.FC<CommentFormProps> = ({
           }
           className={styles.textarea}
           rows={3}
+          onClick={(e) => e.stopPropagation()} // Stop click from propagating to potential overlays
+          onFocus={(e) => e.stopPropagation()} // Ensure focus events don't propagate
+          style={{ position: "relative", zIndex: 10 }} // Ensure higher z-index
         />
         {error && <div className={styles.error}>{error}</div>}
       </div>
