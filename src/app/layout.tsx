@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 
+import { GoogleTagManager } from "@next/third-parties/google";
+import { ThemeProvider } from "next-themes";
+import React from "react";
+import { Toaster } from "react-hot-toast";
 import { AgeConsentProvider } from "@/context/AgeConsentContext";
 import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
 import { AuthSessionProvider } from "@/context/AuthSessionContext";
@@ -7,11 +11,7 @@ import { FavoritesProvider } from "@/context/FavoritesContext";
 import { CommentsProvider } from "@/context/CommentsContext";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
 
-import { GoogleTagManager } from "@next/third-parties/google";
 
-import { ThemeProvider } from "next-themes";
-import React from "react";
-import { Toaster } from "react-hot-toast";
 
 import "./globals.css";
 

@@ -1,17 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
-import styles from "./ThemeToggle.module.css";
-
+import React, { useEffect } from "react";
+import Image from "next/image";
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 
+import styles from "./ThemeToggle.module.css";
+
 const Tooltip = dynamic(
   () => import("react-tooltip").then((mod) => mod.Tooltip),
-  { ssr: false } // Disable server-side rendering
+  { ssr: false }, // Disable server-side rendering
 );
-
-import Image from "next/image";
 
 const ThemeToggle = () => {
   const { theme, setTheme, resolvedTheme } = useTheme();
@@ -25,7 +24,7 @@ const ThemeToggle = () => {
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
     const prefersDarkScheme = window.matchMedia(
-      "(prefers-color-scheme: dark)"
+      "(prefers-color-scheme: dark)",
     ).matches;
     const defaultTheme = storedTheme || (prefersDarkScheme ? "dark" : "light");
     setTheme(defaultTheme);

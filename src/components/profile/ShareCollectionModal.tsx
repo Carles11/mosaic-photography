@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import QRCode from "qrcode";
-import { Collection } from "@/types";
 import styles from "./ShareCollectionModal.module.css";
+import { Collection } from "@/types";
 
 interface ShareCollectionModalProps {
   isOpen: boolean;
@@ -21,7 +21,8 @@ export default function ShareCollectionModal({
     "link",
   );
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
-  const [emailSending, setEmailSending] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_emailSending, _setEmailSending] = useState(false);
   const [embedCopied, setEmbedCopied] = useState(false);
 
   const shareUrl = `${window.location.origin}/profile/collections/${collection.id}`;

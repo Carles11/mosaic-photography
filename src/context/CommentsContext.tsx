@@ -8,9 +8,9 @@ import React, {
   useCallback,
   useRef,
 } from "react";
+import { useAuthSession } from "./AuthSessionContext";
 import { supabase } from "@/lib/supabaseClient";
 import { Comment } from "@/types";
-import { useAuthSession } from "./AuthSessionContext";
 
 interface CommentsContextType {
   comments: Record<string, Comment[]>; // imageId -> Comment[]

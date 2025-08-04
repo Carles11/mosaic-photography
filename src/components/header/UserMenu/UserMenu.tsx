@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { SupabaseUser } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
 import UserMenuButton from "./UserMenuButton";
 import UserMenuDropdown from "./UserMenuDropdown";
 import styles from "./UserMenu.module.css";
-import { useRouter } from "next/navigation";
+import { SupabaseUser } from "@/lib/supabaseClient";
 
 interface UserMenuProps {
   user?: SupabaseUser | null;

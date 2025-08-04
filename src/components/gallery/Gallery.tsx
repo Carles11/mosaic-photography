@@ -3,9 +3,9 @@
 import React, { JSX } from "react";
 import ImageCard from "../cards/ImageCard";
 // import AuthorCard from "../cards/AuthorCard";
+import styles from "./gallery.module.css";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
 
-import styles from "./gallery.module.css";
 
 interface GalleryProps extends JSX.IntrinsicAttributes {
   id: string;

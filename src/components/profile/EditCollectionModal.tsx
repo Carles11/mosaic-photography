@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import styles from "./EditCollectionModal.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { Collection } from "@/types";
-import styles from "./EditCollectionModal.module.css";
 
 interface EditCollectionModalProps {
   isOpen: boolean;
@@ -25,7 +25,8 @@ export default function EditCollectionModal({
   });
   const [loading, setLoading] = useState(false);
   const [showPrivacyWarning, setShowPrivacyWarning] = useState(false);
-  const [privacyChangeDirection, setPrivacyChangeDirection] = useState<
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_privacyChangeDirection, setPrivacyChangeDirection] = useState<
     "toPublic" | "toPrivate" | null
   >(null);
 
@@ -101,7 +102,8 @@ export default function EditCollectionModal({
     }
   };
 
-  const handlePrivacyChange = (privacy: "private" | "public") => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _handlePrivacyChange = (privacy: "private" | "public") => {
     setFormData((prev) => ({ ...prev, privacy }));
     // setShowPrivacyWarning(false);
     // setPrivacyChangeDirection(null);

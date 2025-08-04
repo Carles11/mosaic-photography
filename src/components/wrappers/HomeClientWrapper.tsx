@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAgeConsent } from "@/context/AgeConsentContext";
 import Cookies from "js-cookie";
+import { HomeTitles } from "../header/titles/HomeTitles";
+import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
+import styles from "./home.module.css";
+import { useAgeConsent } from "@/context/AgeConsentContext";
 import { SupabaseUser } from "@/lib/supabaseClient";
 
 import Gallery from "@/components/gallery/Gallery";
@@ -15,9 +18,6 @@ import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import BottomNav from "@/components/navigation/BottomNav/BottomNav";
 
-import styles from "./home.module.css";
-import { HomeTitles } from "../header/titles/HomeTitles";
-import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
 
 interface HomeClientWrapperProps {
   showLoginButton?: boolean;

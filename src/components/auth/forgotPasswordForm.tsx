@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
 import styles from "./ForgotPasswordForm.module.css";
+import { supabase } from "@/lib/supabaseClient";
 
 interface ForgotPasswordFormProps {
   onSwitchToLogin?: () => void;

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
-import { useFavorites } from "@/context/FavoritesContext";
 import styles from "./HeartButton.module.css";
+import { useFavorites } from "@/context/FavoritesContext";
 
 interface HeartButtonProps {
   imageId: string | number;

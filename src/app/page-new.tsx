@@ -1,8 +1,8 @@
 "use client";
 
-import { useAuth } from "@/hooks/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
 import AuthModal from "@/components/auth/AuthModal";
 import { AuthView } from "@/lib/auth/auth-types";

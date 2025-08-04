@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import styles from "./CreateCollectionModal.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { Collection } from "@/types";
-import styles from "./CreateCollectionModal.module.css";
 
 interface CreateCollectionModalProps {
   isOpen: boolean;

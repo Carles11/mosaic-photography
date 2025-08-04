@@ -1,8 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { signOut } from "@/lib/auth/auth-helpers";
-import { useRouter } from "next/navigation";
 
 export function useAuth() {
   const { user, loading } = useAuthSession();

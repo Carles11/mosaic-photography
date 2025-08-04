@@ -1,9 +1,9 @@
 "use client";
 
 import { Suspense } from "react";
-import ConfirmEmailForm from "@/components/auth/confirmEmailForm";
 import Link from "next/link";
 import styles from "../auth.module.css";
+import ConfirmEmailForm from "@/components/auth/confirmEmailForm";
 
 function ConfirmEmailContent() {
   return (

@@ -4,14 +4,22 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import JSZip from "jszip";
+import { toast } from "react-hot-toast";
+import styles from "./CollectionView.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { CollectionWithImages } from "@/types";
 import ShareCollectionModal from "@/components/profile/ShareCollectionModal";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import styles from "./CollectionView.module.css";
-import { toast } from "react-hot-toast";
+
+interface ImageData {
+  id: string;
+  url: string;
+  title?: string;
+  description?: string;
+  // Add other properties as needed
+}
 
 export default function CollectionView() {
   const params = useParams();
@@ -35,22 +43,6 @@ export default function CollectionView() {
 
   const collectionId = params?.id as string;
   const isEmbedded = searchParams?.get("embed") === "true";
-
-  useEffect(() => {
-    loadCollection();
-  }, [collectionId, user]);
-
-  useEffect(() => {
-    // Detect mobile device
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768 || "ontouchstart" in window);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   const loadCollection = async () => {
     if (!collectionId) {
@@ -97,7 +89,7 @@ export default function CollectionView() {
         return;
       }
 
-      let imagesData: any[] = [];
+      let imagesData: ImageData[] = [];
       if (collectionFavoritesData && collectionFavoritesData.length > 0) {
         // Get favorites to get image_ids
         const favoriteIds = collectionFavoritesData.map(
@@ -145,6 +137,11 @@ export default function CollectionView() {
                 : null;
 
               return {
+                id: favorite?.image_id || "", // Use image_id as id
+                url: image?.url || "", // Use image.url as url
+                title: image?.title || "Image not found",
+                description: undefined, // No description available
+                // Additional properties for later use
                 favorite_id: cfItem.favorite_id,
                 image_id: favorite?.image_id || "",
                 image_url: image?.url || "",
@@ -153,7 +150,7 @@ export default function CollectionView() {
                 added_at: cfItem.added_at,
               };
             })
-            .filter((item) => item.image_url); // Filter out items where image wasn't found
+            .filter((item) => item.url); // Filter out items where image wasn't found
         }
       }
 
@@ -188,6 +185,22 @@ export default function CollectionView() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadCollection();
+  }, [loadCollection]);
+
+  useEffect(() => {
+    // Detect mobile device
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768 || "ontouchstart" in window);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -456,28 +469,30 @@ export default function CollectionView() {
     }
   };
 
-  const handleDragEnd = (e: React.DragEvent) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _handleDragEnd = (event: React.DragEvent) => {
     if (!isReordering) return;
 
     // Reset visual state
-    const target = e.target as HTMLElement;
+    const target = event.target as HTMLElement;
     target.style.opacity = "1";
 
     setDraggedItem(null);
     setDragOverItem(null);
   };
 
-  const handleDragOver = (e: React.DragEvent, favoriteId: number) => {
-    if (!isReordering || !draggedItem) return;
+  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const _handleDragOver = (event: React.DragEvent, favoriteId: number) => {
+  //   if (!isReordering || !draggedItem) return;
 
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
+  //   event.preventDefault();
+  //   event.dataTransfer.dropEffect = "move";
 
-    // Only update if we're over a different item
-    if (favoriteId !== draggedItem && favoriteId !== dragOverItem) {
-      setDragOverItem(favoriteId);
-    }
-  };
+  //   // Only update if we're over a different item
+  //   if (favoriteId !== draggedItem && favoriteId !== dragOverItem) {
+  //     setDragOverItem(favoriteId);
+  //   }
+  // };
 
   const handleDragLeave = (e: React.DragEvent) => {
     if (!isReordering) return;

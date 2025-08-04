@@ -1,9 +1,9 @@
 "use client";
 
 import { Suspense } from "react";
-import SignupForm from "@/components/auth/signUpForm";
 import Link from "next/link";
 import styles from "../auth.module.css";
+import SignupForm from "@/components/auth/signUpForm";
 
 function SignupContent() {
   return (

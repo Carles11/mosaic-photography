@@ -1,6 +1,6 @@
 import Link from "next/link";
-import styles from "./BottomNav.module.css";
 import { sendGTMEvent } from "@next/third-parties/google";
+import styles from "./BottomNav.module.css";
 
 interface BottomNavItemProps {
   icon: string;

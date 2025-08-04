@@ -1,12 +1,12 @@
 "use client";
 
-import { useAuth } from "@/hooks/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { sendGTMEvent } from "@next/third-parties/google";
+import { useAuth } from "@/hooks/useAuth";
 import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
 import AuthModal from "@/components/auth/AuthModal";
 import { AuthView } from "@/lib/auth/auth-types";
-import { sendGTMEvent } from "@next/third-parties/google";
 
 // Import session debug for development
 if (process.env.NODE_ENV === "development") {

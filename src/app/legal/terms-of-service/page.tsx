@@ -61,6 +61,9 @@ const TermsOfService: React.FC = () => {
         you make a purchase through them. This helps support my work at no
         additional cost to you.
       </p>
+      <p>
+        By accessing this website, you agree to our &quot;Terms of Service&quot;
+      </p>
     </section>
   );
 };

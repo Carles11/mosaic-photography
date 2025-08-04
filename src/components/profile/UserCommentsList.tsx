@@ -1,12 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import styles from "./UserCommentsList.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { UserCommentWithImage } from "@/types";
-import styles from "./UserCommentsList.module.css";
 
 const COMMENTS_PER_PAGE = 10;
+
+interface Comment {
+  id: string;
+  text: string;
+  // other properties as needed
+}
 
 export default function UserCommentsList() {
   const { user } = useAuthSession();

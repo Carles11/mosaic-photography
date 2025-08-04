@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
+import styles from "./ImageCard.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { ImageCardProps, ImageWithOrientation } from "@/types";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
-import styles from "./ImageCard.module.css";
 
 const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
   const [images, setImages] = useState<ImageWithOrientation[]>([]);

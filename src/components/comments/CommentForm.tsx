@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { useComments } from "@/context/CommentsContext";
 import styles from "./CommentForm.module.css";
+import { useComments } from "@/context/CommentsContext";
 
 interface CommentFormProps {
   imageId: string;

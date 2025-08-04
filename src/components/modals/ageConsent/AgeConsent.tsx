@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import styles from "./AgeConsent.module.css";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 
-import styles from "./AgeConsent.module.css";
 
 export const AgeConsent = ({
   setIsMinimumAgeConfirmed,

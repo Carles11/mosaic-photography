@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+import Slider, { Settings } from "react-slick";
+import { sendGTMEvent } from "@next/third-parties/google";
+import ImageWrapper from "../wrappers/ImageWrapper";
+import styles from "./PhotographersViewCard.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { Photographer } from "@/types";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
-import Slider, { Settings } from "react-slick";
-import { sendGTMEvent } from "@next/third-parties/google";
 
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import Dropdown from "@/components/inputs/dropDown";
@@ -12,8 +14,6 @@ import JsonLdSchema from "@/components/seo/JsonLdSchema";
 
 import "slick-carousel/slick/slick.css"; // Import slick-carousel styles
 import "slick-carousel/slick/slick-theme.css"; // Import slick-carousel theme
-import styles from "./PhotographersViewCard.module.css";
-import ImageWrapper from "../wrappers/ImageWrapper";
 
 interface PhotographersViewCardProps {
   onLoginRequired?: () => void;

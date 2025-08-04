@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import styles from "./UserMenu.module.css";
 import { SupabaseUser } from "@/lib/supabaseClient";
 import ThemeToggle from "@/components/theme/ThemeToggle"; // Add import
 
-import styles from "./UserMenu.module.css";
 
 interface UserMenuDropdownProps {
   user?: SupabaseUser | null;

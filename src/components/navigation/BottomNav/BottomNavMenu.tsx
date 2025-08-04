@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import { SupabaseUser } from "@/lib/supabaseClient";
 import styles from "./BottomNav.module.css";
+import { SupabaseUser } from "@/lib/supabaseClient";
 import ThemeToggle from "@/components/theme/ThemeToggle"; // Add import
 
 interface BottomNavMenuProps {

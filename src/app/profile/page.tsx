@@ -1,13 +1,13 @@
 "use client";
 
+import { sendGTMEvent } from "@next/third-parties/google";
+import styles from "./profile.module.css";
 import { useAuth } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/auth/guards/ProtectedRoute";
 import ProfileForm from "@/components/profile/ProfileForm";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import BottomNav from "@/components/navigation/BottomNav/BottomNav";
-import { sendGTMEvent } from "@next/third-parties/google";
-import styles from "./profile.module.css";
 
 function ProfileContent() {
   const { user, logout } = useAuth();

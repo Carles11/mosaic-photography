@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { SupabaseUser } from "@/lib/supabaseClient";
 import BottomNavItem from "./BottomNavItem";
 import BottomNavMenu from "./BottomNavMenu";
 import styles from "./BottomNav.module.css";
+import { SupabaseUser } from "@/lib/supabaseClient";
 
 interface BottomNavProps {
   user?: SupabaseUser | null;

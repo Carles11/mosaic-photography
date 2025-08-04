@@ -1,9 +1,9 @@
 "use client";
 
 import { Suspense } from "react";
-import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
 import Link from "next/link";
 import styles from "../auth.module.css";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
 
 function ForgotPasswordContent() {
   return (

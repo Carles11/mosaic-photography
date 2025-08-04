@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabaseClient";
-import { useAuthSession } from "@/context/AuthSessionContext";
-import { Collection } from "@/types";
+import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import styles from "./AddToCollectionModal.module.css";
+import { supabase } from "@/lib/supabaseClient";
+import { useAuthSession } from "@/context/AuthSessionContext";
+import { Collection as CollectionType } from "@/types";
 
 interface AddToCollectionModalProps {
   isOpen: boolean;
@@ -13,6 +13,12 @@ interface AddToCollectionModalProps {
   imageTitle: string;
   onClose: () => void;
   onAddToCollection?: (collectionId: string) => void;
+}
+
+interface Collection {
+  id: string;
+  name: string;
+  // other properties as needed
 }
 
 export default function AddToCollectionModal({
@@ -23,21 +29,14 @@ export default function AddToCollectionModal({
   onAddToCollection,
 }: AddToCollectionModalProps) {
   const { user } = useAuthSession();
-  const [collections, setCollections] = useState<Collection[]>([]);
+  const [collections, setCollections] = useState<CollectionType[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState<string | null>(null);
   const [alreadyInCollections, setAlreadyInCollections] = useState<Set<string>>(
     new Set(),
   );
 
-  useEffect(() => {
-    if (isOpen && user) {
-      loadCollections();
-      checkExistingAssociations();
-    }
-  }, [isOpen, user, imageId]);
-
-  const loadCollections = async () => {
+  const loadCollections = useCallback(async () => {
     if (!user) return;
 
     setLoading(true);
@@ -59,9 +58,9 @@ export default function AddToCollectionModal({
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
-  const checkExistingAssociations = async () => {
+  const checkExistingAssociations = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -97,7 +96,12 @@ export default function AddToCollectionModal({
     } catch (error) {
       console.error("Error checking existing associations:", error);
     }
-  };
+  }, [user, imageId]);
+
+  useEffect(() => {
+    checkExistingAssociations();
+    loadCollections();
+  }, [checkExistingAssociations, loadCollections]);
 
   const handleAddToCollection = async (collectionId: string) => {
     if (!user || adding) return;
@@ -240,8 +244,8 @@ export default function AddToCollectionModal({
             </div>
           ) : collections.length === 0 ? (
             <div className={styles.empty}>
-              <p>You don't have any collections yet.</p>
-              <p>Create a collection first to organize your favorites!</p>
+              <p>You haven&apos;t created any collections yet</p>
+              <button>&quot;Create new collection&quot;</button>
             </div>
           ) : (
             <div className={styles.collectionsList}>

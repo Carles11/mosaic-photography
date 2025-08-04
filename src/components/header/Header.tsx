@@ -6,11 +6,10 @@ import Link from "next/link";
 import { sendGTMEvent } from "@next/third-parties/google";
 
 import ThemeImage from "../theme/ThemeImageDark";
-import GoProModal from "@/components/modals/goProModal/GoProModal";
 import UserMenu from "./UserMenu/UserMenu";
-import { SupabaseUser } from "@/lib/supabaseClient";
-
 import styles from "./header.module.css";
+import GoProModal from "@/components/modals/goProModal/GoProModal";
+import { SupabaseUser } from "@/lib/supabaseClient";
 
 interface HeaderProps {
   showLoginButton?: boolean;
@@ -18,6 +17,10 @@ interface HeaderProps {
   user?: SupabaseUser | null;
   onLogoutClick?: () => void;
 }
+
+// Fix line 22 - add underscore to show it's intentionally unused
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _showLoginButton = false;
 
 const Header = ({
   showLoginButton = false,

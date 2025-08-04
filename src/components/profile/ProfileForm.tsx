@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import styles from "./ProfileForm.module.css";
 import { supabase, SupabaseUser } from "@/lib/supabaseClient";
 import { useFavorites } from "@/context/FavoritesContext";
 import type { UserProfile } from "@/types";
-import styles from "./ProfileForm.module.css";
 
 interface ProfileFormProps {
   user: SupabaseUser;

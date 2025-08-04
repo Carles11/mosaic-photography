@@ -8,10 +8,12 @@ export function PublicRoute({
   fallback = <div>Loading...</div>,
   redirectTo = "/",
 }: RouteGuardProps) {
-  const { shouldRender, loading } = useAuthGuard({
+  const { loading } = useAuthGuard({
     required: false,
     redirectTo,
   });
+
+  // const _shouldRender = /* ... */; // Unused but keeping for reference
 
   if (loading) {
     return <>{fallback}</>;

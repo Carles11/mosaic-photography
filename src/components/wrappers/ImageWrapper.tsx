@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Item } from "./PhotoSwipeWrapper"; // Import Item from PhotoSwipeWrapper
+import styles from "./image.module.css";
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsButton from "@/components/buttons/CommentsButton";
 import CommentsModal from "@/components/modals/comments/CommentsModal";
-import styles from "./image.module.css";
 
 interface ImageWrapperProps {
   image: {

@@ -1,3 +1,4 @@
+import React from "react";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
@@ -7,7 +8,7 @@ import PrimaryButton from "@/components/buttons/PrimaryButton";
 
 const ReactTooltip = dynamic(
   () => import("react-tooltip").then((mod) => mod.Tooltip),
-  { ssr: false } // Disable server-side rendering
+  { ssr: false }, // Disable server-side rendering
 );
 
 import styles from "./goProModal.module.css";

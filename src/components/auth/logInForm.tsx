@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
 import styles from "./LogInForm.module.css";
+import { supabase } from "@/lib/supabaseClient";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 
 interface LoginFormProps {

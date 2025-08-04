@@ -1,13 +1,13 @@
 "use client";
 
+import { sendGTMEvent } from "@next/third-parties/google";
+import styles from "./my-content.module.css";
 import { useAuth } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/auth/guards/ProtectedRoute";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import BottomNav from "@/components/navigation/BottomNav/BottomNav";
 import ContentTabs from "@/components/my-content/ContentTabs";
-import { sendGTMEvent } from "@next/third-parties/google";
-import styles from "./my-content.module.css";
 
 function MyContentContent() {
   const { user, logout } = useAuth();

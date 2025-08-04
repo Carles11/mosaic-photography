@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import styles from "./CommentItem.module.css";
 import { Comment } from "@/types";
 import { useComments } from "@/context/CommentsContext";
-import styles from "./CommentItem.module.css";
 
 interface CommentItemProps {
   comment: Comment;

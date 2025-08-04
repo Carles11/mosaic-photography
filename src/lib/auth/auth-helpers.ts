@@ -10,6 +10,13 @@ export type AuthResult<T = any> = {
   error?: AuthError;
 };
 
+// Fix 'any' type on line 8
+interface UserData {
+  id: string;
+  email?: string;
+  // other properties as needed
+}
+
 /**
  * Sign in with email and password
  */

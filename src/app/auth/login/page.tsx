@@ -1,9 +1,9 @@
 "use client";
 
 import { Suspense } from "react";
-import LoginForm from "@/components/auth/logInForm";
 import Link from "next/link";
 import styles from "../auth.module.css";
+import LoginForm from "@/components/auth/logInForm";
 
 function LoginContent() {
   return (

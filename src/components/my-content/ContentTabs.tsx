@@ -2,28 +2,21 @@
 
 import { useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { SupabaseUser } from "@/lib/supabaseClient";
 import FavoritesTab from "./FavoritesTab";
 import CollectionsTab from "./CollectionsTab";
 import CommentsTab from "./CommentsTab";
 import styles from "./ContentTabs.module.css";
 
-interface ContentTabsProps {
-  user: SupabaseUser;
-}
-
-type TabType = "favorites" | "collections" | "comments";
-
-const ContentTabs = ({ user }: ContentTabsProps) => {
+const ContentTabs = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const initialTab = (searchParams?.get("tab") as TabType) || "favorites";
-  const [activeTab, setActiveTab] = useState<TabType>(initialTab);
+  const initialTab = searchParams?.get("tab") || "favorites";
+  const [activeTab, setActiveTab] = useState(initialTab);
   const collectionsRef = useRef<{ refreshCollections: () => void } | null>(
     null,
   );
 
-  const handleTabChange = (tab: TabType) => {
+  const handleTabChange = (tab: string) => {
     console.log("🔍 [DEBUG] Tab changed to:", tab);
     setActiveTab(tab);
     // Update URL without page reload

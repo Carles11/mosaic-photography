@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useComments } from "@/context/CommentsContext";
 import styles from "./CommentsButton.module.css";
+import { useComments } from "@/context/CommentsContext";
 
 interface CommentsButtonProps {
   imageId: string;

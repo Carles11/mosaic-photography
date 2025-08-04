@@ -1,9 +1,10 @@
 import React from "react";
 import { Metadata } from "next";
+import Link from "next/link";
+import styles from "./faq.module.css";
 import { faqStructuredData } from "@/utils/faqStructuredData";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import styles from "./faq.module.css";
 
 export const metadata: Metadata = {
   title:
@@ -263,9 +264,10 @@ const FAQPage: React.FC = () => {
             </p>
             <div className={styles.contactInfo}>
               <p>
-                Explore our <a href="/">vintage nude photography gallery</a> or
-                learn more about our{" "}
-                <a href="/legal/terms-of-service">terms of service</a>.
+                Explore our{" "}
+                <Link href="/">vintage nude photography gallery</Link> or learn
+                more about our{" "}
+                <Link href="/legal/terms-of-service">terms of service</Link>.
               </p>
             </div>
           </div>

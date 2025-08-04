@@ -12,6 +12,18 @@ interface PhotoSwipeWrapperProps {
   images?: Array<{ id: string | number; [key: string]: any }>; // Array of images with at least an id field
 }
 
+interface PhotoSwipeOptions {
+  // Add appropriate properties
+  dataSource?: Record<string, unknown>[];
+  index?: number;
+}
+
+interface PhotoSwipeEvent {
+  type: string;
+  target: unknown;
+  // Add other properties as needed
+}
+
 // Global state to prevent multiple PhotoSwipe handlers
 let isPhotoSwipeHandlerActive = false;
 

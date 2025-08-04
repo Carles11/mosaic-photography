@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
-import { useAuthSession } from "@/context/AuthSessionContext";
-import { Collection } from "@/types";
 import CreateCollectionModal from "./CreateCollectionModal";
 import EditCollectionModal from "./EditCollectionModal";
 import styles from "./CollectionsList.module.css";
+import { supabase } from "@/lib/supabaseClient";
+import { useAuthSession } from "@/context/AuthSessionContext";
+import { Collection } from "@/types";
 
 export interface CollectionsListRef {
   refreshCollections: () => void;
@@ -54,6 +54,9 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
       const { data: sessionData, error: sessionError } =
         await supabase.auth.getSession();
 
+      // sessionData is an object, not an array
+      // const [_sessionData, _sessionError] = sessionData;
+
       // Try the known collection IDs directly
       const { data: knownCollections, error: knownError } = await supabase
         .from("collections")
@@ -62,6 +65,9 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
           "1de09a36-8180-496e-823a-e2ce80b6cf45",
           "960305af-8088-4254-86f3-0f88a06edd34",
         ]);
+
+      // knownCollections can be null or an array, no destructuring needed
+      // const [_knownCollections] = knownCollections;
 
       if (knownError) {
         alert(
@@ -91,6 +97,9 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
               .select("*", { count: "exact", head: true })
               .eq("collection_id", collection.id);
 
+            // count is a number or null, no destructuring needed
+            // const [counts, _countError] = count;
+
             // Get preview images (first 4)
             const { data: previewData, error: previewError } = await supabase
               .from("collection_favorites")
@@ -98,8 +107,10 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
               .eq("collection_id", collection.id)
               .limit(4);
 
-            const preview_images =
-              previewData?.map((item: any) => item.favorites.images.url) || [];
+            // previewData can be null, so handle that case
+            const preview_images = Array.isArray(previewData)
+              ? previewData.map((item: any) => item.favorites.images.url)
+              : [];
 
             return {
               ...collection,

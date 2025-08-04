@@ -1,9 +1,9 @@
 "use client";
 
 import { Suspense } from "react";
-import ResetPasswordForm from "@/components/auth/resetPasswordForm";
 import Link from "next/link";
 import styles from "../auth.module.css";
+import ResetPasswordForm from "@/components/auth/resetPasswordForm";
 
 function ResetPasswordContent() {
   return (

@@ -1,12 +1,17 @@
 "use client";
 
+// React imports first
 import { useState } from "react";
+
+// Type imports
 import { AuthView } from "@/lib/auth/auth-types";
-import LoginForm from "@/components/auth/logInForm";
-import SignupForm from "@/components/auth/signUpForm";
-import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
-import ResetPasswordForm from "@/components/auth/resetPasswordForm";
+
+// Component imports alphabetically
 import ConfirmEmailForm from "@/components/auth/confirmEmailForm";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
+import LoginForm from "@/components/auth/logInForm";
+import ResetPasswordForm from "@/components/auth/resetPasswordForm";
+import SignupForm from "@/components/auth/signUpForm";
 
 interface AuthModalProps {
   isOpen: boolean;
