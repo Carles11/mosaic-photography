@@ -7,6 +7,12 @@ import styles from "./FavoritesList.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useFavorites } from "@/context/FavoritesContext";
 import { ImageData } from "@/types";
+import dynamic from "next/dynamic";
+
+// const Tooltip = dynamic(
+//   () => import("react-tooltip").then((mod) => mod.Tooltip),
+//   { ssr: false }, // Disable server-side rendering
+// );
 
 interface FavoriteImageData extends ImageData {
   favoriteId: string; // To track the favorite relationship
@@ -158,20 +164,39 @@ export default function FavoritesList({
                     </div>
                     <div className={styles.imageActions}>
                       <button
+                        id="collection-icon"
                         onClick={() =>
                           handleAddToCollectionClick(image.id, image.title)
                         }
                         className={styles.addToCollectionButton}
                         title="Add to collection"
                       >
-                        <span className={styles.collectionIcon}>📁</span>
+                        <span className={styles.collectionIcon}>
+                          <Image
+                            src="/icons/collection-add.png"
+                            width={24}
+                            height={24}
+                            alt="add to collection icon"
+                            priority={false} // Set to true for critical images
+                            loading="lazy"
+                          />
+                        </span>
+                        {/* <Tooltip
+                          anchorSelect="#collection-icon"
+                          content="Add to collection"
+                        /> */}
                       </button>
                       <button
                         onClick={() => handleUnlikeClick(image.id)}
                         className={styles.unlikeButton}
+                        id="unlike-icon"
                         title="Remove from favorites"
                       >
                         <span className={styles.heartIcon}>💔</span>
+                        {/* <Tooltip
+                          anchorSelect="#unlike-icon"
+                          content="Remove from favorites"
+                        /> */}
                       </button>
                     </div>
                   </div>

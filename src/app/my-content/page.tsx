@@ -32,7 +32,7 @@ function MyContentContent() {
           <p className={styles.subtitle}>
             Manage your favorites, collections, and comments
           </p>
-          <ContentTabs user={user} />
+          <ContentTabs />
         </div>
       </main>
       <Footer />

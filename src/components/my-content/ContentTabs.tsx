@@ -64,7 +64,7 @@ const ContentTabs = () => {
         )}
         {activeTab === "collections" && (
           <>
-            {console.log("🔍 [DEBUG] Rendering CollectionsTab")}
+            {/* {console.log("🔍 [DEBUG] Rendering CollectionsTab")} */}
             <CollectionsTab ref={collectionsRef} />
           </>
         )}

@@ -2,6 +2,12 @@
 import React, { useEffect } from "react";
 import styles from "./HeartButton.module.css";
 import { useFavorites } from "@/context/FavoritesContext";
+// import dynamic from "next/dynamic";
+
+// const Tooltip = dynamic(
+//   () => import("react-tooltip").then((mod) => mod.Tooltip),
+//   { ssr: false }, // Disable server-side rendering
+// );
 
 interface HeartButtonProps {
   imageId: string | number;
@@ -64,6 +70,7 @@ const HeartButton: React.FC<HeartButtonProps> = ({
 
   return (
     <button
+      id="heart-icon"
       className={`${styles.heartButton} ${className} ${isLiked ? styles.liked : styles.unliked}`}
       onClick={handleClick}
       aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
@@ -81,6 +88,10 @@ const HeartButton: React.FC<HeartButtonProps> = ({
       >
         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
       </svg>
+      {/* <Tooltip
+        anchorSelect="#heart-icon"
+        content={isLiked ? "Remove from favorites" : "Add to favorites"}
+      /> */}
     </button>
   );
 };

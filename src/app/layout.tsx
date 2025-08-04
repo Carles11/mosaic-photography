@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { tradeGothic } from "./fonts";
 
 import { GoogleTagManager } from "@next/third-parties/google";
 import { ThemeProvider } from "next-themes";
@@ -10,8 +11,6 @@ import { AuthSessionProvider } from "@/context/AuthSessionContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
 import { CommentsProvider } from "@/context/CommentsContext";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
-
-
 
 import "./globals.css";
 
@@ -58,6 +57,8 @@ export const metadata: Metadata = {
     "nude photography",
     "vintage nudes",
     "nude art",
+    "free images art",
+    "free art",
     "vintage nude photography ",
     "vintage nude photography public domain",
     "vintage art photography",
@@ -210,15 +211,21 @@ type RootLayoutProps = { children: React.ReactNode };
 
 function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${tradeGothic.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
         <noscript>
           <link rel="stylesheet" href="/non-critical.css" />
         </noscript>
+
+        <link rel="preconnect" href="https://www.mosaic.photography" />
       </head>
       <GoogleTagManager gtmId="GTM-N74Q9JC5" />
-      <body>
+      <body className={`font-trade-gothic`}>
         <NonCriticalCSSLoader />
         <Toaster position="top-center" />
         <ThemeProvider defaultTheme="dark">

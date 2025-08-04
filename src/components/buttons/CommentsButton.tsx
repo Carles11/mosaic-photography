@@ -3,6 +3,12 @@
 import React, { useEffect } from "react";
 import styles from "./CommentsButton.module.css";
 import { useComments } from "@/context/CommentsContext";
+// import dynamic from "next/dynamic";
+
+// const Tooltip = dynamic(
+//   () => import("react-tooltip").then((mod) => mod.Tooltip),
+//   { ssr: false }, // Disable server-side rendering
+// );
 
 interface CommentsButtonProps {
   imageId: string;
@@ -41,6 +47,7 @@ const CommentsButton: React.FC<CommentsButtonProps> = ({
 
   return (
     <button
+      id="heart-icon"
       className={`${styles.commentsButton} ${className}`}
       onClick={handleClick}
       aria-label={`View comments${commentCount > 0 ? ` (${commentCount})` : ""}`}
@@ -63,6 +70,10 @@ const CommentsButton: React.FC<CommentsButtonProps> = ({
         />
       </svg>
       {commentCount > 0 && <span className={styles.badge}>{commentCount}</span>}
+      {/* <Tooltip
+        anchorSelect="#heart-icon"
+        content={`View comments${commentCount > 0 ? ` (${commentCount})` : ""}`}
+      /> */}
     </button>
   );
 };

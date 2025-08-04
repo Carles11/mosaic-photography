@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
