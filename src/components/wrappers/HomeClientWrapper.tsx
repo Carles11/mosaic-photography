@@ -18,7 +18,6 @@ import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import BottomNav from "@/components/navigation/BottomNav/BottomNav";
 
-
 interface HomeClientWrapperProps {
   showLoginButton?: boolean;
   onLoginClick?: () => void;
@@ -66,22 +65,22 @@ function HomeClientWrapper({
         onLogoutClick={onLogoutClick}
         user={user}
       />
-      {/* Show AgeConsent only for real users */}
-      {!isCrawlerBot && (
+
+      {/* Show AgeConsent only for real users and if age is not confirmed */}
+      {!isCrawlerBot && !isMinimumAgeConfirmed && (
         <AgeConsent
           isMinimumAgeConfirmed={isMinimumAgeConfirmed}
           setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed}
         />
       )}
+
       {isMinimumAgeConfirmed && (
         <>
           <script type="application/ld+json">
             {JSON.stringify(structuredData)}
           </script>
           <section
-            className={`${styles.pageContent} ${
-              isMinimumAgeConfirmed ? styles.visible : styles.invisible
-            }`}
+            className={`${styles.pageContent} ${styles.visible}`}
             aria-hidden={!isMinimumAgeConfirmed}
           >
             <div className={styles.content}>
