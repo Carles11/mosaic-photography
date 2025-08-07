@@ -41,6 +41,29 @@ const nextConfig: NextConfig = {
       config.resolve.alias["moment"] = "moment/min/moment-with-locales";
     }
 
+    // Add minimatch alias and force CommonJS resolution
+
+    config.resolve.alias = {
+      ...config.resolve.alias, // Preserve existing aliases
+      minimatch: require.resolve("minimatch"),
+    };
+
+    // Add minimatch to transpiled packages
+    config.module.rules.push({
+      test: /minimatch/,
+      use: [
+        {
+          loader: "babel-loader",
+          options: {
+            presets: ["next/babel"],
+            plugins: [
+              ["@babel/plugin-transform-modules-commonjs", { loose: true }],
+            ],
+          },
+        },
+      ],
+    });
+
     return config;
   },
 
