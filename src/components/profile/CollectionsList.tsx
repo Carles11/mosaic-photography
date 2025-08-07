@@ -8,6 +8,7 @@ import styles from "./CollectionsList.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { Collection } from "@/types";
+import Image from "next/image";
 
 export interface CollectionsListRef {
   refreshCollections: () => void;
@@ -51,14 +52,13 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
 
     try {
       // Check current session
-      const { data: sessionData, error: sessionError } =
-        await supabase.auth.getSession();
+      await supabase.auth.getSession();
 
       // sessionData is an object, not an array
       // const [_sessionData, _sessionError] = sessionData;
 
       // Try the known collection IDs directly
-      const { data: knownCollections, error: knownError } = await supabase
+      await supabase
         .from("collections")
         .select("*")
         .in("id", [
@@ -66,26 +66,12 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
           "960305af-8088-4254-86f3-0f88a06edd34",
         ]);
 
-      // knownCollections can be null or an array, no destructuring needed
-      // const [_knownCollections] = knownCollections;
-
-      if (knownError) {
-        alert(
-          "Database access blocked by security policies. Check Supabase RLS settings for collections table.",
-        );
-        return;
-      }
-
       // If known collections work, try the regular query
-      const { data: collectionsData, error: collectionsError } = await supabase
+      const { data: collectionsData } = await supabase
         .from("collections")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-
-      if (collectionsError) {
-        return;
-      }
 
       if (collectionsData && collectionsData.length > 0) {
         // Process collections for image counts and previews
@@ -101,7 +87,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
             // const [counts, _countError] = count;
 
             // Get preview images (first 4)
-            const { data: previewData, error: previewError } = await supabase
+            const { data: previewData } = await supabase
               .from("collection_favorites")
               .select("favorites!inner(images!inner(url))")
               .eq("collection_id", collection.id)
@@ -109,7 +95,16 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
 
             // previewData can be null, so handle that case
             const preview_images = Array.isArray(previewData)
-              ? previewData.map((item: any) => item.favorites.images.url)
+              ? previewData.flatMap(
+                  (item: { favorites: { images: { url: string }[] }[] }) =>
+                    Array.isArray(item.favorites)
+                      ? item.favorites.flatMap((fav) =>
+                          Array.isArray(fav.images)
+                            ? fav.images.map((img) => img.url)
+                            : [],
+                        )
+                      : [],
+                )
               : [];
 
             return {
@@ -124,7 +119,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
       } else {
         setCollections([]);
       }
-    } catch (error) {
+    } catch {
     } finally {
       setLoading(false);
     }
@@ -132,7 +127,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
 
   useEffect(() => {
     loadCollections();
-  }, [user]);
+  }, [user, loadCollections]);
 
   const handleCreateCollection = (newCollection: Collection) => {
     setCollections((prev) => [
@@ -278,9 +273,11 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                       .slice(0, 4)
                       .map((imageUrl, index) => (
                         <div key={index} className={styles.previewImage}>
-                          <img
+                          <Image
                             src={imageUrl}
                             alt={`Preview ${index + 1}`}
+                            width={80}
+                            height={80}
                             loading="lazy"
                           />
                         </div>
@@ -303,12 +300,6 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                   <span className={styles.imageCount}>
                     {collection.image_count}{" "}
                     {collection.image_count === 1 ? "image" : "images"}
-                  </span>
-                  <span
-                    className={`${styles.privacyBadge} ${styles[collection.privacy]}`}
-                  >
-                    {collection.privacy === "private" ? "🔒" : "🌐"}{" "}
-                    {collection.privacy}
                   </span>
                 </div>
                 {collection.description && (
