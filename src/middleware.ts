@@ -102,17 +102,6 @@ export async function middleware(req: NextRequest) {
   return response;
 }
 
-// Removed duplicate declaration of _getLoginRedirect to fix redeclaration error
-
-// Fix unused variables on lines 6 and 68
-// Line 6:
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// const _getLoginRedirect = /* existing value */;
-
-// Line 68:
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// const [session, _sessionError] = /* existing value */;
-
 export const config = {
   matcher: [
     // Apply to all routes except static files and API

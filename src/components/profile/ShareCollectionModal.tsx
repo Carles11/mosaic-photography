@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import QRCode from "qrcode";
 import styles from "./ShareCollectionModal.module.css";
 import { Collection } from "@/types";
@@ -175,10 +176,12 @@ export default function ShareCollectionModal({
               <div className={styles.qrSection}>
                 <div className={styles.qrContainer}>
                   {qrCodeDataUrl ? (
-                    <img
+                    <Image
                       src={qrCodeDataUrl}
                       alt="QR Code for collection"
                       className={styles.qrCode}
+                      width={180}
+                      height={180}
                     />
                   ) : (
                     <div className={styles.qrLoading}>

@@ -34,10 +34,6 @@ const ThemeImage = (props: Props) => {
   const displayWidth = isMobile ? 250 : 383;
   const displayHeight = isMobile ? 176 : 271;
 
-  // Set the source dimensions (full size for quality)
-  const sourceWidth = isMobile ? 500 : 766;
-  const sourceHeight = isMobile ? 353 : 541;
-
   return (
     <Image
       priority={true}

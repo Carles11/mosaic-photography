@@ -7,7 +7,6 @@ import styles from "./FavoritesList.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useFavorites } from "@/context/FavoritesContext";
 import { ImageData } from "@/types";
-import dynamic from "next/dynamic";
 
 // const Tooltip = dynamic(
 //   () => import("react-tooltip").then((mod) => mod.Tooltip),

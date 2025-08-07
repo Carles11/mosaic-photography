@@ -74,7 +74,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     } catch (error) {
       console.error("Error creating initial profile:", error);
     }
-  }, [databaseError, user.id]);
+  }, [user.id]);
 
   const loadProfile = useCallback(async () => {
     try {

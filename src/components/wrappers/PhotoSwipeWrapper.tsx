@@ -9,19 +9,7 @@ import "photoswipe/dist/photoswipe.css";
 interface PhotoSwipeWrapperProps {
   galleryOptions?: Record<string, string | number | boolean>;
   onLoginRequired?: () => void;
-  images?: Array<{ id: string | number; [key: string]: any }>; // Array of images with at least an id field
-}
-
-interface PhotoSwipeOptions {
-  // Add appropriate properties
-  dataSource?: Record<string, unknown>[];
-  index?: number;
-}
-
-interface PhotoSwipeEvent {
-  type: string;
-  target: unknown;
-  // Add other properties as needed
+  images?: Array<{ id: string | number; [key: string]: unknown }>; // Array of images with at least an id field
 }
 
 // Global state to prevent multiple PhotoSwipe handlers
@@ -44,7 +32,9 @@ const PhotoSwipeWrapper: React.FC<
   };
 
   // Extract image ID directly from PhotoSwipe's slide data
-  const getImageIdFromPhotoSwipe = (pswpInstance: any): string | null => {
+  const getImageIdFromPhotoSwipe = (pswpInstance: {
+    currSlide?: { data?: { id?: string | number; alt?: string } };
+  }): string | null => {
     if (!pswpInstance || !pswpInstance.currSlide) {
       return null;
     }
@@ -104,18 +94,21 @@ const PhotoSwipeWrapper: React.FC<
     };
 
     // Setup PhotoSwipe event listeners
+
     const setupPhotoSwipeListeners = (pswpElement: HTMLElement): boolean => {
       // Try multiple ways to access the PhotoSwipe instance
-      let pswpInstance = (pswpElement as any).pswp;
+      let pswpInstance: any = (pswpElement as unknown as { pswp?: unknown })
+        .pswp;
 
       if (!pswpInstance) {
         // Try alternative property names
-        pswpInstance = (pswpElement as any).photoswipe;
+        pswpInstance = (pswpElement as unknown as { photoswipe?: unknown })
+          .photoswipe;
       }
 
       if (!pswpInstance) {
         // Try to find it in the global window object
-        pswpInstance = (window as any).pswp;
+        pswpInstance = (window as unknown as { pswp?: unknown }).pswp;
       }
 
       if (!pswpInstance) {
@@ -124,7 +117,7 @@ const PhotoSwipeWrapper: React.FC<
         if (pswpData) {
           try {
             pswpInstance = JSON.parse(pswpData);
-          } catch (e) {
+          } catch {
             // Ignore parsing errors
           }
         }
@@ -159,7 +152,7 @@ const PhotoSwipeWrapper: React.FC<
     };
 
     // Watch for PhotoSwipe modal creation
-    const observer = new MutationObserver((mutations) => {
+    const observer = new MutationObserver((mutations: MutationRecord[]) => {
       mutations.forEach((mutation) => {
         if (mutation.type !== "childList") return;
 
@@ -187,7 +180,7 @@ const PhotoSwipeWrapper: React.FC<
                   setTimeout(trySetupListeners, attemptInterval);
                 } else if (!success) {
                   // Fallback: Try to extract image ID from DOM or first image
-                  let fallbackImageId = null;
+                  let fallbackImageId: string | null = null;
 
                   // Try to find image ID from the current slide's img element
                   const currentImg = element.querySelector(
@@ -205,17 +198,18 @@ const PhotoSwipeWrapper: React.FC<
                     images.length > 0
                   ) {
                     // Try to match the image URL with our images array
-                    const matchingImage = images.find(
-                      (img) =>
-                        currentImg.src.includes(String(img.id)) ||
-                        String(img.url || "").includes(
-                          currentImg.src.split("/").pop() || "",
-                        ) ||
-                        currentImg.src.includes(
-                          String(img.url || "")
-                            .split("/")
-                            .pop() || "",
-                        ),
+                    const matchingImage = images.find((img) =>
+                      typeof img.id === "string" || typeof img.id === "number"
+                        ? currentImg.src.includes(String(img.id)) ||
+                          String((img as { url?: string }).url || "").includes(
+                            currentImg.src.split("/").pop() || "",
+                          ) ||
+                          currentImg.src.includes(
+                            String((img as { url?: string }).url || "")
+                              .split("/")
+                              .pop() || "",
+                          )
+                        : false,
                     );
 
                     if (matchingImage) {
@@ -287,7 +281,7 @@ const PhotoSwipeWrapper: React.FC<
                         }
                       }
 
-                      let newImageId = null;
+                      let newImageId: string | null = null;
 
                       if (targetImg && targetImg.dataset.imageId) {
                         newImageId = targetImg.dataset.imageId;
@@ -299,17 +293,21 @@ const PhotoSwipeWrapper: React.FC<
                         images &&
                         images.length > 0
                       ) {
-                        const matchingImage = images.find(
-                          (img) =>
-                            targetImg.src.includes(String(img.id)) ||
-                            String(img.url || "").includes(
-                              targetImg.src.split("/").pop() || "",
-                            ) ||
-                            targetImg.src.includes(
-                              String(img.url || "")
-                                .split("/")
-                                .pop() || "",
-                            ),
+                        const matchingImage = images.find((img) =>
+                          typeof img.id === "string" ||
+                          typeof img.id === "number"
+                            ? targetImg.src.includes(String(img.id)) ||
+                              String(
+                                (img as { url?: string }).url || "",
+                              ).includes(
+                                targetImg.src.split("/").pop() || "",
+                              ) ||
+                              targetImg.src.includes(
+                                String((img as { url?: string }).url || "")
+                                  .split("/")
+                                  .pop() || "",
+                              )
+                            : false,
                         );
 
                         if (matchingImage) {
@@ -320,21 +318,13 @@ const PhotoSwipeWrapper: React.FC<
                       return {
                         newImageId,
                         currentImgSrc: targetImg?.src || "",
-                        totalImages: allImages.length,
-                        visibleImages: Array.from(allImages).filter((img) => {
-                          const rect = img.getBoundingClientRect();
-                          return rect.width > 0 && rect.height > 0;
-                        }).length,
+                        // totalImages and visibleImages are not used, so omit them
                       };
                     };
 
                     const checkForSlideChanges = () => {
-                      const {
-                        newImageId,
-                        currentImgSrc,
-                        totalImages,
-                        visibleImages,
-                      } = getCurrentImageInfo();
+                      const { newImageId, currentImgSrc } =
+                        getCurrentImageInfo();
 
                       // Only check if we have valid data (avoid null states during transitions)
                       if (!newImageId && !currentImgSrc) {
@@ -409,8 +399,8 @@ const PhotoSwipeWrapper: React.FC<
                     });
 
                     // Listen for keyboard events (more targeted)
-                    const handleKeyDown = (e: KeyboardEvent) => {
-                      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+                    const handleKeyDown = (_e: KeyboardEvent) => {
+                      if (_e.key === "ArrowLeft" || _e.key === "ArrowRight") {
                         // Check immediately and then again after delays
                         checkForSlideChanges();
                         setTimeout(checkForSlideChanges, 50);
@@ -471,7 +461,7 @@ const PhotoSwipeWrapper: React.FC<
       observer.disconnect();
       isPhotoSwipeHandlerActive = false;
     };
-  }, []); // No dependencies to prevent re-running
+  }, [images]); // Add images as dependency for useEffect
 
   return (
     <>

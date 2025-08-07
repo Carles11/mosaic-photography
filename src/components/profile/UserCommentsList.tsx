@@ -1,18 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import styles from "./UserCommentsList.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { UserCommentWithImage } from "@/types";
 
 const COMMENTS_PER_PAGE = 10;
-
-interface Comment {
-  id: string;
-  text: string;
-  // other properties as needed
-}
 
 export default function UserCommentsList() {
   const { user } = useAuthSession();
@@ -94,7 +89,7 @@ export default function UserCommentsList() {
 
       // Transform the data to match our interface
       const transformedComments: UserCommentWithImage[] = commentsData.map(
-        (comment: any) => {
+        (comment: UserCommentWithImage) => {
           const imageDetails = imageMap.get(comment.image_id);
           return {
             id: comment.id,
@@ -127,7 +122,7 @@ export default function UserCommentsList() {
 
   useEffect(() => {
     loadUserComments(1, true);
-  }, [user]);
+  }, [user, loadUserComments]);
 
   const handleLoadMore = () => {
     const nextPage = page + 1;
@@ -254,9 +249,11 @@ export default function UserCommentsList() {
             <div className={styles.imageInfo}>
               {comment.image_url ? (
                 <div className={styles.imageThumbnail}>
-                  <img
+                  <Image
                     src={comment.image_url}
                     alt={comment.image_title || "Mosaic Gallery image"}
+                    width={80}
+                    height={80}
                     loading="lazy"
                   />
                 </div>

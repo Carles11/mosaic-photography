@@ -5,17 +5,10 @@ export type AuthError = {
   status?: number;
 };
 
-export type AuthResult<T = any> = {
+export type AuthResult<T = unknown> = {
   data?: T;
   error?: AuthError;
 };
-
-// Fix 'any' type on line 8
-interface UserData {
-  id: string;
-  email?: string;
-  // other properties as needed
-}
 
 /**
  * Sign in with email and password
