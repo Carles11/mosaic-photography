@@ -135,7 +135,9 @@ const PhotoSwipeWrapper: React.FC<
         }
 
         // Listen for slide changes
-        (pswpInstance as { on: Function }).on("change", () => {
+        (
+          pswpInstance as { on: (event: string, callback: () => void) => void }
+        ).on("change", () => {
           const newImageId = getImageIdFromPhotoSwipe(
             pswpInstance as {
               currSlide?: { data?: { id?: string | number; alt?: string } };
@@ -147,7 +149,9 @@ const PhotoSwipeWrapper: React.FC<
         });
 
         // Clean up when PhotoSwipe closes
-        (pswpInstance as { on: Function }).on("destroy", () => {
+        (
+          pswpInstance as { on: (event: string, callback: () => void) => void }
+        ).on("destroy", () => {
           setCurrentImageId(null);
           setPhotoSwipeContainer(null);
         });

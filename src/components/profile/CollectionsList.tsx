@@ -157,7 +157,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
       } else {
         setCollections((prev) => prev.filter((col) => col.id !== collectionId));
       }
-    } catch (error) {
+    } catch {
       alert("Failed to delete collection. Please try again.");
     }
   };
