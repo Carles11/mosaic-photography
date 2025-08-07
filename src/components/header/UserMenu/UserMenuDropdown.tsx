@@ -37,7 +37,7 @@ const UserMenuDropdown = ({
           </Link>
 
           <Link
-            href="/my-content"
+            href="/contents"
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={onClose}
           >

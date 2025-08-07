@@ -94,7 +94,7 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    // Exclude /my-content from middleware
-    "/((?!_next/static|_next/image|favicon.ico|my-content|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    // Exclude /contents from middleware
+    "/((?!_next/static|_next/image|favicon.ico|contents|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

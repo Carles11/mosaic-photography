@@ -44,8 +44,8 @@ const BottomNav = ({
               <BottomNavItem
                 icon="≡"
                 label="Content"
-                href="/my-content"
-                isActive={pathname?.startsWith("/my-content") ?? false}
+                href="/contents"
+                isActive={pathname?.startsWith("/contents") ?? false}
               />
               <BottomNavItem
                 icon="⋯"

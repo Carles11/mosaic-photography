@@ -658,7 +658,7 @@ export default function CollectionView() {
                   </button>
                   <span className={styles.breadcrumbSeparator}>→</span>
                   <button
-                    onClick={() => router.push("/my-content?tab=collections")}
+                    onClick={() => router.push("/contents?tab=collections")}
                     className={styles.breadcrumbLink}
                   >
                     Collections
