@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { sendGTMEvent } from "@next/third-parties/google";
 import styles from "./contents.module.css";
 import { useAuth } from "@/hooks/useAuth";
-// import { ProtectedRoute } from "@/components/auth/guards/ProtectedRoute";
+import { ProtectedRoute } from "@/components/auth/guards/ProtectedRoute";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import BottomNav from "@/components/navigation/BottomNav/BottomNav";
@@ -51,14 +51,15 @@ function MyContentContent() {
 }
 
 export default function MyContentPage() {
-  // <ProtectedRoute
-  //   fallback={
-  //     <div className={styles.loadingContainer}>
-  //       <div className={styles.loader}>Loading...</div>
-  //     </div>
-  //   }
-  // >
-  //   <MyContentContent />;{" "}
-  // </ProtectedRoute>;
-  return <MyContentContent />;
+  return (
+    <ProtectedRoute
+      fallback={
+        <div className={styles.loadingContainer}>
+          <div className={styles.loader}>Loading...</div>
+        </div>
+      }
+    >
+      <MyContentContent />;{" "}
+    </ProtectedRoute>
+  );
 }
