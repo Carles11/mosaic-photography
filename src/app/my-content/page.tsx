@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = "force-static";
 
 import { Suspense } from "react";
 import { sendGTMEvent } from "@next/third-parties/google";
