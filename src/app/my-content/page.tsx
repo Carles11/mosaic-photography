@@ -30,7 +30,7 @@ function MyContentContent() {
         <div className={styles.content}>
           <h1 className={styles.title}>My Content</h1>
           <p className={styles.subtitle}>
-            Manage your favorites, collections, and comments
+            Manage your favorites, collections, and comments.
           </p>
           <ContentTabs />
         </div>
