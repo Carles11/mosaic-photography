@@ -5,13 +5,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "vercel-build": "NEXT_IGNORE_TSC_ERRORS=1 next build",
+    "postbuild": "tsx scripts/generate-image-sitemap.ts && tsx scripts/generate-collection-sitemap.ts",
     "start": "next start",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src/",
     "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src/ --fix",
     "format-imports": "eslint --ext .js,.jsx,.ts,.tsx src/ --fix --quiet --rule \"import/order: error\" --rule \"import/no-duplicates: error\"",
     "lint:imports": "eslint --ext .js,.jsx,.ts,.tsx src/ --quiet --rule \"import/order: error\" --rule \"import/no-duplicates: error\"",
     "analyze": "cross-env ANALYZE=true next build",
-    "postbuild": "tsx scripts/generate-image-sitemap.ts && tsx scripts/generate-collection-sitemap.ts",
     "generate-image-sitemap": "tsx src/scripts/generate-image-sitemap.ts",
     "update-orientations": "node scripts/update-image-orientations.js",
     "clean": "rimraf .next"

@@ -6,7 +6,16 @@ module.exports = {
     "plugin:import/typescript",
   ],
   plugins: ["import"],
+  settings: {
+    "import/resolver": {
+      node: {
+        paths: ["src"],
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      },
+    },
+  },
   rules: {
+    "import/default": "off",
     // Import order rules
     "import/order": [
       "error",

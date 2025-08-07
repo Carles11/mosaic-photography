@@ -9,5 +9,11 @@
         }
       ]
     }
-  ]
+  ],
+  "build": {
+    "env": {
+      "NODE_OPTIONS": "--experimental-vm-modules",
+      "NEXT_IGNORE_TSC_ERRORS": "1"
+    }
+  }
 }

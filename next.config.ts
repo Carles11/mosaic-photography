@@ -42,28 +42,21 @@ const nextConfig: NextConfig = {
       config.resolve.alias["moment"] = "moment/min/moment-with-locales";
     }
 
-    // Add minimatch alias and force CommonJS resolution
+    // Vercel-specific minimatch resolution
+    if (process.env.VERCEL) {
+      config.resolve.alias.minimatch = path.resolve(
+        __dirname,
+        "node_modules/minimatch/minimatch.js",
+      );
 
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      minimatch: path.resolve(__dirname, "src/lib/minimatch.js"),
-    };
-
-    // Add minimatch to transpiled packages
-    config.module.rules.push({
-      test: /minimatch/,
-      use: [
-        {
-          loader: "babel-loader",
-          options: {
-            presets: ["next/babel"],
-            plugins: [
-              ["@babel/plugin-transform-modules-commonjs", { loose: true }],
-            ],
-          },
-        },
-      ],
-    });
+      // Add special handling for serverless environment
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /^minimatch$/,
+          path.resolve(__dirname, "src/lib/minimatch.js"),
+        ),
+      );
+    }
 
     return config;
   },
