@@ -43,22 +43,6 @@ const nextConfig: NextConfig = {
       config.resolve.alias["moment"] = "moment/min/moment-with-locales";
     }
 
-    // Vercel-specific minimatch resolution
-    if (process.env.VERCEL) {
-      config.resolve.alias.minimatch = path.resolve(
-        __dirname,
-        "node_modules/minimatch/minimatch.js",
-      );
-
-      // Add special handling for serverless environment
-      config.plugins.push(
-        new webpack.NormalModuleReplacementPlugin(
-          /^minimatch$/,
-          path.resolve(__dirname, "src/lib/minimatch.js"),
-        ),
-      );
-    }
-
     return config;
   },
 
