@@ -47,7 +47,7 @@ const PrivacyPolicy: React.FC = () => {
         website. Google Tag Manager itself does not collect personal
         information, but it may deploy tags that collect data for analytics
         purposes and help us improve the user experience. For more information,
-        please review Google's privacy policy.
+        please review Google&apos;s privacy policy.
       </p>
       <h2 className={styles.subtitle}>Contact</h2>
       <p className={styles.text}>

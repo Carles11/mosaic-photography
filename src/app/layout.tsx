@@ -214,9 +214,9 @@ function RootLayout({ children }: RootLayoutProps) {
     >
       <head>
         <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
-        <noscript>
+        {/* <noscript>
           <link rel="stylesheet" href="/non-critical.css" />
-        </noscript>
+        </noscript> */}
 
         <link rel="preconnect" href="https://www.mosaic.photography" />
       </head>
