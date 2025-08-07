@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 import {
   isProtectedRoute,
   isAuthRoute,
@@ -47,7 +46,7 @@ export async function middleware(req: NextRequest) {
     return response;
   }
 
-  // Get auth token from cookies
+  // Get auth token from cookies - Edge Runtime compatible approach
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -58,42 +57,25 @@ export async function middleware(req: NextRequest) {
   }
 
   try {
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    });
-
-    // Get session from the current request
+    // Simple authentication check using access token from cookies
+    // This avoids using the full Supabase client which has Node.js dependencies
     let isAuthenticated = false;
 
-    try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      isAuthenticated = !!session?.user;
-    } catch {
-      // If session check fails, try with cookies
-      const accessToken = req.cookies.get("sb-access-token")?.value;
-      if (accessToken) {
-        const {
-          data: { user },
-          error,
-        } = await supabase.auth.getUser(accessToken);
-        isAuthenticated = !error && !!user;
-      }
+    // Check for Supabase auth cookies
+    const accessTokenCookie = req.cookies.get("sb-access-token");
+    const refreshTokenCookie = req.cookies.get("sb-refresh-token");
+
+    // Simple check - if we have auth cookies, assume authenticated
+    // The actual auth validation will happen on the client side
+    if (accessTokenCookie?.value && refreshTokenCookie?.value) {
+      isAuthenticated = true;
     }
 
     // Temporarily disable auth checks in middleware - let client-side handle it
-    // Handle protected routes - temporarily disabled for debugging
-    // if (isProtectedRoute(pathname) && !isAuthenticated) {
-    //   console.log(`Middleware: Redirecting ${pathname} - authenticated: ${isAuthenticated}`);
-    //   const loginUrl = new URL(getLoginRedirect(pathname), req.url);
-    //   return NextResponse.redirect(loginUrl);
-    // }
+    // This ensures we don't block users due to Edge Runtime limitations
+    // The ProtectedRoute component will handle proper authentication
 
-    // Handle auth routes for authenticated users
+    // Handle auth routes for potentially authenticated users
     if (isAuthRoute(pathname) && isAuthenticated) {
       const redirectTo = searchParams.get("redirect");
       const homeUrl = new URL(
