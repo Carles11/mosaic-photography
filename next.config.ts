@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import withPWA from "next-pwa";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import pwaConfig from "./pwa.config";
+const path = require("path");
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -40,6 +41,29 @@ const nextConfig: NextConfig = {
     if (!isServer) {
       config.resolve.alias["moment"] = "moment/min/moment-with-locales";
     }
+
+    // Add minimatch alias and force CommonJS resolution
+
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      minimatch: path.resolve(__dirname, "src/lib/minimatch.js"),
+    };
+
+    // Add minimatch to transpiled packages
+    config.module.rules.push({
+      test: /minimatch/,
+      use: [
+        {
+          loader: "babel-loader",
+          options: {
+            presets: ["next/babel"],
+            plugins: [
+              ["@babel/plugin-transform-modules-commonjs", { loose: true }],
+            ],
+          },
+        },
+      ],
+    });
 
     return config;
   },
