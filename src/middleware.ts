@@ -8,6 +8,14 @@ import {
 
 // Middleware to handle bot cookies and auth protection
 export async function middleware(req: NextRequest) {
+  // Skip middleware during build time
+  if (
+    process.env.NODE_ENV === undefined ||
+    !process.env.NEXT_PUBLIC_SUPABASE_URL
+  ) {
+    return NextResponse.next();
+  }
+
   const userAgent = req.headers.get("user-agent") || "";
   const isBot = /bot|crawl|slurp|spider|google/i.test(userAgent);
   const { pathname, searchParams } = req.nextUrl;
@@ -45,6 +53,7 @@ export async function middleware(req: NextRequest) {
 
   if (!supabaseUrl || !supabaseAnonKey) {
     console.error("Missing Supabase environment variables in middleware");
+    // During build time or when env vars are missing, skip auth checks
     return response;
   }
 
