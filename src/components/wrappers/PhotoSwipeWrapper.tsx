@@ -9,7 +9,7 @@ import "photoswipe/dist/photoswipe.css";
 interface PhotoSwipeWrapperProps {
   galleryOptions?: Record<string, string | number | boolean>;
   onLoginRequired?: () => void;
-  images?: Array<{ id: string | number; [key: string]: unknown }>; // Array of images with at least an id field
+  images?: Array<{ id: string | number } & Record<string, unknown>>; // Array of images with at least an id field
 }
 
 // Global state to prevent multiple PhotoSwipe handlers
