@@ -1,5 +1,4 @@
 "use client";
-export const dynamic = "force-static";
 
 import { Suspense } from "react";
 import { sendGTMEvent } from "@next/third-parties/google";
@@ -52,5 +51,14 @@ function MyContentContent() {
 }
 
 export default function MyContentPage() {
+  // <ProtectedRoute
+  //   fallback={
+  //     <div className={styles.loadingContainer}>
+  //       <div className={styles.loader}>Loading...</div>
+  //     </div>
+  //   }
+  // >
+  //   <MyContentContent />;{" "}
+  // </ProtectedRoute>;
   return <MyContentContent />;
 }
