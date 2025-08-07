@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import withPWA from "next-pwa";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import pwaConfig from "./pwa.config";
+import { webpack } from "next/dist/compiled/webpack/webpack";
 const path = require("path");
 
 const isDev = process.env.NODE_ENV === "development";
