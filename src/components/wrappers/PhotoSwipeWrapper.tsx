@@ -4,12 +4,13 @@ import { createPortal } from "react-dom";
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsButton from "@/components/buttons/CommentsButton";
 import CommentsModal from "@/components/modals/comments/CommentsModal";
+import { ImageWithOrientation } from "@/types";
 import "photoswipe/dist/photoswipe.css";
 
 interface PhotoSwipeWrapperProps {
   galleryOptions?: Record<string, string | number | boolean>;
   onLoginRequired?: () => void;
-  images?: Array<{ id: string | number } & Record<string, unknown>>; // Array of images with at least an id field
+  images?: Array<{ id: string | number } | ImageWithOrientation>; // Array of images with at least an id field
 }
 
 // Global state to prevent multiple PhotoSwipe handlers
