@@ -13,7 +13,6 @@ import ShareCollectionModal from "@/components/profile/ShareCollectionModal";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 
-
 interface CollectionImageData {
   id: string;
   url: string;
@@ -190,7 +189,7 @@ export default function CollectionView() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [collectionId]);
 
   useEffect(() => {
     loadCollection();
