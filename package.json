@@ -11,7 +11,7 @@
     "format-imports": "eslint --ext .js,.jsx,.ts,.tsx src/ --fix --quiet --rule \"import/order: error\" --rule \"import/no-duplicates: error\"",
     "lint:imports": "eslint --ext .js,.jsx,.ts,.tsx src/ --quiet --rule \"import/order: error\" --rule \"import/no-duplicates: error\"",
     "analyze": "cross-env ANALYZE=true next build",
-    "postbuild": "ts-node --project tsconfig.json scripts/generate-image-sitemap.ts",
+    "postbuild": "ts-node --project tsconfig.json scripts/generate-image-sitemap.ts && ts-node --project tsconfig.json scripts/generate-collection-sitemap.ts",
     "generate-image-sitemap": "ts-node --project tsconfig.json src/scripts/generate-image-sitemap.ts",
     "update-orientations": "node scripts/update-image-orientations.js",
     "clean": "rimraf .next"
