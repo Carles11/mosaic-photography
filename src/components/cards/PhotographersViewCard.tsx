@@ -43,43 +43,38 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
         .from("photographers")
         .select(
           `
-          name, surname, author, biography, birthdate, deceasedate, origin, website, store, instagram,
-          images (id, url, author, title, description, created_at)
-        `,
-        );
+      name, surname, author, biography, birthdate, deceasedate, origin, website, store, instagram,
+      images (id, url, author, title, description, created_at)
+    `,
+        )
+        .order("random_order", { ascending: true }) // Key change: Orders by the server-generated random value
+        .order("created_at", { ascending: true, foreignTable: "images" }); // Keeps your existing image sorting
 
       if (error) {
         setError(error.message);
-
         setLoading(false);
         return;
       }
 
-      if (!photographers) {
-        setError("No artists found.");
+      // Process images (your existing logic for featured images)
+      const processedPhotographers = (photographers || []).map(
+        (photographer) => {
+          if (!photographer.images) return photographer;
 
-        setLoading(false);
-        return;
-      }
-      // After fetching and shuffling photographers:
-      const processedPhotographers = (
-        photographers.sort(() => Math.random() - 0.5) || []
-      ).map((photographer) => {
-        if (!photographer.images) return photographer;
+          const featuredIndex = photographer.images.findIndex((img) => {
+            const fileName = img.url.split("/").pop()?.toLowerCase();
+            return fileName?.startsWith("000_aaa");
+          });
 
-        const featuredIndex = photographer.images.findIndex((img) => {
-          const fileName = img.url.split("/").pop()?.toLowerCase(); // Extract the file name and normalize case
-          return fileName?.startsWith("000_aaa");
-        });
+          if (featuredIndex > -1) {
+            const [featured] = photographer.images.splice(featuredIndex, 1);
+            photographer.images.unshift(featured);
+          }
 
-        if (featuredIndex > -1) {
-          // Place the found image at the start
-          const [featured] = photographer.images.splice(featuredIndex, 1);
-          photographer.images.unshift(featured);
-        }
+          return photographer;
+        },
+      );
 
-        return photographer;
-      });
       setPhotographers(processedPhotographers);
       setLoading(false);
     };

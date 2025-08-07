@@ -5,14 +5,7 @@ import { useRouter } from "next/navigation";
 import UserMenuButton from "./UserMenuButton";
 import UserMenuDropdown from "./UserMenuDropdown";
 import styles from "./UserMenu.module.css";
-import { SupabaseUser } from "@/lib/supabaseClient";
-
-interface UserMenuProps {
-  user?: SupabaseUser | null;
-  onLoginClick?: () => void;
-  onLogoutClick?: () => void;
-  onGoProClick?: () => void;
-}
+import type { UserMenuProps } from "@/types";
 
 const UserMenu = ({
   user,

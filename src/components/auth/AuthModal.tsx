@@ -4,7 +4,7 @@
 import { useState } from "react";
 
 // Type imports
-import { AuthView } from "@/lib/auth/auth-types";
+import { AuthModalProps, AuthView } from "@/types/auth";
 
 // Component imports alphabetically
 import ConfirmEmailForm from "@/components/auth/confirmEmailForm";
@@ -12,13 +12,6 @@ import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm_temp";
 import LoginForm from "@/components/auth/logInForm";
 import ResetPasswordForm from "@/components/auth/resetPasswordForm";
 import SignupForm from "@/components/auth/signUpForm";
-
-interface AuthModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  initialView?: AuthView;
-  initialEmail?: string;
-}
 
 export default function AuthModal({
   isOpen,

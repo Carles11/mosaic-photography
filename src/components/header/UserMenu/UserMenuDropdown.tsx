@@ -2,17 +2,8 @@
 
 import Link from "next/link";
 import styles from "./UserMenu.module.css";
-import { SupabaseUser } from "@/lib/supabaseClient";
-import ThemeToggle from "@/components/theme/ThemeToggle"; // Add import
-
-
-interface UserMenuDropdownProps {
-  user?: SupabaseUser | null;
-  onLoginClick?: () => void;
-  onLogoutClick?: () => void;
-  onGoProClick?: () => void;
-  onClose: () => void;
-}
+import ThemeToggle from "@/components/theme/ThemeToggle";
+import type { UserMenuDropdownProps } from "@/types";
 
 const UserMenuDropdown = ({
   user,

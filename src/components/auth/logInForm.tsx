@@ -4,15 +4,7 @@ import { useRouter } from "next/navigation";
 import styles from "./LogInForm.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
-
-interface LoginFormProps {
-  onSwitchToSignup?: () => void;
-  onForgotPassword?: () => void;
-  onEmailChange?: (email: string) => void;
-  initialEmail?: string;
-  onSuccess?: () => void;
-  redirectTo?: string;
-}
+import type { LoginFormProps } from "@/types";
 
 export default function LoginForm({
   onSwitchToSignup,

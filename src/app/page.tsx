@@ -6,7 +6,7 @@ import { sendGTMEvent } from "@next/third-parties/google";
 import { useAuth } from "@/hooks/useAuth";
 import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
 import AuthModal from "@/components/auth/AuthModal";
-import { AuthView } from "@/lib/auth/auth-types";
+import { AuthView } from "@/types/auth";
 
 // Import session debug for development
 if (process.env.NODE_ENV === "development") {

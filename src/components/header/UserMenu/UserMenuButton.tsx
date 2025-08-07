@@ -1,13 +1,7 @@
 "use client";
 import { sendGTMEvent } from "@next/third-parties/google";
 import styles from "./UserMenu.module.css";
-import { SupabaseUser } from "@/lib/supabaseClient";
-
-interface UserMenuButtonProps {
-  user?: SupabaseUser | null;
-  isOpen: boolean;
-  onClick: () => void;
-}
+import type { UserMenuButtonProps } from "@/types";
 
 const UserMenuButton = ({ user, isOpen, onClick }: UserMenuButtonProps) => {
   const getUserInitial = (email: string) => {

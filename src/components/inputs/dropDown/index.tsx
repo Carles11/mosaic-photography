@@ -1,13 +1,7 @@
 import React from "react";
 import { sendGTMEvent } from "@next/third-parties/google";
-
 import styles from "./Dropdown.module.css";
-
-interface DropdownProps {
-  buttonText: string;
-  items: { store: string; website: string; affiliate: boolean }[];
-  onToggle?: (isOpen: boolean) => void; // New prop
-}
+import type { DropdownProps } from "@/types";
 
 const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, onToggle }) => {
   const handleToggle = (event: React.SyntheticEvent<HTMLDetailsElement>) => {
