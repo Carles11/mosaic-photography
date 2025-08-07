@@ -3,7 +3,6 @@ import { createClient } from "@supabase/supabase-js";
 import {
   isProtectedRoute,
   isAuthRoute,
-  getLoginRedirect,
   getAuthenticatedRedirect,
 } from "@/lib/auth/auth-guards";
 
@@ -65,7 +64,7 @@ export async function middleware(req: NextRequest) {
         data: { session },
       } = await supabase.auth.getSession();
       isAuthenticated = !!session?.user;
-    } catch (sessionError) {
+    } catch {
       // If session check fails, try with cookies
       const accessToken = req.cookies.get("sb-access-token")?.value;
       if (accessToken) {

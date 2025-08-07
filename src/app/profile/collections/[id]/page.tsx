@@ -193,7 +193,7 @@ export default function CollectionView() {
 
   useEffect(() => {
     loadCollection();
-  }, [collectionId]);
+  }, [collectionId, loadCollection]);
 
   useEffect(() => {
     // Detect mobile device

@@ -97,7 +97,7 @@ const PhotoSwipeWrapper: React.FC<
 
     const setupPhotoSwipeListeners = (pswpElement: HTMLElement): boolean => {
       // Try multiple ways to access the PhotoSwipe instance
-      let pswpInstance: any = (pswpElement as unknown as { pswp?: unknown })
+      let pswpInstance: unknown = (pswpElement as unknown as { pswp?: unknown })
         .pswp;
 
       if (!pswpInstance) {
@@ -125,22 +125,29 @@ const PhotoSwipeWrapper: React.FC<
 
       if (pswpInstance) {
         // Set initial image ID
-        const initialImageId = getImageIdFromPhotoSwipe(pswpInstance);
+        const initialImageId = getImageIdFromPhotoSwipe(
+          pswpInstance as {
+            currSlide?: { data?: { id?: string | number; alt?: string } };
+          },
+        );
         if (initialImageId) {
           setCurrentImageId(initialImageId);
         }
 
         // Listen for slide changes
-        pswpInstance.on("change", () => {
-          const newImageId = getImageIdFromPhotoSwipe(pswpInstance);
-
+        (pswpInstance as { on: Function }).on("change", () => {
+          const newImageId = getImageIdFromPhotoSwipe(
+            pswpInstance as {
+              currSlide?: { data?: { id?: string | number; alt?: string } };
+            },
+          );
           if (newImageId) {
             setCurrentImageId(newImageId);
           }
         });
 
         // Clean up when PhotoSwipe closes
-        pswpInstance.on("destroy", () => {
+        (pswpInstance as { on: Function }).on("destroy", () => {
           setCurrentImageId(null);
           setPhotoSwipeContainer(null);
         });

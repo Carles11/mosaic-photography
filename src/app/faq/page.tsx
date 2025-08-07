@@ -258,9 +258,9 @@ const FAQPage: React.FC = () => {
             <p>
               Can&apos;t find the answer you&apos;re looking for? We&apos;re
               here to help! Our curated collection of public domain vintage nude
-              photography continues to grow, and we're always happy to assist
-              with specific questions about usage rights, historical context, or
-              technical details.
+              photography continues to grow, and we&apos;re always happy to
+              assist with specific questions about usage rights, historical
+              context, or technical details.
             </p>
             <div className={styles.contactInfo}>
               <p>

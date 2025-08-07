@@ -1,6 +1,12 @@
 "use client";
 
-import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
+import {
+  useState,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+  useCallback,
+} from "react";
 import { useRouter } from "next/navigation";
 import CreateCollectionModal from "./CreateCollectionModal";
 import EditCollectionModal from "./EditCollectionModal";
@@ -30,34 +36,19 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768 || "ontouchstart" in window);
     };
-
     checkMobile();
     window.addEventListener("resize", checkMobile);
-
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Expose refresh function to parent components
-  useImperativeHandle(ref, () => ({
-    refreshCollections: loadCollections,
-  }));
-
-  const loadCollections = async () => {
+  const loadCollections = useCallback(async () => {
     if (!user) {
       setLoading(false);
       return;
     }
-
     setLoading(true);
-
     try {
-      // Check current session
       await supabase.auth.getSession();
-
-      // sessionData is an object, not an array
-      // const [_sessionData, _sessionError] = sessionData;
-
-      // Try the known collection IDs directly
       await supabase
         .from("collections")
         .select("*")
@@ -65,35 +56,23 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
           "1de09a36-8180-496e-823a-e2ce80b6cf45",
           "960305af-8088-4254-86f3-0f88a06edd34",
         ]);
-
-      // If known collections work, try the regular query
       const { data: collectionsData } = await supabase
         .from("collections")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-
       if (collectionsData && collectionsData.length > 0) {
-        // Process collections for image counts and previews
         const collectionsWithCounts = await Promise.all(
           collectionsData.map(async (collection) => {
-            // Get image count
-            const { count, error: countError } = await supabase
+            const { count: imageCount } = await supabase
               .from("collection_favorites")
               .select("*", { count: "exact", head: true })
               .eq("collection_id", collection.id);
-
-            // count is a number or null, no destructuring needed
-            // const [counts, _countError] = count;
-
-            // Get preview images (first 4)
             const { data: previewData } = await supabase
               .from("collection_favorites")
               .select("favorites!inner(images!inner(url))")
               .eq("collection_id", collection.id)
               .limit(4);
-
-            // previewData can be null, so handle that case
             const preview_images = Array.isArray(previewData)
               ? previewData.flatMap(
                   (item: { favorites: { images: { url: string }[] }[] }) =>
@@ -106,15 +85,13 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                       : [],
                 )
               : [];
-
             return {
               ...collection,
-              image_count: count || 0,
+              image_count: imageCount || 0,
               preview_images,
             };
           }),
         );
-
         setCollections(collectionsWithCounts);
       } else {
         setCollections([]);
@@ -123,7 +100,15 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      refreshCollections: loadCollections,
+    }),
+    [loadCollections],
+  );
 
   useEffect(() => {
     loadCollections();

@@ -74,7 +74,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     } catch (error) {
       console.error("Error creating initial profile:", error);
     }
-  }, [user.id]);
+  }, [user.id, databaseError]);
 
   const loadProfile = useCallback(async () => {
     try {
@@ -122,7 +122,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     } finally {
       setLoading(false);
     }
-  }, [user.id, databaseError, createInitialProfile]);
+  }, [user.id, createInitialProfile]);
 
   useEffect(() => {
     loadProfile();
