@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { sendGTMEvent } from "@next/third-parties/google";
 import styles from "./my-content.module.css";
 import { useAuth } from "@/hooks/useAuth";
@@ -32,7 +33,9 @@ function MyContentContent() {
           <p className={styles.subtitle}>
             Manage your favorites, collections, and comments.
           </p>
-          <ContentTabs />
+          <Suspense fallback={<div>Loading content...</div>}>
+            <ContentTabs />
+          </Suspense>
         </div>
       </main>
       <Footer />
