@@ -93,5 +93,5 @@ export default withBundleAnalyzer({
     register: !isDev,
     disable: isDev, // Keep disabled unless going full PWA
     ...pwaConfig,
-  })(nextConfig)
+  })(nextConfig),
 );
