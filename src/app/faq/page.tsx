@@ -256,11 +256,11 @@ const FAQPage: React.FC = () => {
           <div className={styles.callToAction}>
             <h2>Still Have Questions?</h2>
             <p>
-              Can't find the answer you're looking for? We're here to help! Our
-              curated collection of public domain vintage nude photography
-              continues to grow, and we're always happy to assist with specific
-              questions about usage rights, historical context, or technical
-              details.
+              Can&apos;t find the answer you&apos;re looking for? We&apos;re
+              here to help! Our curated collection of public domain vintage nude
+              photography continues to grow, and we're always happy to assist
+              with specific questions about usage rights, historical context, or
+              technical details.
             </p>
             <div className={styles.contactInfo}>
               <p>
