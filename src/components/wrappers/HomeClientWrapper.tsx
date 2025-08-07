@@ -60,7 +60,6 @@ function HomeClientWrapper({
     <div className={styles.container}>
       <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
       <Header
-        showLoginButton={showLoginButton}
         onLoginClick={onLoginClick}
         onLogoutClick={onLogoutClick}
         user={user}
@@ -68,10 +67,7 @@ function HomeClientWrapper({
 
       {/* Show AgeConsent only for real users and if age is not confirmed */}
       {!isCrawlerBot && !isMinimumAgeConfirmed && (
-        <AgeConsent
-          isMinimumAgeConfirmed={isMinimumAgeConfirmed}
-          setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed}
-        />
+        <AgeConsent setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed} />
       )}
 
       {isMinimumAgeConfirmed && (
