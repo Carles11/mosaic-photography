@@ -19,7 +19,6 @@ import Footer from "@/components/footer/Footer";
 import BottomNav from "@/components/navigation/BottomNav/BottomNav";
 
 interface HomeClientWrapperProps {
-  showLoginButton?: boolean;
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
   user?: SupabaseUser | null;
@@ -27,7 +26,6 @@ interface HomeClientWrapperProps {
 }
 
 function HomeClientWrapper({
-  showLoginButton = false,
   onLoginClick,
   onLogoutClick,
   user,
