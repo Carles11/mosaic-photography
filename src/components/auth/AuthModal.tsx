@@ -8,7 +8,7 @@ import { AuthView } from "@/lib/auth/auth-types";
 
 // Component imports alphabetically
 import ConfirmEmailForm from "@/components/auth/confirmEmailForm";
-import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm_temp";
 import LoginForm from "@/components/auth/logInForm";
 import ResetPasswordForm from "@/components/auth/resetPasswordForm";
 import SignupForm from "@/components/auth/signUpForm";
