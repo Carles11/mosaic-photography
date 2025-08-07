@@ -75,7 +75,6 @@ export default function Home() {
   return (
     <>
       <HomeClientWrapper
-        showLoginButton={!user}
         onLoginClick={handleLoginClick}
         onLogoutClick={logout}
         user={user}
