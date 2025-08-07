@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import styles from "./AddToCollectionModal.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
+
 import { Collection as CollectionType } from "@/types";
 
 interface AddToCollectionModalProps {
@@ -13,12 +14,6 @@ interface AddToCollectionModalProps {
   imageTitle: string;
   onClose: () => void;
   onAddToCollection?: (collectionId: string) => void;
-}
-
-interface Collection {
-  id: string;
-  name: string;
-  // other properties as needed
 }
 
 export default function AddToCollectionModal({
@@ -90,7 +85,8 @@ export default function AddToCollectionModal({
       }
 
       const existingCollections = new Set(
-        data?.map((item: any) => item.collection_id) || [],
+        data?.map((item: { collection_id: string }) => item.collection_id) ||
+          [],
       );
       setAlreadyInCollections(existingCollections);
     } catch (error) {
@@ -234,7 +230,7 @@ export default function AddToCollectionModal({
 
         <div className={styles.content}>
           <p className={styles.imageTitle}>
-            <strong>"{imageTitle}"</strong>
+            <strong>&quot;{imageTitle}&quot;</strong>
           </p>
 
           {loading ? (
@@ -264,14 +260,6 @@ export default function AddToCollectionModal({
                           {collection.description}
                         </p>
                       )}
-                      <div className={styles.collectionMeta}>
-                        <span
-                          className={`${styles.privacyBadge} ${styles[collection.privacy]}`}
-                        >
-                          {collection.privacy === "private" ? "🔒" : "🌐"}{" "}
-                          {collection.privacy}
-                        </span>
-                      </div>
                     </div>
 
                     <button

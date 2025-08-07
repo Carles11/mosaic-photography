@@ -3,10 +3,8 @@ import styles from "./AgeConsent.module.css";
 
 export const AgeConsent = ({
   setIsMinimumAgeConfirmed,
-  isMinimumAgeConfirmed,
 }: {
   setIsMinimumAgeConfirmed: (value: boolean) => void;
-  isMinimumAgeConfirmed: boolean;
 }) => {
   const [isMounted, setIsMounted] = useState(false);
 

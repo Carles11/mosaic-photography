@@ -12,22 +12,12 @@ import GoProModal from "@/components/modals/goProModal/GoProModal";
 import { SupabaseUser } from "@/lib/supabaseClient";
 
 interface HeaderProps {
-  showLoginButton?: boolean;
   onLoginClick?: () => void;
   user?: SupabaseUser | null;
   onLogoutClick?: () => void;
 }
 
-// Fix line 22 - add underscore to show it's intentionally unused
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _showLoginButton = false;
-
-const Header = ({
-  showLoginButton = false,
-  onLoginClick,
-  user,
-  onLogoutClick,
-}: HeaderProps) => {
+const Header = ({ onLoginClick, user, onLogoutClick }: HeaderProps) => {
   const [showGoProModal, setShowGoProModal] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";

@@ -568,7 +568,6 @@ export default function CollectionView() {
     return (
       <>
         <Header
-          showLoginButton={!user}
           onLoginClick={() => router.push("/?modal=auth")}
           user={user}
           onLogoutClick={handleLogout}
@@ -588,7 +587,6 @@ export default function CollectionView() {
     return (
       <>
         <Header
-          showLoginButton={!user}
           onLoginClick={() => router.push("/?modal=auth")}
           user={user}
           onLogoutClick={handleLogout}
@@ -614,7 +612,6 @@ export default function CollectionView() {
     return (
       <>
         <Header
-          showLoginButton={!user}
           onLoginClick={() => router.push("/?modal=auth")}
           user={user}
           onLogoutClick={handleLogout}
@@ -639,7 +636,6 @@ export default function CollectionView() {
     <>
       {!isEmbedded && (
         <Header
-          showLoginButton={!user}
           onLoginClick={() => router.push("/?modal=auth")}
           user={user}
           onLogoutClick={handleLogout}
