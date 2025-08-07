@@ -113,7 +113,6 @@ export interface Collection {
   user_id: string;
   name: string;
   description?: string;
-  privacy: "private" | "public";
   created_at: string;
   image_count?: number; // Computed field for display
   preview_images?: string[]; // First 4 image URLs for preview
