@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { useEffect, useState } from "react";
 import { sendGTMEvent } from "@next/third-parties/google";
 import { useAuth } from "@/hooks/useAuth";
@@ -13,7 +14,7 @@ if (process.env.NODE_ENV === "development") {
   import("@/utils/sessionDebug");
 }
 
-export default function Home() {
+function Home() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -89,5 +90,13 @@ export default function Home() {
         initialEmail=""
       />
     </>
+  );
+}
+
+export default function HomePageWithSuspense() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Home />
+    </Suspense>
   );
 }
