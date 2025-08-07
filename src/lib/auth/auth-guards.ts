@@ -1,7 +1,11 @@
 /**
  * Protected routes that require authentication
  */
-export const PROTECTED_ROUTES = ["/profile", "/profile/*"] as const;
+export const PROTECTED_ROUTES = [
+  "/profile",
+  "/profile/*",
+  "/my-content",
+] as const;
 
 /**
  * Auth routes that should redirect authenticated users
