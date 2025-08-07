@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import withPWA from "next-pwa";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import pwaConfig from "./pwa.config";
+const path = require("path");
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -44,8 +45,8 @@ const nextConfig: NextConfig = {
     // Add minimatch alias and force CommonJS resolution
 
     config.resolve.alias = {
-      ...config.resolve.alias, // Preserve existing aliases
-      minimatch: require.resolve("minimatch"),
+      ...config.resolve.alias,
+      minimatch: path.resolve(__dirname, "src/lib/minimatch.js"),
     };
 
     // Add minimatch to transpiled packages
