@@ -1,12 +1,4 @@
-// Use dynamic import for Vercel compatibility
-let minimatch;
-
-if (typeof window === "undefined") {
-  // Server environment
-  minimatch = require("minimatch");
-} else {
-  // Client environment
-  minimatch = require("minimatch").defaults || require("minimatch");
-}
+import minimatchPkg from "minimatch";
+const minimatch = minimatchPkg.default || minimatchPkg;
 
 module.exports = minimatch;
