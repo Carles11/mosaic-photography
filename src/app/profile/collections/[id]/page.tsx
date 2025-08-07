@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import JSZip from "jszip";
@@ -13,12 +13,18 @@ import ShareCollectionModal from "@/components/profile/ShareCollectionModal";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 
-interface ImageData {
+
+interface CollectionImageData {
   id: string;
   url: string;
   title?: string;
   description?: string;
-  // Add other properties as needed
+  favorite_id: number;
+  image_id: string;
+  image_url: string;
+  image_title: string;
+  image_author: string;
+  added_at: string;
 }
 
 export default function CollectionView() {
@@ -44,7 +50,7 @@ export default function CollectionView() {
   const collectionId = params?.id as string;
   const isEmbedded = searchParams?.get("embed") === "true";
 
-  const loadCollection = async () => {
+  const loadCollection = useCallback(async () => {
     if (!collectionId) {
       setError("Collection ID not found");
       setLoading(false);
@@ -89,7 +95,7 @@ export default function CollectionView() {
         return;
       }
 
-      let imagesData: ImageData[] = [];
+      let imagesData: CollectionImageData[] = [];
       if (collectionFavoritesData && collectionFavoritesData.length > 0) {
         // Get favorites to get image_ids
         const favoriteIds = collectionFavoritesData.map(
@@ -165,7 +171,7 @@ export default function CollectionView() {
       }
 
       // Transform the data
-      const images = imagesData.map((item: any) => ({
+      const images = imagesData.map((item: CollectionImageData) => ({
         favorite_id: item.favorite_id,
         image_id: item.image_id,
         image_url: item.image_url,
@@ -188,7 +194,7 @@ export default function CollectionView() {
 
   useEffect(() => {
     loadCollection();
-  }, [loadCollection]);
+  }, [collectionId]);
 
   useEffect(() => {
     // Detect mobile device
@@ -430,7 +436,7 @@ export default function CollectionView() {
     }
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
     if (!isReordering || !isMobile) return;
 
     const target = e.currentTarget as HTMLElement;
@@ -440,7 +446,7 @@ export default function CollectionView() {
 
     if (draggedItem && dragOverItem && draggedItem !== dragOverItem) {
       // Perform the drop operation
-      handleDrop(e as any, dragOverItem);
+      handleDrop(e as unknown as React.DragEvent<HTMLDivElement>, dragOverItem);
     }
 
     setDraggedItem(null);
