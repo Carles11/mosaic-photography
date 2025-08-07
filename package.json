@@ -2,7 +2,6 @@
   "name": "mosaic",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -66,7 +65,7 @@
     "typescript": "^5"
   },
   "resolutions": {
-    "minimatch": "^9.0.0",
+    "minimatch": "^9.0.3",
     "@types/minimatch": "^5.1.2"
   }
 }

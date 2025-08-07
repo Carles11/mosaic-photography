@@ -6,7 +6,7 @@ if (typeof window === "undefined") {
   minimatch = require("minimatch");
 } else {
   // Client environment
-  minimatch = require("minimatch").default || require("minimatch");
+  minimatch = require("minimatch").defaults || require("minimatch");
 }
 
 module.exports = minimatch;
