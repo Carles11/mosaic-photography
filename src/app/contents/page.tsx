@@ -1,17 +1,18 @@
 "use client";
 
 import { Suspense } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 import { sendGTMEvent } from "@next/third-parties/google";
 import styles from "./contents.module.css";
-import { useAuth } from "@/hooks/useAuth";
-import { ProtectedRoute } from "@/components/auth/guards/ProtectedRoute";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import BottomNav from "@/components/navigation/BottomNav/BottomNav";
 import ContentTabs from "@/components/contents/ContentTabs";
 
 function MyContentContent() {
-  const { user, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
+  const router = useRouter();
 
   const handleGoProClick = () => {
     sendGTMEvent({
@@ -20,8 +21,17 @@ function MyContentContent() {
     });
   };
 
+  if (loading) {
+    return (
+      <div className={styles.loadingContainer}>
+        <div className={styles.loader}>Loading...</div>
+      </div>
+    );
+  }
+
   if (!user) {
-    return null; // ProtectedRoute will handle redirect
+    router.push("/auth/login?redirect=/contents");
+    return null;
   }
 
   return (
@@ -51,15 +61,5 @@ function MyContentContent() {
 }
 
 export default function MyContentPage() {
-  return (
-    <ProtectedRoute
-      fallback={
-        <div className={styles.loadingContainer}>
-          <div className={styles.loader}>Loading...</div>
-        </div>
-      }
-    >
-      <MyContentContent />;{" "}
-    </ProtectedRoute>
-  );
+  return <MyContentContent />;
 }
