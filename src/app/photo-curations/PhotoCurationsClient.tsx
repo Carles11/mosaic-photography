@@ -6,9 +6,9 @@ import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import BottomNav from "@/components/navigation/BottomNav/BottomNav";
 import ContentTabs from "@/components/contents/ContentTabs";
-import styles from "./contents.module.css";
+import styles from "./photoCurations.module.css";
 
-export default function MyContentClient() {
+export default function PhotoCurationsClient() {
   const { user, logout, loading } = useAuth();
   const router = useRouter();
 
@@ -28,7 +28,7 @@ export default function MyContentClient() {
   }
 
   if (!user) {
-    router.push("/auth/login?redirect=/contents");
+    router.push("/auth/login?redirect=/photo-curations");
     return null;
   }
 
@@ -37,7 +37,7 @@ export default function MyContentClient() {
       <Header user={user} onLogoutClick={logout} />
       <main className={styles.main}>
         <div className={styles.content}>
-          <h1 className={styles.title}>My Content</h1>
+          <h1 className={styles.title}>Photo Curations</h1>
           <p className={styles.subtitle}>
             Manage your favorites, collections, and comments.
           </p>
