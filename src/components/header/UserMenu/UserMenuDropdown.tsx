@@ -37,7 +37,7 @@ const UserMenuDropdown = ({
           </Link>
 
           <Link
-            href="/contents"
+            href="/photo-curations"
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={onClose}
           >
