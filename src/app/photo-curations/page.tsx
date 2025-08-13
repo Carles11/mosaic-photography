@@ -3,7 +3,7 @@ import PhotoCurationsClient from "./PhotoCurationsClient";
 
 export default function PhotoCurationsPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Loading..</div>}>
       <PhotoCurationsClient />
     </Suspense>
   );
