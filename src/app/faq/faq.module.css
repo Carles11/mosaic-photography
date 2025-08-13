@@ -83,7 +83,7 @@
 .tableOfContents ul ul a {
   color: var(--link-color);
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 1.2rem;
 }
 
 .tableOfContents ul ul a:hover {

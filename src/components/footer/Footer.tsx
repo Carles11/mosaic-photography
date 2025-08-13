@@ -1,4 +1,5 @@
-import React from "react";
+import RioFrancesLink from "./RioFrancesLink";
+
 import styles from "./footer.module.css";
 
 const Footer: React.FC = () => {
@@ -17,14 +18,7 @@ const Footer: React.FC = () => {
         <div className={styles.footerItem}>
           <p>Created by </p>
           <p>
-            <a
-              href="https://www.rio-frances.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Carles del Río Francés
-            </a>{" "}
-            |{" "}
+            <RioFrancesLink /> |{" "}
             <a
               href="https://github.com/Carles11"
               target="_blank"

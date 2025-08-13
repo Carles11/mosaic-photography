@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "./AuthSessionContext";
+import { supabase } from "@/lib/supabaseClient";
 
 type FavoritesContextType = {
   favorites: Set<string>;

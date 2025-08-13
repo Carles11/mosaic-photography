@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { sendGTMEvent } from "@next/third-parties/google";
 
+import styles from "./photographerModal.module.css";
 import { Photographer } from "@/types";
 import Dropdown from "@/components/inputs/dropDown";
 
-import styles from "./photographerModal.module.css";
 
 interface PhotographerModalProps {
   photographer: Photographer;

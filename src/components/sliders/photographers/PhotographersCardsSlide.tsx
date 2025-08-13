@@ -1,5 +1,5 @@
-import PhotographersViewCard from "@/components/cards/PhotographersViewCard";
 import styles from "./PhotographersCardSlide.module.css";
+import PhotographersViewCard from "@/components/cards/PhotographersViewCard";
 
 interface PhotographersCardsSlideProps {
   onLoginRequired?: () => void;

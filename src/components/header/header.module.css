@@ -23,19 +23,14 @@
   margin: 0;
 }
 
-.goProText {
-  font-size: 1.2rem;
-  font-weight: 700;
-  background: var(--text-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-align: center;
-  cursor: pointer;
-}
-.goProText:hover {
-  text-decoration: underline;
-  color: var(--text-color);
+.backToHomeButton {
+  color: var(--text-color, #fff);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .themeImage {
@@ -75,6 +70,26 @@
   border-color: transparent;
 }
 
+.actionSection {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.rightActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-right: 0.5rem;
+}
+
+/* Desktop only class - hide user menu on mobile */
+.desktopOnly {
+  display: flex;
+}
+
 /* Media query for tablets Portrait and landscape */
 @media (min-width: 768px) and (max-width: 1024px) {
   .themeImage {
@@ -99,21 +114,34 @@
     height: auto;
   }
 
-  .actionSection {
-    flex-direction: column;
-    gap: 1.5rem;
-    text-align: center;
+  /* Hide desktop user menu on mobile */
+  .desktopOnly {
+    display: none !important;
   }
 
-  .leftActions,
-  .rightActions {
+  .actionSection {
     justify-content: center;
   }
 
   .rightActions {
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    justify-content: center;
   }
+}
+
+/* Legacy styles - keeping for backward compatibility but may be unused now */
+.goProText {
+  font-size: 1.2rem;
+  font-weight: 700;
+  background: var(--text-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-align: center;
+  cursor: pointer;
+}
+.goProText:hover {
+  text-decoration: underline;
+  color: var(--text-color);
 }
 
 .loginButton {
@@ -137,7 +165,7 @@
 }
 
 .profileButton {
-  background: var(--primary-color, #007bff);
+  background: transparent;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -149,13 +177,10 @@
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  transition:
-    background-color 0.2s,
-    transform 0.1s;
 }
 
 .profileButton:hover {
-  background: var(--primary-hover, #0056b3);
+  background: transparent;
   transform: translateY(-1px);
   text-decoration: none;
 }
@@ -166,23 +191,8 @@
   font-weight: 500;
 }
 
-.actionSection {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
 .leftActions {
   display: flex;
   align-items: center;
   padding-left: 0.5rem;
-}
-
-.rightActions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding-right: 0.5rem;
 }

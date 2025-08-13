@@ -37,6 +37,12 @@ This project includes precision optimizations for SEO and ranking positioning. B
 ### Structured Data (JSON-LD)
 
 - **Schema.org Markup**: JSON-LD structured data is implemented to provide search engines with detailed information about the content, such as page type, breadcrumbs, and product details (if applicable).
+- **Image SEO Enhancement**: The `JsonLdSchema` component provides structured data specifically optimized for Google Image Search, supporting both single images and image galleries with rich metadata including:
+  - Image name and description
+  - Credit information
+  - Licensing details
+  - Technical specifications (dimensions, format)
+  - This implementation follows Google's guidelines for image license metadata to improve discoverability and proper attribution in image search results.
 
 ### Performance Optimizations
 
@@ -62,6 +68,40 @@ This project is a gallery of high-resolution images with the following features 
 - **Database**: Image metadata and other content are managed using **Supabase**, a powerful backend-as-a-service platform.
 - **Frontend Framework**: Built with **Next.js**, leveraging its server-side rendering (SSR) and static site generation (SSG) capabilities for optimal performance and SEO.
 - **Image Loading**: High-resolution images are dynamically loaded and optimized using the `next/image` component, ensuring fast load times and reduced bandwidth usage.
+
+### Image Orientation Script
+
+The project includes a utility script to automatically detect and correct image orientation:
+
+- **Script Location**: Located at `scripts/update-image-orientation.md`
+- **Purpose**: Automatically detects and corrects the orientation of images based on their EXIF data
+- **Usage**: Follow the instructions in the script file to process new images before they are displayed in the gallery
+- **Benefits**: Ensures consistent presentation of images regardless of the camera settings used during capture
+
+This script is particularly useful when uploading new images from various sources, as it standardizes their orientation for proper display in the gallery.
+
+### Image Sitemap Generator
+
+The project includes a script to generate an XML sitemap specifically for images:
+
+- **Script Location**: Located at `scripts/generate-image-sitemap.ts`
+- **Purpose**: Creates an XML sitemap that helps search engines discover and index your images more effectively
+- **Benefits**: Improves image SEO by providing search engines with additional metadata about your images
+
+**Running the Image Sitemap Generator:**
+
+1. Ensure you have the required environment variables set up (NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY)
+2. Run the script with:
+
+```bash
+# Navigate to project root
+cd path/to/mosaic-photography
+
+# Compile and run the TypeScript script
+npx ts-node scripts/generate-image-sitemap.ts
+```
+
+This will generate an `image-sitemap.xml` file in the `public` directory, which will be served at the root of your website. For best results, add this sitemap to your robots.txt file and submit it to Google Search Console.
 
 ### Visual Overview
 

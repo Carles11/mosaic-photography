@@ -2,19 +2,15 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-// Define the context and its type
 const AgeConsentContext = createContext<{
   isMinimumAgeConfirmed: boolean;
   setIsMinimumAgeConfirmed: (value: boolean) => void;
-} | null>(null);
+}>({
+  isMinimumAgeConfirmed: false,
+  setIsMinimumAgeConfirmed: () => {},
+});
 
-export const useAgeConsent = () => {
-  const context = useContext(AgeConsentContext);
-  if (!context) {
-    throw new Error("useAgeConsent must be used within an AgeConsentProvider");
-  }
-  return context;
-};
+export const useAgeConsent = () => useContext(AgeConsentContext);
 
 export const AgeConsentProvider = ({
   children,
@@ -22,38 +18,22 @@ export const AgeConsentProvider = ({
   children: React.ReactNode;
 }) => {
   const [isMinimumAgeConfirmed, setIsMinimumAgeConfirmed] = useState(false);
-  const [isCheckingSession, setIsCheckingSession] = useState(true);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    // Check sessionStorage for age confirmation (only on client-side)
-    if (typeof window !== "undefined") {
-      const ageConfirmed = sessionStorage.getItem("isMinimumAgeConfirmed");
-      if (ageConfirmed === "true") {
-        setIsMinimumAgeConfirmed(true);
-      }
+    setIsClient(true);
+    const ageConfirmed = sessionStorage.getItem("isMinimumAgeConfirmed");
+    if (ageConfirmed === "true") {
+      setIsMinimumAgeConfirmed(true);
     }
-    setIsCheckingSession(false); // Ensure the modal doesn't disappear prematurely
   }, []);
 
   const handleAgeConfirmation = (value: boolean) => {
     setIsMinimumAgeConfirmed(value);
-    if (typeof window !== "undefined") {
+    if (isClient) {
       sessionStorage.setItem("isMinimumAgeConfirmed", value.toString());
     }
   };
-
-  if (isCheckingSession) {
-    return (
-      <AgeConsentContext.Provider
-        value={{
-          isMinimumAgeConfirmed: false,
-          setIsMinimumAgeConfirmed: () => {},
-        }}
-      >
-        {children}
-      </AgeConsentContext.Provider>
-    ); // Provide context even during initial check
-  }
 
   return (
     <AgeConsentContext.Provider

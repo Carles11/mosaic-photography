@@ -2,12 +2,12 @@
 
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
+import styles from "./CommentsModal.module.css";
 import { CommentsModalProps } from "@/types";
 import { useComments } from "@/context/CommentsContext";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import CommentForm from "@/components/comments/CommentForm";
 import CommentItem from "@/components/comments/CommentItem";
-import styles from "./CommentsModal.module.css";
 
 const CommentsModal: React.FC<CommentsModalProps> = ({
   imageId,

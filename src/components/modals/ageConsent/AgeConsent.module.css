@@ -2,19 +2,24 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 9999;
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 0.5s ease-in-out, visibility 0s 0.5s; /* Increased fade duration */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Performance optimizations */
+  will-change: opacity;
+  transform: translateZ(0);
 }
 
 .hidden {
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.5s ease-in-out, visibility 0s 0.5s; /* Same fade duration, with delayed visibility change */
+  transition:
+    opacity 0.5s ease-in-out,
+    visibility 0s 0.5s; /* Same fade duration, with delayed visibility change */
 }
 
 .ageModalOverlay {
@@ -34,43 +39,40 @@
 }
 
 .ageConfirmationContent {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   background: var(--background-color);
   padding: 20px;
   border-radius: 8px;
   width: 90%;
   max-width: 500px;
-  height: auto;
-  max-height: 70vh;
-  overflow-y: auto;
   text-align: center;
+  /* Performance optimizations */
+  will-change: transform;
+  transform: translateZ(0);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .consentTitle {
   font-size: 2rem;
   font-weight: 700;
-}
-
-.consentSubTitle {
-  font-size: 1.6rem;
-  font-weight: 400;
+  margin-bottom: 0.5rem;
 }
 
 .consentText {
   font-size: 1.2rem;
+  margin-bottom: 1.5rem;
 }
 
 .consentButton {
-  padding: 0 4px;
   text-decoration: underline;
+  background: var(--background-color);
+  color: var(--text-color);
   border: 1px solid var(--text-color);
   border-radius: 4px;
-  padding: 9px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 .consentButton:hover {
-  background: #005bb5;
+  background-color: var(--tertiary-color) !important;
 }

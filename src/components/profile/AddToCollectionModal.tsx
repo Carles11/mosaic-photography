@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { toast } from "react-hot-toast";
+import styles from "./AddToCollectionModal.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
-import { Collection } from "@/types";
-import styles from "./AddToCollectionModal.module.css";
+
+import { Collection as CollectionType } from "@/types";
 
 interface AddToCollectionModalProps {
   isOpen: boolean;
@@ -22,21 +24,14 @@ export default function AddToCollectionModal({
   onAddToCollection,
 }: AddToCollectionModalProps) {
   const { user } = useAuthSession();
-  const [collections, setCollections] = useState<Collection[]>([]);
+  const [collections, setCollections] = useState<CollectionType[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState<string | null>(null);
   const [alreadyInCollections, setAlreadyInCollections] = useState<Set<string>>(
     new Set(),
   );
 
-  useEffect(() => {
-    if (isOpen && user) {
-      loadCollections();
-      checkExistingAssociations();
-    }
-  }, [isOpen, user, imageId]);
-
-  const loadCollections = async () => {
+  const loadCollections = useCallback(async () => {
     if (!user) return;
 
     setLoading(true);
@@ -58,9 +53,9 @@ export default function AddToCollectionModal({
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
-  const checkExistingAssociations = async () => {
+  const checkExistingAssociations = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -90,13 +85,19 @@ export default function AddToCollectionModal({
       }
 
       const existingCollections = new Set(
-        data?.map((item: any) => item.collection_id) || [],
+        data?.map((item: { collection_id: string }) => item.collection_id) ||
+          [],
       );
       setAlreadyInCollections(existingCollections);
     } catch (error) {
       console.error("Error checking existing associations:", error);
     }
-  };
+  }, [user, imageId]);
+
+  useEffect(() => {
+    checkExistingAssociations();
+    loadCollections();
+  }, [checkExistingAssociations, loadCollections]);
 
   const handleAddToCollection = async (collectionId: string) => {
     if (!user || adding) return;
@@ -114,7 +115,7 @@ export default function AddToCollectionModal({
 
       if (favoriteError || !favoriteData) {
         console.error("Error finding favorite:", favoriteError);
-        alert(
+        toast.error(
           "You must favorite this image first before adding it to a collection!",
         );
         return;
@@ -129,7 +130,7 @@ export default function AddToCollectionModal({
         .single();
 
       if (existing) {
-        alert("Image is already in this collection!");
+        toast("Image is already in this collection!", { icon: "⚠️" });
         return;
       }
 
@@ -141,7 +142,7 @@ export default function AddToCollectionModal({
 
       if (error) {
         console.error("Error adding to collection:", error);
-        alert("Failed to add image to collection. Please try again.");
+        toast.error("Failed to add image to collection. Please try again.");
         return;
       }
 
@@ -154,7 +155,7 @@ export default function AddToCollectionModal({
       }
     } catch (error) {
       console.error("Error adding to collection:", error);
-      alert("Failed to add image to collection. Please try again.");
+      toast.error("Failed to add image to collection. Please try again.");
     } finally {
       setAdding(null);
     }
@@ -187,7 +188,9 @@ export default function AddToCollectionModal({
 
       if (error) {
         console.error("Error removing from collection:", error);
-        alert("Failed to remove image from collection. Please try again.");
+        toast.error(
+          "Failed to remove image from collection. Please try again.",
+        );
         return;
       }
 
@@ -200,10 +203,10 @@ export default function AddToCollectionModal({
 
       // Show success message
       const collection = collections.find((c) => c.id === collectionId);
-      alert(`Removed "${imageTitle}" from "${collection?.name}"`);
+      toast.success(`Removed "${imageTitle}" from "${collection?.name}"`);
     } catch (error) {
       console.error("Error removing from collection:", error);
-      alert("Failed to remove image from collection. Please try again.");
+      toast.error("Failed to remove image from collection. Please try again.");
     } finally {
       setAdding(null);
     }
@@ -227,7 +230,7 @@ export default function AddToCollectionModal({
 
         <div className={styles.content}>
           <p className={styles.imageTitle}>
-            <strong>"{imageTitle}"</strong>
+            <strong>&quot;{imageTitle}&quot;</strong>
           </p>
 
           {loading ? (
@@ -237,8 +240,8 @@ export default function AddToCollectionModal({
             </div>
           ) : collections.length === 0 ? (
             <div className={styles.empty}>
-              <p>You don't have any collections yet.</p>
-              <p>Create a collection first to organize your favorites!</p>
+              <p>You haven&apos;t created any collections yet</p>
+              <button>&quot;Create new collection&quot;</button>
             </div>
           ) : (
             <div className={styles.collectionsList}>
@@ -257,14 +260,6 @@ export default function AddToCollectionModal({
                           {collection.description}
                         </p>
                       )}
-                      <div className={styles.collectionMeta}>
-                        <span
-                          className={`${styles.privacyBadge} ${styles[collection.privacy]}`}
-                        >
-                          {collection.privacy === "private" ? "🔒" : "🌐"}{" "}
-                          {collection.privacy}
-                        </span>
-                      </div>
                     </div>
 
                     <button

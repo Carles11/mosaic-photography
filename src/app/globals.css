@@ -1,38 +1,6 @@
 /* filepath: /C:/Users/Usuario/Documents/AAA_REPOs/mosaic/styles/globals.css */
 /* Critical CSS only - everything else moved to non-critical.css */
 
-@font-face {
-  font-family: "Trade Gothic";
-  src: url("/fonts/TradeGothic-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Trade Gothic";
-  src: url("/fonts/TradeGothic-Light.ttf") format("truetype");
-  font-weight: 200;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Trade Gothic";
-  src: url("/fonts/TradeGothic-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Trade Gothic";
-  src: url("/fonts/TradeGothic-ExtraBold.ttf") format("truetype");
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-
 html,
 body {
   height: 100%;
@@ -48,6 +16,7 @@ body {
   --text-color: #1d1d1d;
   --secondary-color: #cccaca;
   --tertiary-color: #fd6c6c;
+  --accent-color: #f4d35e;
   --text-gradient: linear-gradient(135deg, #4cf6c3 30%, #1faef0 70%);
   --color-white: #fff;
   --color-black: #1d1d1d;
@@ -61,12 +30,16 @@ body {
   margin: 0; /* Remove default margin */
   position: relative;
   height: 100%;
-  font-family: "Trade Gothic", sans-serif;
+  font-family: var(--font-trade-gothic), sans-serif;
   font-weight: 400; /* Default weight */
   padding: 0;
   box-sizing: border-box;
   background-color: var(--background-color);
   color: var(--text-color);
+}
+
+.font-trade-gothic {
+  font-family: var(--font-trade-gothic), sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {

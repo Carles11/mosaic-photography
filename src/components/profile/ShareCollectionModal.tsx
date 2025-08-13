@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import QRCode from "qrcode";
-import { Collection } from "@/types";
 import styles from "./ShareCollectionModal.module.css";
+import { Collection } from "@/types";
 
 interface ShareCollectionModalProps {
   isOpen: boolean;
@@ -21,7 +22,8 @@ export default function ShareCollectionModal({
     "link",
   );
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
-  const [emailSending, setEmailSending] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_emailSending, _setEmailSending] = useState(false);
   const [embedCopied, setEmbedCopied] = useState(false);
 
   const shareUrl = `${window.location.origin}/profile/collections/${collection.id}`;
@@ -115,179 +117,165 @@ export default function ShareCollectionModal({
           <div className={styles.collectionInfo}>
             <h4>{collection.name}</h4>
             {collection.description && <p>{collection.description}</p>}
-            <span className={styles.privacy}>
-              {collection.privacy === "public" ? "🌐 Public" : "🔒 Private"}
-            </span>
           </div>
 
-          {collection.privacy === "public" ? (
-            <>
-              {/* Tab Navigation */}
-              <div className={styles.tabs}>
-                <button
-                  className={`${styles.tab} ${activeTab === "link" ? styles.active : ""}`}
-                  onClick={() => setActiveTab("link")}
-                >
-                  🔗 Link
-                </button>
-                <button
-                  className={`${styles.tab} ${activeTab === "qr" ? styles.active : ""}`}
-                  onClick={() => setActiveTab("qr")}
-                >
-                  📱 QR Code
-                </button>
-                <button
-                  className={`${styles.tab} ${activeTab === "email" ? styles.active : ""}`}
-                  onClick={() => setActiveTab("email")}
-                >
-                  📧 Email
-                </button>
-                <button
-                  className={`${styles.tab} ${activeTab === "embed" ? styles.active : ""}`}
-                  onClick={() => setActiveTab("embed")}
-                >
-                  🔗 Embed
-                </button>
+          {/* Tab Navigation */}
+          <div className={styles.tabs}>
+            <button
+              className={`${styles.tab} ${activeTab === "link" ? styles.active : ""}`}
+              onClick={() => setActiveTab("link")}
+            >
+              🔗 Link
+            </button>
+            <button
+              className={`${styles.tab} ${activeTab === "qr" ? styles.active : ""}`}
+              onClick={() => setActiveTab("qr")}
+            >
+              📱 QR Code
+            </button>
+            <button
+              className={`${styles.tab} ${activeTab === "email" ? styles.active : ""}`}
+              onClick={() => setActiveTab("email")}
+            >
+              📧 Email
+            </button>
+            <button
+              className={`${styles.tab} ${activeTab === "embed" ? styles.active : ""}`}
+              onClick={() => setActiveTab("embed")}
+            >
+              🔗 Embed
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          <div className={styles.tabContent}>
+            {activeTab === "link" && (
+              <div className={styles.urlSection}>
+                <label className={styles.label}>Collection URL:</label>
+                <div className={styles.urlContainer}>
+                  <input
+                    type="text"
+                    value={shareUrl}
+                    readOnly
+                    className={styles.urlInput}
+                  />
+                  <button
+                    onClick={handleCopyLink}
+                    className={`${styles.copyButton} ${copied ? styles.copied : ""}`}
+                  >
+                    {copied ? "Copied!" : "Copy"}
+                  </button>
+                </div>
+                <p className={styles.hint}>
+                  Share this link with anyone to let them view your collection.
+                </p>
               </div>
+            )}
 
-              {/* Tab Content */}
-              <div className={styles.tabContent}>
-                {activeTab === "link" && (
-                  <div className={styles.urlSection}>
-                    <label className={styles.label}>Collection URL:</label>
-                    <div className={styles.urlContainer}>
-                      <input
-                        type="text"
-                        value={shareUrl}
-                        readOnly
-                        className={styles.urlInput}
-                      />
-                      <button
-                        onClick={handleCopyLink}
-                        className={`${styles.copyButton} ${copied ? styles.copied : ""}`}
-                      >
-                        {copied ? "Copied!" : "Copy"}
-                      </button>
+            {activeTab === "qr" && (
+              <div className={styles.qrSection}>
+                <div className={styles.qrContainer}>
+                  {qrCodeDataUrl ? (
+                    <Image
+                      src={qrCodeDataUrl}
+                      alt="QR Code for collection"
+                      className={styles.qrCode}
+                      width={180}
+                      height={180}
+                    />
+                  ) : (
+                    <div className={styles.qrLoading}>
+                      Generating QR Code...
                     </div>
-                    <p className={styles.hint}>
-                      Share this link with anyone to let them view your
-                      collection.
-                    </p>
-                  </div>
-                )}
-
-                {activeTab === "qr" && (
-                  <div className={styles.qrSection}>
-                    <div className={styles.qrContainer}>
-                      {qrCodeDataUrl ? (
-                        <img
-                          src={qrCodeDataUrl}
-                          alt="QR Code for collection"
-                          className={styles.qrCode}
-                        />
-                      ) : (
-                        <div className={styles.qrLoading}>
-                          Generating QR Code...
-                        </div>
-                      )}
-                    </div>
-                    <div className={styles.qrActions}>
-                      <button
-                        onClick={handleDownloadQR}
-                        className={styles.downloadButton}
-                        disabled={!qrCodeDataUrl}
-                      >
-                        📥 Download QR Code
-                      </button>
-                    </div>
-                    <p className={styles.hint}>
-                      Scan this QR code with any smartphone camera to open the
-                      collection.
-                    </p>
-                  </div>
-                )}
-
-                {activeTab === "email" && (
-                  <div className={styles.emailSection}>
-                    <div className={styles.emailPreview}>
-                      <h5>Email Preview:</h5>
-                      <div className={styles.emailContent}>
-                        <strong>Subject:</strong> Check out this collection:{" "}
-                        {collection.name}
-                        <br />
-                        <br />
-                        <strong>Message:</strong>
-                        <br />
-                        I wanted to share this amazing image collection with
-                        you!
-                        <br />
-                        <br />
-                        Collection: {collection.name}
-                        <br />
-                        {collection.description && (
-                          <>
-                            Description: {collection.description}
-                            <br />
-                          </>
-                        )}
-                        Images: {collection.image_count || 0}
-                        <br />
-                        <br />
-                        View it here: {shareUrl}
-                      </div>
-                    </div>
-                    <button
-                      onClick={handleEmailShare}
-                      className={styles.emailButton}
-                    >
-                      📧 Open in Email App
-                    </button>
-                    <p className={styles.hint}>
-                      This will open your default email app with a pre-written
-                      message.
-                    </p>
-                  </div>
-                )}
-
-                {activeTab === "embed" && (
-                  <div className={styles.embedSection}>
-                    <label className={styles.label}>Embed Code:</label>
-                    <div className={styles.embedContainer}>
-                      <textarea
-                        value={embedCode}
-                        readOnly
-                        className={styles.embedTextarea}
-                        rows={3}
-                      />
-                      <button
-                        onClick={handleCopyEmbed}
-                        className={`${styles.copyButton} ${embedCopied ? styles.copied : ""}`}
-                      >
-                        {embedCopied ? "Copied!" : "Copy"}
-                      </button>
-                    </div>
-                    <div className={styles.embedPreview}>
-                      <h5>Preview:</h5>
-                      <div className={styles.embedFrame}>
-                        <span>📷 {collection.name}</span>
-                        <small>{collection.image_count || 0} images</small>
-                      </div>
-                    </div>
-                    <p className={styles.hint}>
-                      Paste this code into any website to embed your collection.
-                    </p>
-                  </div>
-                )}
+                  )}
+                </div>
+                <div className={styles.qrActions}>
+                  <button
+                    onClick={handleDownloadQR}
+                    className={styles.downloadButton}
+                    disabled={!qrCodeDataUrl}
+                  >
+                    📥 Download QR Code
+                  </button>
+                </div>
+                <p className={styles.hint}>
+                  Scan this QR code with any smartphone camera to open the
+                  collection.
+                </p>
               </div>
-            </>
-          ) : (
-            <div className={styles.privateMessage}>
-              <p>
-                This collection is private and cannot be shared. Change it to
-                public in collection settings to enable sharing.
-              </p>
-            </div>
-          )}
+            )}
+
+            {activeTab === "email" && (
+              <div className={styles.emailSection}>
+                <div className={styles.emailPreview}>
+                  <h5>Email Preview:</h5>
+                  <div className={styles.emailContent}>
+                    <strong>Subject:</strong> Check out this collection:{" "}
+                    {collection.name}
+                    <br />
+                    <br />
+                    <strong>Message:</strong>
+                    <br />
+                    I wanted to share this amazing image collection with you!
+                    <br />
+                    <br />
+                    Collection: {collection.name}
+                    <br />
+                    {collection.description && (
+                      <>
+                        Description: {collection.description}
+                        <br />
+                      </>
+                    )}
+                    Images: {collection.image_count || 0}
+                    <br />
+                    <br />
+                    View it here: {shareUrl}
+                  </div>
+                </div>
+                <button
+                  onClick={handleEmailShare}
+                  className={styles.emailButton}
+                >
+                  📧 Open in Email App
+                </button>
+                <p className={styles.hint}>
+                  This will open your default email app with a pre-written
+                  message.
+                </p>
+              </div>
+            )}
+
+            {activeTab === "embed" && (
+              <div className={styles.embedSection}>
+                <label className={styles.label}>Embed Code:</label>
+                <div className={styles.embedContainer}>
+                  <textarea
+                    value={embedCode}
+                    readOnly
+                    className={styles.embedTextarea}
+                    rows={3}
+                  />
+                  <button
+                    onClick={handleCopyEmbed}
+                    className={`${styles.copyButton} ${embedCopied ? styles.copied : ""}`}
+                  >
+                    {embedCopied ? "Copied!" : "Copy"}
+                  </button>
+                </div>
+                <div className={styles.embedPreview}>
+                  <h5>Preview:</h5>
+                  <div className={styles.embedFrame}>
+                    <span>📷 {collection.name}</span>
+                    <small>{collection.image_count || 0} images</small>
+                  </div>
+                </div>
+                <p className={styles.hint}>
+                  Paste this code into any website to embed your collection.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

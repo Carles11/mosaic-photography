@@ -1,69 +1,18 @@
 import React, { useEffect, useState, useRef } from "react";
+import styles from "./ImageCard.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { ImageCardProps, ImageWithOrientation } from "@/types";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
-import styles from "./ImageCard.module.css";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
 
 const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
   const [images, setImages] = useState<ImageWithOrientation[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [orientationsLoading, setOrientationsLoading] = useState<Set<string>>(
-    new Set(),
-  );
 
   const imgRef = useRef<HTMLImageElement | null>(null);
-
-  // Pre-load image dimensions to determine orientation
-  const loadImageDimensions = (
-    imageUrl: string,
-  ): Promise<{ width: number; height: number }> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () =>
-        resolve({ width: img.naturalWidth, height: img.naturalHeight });
-      img.onerror = () => reject(new Error("Failed to load image"));
-      img.src = imageUrl;
-
-      // Add timeout to prevent hanging
-      setTimeout(() => {
-        reject(new Error("Image load timeout"));
-      }, 3000); // Reduced to 3 second timeout
-    });
-  };
-
-  // Update image orientation after determining it
-  const updateImageOrientation = async (imageId: string, imageUrl: string) => {
-    if (orientationsLoading.has(imageId)) return; // Already loading
-
-    setOrientationsLoading((prev) => new Set(prev).add(imageId));
-
-    try {
-      const dimensions = await loadImageDimensions(imageUrl);
-      const orientation =
-        dimensions.width > dimensions.height ? "landscape" : "portrait";
-
-      setImages((prevImages) =>
-        prevImages.map((img) =>
-          img.id === imageId ? { ...img, orientation } : img,
-        ),
-      );
-    } catch (error) {
-      console.warn(
-        `Failed to determine orientation for image ${imageId}:`,
-        error,
-      );
-      // Keep default portrait orientation
-    } finally {
-      setOrientationsLoading((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(imageId);
-        return newSet;
-      });
-    }
-  };
 
   useEffect(() => {
     const fetchImages = async (): Promise<void> => {
@@ -71,7 +20,7 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
 
       const { data: images, error } = await supabase.from("images").select(
         `
-          id, url, author, title, description, created_at
+          id, url, author, title, description, created_at, orientation
         `,
       );
 
@@ -93,13 +42,12 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
         return !fileName?.startsWith("000_aaa");
       });
 
-      // Initially set all images as portrait to prevent layout shifts
       // Add mosaic logic for more dynamic gallery layout
-      const initialImages: ImageWithOrientation[] = filteredImages.map(
+      const processedImages: ImageWithOrientation[] = filteredImages.map(
         (img, index) => {
           let mosaicType: "normal" | "large" | "wide" | "tall" = "normal";
 
-          // Create mosaic variations for portrait images with better distribution
+          // Create mosaic variations with better distribution
           // Use different intervals for different mosaic types to create more variety
           const isLargeMosaic = index > 0 && index % 11 === 0; // Every 11th image
           const isWideMosaic = index > 0 && index % 13 === 7; // Every 13th image, offset by 7
@@ -115,22 +63,15 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
 
           return {
             ...img,
-            orientation: "portrait" as const,
+            // Use the orientation from the database or default to "vertical" if not available
+            orientation: img.orientation || "vertical",
             mosaicType,
           };
         },
       );
 
-      setImages(initialImages.sort(() => Math.random() - 0.5)); // Shuffle images
+      setImages(processedImages.sort(() => Math.random() - 0.5)); // Shuffle images
       setLoading(false);
-
-      // Asynchronously determine actual orientations (without blocking initial render)
-      initialImages.forEach((img) => {
-        setTimeout(
-          () => updateImageOrientation(img.id, img.url),
-          Math.random() * 1000,
-        );
-      });
     };
 
     fetchImages();
@@ -146,6 +87,31 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
         ClimbBoxLoaderContainer("var(--text-color)", 16, loading)
       ) : (
         <>
+          {/* Add structured data for the image gallery */}
+          <JsonLdSchema
+            type="ImageGallery"
+            name="Mosaic Photography Gallery"
+            description="A curated collection of high-quality vintage photography from our archives"
+            images={images.map((image) => ({
+              contentUrl: image.url,
+              name: image.title || "Untitled Image",
+              description:
+                image.description ||
+                "Vintage photography from Mosaic's archives",
+              creditText: image.author || "Unknown Photographer",
+              width: typeof image.width === "number" ? image.width : 1200,
+              height: typeof image.height === "number" ? image.height : 800,
+              encodingFormat:
+                image.url.endsWith(".jpg") || image.url.endsWith(".jpeg")
+                  ? "image/jpeg"
+                  : image.url.endsWith(".png")
+                    ? "image/png"
+                    : "image/jpeg",
+              license: "https://creativecommons.org/publicdomain/mark/1.0/",
+              acquireLicensePage: "https://www.mosaic.photography/license",
+            }))}
+          />
+
           <PhotoSwipeWrapper
             images={images} // Pass images array to PhotoSwipeWrapper
             onLoginRequired={onLoginRequired}
@@ -161,10 +127,10 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
               // Determine CSS class based on orientation and mosaic type
               let cssClass = styles.gridItem;
 
-              if (image.orientation === "landscape") {
+              if (image.orientation === "horizontal") {
                 cssClass += ` ${styles.landscape}`;
-              } else {
-                // Portrait image - check for mosaic type (only for portrait images)
+              } else if (image.orientation === "vertical") {
+                // Vertical image - check for mosaic type (only for vertical images)
                 switch (image.mosaicType) {
                   case "large":
                     cssClass += ` ${styles.mosaicLarge}`;
@@ -178,6 +144,9 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
                   default:
                     cssClass += ` ${styles.portrait}`;
                 }
+              } else if (image.orientation === "square") {
+                // If we need to add special handling for square images in the future
+                cssClass += ` ${styles.portrait}`; // For now, use portrait style for square
               }
 
               return (

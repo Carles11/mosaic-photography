@@ -3,6 +3,8 @@ import withPWA from "next-pwa";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import pwaConfig from "./pwa.config";
 
+const path = require("path");
+
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
@@ -30,7 +32,7 @@ const nextConfig: NextConfig = {
     ],
     minimumCacheTTL: 31536000, // 1 year
   },
-  webpack: (config, { isServer }) => {
+  webpack: (config, { webpack, isServer }) => {
     config.optimization.splitChunks = {
       chunks: "all",
       minSize: 20000,
@@ -44,15 +46,15 @@ const nextConfig: NextConfig = {
     return config;
   },
 
-  // ✅ Rewrites (sitemap path)
-  async rewrites() {
-    return [
-      {
-        source: "/sitemap.xml",
-        destination: "/api/sitemap",
-      },
-    ];
-  },
+  // // ✅ Rewrites (sitemap path)
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/sitemap.xml",
+  //       destination: "/api/sitemap",
+  //     },
+  //   ];
+  // },
 
   // ✅ Headers for static asset access and SEO crawling
   async headers() {
@@ -93,5 +95,5 @@ export default withBundleAnalyzer({
     register: !isDev,
     disable: isDev, // Keep disabled unless going full PWA
     ...pwaConfig,
-  })(nextConfig)
+  })(nextConfig),
 );

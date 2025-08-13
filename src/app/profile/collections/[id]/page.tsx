@@ -1,16 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import JSZip from "jszip";
+import { toast } from "react-hot-toast";
+import styles from "./CollectionView.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { CollectionWithImages } from "@/types";
 import ShareCollectionModal from "@/components/profile/ShareCollectionModal";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import styles from "./CollectionView.module.css";
+
+interface CollectionImageData {
+  id: string;
+  url: string;
+  title?: string;
+  description?: string;
+  favorite_id: number;
+  image_id: string;
+  image_url: string;
+  image_title: string;
+  image_author: string;
+  added_at: string;
+}
 
 export default function CollectionView() {
   const params = useParams();
@@ -35,23 +49,7 @@ export default function CollectionView() {
   const collectionId = params?.id as string;
   const isEmbedded = searchParams?.get("embed") === "true";
 
-  useEffect(() => {
-    loadCollection();
-  }, [collectionId, user]);
-
-  useEffect(() => {
-    // Detect mobile device
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768 || "ontouchstart" in window);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  const loadCollection = async () => {
+  const loadCollection = useCallback(async () => {
     if (!collectionId) {
       setError("Collection ID not found");
       setLoading(false);
@@ -76,16 +74,6 @@ export default function CollectionView() {
         return;
       }
 
-      // Check if user can access this collection
-      if (
-        collectionData.privacy === "private" &&
-        collectionData.user_id !== user?.id
-      ) {
-        setError("You don't have permission to view this collection");
-        setLoading(false);
-        return;
-      }
-
       // Get collection images with details
       // We need to handle this differently because favorites.image_id is TEXT (like "4960")
       // and we need to match it with images.id
@@ -106,7 +94,7 @@ export default function CollectionView() {
         return;
       }
 
-      let imagesData: any[] = [];
+      let imagesData: CollectionImageData[] = [];
       if (collectionFavoritesData && collectionFavoritesData.length > 0) {
         // Get favorites to get image_ids
         const favoriteIds = collectionFavoritesData.map(
@@ -120,18 +108,12 @@ export default function CollectionView() {
         if (favoritesError) {
           console.error("Error loading favorites:", favoritesError);
           // If we can't access favorites (anonymous user), still show empty collection
-          if (collectionData.privacy === "public") {
-            setCollection({
-              ...collectionData,
-              images: [],
-            });
-            setLoading(false);
-            return;
-          } else {
-            setError("Error loading collection images");
-            setLoading(false);
-            return;
-          }
+          setCollection({
+            ...collectionData,
+            images: [],
+          });
+          setLoading(false);
+          return;
         }
 
         if (favoritesData && favoritesData.length > 0) {
@@ -160,6 +142,11 @@ export default function CollectionView() {
                 : null;
 
               return {
+                id: favorite?.image_id || "", // Use image_id as id
+                url: image?.url || "", // Use image.url as url
+                title: image?.title || "Image not found",
+                description: undefined, // No description available
+                // Additional properties for later use
                 favorite_id: cfItem.favorite_id,
                 image_id: favorite?.image_id || "",
                 image_url: image?.url || "",
@@ -168,12 +155,12 @@ export default function CollectionView() {
                 added_at: cfItem.added_at,
               };
             })
-            .filter((item) => item.image_url); // Filter out items where image wasn't found
+            .filter((item) => item.url); // Filter out items where image wasn't found
         }
       }
 
-      if (imagesData.length === 0 && collectionData.privacy === "public") {
-        // Public collection with no images or access issues
+      if (imagesData.length === 0) {
+        // Collection with no images or access issues
         setCollection({
           ...collectionData,
           images: [],
@@ -183,7 +170,7 @@ export default function CollectionView() {
       }
 
       // Transform the data
-      const images = imagesData.map((item: any) => ({
+      const images = imagesData.map((item: CollectionImageData) => ({
         favorite_id: item.favorite_id,
         image_id: item.image_id,
         image_url: item.image_url,
@@ -202,7 +189,23 @@ export default function CollectionView() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [collectionId]);
+
+  useEffect(() => {
+    loadCollection();
+  }, [collectionId, loadCollection]);
+
+  useEffect(() => {
+    // Detect mobile device
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768 || "ontouchstart" in window);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -305,88 +308,12 @@ export default function CollectionView() {
       if (successCount === 0) {
         setIsExporting(false);
 
-        const userChoice = confirm(
-          `Unable to download images directly due to CORS restrictions.\n\n` +
-            `Would you like to:\n` +
-            `• OK - Create a list of image URLs to copy\n` +
-            `• Cancel - Create a ZIP with image URLs only`,
+        // Use a toast to ask for user choice instead of confirm
+        toast(
+          "Unable to download images directly due to CORS restrictions. Creating a ZIP with image URLs only.",
+          { icon: "⚠️", duration: 8000 },
         );
-
-        if (userChoice) {
-          // Create a popup window with all image URLs for easy copying
-          const imageUrlsList = collection.images
-            .map(
-              (image, index) =>
-                `${index + 1}. ${image.image_title} - ${image.image_url}`,
-            )
-            .join("\n");
-
-          const popupContent = `
-            <html>
-              <head>
-                <title>Collection Image URLs - ${collection.name}</title>
-                <style>
-                  body { font-family: Arial, sans-serif; padding: 20px; }
-                  h1 { color: #333; }
-                  .url-list { background: #f5f5f5; padding: 15px; border-radius: 5px; }
-                  .image-link { display: block; margin: 10px 0; padding: 10px; background: white; border-radius: 3px; text-decoration: none; color: #0066cc; }
-                  .image-link:hover { background: #e6f3ff; }
-                  .copy-btn { margin: 10px 0; padding: 10px 15px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
-                  .copy-btn:hover { background: #0056b3; }
-                </style>
-              </head>
-              <body>
-                <h1>Collection: ${collection.name}</h1>
-                <p>Click on any image URL below to open it in a new tab, or use the copy button to copy all URLs:</p>
-                <button class="copy-btn" onclick="copyAllUrls()">Copy All URLs</button>
-                <div class="url-list">
-                  ${collection.images
-                    .map(
-                      (image, index) =>
-                        `<a href="${image.image_url}" target="_blank" class="image-link">
-                      ${index + 1}. ${image.image_title}<br>
-                      <small>${image.image_url}</small>
-                    </a>`,
-                    )
-                    .join("")}
-                </div>
-                <script>
-                  function copyAllUrls() {
-                    const urls = ${JSON.stringify(collection.images.map((img) => img.image_url))};
-                    navigator.clipboard.writeText(urls.join('\\n')).then(() => {
-                      alert('All URLs copied to clipboard!');
-                    }).catch(() => {
-                      // Fallback for older browsers
-                      const textArea = document.createElement('textarea');
-                      textArea.value = urls.join('\\n');
-                      document.body.appendChild(textArea);
-                      textArea.select();
-                      document.execCommand('copy');
-                      document.body.removeChild(textArea);
-                      alert('All URLs copied to clipboard!');
-                    });
-                  }
-                </script>
-              </body>
-            </html>
-          `;
-
-          const popup = window.open(
-            "",
-            "_blank",
-            "width=800,height=600,scrollbars=yes",
-          );
-          if (popup) {
-            popup.document.write(popupContent);
-            popup.document.close();
-          } else {
-            alert(
-              "Popup blocked! Please allow popups for this site and try again.",
-            );
-          }
-          return;
-        }
-        // If user chose Cancel, continue with URL-only ZIP below
+        // Continue with URL-only ZIP below
       }
 
       // Create a text file with all image information
@@ -430,21 +357,23 @@ export default function CollectionView() {
       URL.revokeObjectURL(link.href);
 
       if (successCount === collection.images.length) {
-        alert(
+        toast.success(
           `Successfully exported all ${successCount} images as ${zipFileName}!`,
         );
       } else if (successCount > 0) {
-        alert(
+        toast(
           `Exported ${successCount} images successfully. ${failCount} images failed due to CORS restrictions. Check the _Image_URLs_and_Info.txt file for missing images.`,
+          { icon: "⚠️", duration: 8000 },
         );
       } else {
-        alert(
+        toast(
           `Created ZIP with image URLs and info. No images could be downloaded directly due to CORS restrictions.`,
+          { icon: "⚠️", duration: 8000 },
         );
       }
     } catch (error) {
       console.error("Error creating ZIP:", error);
-      alert("Error creating ZIP file. Please try again.");
+      toast.error("Error creating ZIP file. Please try again.");
     } finally {
       setIsExporting(false);
     }
@@ -506,7 +435,7 @@ export default function CollectionView() {
     }
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
     if (!isReordering || !isMobile) return;
 
     const target = e.currentTarget as HTMLElement;
@@ -516,7 +445,7 @@ export default function CollectionView() {
 
     if (draggedItem && dragOverItem && draggedItem !== dragOverItem) {
       // Perform the drop operation
-      handleDrop(e as any, dragOverItem);
+      handleDrop(e as unknown as React.DragEvent<HTMLDivElement>, dragOverItem);
     }
 
     setDraggedItem(null);
@@ -545,28 +474,30 @@ export default function CollectionView() {
     }
   };
 
-  const handleDragEnd = (e: React.DragEvent) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _handleDragEnd = (event: React.DragEvent) => {
     if (!isReordering) return;
 
     // Reset visual state
-    const target = e.target as HTMLElement;
+    const target = event.target as HTMLElement;
     target.style.opacity = "1";
 
     setDraggedItem(null);
     setDragOverItem(null);
   };
 
-  const handleDragOver = (e: React.DragEvent, favoriteId: number) => {
-    if (!isReordering || !draggedItem) return;
+  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const _handleDragOver = (event: React.DragEvent, favoriteId: number) => {
+  //   if (!isReordering || !draggedItem) return;
 
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
+  //   event.preventDefault();
+  //   event.dataTransfer.dropEffect = "move";
 
-    // Only update if we're over a different item
-    if (favoriteId !== draggedItem && favoriteId !== dragOverItem) {
-      setDragOverItem(favoriteId);
-    }
-  };
+  //   // Only update if we're over a different item
+  //   if (favoriteId !== draggedItem && favoriteId !== dragOverItem) {
+  //     setDragOverItem(favoriteId);
+  //   }
+  // };
 
   const handleDragLeave = (e: React.DragEvent) => {
     if (!isReordering) return;
@@ -637,7 +568,6 @@ export default function CollectionView() {
     return (
       <>
         <Header
-          showLoginButton={!user}
           onLoginClick={() => router.push("/?modal=auth")}
           user={user}
           onLogoutClick={handleLogout}
@@ -657,7 +587,6 @@ export default function CollectionView() {
     return (
       <>
         <Header
-          showLoginButton={!user}
           onLoginClick={() => router.push("/?modal=auth")}
           user={user}
           onLogoutClick={handleLogout}
@@ -666,8 +595,11 @@ export default function CollectionView() {
           <div className={styles.error}>
             <h2>Error</h2>
             <p>{error}</p>
-            <button onClick={() => router.back()} className={styles.backButton}>
-              Go Back
+            <button
+              onClick={() => router.push("/")}
+              className={styles.backButton}
+            >
+              Start at home
             </button>
           </div>
         </div>
@@ -680,7 +612,6 @@ export default function CollectionView() {
     return (
       <>
         <Header
-          showLoginButton={!user}
           onLoginClick={() => router.push("/?modal=auth")}
           user={user}
           onLogoutClick={handleLogout}
@@ -688,8 +619,11 @@ export default function CollectionView() {
         <div className={styles.container}>
           <div className={styles.error}>
             <h2>Collection Not Found</h2>
-            <button onClick={() => router.back()} className={styles.backButton}>
-              Go Back
+            <button
+              onClick={() => router.push("/")}
+              className={styles.backButton}
+            >
+              Start at home
             </button>
           </div>
         </div>
@@ -702,7 +636,6 @@ export default function CollectionView() {
     <>
       {!isEmbedded && (
         <Header
-          showLoginButton={!user}
           onLoginClick={() => router.push("/?modal=auth")}
           user={user}
           onLogoutClick={handleLogout}
@@ -724,7 +657,12 @@ export default function CollectionView() {
                     Profile
                   </button>
                   <span className={styles.breadcrumbSeparator}>→</span>
-                  <span className={styles.breadcrumbCurrent}>Collections</span>
+                  <button
+                    onClick={() => router.push("/contents?tab=collections")}
+                    className={styles.breadcrumbLink}
+                  >
+                    Collections
+                  </button>
                   <span className={styles.breadcrumbSeparator}>→</span>
                 </>
               ) : (
@@ -754,9 +692,6 @@ export default function CollectionView() {
                 <span className={styles.imageCount}>
                   {collection.images.length} image
                   {collection.images.length !== 1 ? "s" : ""}
-                </span>
-                <span className={styles.privacy}>
-                  {collection.privacy === "public" ? "🌐 Public" : "🔒 Private"}
                 </span>
               </div>
             </div>
@@ -819,11 +754,11 @@ export default function CollectionView() {
             {isReordering && isMobile && (
               <div className={styles.mobileInstructions}>
                 <p>
-                  📱 <strong>Touch and hold</strong> an image for 0.2 seconds to
+                  <strong>Touch and hold</strong> an image for 0.2 seconds to
                   start dragging.
                   <br />
-                  💡 <strong>Swipe left or right</strong> on images to select
-                  them quickly.
+                  <strong>Swipe left or right</strong> on images to select them
+                  quickly.
                 </p>
               </div>
             )}
@@ -842,7 +777,6 @@ export default function CollectionView() {
                   }`}
                   draggable={isReordering && !isMobile}
                   onDragStart={(e) => handleDragStart(e, image.favorite_id)}
-                  onDragEnd={handleDragEnd}
                   onDragOver={(e) => {
                     e.preventDefault();
                     setDragOverItem(image.favorite_id);

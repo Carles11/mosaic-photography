@@ -1,45 +1,31 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuthSession } from "@/context/AuthSessionContext";
-import { supabase } from "@/lib/supabaseClient";
-
+import { sendGTMEvent } from "@next/third-parties/google";
+import styles from "./profile.module.css";
+import { useAuth } from "@/hooks/useAuth";
+import { ProtectedRoute } from "@/components/auth/guards/ProtectedRoute";
 import ProfileForm from "@/components/profile/ProfileForm";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import styles from "./profile.module.css";
+import BottomNav from "@/components/navigation/BottomNav/BottomNav";
 
-export default function ProfilePage() {
-  const { user, loading } = useAuthSession();
-  const router = useRouter();
+function ProfileContent() {
+  const { user, logout } = useAuth();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/");
-    }
-  }, [user, loading, router]);
-
-  if (loading) {
-    return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loader}>Loading...</div>
-      </div>
-    );
-  }
+  const handleGoProClick = () => {
+    sendGTMEvent({
+      event: "goProText",
+      value: "Go Pro clicked from profile bottom nav",
+    });
+  };
 
   if (!user) {
-    return null; // Will redirect
+    return null; // ProtectedRoute will handle redirect
   }
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push("/");
-  };
 
   return (
     <div className={styles.container}>
-      <Header user={user} onLogoutClick={handleLogout} />
+      <Header user={user} onLogoutClick={logout} />
       <main className={styles.main}>
         <div className={styles.content}>
           <h1 className={styles.title}>My Profile</h1>
@@ -47,6 +33,27 @@ export default function ProfilePage() {
         </div>
       </main>
       <Footer />
+
+      {/* Mobile Bottom Navigation */}
+      <BottomNav
+        user={user}
+        onLogoutClick={logout}
+        onGoProClick={handleGoProClick}
+      />
     </div>
+  );
+}
+
+export default function ProfilePage() {
+  return (
+    <ProtectedRoute
+      fallback={
+        <div className={styles.loadingContainer}>
+          <div className={styles.loader}>Loading...</div>
+        </div>
+      }
+    >
+      <ProfileContent />
+    </ProtectedRoute>
   );
 }

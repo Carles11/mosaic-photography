@@ -1,9 +1,10 @@
 import React from "react";
 import { Metadata } from "next";
+import Link from "next/link";
+import styles from "./faq.module.css";
 import { faqStructuredData } from "@/utils/faqStructuredData";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import styles from "./faq.module.css";
 
 export const metadata: Metadata = {
   title:
@@ -251,25 +252,26 @@ const FAQPage: React.FC = () => {
           ))}
         </main>
 
-        <footer className={styles.faqFooter}>
+        <section className={styles.faqFooter}>
           <div className={styles.callToAction}>
             <h2>Still Have Questions?</h2>
             <p>
-              Can't find the answer you're looking for? We're here to help! Our
-              curated collection of public domain vintage nude photography
-              continues to grow, and we're always happy to assist with specific
-              questions about usage rights, historical context, or technical
-              details.
+              Can&apos;t find the answer you&apos;re looking for? We&apos;re
+              here to help! Our curated collection of public domain vintage nude
+              photography continues to grow, and we&apos;re always happy to
+              assist with specific questions about usage rights, historical
+              context, or technical details.
             </p>
             <div className={styles.contactInfo}>
               <p>
-                Explore our <a href="/">vintage nude photography gallery</a> or
-                learn more about our{" "}
-                <a href="/legal/terms-of-service">terms of service</a>.
+                Explore our{" "}
+                <Link href="/">vintage nude photography gallery</Link> or learn
+                more about our{" "}
+                <Link href="/legal/terms-of-service">terms of service</Link>.
               </p>
             </div>
           </div>
-        </footer>
+        </section>
       </div>
 
       {/* Simple Go to Top Button - CSS only, no JavaScript needed */}

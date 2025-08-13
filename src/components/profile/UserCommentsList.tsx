@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
+import styles from "./UserCommentsList.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { UserCommentWithImage } from "@/types";
-import styles from "./UserCommentsList.module.css";
 
 const COMMENTS_PER_PAGE = 10;
 
@@ -18,110 +19,110 @@ export default function UserCommentsList() {
   const [editContent, setEditContent] = useState("");
   const [updating, setUpdating] = useState(false);
 
-  const loadUserComments = async (
-    pageNum: number = 1,
-    reset: boolean = false,
-  ) => {
-    if (!user) {
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const offset = (pageNum - 1) * COMMENTS_PER_PAGE;
-
-      // First, get the user's comments
-      const { data: commentsData, error: commentsError } = await supabase
-        .from("comments")
-        .select(
-          `
-          id,
-          user_id,
-          image_id,
-          content,
-          created_at
-        `,
-        )
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .range(offset, offset + COMMENTS_PER_PAGE - 1);
-
-      if (commentsError) {
-        console.error("Error loading user comments:", commentsError);
-        if (commentsError.code === "42P01") {
-          console.warn("comments table doesn't exist yet");
-        }
+  const loadUserComments = useCallback(
+    async (pageNum: number = 1, reset: boolean = false) => {
+      if (!user) {
+        setLoading(false);
         return;
       }
 
-      if (!commentsData || commentsData.length === 0) {
+      setLoading(true);
+      try {
+        const offset = (pageNum - 1) * COMMENTS_PER_PAGE;
+
+        // First, get the user's comments
+        const { data: commentsData, error: commentsError } = await supabase
+          .from("comments")
+          .select(
+            `
+            id,
+            user_id,
+            image_id,
+            content,
+            created_at
+          `,
+          )
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .range(offset, offset + COMMENTS_PER_PAGE - 1);
+
+        if (commentsError) {
+          console.error("Error loading user comments:", commentsError);
+          if (commentsError.code === "42P01") {
+            console.warn("comments table doesn't exist yet");
+          }
+          return;
+        }
+
+        if (!commentsData || commentsData.length === 0) {
+          if (reset) {
+            setComments([]);
+          }
+          setHasMore(false);
+          return;
+        }
+
+        // Get unique image IDs to fetch image details
+        const imageIds = [
+          ...new Set(commentsData.map((comment) => comment.image_id)),
+        ];
+
+        // Fetch image details for these IDs
+        const { data: imagesData, error: imagesError } = await supabase
+          .from("images")
+          .select("id, title, url, author")
+          .in("id", imageIds);
+
+        if (imagesError) {
+          console.error("Error loading image details:", imagesError);
+        }
+
+        // Create a map of image_id -> image details for quick lookup
+        const imageMap = new Map();
+        if (imagesData) {
+          imagesData.forEach((image) => {
+            imageMap.set(image.id, image);
+          });
+        }
+
+        // Transform the data to match our interface
+        const transformedComments: UserCommentWithImage[] = commentsData.map(
+          (comment: UserCommentWithImage) => {
+            const imageDetails = imageMap.get(comment.image_id);
+            return {
+              id: comment.id,
+              user_id: comment.user_id,
+              image_id: comment.image_id,
+              content: comment.content,
+              created_at: comment.created_at,
+              updated_at: comment.updated_at, // This might be undefined, which is fine
+              user_email: undefined, // Not available in current schema
+              image_title: imageDetails?.title,
+              image_url: imageDetails?.url,
+              image_author: imageDetails?.author,
+            };
+          },
+        );
+
         if (reset) {
-          setComments([]);
+          setComments(transformedComments);
+        } else {
+          setComments((prev) => [...prev, ...transformedComments]);
         }
-        setHasMore(false);
-        return;
+
+        setHasMore(transformedComments.length === COMMENTS_PER_PAGE);
+      } catch (error) {
+        console.error("Error loading user comments:", error);
+      } finally {
+        setLoading(false);
       }
-
-      // Get unique image IDs to fetch image details
-      const imageIds = [
-        ...new Set(commentsData.map((comment) => comment.image_id)),
-      ];
-
-      // Fetch image details for these IDs
-      const { data: imagesData, error: imagesError } = await supabase
-        .from("images")
-        .select("id, title, url, author")
-        .in("id", imageIds);
-
-      if (imagesError) {
-        console.error("Error loading image details:", imagesError);
-      }
-
-      // Create a map of image_id -> image details for quick lookup
-      const imageMap = new Map();
-      if (imagesData) {
-        imagesData.forEach((image) => {
-          imageMap.set(image.id, image);
-        });
-      }
-
-      // Transform the data to match our interface
-      const transformedComments: UserCommentWithImage[] = commentsData.map(
-        (comment: any) => {
-          const imageDetails = imageMap.get(comment.image_id);
-          return {
-            id: comment.id,
-            user_id: comment.user_id,
-            image_id: comment.image_id,
-            content: comment.content,
-            created_at: comment.created_at,
-            updated_at: comment.updated_at, // This might be undefined, which is fine
-            user_email: undefined, // Not available in current schema
-            image_title: imageDetails?.title,
-            image_url: imageDetails?.url,
-            image_author: imageDetails?.author,
-          };
-        },
-      );
-
-      if (reset) {
-        setComments(transformedComments);
-      } else {
-        setComments((prev) => [...prev, ...transformedComments]);
-      }
-
-      setHasMore(transformedComments.length === COMMENTS_PER_PAGE);
-    } catch (error) {
-      console.error("Error loading user comments:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [user],
+  );
 
   useEffect(() => {
     loadUserComments(1, true);
-  }, [user]);
+  }, [user, loadUserComments]);
 
   const handleLoadMore = () => {
     const nextPage = page + 1;
@@ -248,9 +249,11 @@ export default function UserCommentsList() {
             <div className={styles.imageInfo}>
               {comment.image_url ? (
                 <div className={styles.imageThumbnail}>
-                  <img
+                  <Image
                     src={comment.image_url}
-                    alt={comment.image_title || "Gallery image"}
+                    alt={comment.image_title || "Mosaic Gallery image"}
+                    width={80}
+                    height={80}
                     loading="lazy"
                   />
                 </div>

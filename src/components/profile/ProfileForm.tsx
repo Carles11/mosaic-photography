@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
+import styles from "./ProfileForm.module.css";
 import { supabase, SupabaseUser } from "@/lib/supabaseClient";
 import { useFavorites } from "@/context/FavoritesContext";
 import type { UserProfile } from "@/types";
-import FavoritesList from "./FavoritesList";
-import UserCommentsList from "./UserCommentsList";
-import CollectionsList, { type CollectionsListRef } from "./CollectionsList";
-import styles from "./ProfileForm.module.css";
 
 interface ProfileFormProps {
   user: SupabaseUser;
@@ -15,7 +13,6 @@ interface ProfileFormProps {
 
 export default function ProfileForm({ user }: ProfileFormProps) {
   const { favorites } = useFavorites();
-  const collectionsListRef = useRef<CollectionsListRef>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -28,13 +25,11 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     name: "",
     instagram: "",
     website: "",
+    own_store_name: "",
+    own_store_url: "",
   });
 
   const [databaseError, setDatabaseError] = useState(false);
-
-  const handleCollectionRefresh = () => {
-    collectionsListRef.current?.refreshCollections();
-  };
 
   const createInitialProfile = useCallback(async () => {
     // Don't try to create profile if we know the database table doesn't exist
@@ -48,6 +43,8 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         name: "",
         instagram: "",
         website: "",
+        own_store_name: "",
+        own_store_url: "",
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
@@ -77,7 +74,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     } catch (error) {
       console.error("Error creating initial profile:", error);
     }
-  }, [databaseError, user.id]);
+  }, [user.id, databaseError]);
 
   const loadProfile = useCallback(async () => {
     try {
@@ -112,6 +109,8 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           name: data.name || "",
           instagram: data.instagram || "",
           website: data.website || "",
+          own_store_name: data.own_store_name || "",
+          own_store_url: data.own_store_url || "",
         });
       } else {
         // No profile exists yet, create a basic one
@@ -123,7 +122,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
     } finally {
       setLoading(false);
     }
-  }, [user.id, databaseError, createInitialProfile]);
+  }, [user.id, createInitialProfile]);
 
   useEffect(() => {
     loadProfile();
@@ -317,6 +316,39 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           />
         </div>
 
+        {/* <div className={styles.field}>
+          <label htmlFor="own_store_name" className={styles.label}>
+            Store Name
+          </label>
+          <input
+            type="text"
+            id="own_store_name"
+            className={styles.input}
+            value={formData.own_store_name}
+            onChange={(e) =>
+              handleInputChange("own_store_name", e.target.value)
+            }
+            placeholder="Enter your store name"
+            maxLength={100}
+            disabled={databaseError}
+          />
+        </div>
+
+        <div className={styles.field}>
+          <label htmlFor="own_store_url" className={styles.label}>
+            Store URL
+          </label>
+          <input
+            type="url"
+            id="own_store_url"
+            className={styles.input}
+            value={formData.own_store_url}
+            onChange={(e) => handleInputChange("own_store_url", e.target.value)}
+            placeholder="https://yourstore.com"
+            disabled={databaseError}
+          />
+        </div> */}
+
         <button
           type="submit"
           className={styles.submitButton}
@@ -330,19 +362,49 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         </button>
       </form>
 
+      {/* Quick Access Section */}
       <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Favorites</h2>
-        <FavoritesList onCollectionUpdate={handleCollectionRefresh} />
-      </div>
+        <h2 className={styles.sectionTitle}>Quick Access</h2>
+        <div className={styles.quickAccess}>
+          <Link
+            href="/contents?tab=favorites"
+            className={styles.quickAccessItem}
+          >
+            <span className={styles.quickAccessIcon}>♡</span>
+            <div className={styles.quickAccessContent}>
+              <h3>My Favorites</h3>
+              <p>{favorites.size} saved images</p>
+            </div>
+          </Link>
 
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Collections</h2>
-        <CollectionsList ref={collectionsListRef} />
-      </div>
+          <Link
+            href="/contents?tab=collections"
+            className={styles.quickAccessItem}
+          >
+            <span className={styles.quickAccessIcon}>📚</span>
+            <div className={styles.quickAccessContent}>
+              <h3>My Collections</h3>
+              <p>Organized image sets</p>
+            </div>
+          </Link>
 
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Comments</h2>
-        <UserCommentsList />
+          <Link
+            href="/contents?tab=comments"
+            className={styles.quickAccessItem}
+          >
+            <span className={styles.quickAccessIcon}>💬</span>
+            <div className={styles.quickAccessContent}>
+              <h3>My Comments</h3>
+              <p>Your gallery interactions</p>
+            </div>
+          </Link>
+        </div>
+
+        <div className={styles.quickAccessFullLink}>
+          <Link href="/contents" className={styles.viewAllButton}>
+            View All My Content →
+          </Link>
+        </div>
       </div>
     </div>
   );

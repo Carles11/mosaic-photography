@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Item } from "./PhotoSwipeWrapper"; // Import Item from PhotoSwipeWrapper
+import styles from "./image.module.css";
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsButton from "@/components/buttons/CommentsButton";
 import CommentsModal from "@/components/modals/comments/CommentsModal";
-import styles from "./image.module.css";
 
 interface ImageWrapperProps {
   image: {
@@ -48,7 +48,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
         <Item
           original={image.url}
           thumbnail={image.url}
-          caption={image.author}
+          caption={`${image.title}`}
           width={imgRef?.current?.naturalWidth} // Use actual width
           height={imgRef?.current?.naturalHeight} // Use actual height
           id={imageIdString} // Pass image ID to PhotoSwipe for hash navigation and identification
@@ -59,8 +59,8 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
               src={image.url}
               alt={image.title || "Gallery Image"}
               className={`${styles.imageItem} ${styles.image}`}
-              width={imgRef?.current?.naturalWidth || 300} // Use actual width
-              height={imgRef?.current?.naturalHeight || 200} // Use actual height
+              width={imgRef?.current?.naturalWidth || 1200} // Use actual width
+              height={imgRef?.current?.naturalHeight || 800} // Use actual height
               sizes="(max-width: 600px) 100vw, 50vw"
               placeholder="blur"
               blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"

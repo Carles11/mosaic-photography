@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { useComments } from "@/context/CommentsContext";
 import styles from "./CommentForm.module.css";
+import { useComments } from "@/context/CommentsContext";
 
 interface CommentFormProps {
   imageId: string;
@@ -62,8 +62,10 @@ const CommentForm: React.FC<CommentFormProps> = ({
               : "Please log in to leave a comment"
           }
           className={styles.textarea}
-          disabled={!isUserLoggedIn() || isSubmitting}
           rows={3}
+          onClick={(e) => e.stopPropagation()} // Stop click from propagating to potential overlays
+          onFocus={(e) => e.stopPropagation()} // Ensure focus events don't propagate
+          style={{ position: "relative", zIndex: 10 }} // Ensure higher z-index
         />
         {error && <div className={styles.error}>{error}</div>}
       </div>

@@ -1,13 +1,20 @@
 "use client";
 
-import { useState, useEffect, useImperativeHandle, forwardRef } from "react";
+import {
+  useState,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+  useCallback,
+} from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
-import { useAuthSession } from "@/context/AuthSessionContext";
-import { Collection } from "@/types";
 import CreateCollectionModal from "./CreateCollectionModal";
 import EditCollectionModal from "./EditCollectionModal";
 import styles from "./CollectionsList.module.css";
+import { supabase } from "@/lib/supabaseClient";
+import { useAuthSession } from "@/context/AuthSessionContext";
+import { Collection } from "@/types";
+import Image from "next/image";
 
 export interface CollectionsListRef {
   refreshCollections: () => void;
@@ -29,88 +36,83 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768 || "ontouchstart" in window);
     };
-
     checkMobile();
     window.addEventListener("resize", checkMobile);
-
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Expose refresh function to parent components
-  useImperativeHandle(ref, () => ({
-    refreshCollections: loadCollections,
-  }));
-
-  const loadCollections = async () => {
+  const loadCollections = useCallback(async () => {
     if (!user) {
       setLoading(false);
       return;
     }
-
     setLoading(true);
     try {
-      // Get collections with image counts
-      const { data: collectionsData, error: collectionsError } = await supabase
+      await supabase.auth.getSession();
+      await supabase
+        .from("collections")
+        .select("*")
+        .in("id", [
+          "1de09a36-8180-496e-823a-e2ce80b6cf45",
+          "960305af-8088-4254-86f3-0f88a06edd34",
+        ]);
+      const { data: collectionsData } = await supabase
         .from("collections")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-
-      if (collectionsError) {
-        console.error("Error loading collections:", collectionsError);
-        if (collectionsError.code === "42P01") {
-          console.warn("collections table doesn't exist yet");
-        }
-        return;
-      }
-
-      if (collectionsData) {
-        // For each collection, get the count and preview images
+      if (collectionsData && collectionsData.length > 0) {
         const collectionsWithCounts = await Promise.all(
           collectionsData.map(async (collection) => {
-            // Get image count
-            const { count } = await supabase
+            const { count: imageCount } = await supabase
               .from("collection_favorites")
               .select("*", { count: "exact", head: true })
               .eq("collection_id", collection.id);
-
-            // Get preview images (first 4)
             const { data: previewData } = await supabase
               .from("collection_favorites")
-              .select(
-                `
-                favorites!inner(
-                  images!inner(url)
-                )
-              `,
-              )
+              .select("favorites!inner(images!inner(url))")
               .eq("collection_id", collection.id)
-              .order("added_at", { ascending: false })
               .limit(4);
-
-            const preview_images =
-              previewData?.map((item: any) => item.favorites.images.url) || [];
-
+            const preview_images = Array.isArray(previewData)
+              ? previewData.flatMap(
+                  (item: { favorites: { images: { url: string }[] }[] }) =>
+                    Array.isArray(item.favorites)
+                      ? item.favorites.flatMap((fav) =>
+                          Array.isArray(fav.images)
+                            ? fav.images.map((img) => img.url)
+                            : [],
+                        )
+                      : [],
+                )
+              : [];
             return {
               ...collection,
-              image_count: count || 0,
+              image_count: imageCount || 0,
               preview_images,
             };
           }),
         );
-
         setCollections(collectionsWithCounts);
+      } else {
+        setCollections([]);
       }
-    } catch (error) {
-      console.error("Error loading collections:", error);
+    } catch {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      refreshCollections: loadCollections,
+    }),
+    [loadCollections],
+  );
 
   useEffect(() => {
     loadCollections();
-  }, [user]);
+  }, [user, loadCollections]);
 
   const handleCreateCollection = (newCollection: Collection) => {
     setCollections((prev) => [
@@ -118,6 +120,10 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
       ...prev,
     ]);
     setShowCreateModal(false);
+
+    setTimeout(() => {
+      loadCollections();
+    }, 1000);
   };
 
   const handleEditCollection = (updatedCollection: Collection) => {
@@ -147,13 +153,11 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
         .eq("id", collectionId);
 
       if (error) {
-        console.error("Error deleting collection:", error);
         alert("Failed to delete collection. Please try again.");
       } else {
         setCollections((prev) => prev.filter((col) => col.id !== collectionId));
       }
-    } catch (error) {
-      console.error("Error deleting collection:", error);
+    } catch {
       alert("Failed to delete collection. Please try again.");
     }
   };
@@ -197,7 +201,9 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
           <h3>No collections yet</h3>
           <p>Create your first collection to organize your favorite images</p>
           <button
-            onClick={() => setShowCreateModal(true)}
+            onClick={() => {
+              setShowCreateModal(true);
+            }}
             className={styles.emptyCreateButton}
           >
             Create Collection
@@ -218,16 +224,21 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                       router.push(`/profile/collections/${collection.id}`)
                     }
                     className={styles.viewButton}
-                    title="View collection"
+                    title="Share collection"
                   >
-                    👁️
+                    {/* Options for share icon similar in style to ⌂: */}
+                    {/* 1. ⎋ (Escape) */}
+                    {/* 2. ⎙ (Print) */}
+                    {/* 3. ⎘ (Insert) */}
+                    {/* 4. ⎗ (Copy) */}
+                    {/* 5. ⎌ (Return) */}Share
                   </button>
                   <button
                     onClick={() => setEditingCollection(collection)}
                     className={styles.editButton}
                     title="Edit collection"
                   >
-                    ✏️
+                    Edit
                   </button>
                   <button
                     onClick={() => handleDeleteCollection(collection.id)}
@@ -247,9 +258,11 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                       .slice(0, 4)
                       .map((imageUrl, index) => (
                         <div key={index} className={styles.previewImage}>
-                          <img
+                          <Image
                             src={imageUrl}
                             alt={`Preview ${index + 1}`}
+                            width={80}
+                            height={80}
                             loading="lazy"
                           />
                         </div>
@@ -259,6 +272,10 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                   <div className={styles.emptyPreview}>
                     <span className={styles.emptyPreviewIcon}>📷</span>
                     <p>No images yet</p>
+                    <p>
+                      To add images to this collection, go to your favorites
+                      above and click the yellow folder icon over the image.
+                    </p>
                   </div>
                 )}
               </div>
@@ -268,12 +285,6 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                   <span className={styles.imageCount}>
                     {collection.image_count}{" "}
                     {collection.image_count === 1 ? "image" : "images"}
-                  </span>
-                  <span
-                    className={`${styles.privacyBadge} ${styles[collection.privacy]}`}
-                  >
-                    {collection.privacy === "private" ? "🔒" : "🌐"}{" "}
-                    {collection.privacy}
                   </span>
                 </div>
                 {collection.description && (

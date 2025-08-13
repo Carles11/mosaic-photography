@@ -26,7 +26,7 @@ export const HomeTitles = () => {
                 })
               }
             >
-              BROWSE ALL PHOTOS
+              GO TO MOSAIC COLLECTION
             </a>
           </h2>
         </div>

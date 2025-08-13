@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
-import PrimaryButton from "@/components/buttons/PrimaryButton";
 import styles from "./mainModal.module.css";
+import PrimaryButton from "@/components/buttons/PrimaryButton";
 
 interface ModalProps {
   isOpen: boolean;

@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useAgeConsent } from "@/context/AgeConsentContext";
 import Cookies from "js-cookie";
+import { HomeTitles } from "../header/titles/HomeTitles";
+import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
+import styles from "./home.module.css";
+import { useAgeConsent } from "@/context/AgeConsentContext";
 import { SupabaseUser } from "@/lib/supabaseClient";
 
 import Gallery from "@/components/gallery/Gallery";
@@ -13,23 +16,20 @@ import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
 import GitHubCorner from "@/components/buttons/GitHubCorner";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-
-import styles from "./home.module.css";
-import { HomeTitles } from "../header/titles/HomeTitles";
-import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
+import BottomNav from "@/components/navigation/BottomNav/BottomNav";
 
 interface HomeClientWrapperProps {
-  showLoginButton?: boolean;
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
   user?: SupabaseUser | null;
+  onGoProClick?: () => void;
 }
 
 function HomeClientWrapper({
-  showLoginButton = false,
   onLoginClick,
   onLogoutClick,
   user,
+  onGoProClick,
 }: HomeClientWrapperProps) {
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
@@ -58,27 +58,23 @@ function HomeClientWrapper({
     <div className={styles.container}>
       <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
       <Header
-        showLoginButton={showLoginButton}
         onLoginClick={onLoginClick}
         onLogoutClick={onLogoutClick}
         user={user}
       />
-      {/* Show AgeConsent only for real users */}
-      {!isCrawlerBot && (
-        <AgeConsent
-          isMinimumAgeConfirmed={isMinimumAgeConfirmed}
-          setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed}
-        />
+
+      {/* Show AgeConsent only for real users and if age is not confirmed */}
+      {!isCrawlerBot && !isMinimumAgeConfirmed && (
+        <AgeConsent setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed} />
       )}
+
       {isMinimumAgeConfirmed && (
         <>
           <script type="application/ld+json">
             {JSON.stringify(structuredData)}
           </script>
           <section
-            className={`${styles.pageContent} ${
-              isMinimumAgeConfirmed ? styles.visible : styles.invisible
-            }`}
+            className={`${styles.pageContent} ${styles.visible}`}
             aria-hidden={!isMinimumAgeConfirmed}
           >
             <div className={styles.content}>
@@ -92,6 +88,14 @@ function HomeClientWrapper({
         </>
       )}
       <Footer />
+
+      {/* Mobile Bottom Navigation */}
+      <BottomNav
+        user={user}
+        onLoginClick={onLoginClick}
+        onLogoutClick={onLogoutClick}
+        onGoProClick={onGoProClick}
+      />
     </div>
   );
 }

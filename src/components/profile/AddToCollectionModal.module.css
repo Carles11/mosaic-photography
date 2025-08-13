@@ -153,33 +153,6 @@
   -webkit-box-orient: vertical;
 }
 
-.collectionMeta {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.privacyBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.125rem 0.375rem;
-  border-radius: 4px;
-  font-size: 0.625rem;
-  font-weight: 500;
-  text-transform: capitalize;
-}
-
-.privacyBadge.private {
-  background: rgba(108, 117, 125, 0.1);
-  color: #6c757d;
-}
-
-.privacyBadge.public {
-  background: rgba(40, 167, 69, 0.1);
-  color: #28a745;
-}
-
 .actionButton {
   display: flex;
   align-items: center;

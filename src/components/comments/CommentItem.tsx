@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import styles from "./CommentItem.module.css";
 import { Comment } from "@/types";
 import { useComments } from "@/context/CommentsContext";
-import styles from "./CommentItem.module.css";
 
 interface CommentItemProps {
   comment: Comment;
@@ -63,7 +63,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
       setIsLoading(false);
     }
   };
-
   return (
     <div className={styles.commentItem}>
       <div className={styles.commentHeader}>
