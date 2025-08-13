@@ -1,3 +1,3 @@
 // src/lib/minimatch.js
-const minimatch = require("minimatch");
+import minimatch from "minimatch";
 module.exports = minimatch;
