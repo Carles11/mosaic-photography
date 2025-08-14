@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 
 import Link from "next/link";
 import { sendGTMEvent } from "@next/third-parties/google";
+import GitHubCorner from "@/components/buttons/GitHubCorner";
 
 import ThemeToggle from "../theme/ThemeToggle";
 import ThemeImage from "../theme/ThemeImageDark";
@@ -18,6 +19,7 @@ const Header = () => {
 
   return (
     <header>
+      <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
       <h2 className="sr-only">
         Mosaic Photography: Iconic Nude Photography Gallery
       </h2>
@@ -45,7 +47,7 @@ const Header = () => {
                 setShowGoProModal(true);
                 sendGTMEvent({
                   event: "goProText",
-                  value: "Go Pro clicked from header",
+                  value: "Go Pro clicked from header"
                 });
               }}
             >
@@ -58,7 +60,7 @@ const Header = () => {
               onClick={() =>
                 sendGTMEvent({
                   event: "ThemeToggleClicked",
-                  value: "Theme toggle clicked from header",
+                  value: "Theme toggle clicked from header"
                 })
               }
             >

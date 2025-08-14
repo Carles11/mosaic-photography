@@ -10,8 +10,6 @@ import Gallery from "@/components/gallery/Gallery";
 import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
 
-import GitHubCorner from "@/components/buttons/GitHubCorner";
-
 import styles from "./home.module.css";
 import { HomeTitles } from "../header/titles/HomeTitles";
 import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
@@ -32,7 +30,6 @@ function HomeClientWrapper() {
 
   return (
     <div className={styles.container}>
-      <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
       {/* Show AgeConsent only for real users */}
       {!isCrawlerBot && (
         <AgeConsent
