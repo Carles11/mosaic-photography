@@ -11,8 +11,6 @@ import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
 
 import GitHubCorner from "@/components/buttons/GitHubCorner";
-import Header from "@/components/header/Header";
-import Footer from "@/components/footer/Footer";
 
 import styles from "./home.module.css";
 import { HomeTitles } from "../header/titles/HomeTitles";
@@ -32,12 +30,9 @@ function HomeClientWrapper() {
     }
   }, [setIsMinimumAgeConfirmed]);
 
-
   return (
     <div className={styles.container}>
-      
       <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
-      <Header />
       {/* Show AgeConsent only for real users */}
       {!isCrawlerBot && (
         <AgeConsent
@@ -66,7 +61,6 @@ function HomeClientWrapper() {
           </section>
         </>
       )}
-      <Footer />
     </div>
   );
 }

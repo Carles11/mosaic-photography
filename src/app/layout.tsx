@@ -1,14 +1,13 @@
-import type { Metadata } from "next";
 
+import type { Metadata } from "next";
 import { AgeConsentProvider } from "@/context/AgeConsentContext";
 import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
 import { GoogleTagManager } from "@next/third-parties/google";
-
 import { ThemeProvider } from "next-themes";
 import React from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-
+import WithHeaderFooter from "@/components/wrappers/WithHeaderFooter";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -188,7 +187,9 @@ function RootLayout({ children }: RootLayoutProps) {
         <ThemeProvider defaultTheme="dark">
           <AgeConsentProvider>
             <ServiceWorkerContext>
-              <main style={{ flex: 1 }}>{children}</main>
+              <WithHeaderFooter>
+                <main style={{ flex: 1 }}>{children}</main>
+              </WithHeaderFooter>
               <Analytics />
               <SpeedInsights />
             </ServiceWorkerContext>
