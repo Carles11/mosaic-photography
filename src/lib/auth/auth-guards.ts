@@ -4,7 +4,7 @@
 export const PROTECTED_ROUTES = [
   "/profile",
   "/profile/*",
-  "/contents",
+  "/photo-curations",
 ] as const;
 
 /**

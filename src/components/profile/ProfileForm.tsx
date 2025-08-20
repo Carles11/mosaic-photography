@@ -367,7 +367,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         <h2 className={styles.sectionTitle}>Quick Access</h2>
         <div className={styles.quickAccess}>
           <Link
-            href="/contents?tab=favorites"
+            href="/photo-curations?tab=favorites"
             className={styles.quickAccessItem}
           >
             <span className={styles.quickAccessIcon}>♡</span>
@@ -378,7 +378,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           </Link>
 
           <Link
-            href="/contents?tab=collections"
+            href="/photo-curations?tab=collections"
             className={styles.quickAccessItem}
           >
             <span className={styles.quickAccessIcon}>📚</span>
@@ -389,7 +389,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           </Link>
 
           <Link
-            href="/contents?tab=comments"
+            href="/photo-curations?tab=comments"
             className={styles.quickAccessItem}
           >
             <span className={styles.quickAccessIcon}>💬</span>
@@ -401,7 +401,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         </div>
 
         <div className={styles.quickAccessFullLink}>
-          <Link href="/contents" className={styles.viewAllButton}>
+          <Link href="/photo-curations" className={styles.viewAllButton}>
             View All My Content →
           </Link>
         </div>
