@@ -22,11 +22,24 @@ export default function ShareCollectionModal({
     "link",
   );
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
+
+  // Email subject and body state
+  const [emailSubject, setEmailSubject] = useState(
+    `Check out this collection: ${collection.name}`,
+  );
+  const [emailBody, setEmailBody] = useState(
+    `I wanted to share this amazing image collection with you!\n\n` +
+      `Collection: ${collection.name}\n` +
+      `${collection.description ? `Description: ${collection.description}\n` : ""}` +
+      `Images: ${collection.image_count || 0}\n\n` +
+      `View it here: ${typeof window !== "undefined" ? window.location.origin : ""}/profile/collections/${collection.id}\n\n` +
+      `Shared from Mosaic Photography`,
+  );
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_emailSending, _setEmailSending] = useState(false);
   const [embedCopied, setEmbedCopied] = useState(false);
 
-  const shareUrl = `${window.location.origin}/profile/collections/${collection.id}`;
+  const shareUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/profile/collections/${collection.id}`;
 
   // Generate QR Code when needed
   useEffect(() => {
@@ -66,18 +79,8 @@ export default function ShareCollectionModal({
   };
 
   const handleEmailShare = () => {
-    const subject = encodeURIComponent(
-      `Check out this collection: ${collection.name}`,
-    );
-    const body = encodeURIComponent(
-      `I wanted to share this amazing image collection with you!\n\n` +
-        `Collection: ${collection.name}\n` +
-        `${collection.description ? `Description: ${collection.description}\n` : ""}` +
-        `Images: ${collection.image_count || 0}\n\n` +
-        `View it here: ${shareUrl}\n\n` +
-        `Shared from Mosaic Photography`,
-    );
-
+    const subject = encodeURIComponent(emailSubject);
+    const body = encodeURIComponent(emailBody);
     const mailtoUrl = `mailto:?subject=${subject}&body=${body}`;
     window.open(mailtoUrl);
   };
@@ -210,27 +213,28 @@ export default function ShareCollectionModal({
                 <div className={styles.emailPreview}>
                   <h5>Email Preview:</h5>
                   <div className={styles.emailContent}>
-                    <strong>Subject:</strong> Check out this collection:{" "}
-                    {collection.name}
+                    <label className={styles.label} htmlFor="emailSubjectInput">
+                      <strong>Subject:</strong>
+                    </label>
+                    <input
+                      id="emailSubjectInput"
+                      type="text"
+                      value={emailSubject}
+                      onChange={(e) => setEmailSubject(e.target.value)}
+                      className={styles.urlInput}
+                    />
                     <br />
                     <br />
-                    <strong>Message:</strong>
-                    <br />
-                    I wanted to share this amazing image collection with you!
-                    <br />
-                    <br />
-                    Collection: {collection.name}
-                    <br />
-                    {collection.description && (
-                      <>
-                        Description: {collection.description}
-                        <br />
-                      </>
-                    )}
-                    Images: {collection.image_count || 0}
-                    <br />
-                    <br />
-                    View it here: {shareUrl}
+                    <label className={styles.label} htmlFor="emailBodyTextarea">
+                      <strong>Message:</strong>
+                    </label>
+                    <textarea
+                      id="emailBodyTextarea"
+                      value={emailBody}
+                      onChange={(e) => setEmailBody(e.target.value)}
+                      className={styles.embedTextarea}
+                      rows={8}
+                    />
                   </div>
                 </div>
                 <button
@@ -240,7 +244,7 @@ export default function ShareCollectionModal({
                   📧 Open in Email App
                 </button>
                 <p className={styles.hint}>
-                  This will open your default email app with a pre-written
+                  This will open your default email app with your custom
                   message.
                 </p>
               </div>

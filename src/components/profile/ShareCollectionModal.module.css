@@ -100,6 +100,7 @@
     font-size: 0.9rem;
     background: var(--background-secondary, #fff);
     color: var(--text-color, #333);
+    width: 90%;
   }
 
   .urlInput:focus {
@@ -301,6 +302,7 @@
     color: var(--text-color, #333);
     resize: vertical;
     min-height: 80px;
+    width: 90%;
   }
 
   .embedTextarea:focus {
