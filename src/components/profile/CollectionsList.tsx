@@ -7,6 +7,7 @@ import {
   forwardRef,
   useCallback,
 } from "react";
+import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import CreateCollectionModal from "./CreateCollectionModal";
 import EditCollectionModal from "./EditCollectionModal";
@@ -142,28 +143,61 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   };
 
   const handleDeleteCollection = async (collectionId: string) => {
-    if (
-      !confirm(
-        "Are you sure you want to delete this collection? This action cannot be undone.",
-      )
-    ) {
-      return;
-    }
-
-    try {
-      const { error } = await supabase
-        .from("collections")
-        .delete()
-        .eq("id", collectionId);
-
-      if (error) {
-        alert("Failed to delete collection. Please try again.");
-      } else {
-        setCollections((prev) => prev.filter((col) => col.id !== collectionId));
-      }
-    } catch {
-      alert("Failed to delete collection. Please try again.");
-    }
+    toast(
+      (t) => (
+        <span>
+          Are you sure you want to delete this collection? This action cannot be
+          undone.
+          <br />
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id);
+              try {
+                const { error } = await supabase
+                  .from("collections")
+                  .delete()
+                  .eq("id", collectionId);
+                if (error) {
+                  toast.error("Failed to delete collection. Please try again.");
+                } else {
+                  setCollections((prev) =>
+                    prev.filter((col) => col.id !== collectionId),
+                  );
+                  toast.success("Collection deleted.");
+                }
+              } catch {
+                toast.error("Failed to delete collection. Please try again.");
+              }
+            }}
+            style={{
+              marginRight: 8,
+              background: "#e53e3e",
+              color: "#fff",
+              border: "none",
+              padding: "4px 10px",
+              borderRadius: 4,
+              cursor: "pointer",
+            }}
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            style={{
+              background: "#eee",
+              color: "#333",
+              border: "none",
+              padding: "4px 10px",
+              borderRadius: 4,
+              cursor: "pointer",
+            }}
+          >
+            Cancel
+          </button>
+        </span>
+      ),
+      { duration: 8000 },
+    );
   };
 
   if (!user) {
