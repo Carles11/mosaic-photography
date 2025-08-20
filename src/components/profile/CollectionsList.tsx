@@ -49,13 +49,6 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
     setLoading(true);
     try {
       await supabase.auth.getSession();
-      await supabase
-        .from("collections")
-        .select("*")
-        .in("id", [
-          "1de09a36-8180-496e-823a-e2ce80b6cf45",
-          "960305af-8088-4254-86f3-0f88a06edd34",
-        ]);
       const { data: collectionsData } = await supabase
         .from("collections")
         .select("*")
@@ -64,27 +57,38 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
       if (collectionsData && collectionsData.length > 0) {
         const collectionsWithCounts = await Promise.all(
           collectionsData.map(async (collection) => {
+            // Get image count
             const { count: imageCount } = await supabase
               .from("collection_favorites")
               .select("*", { count: "exact", head: true })
               .eq("collection_id", collection.id);
-            const { data: previewData } = await supabase
+
+            // Get up to 4 favorite_ids for preview
+            const { data: collectionFavorites } = await supabase
               .from("collection_favorites")
-              .select("favorites!inner(images!inner(url))")
+              .select("favorite_id")
               .eq("collection_id", collection.id)
+              .order("display_order", { ascending: true })
               .limit(4);
-            const preview_images = Array.isArray(previewData)
-              ? previewData.flatMap(
-                  (item: { favorites: { images: { url: string }[] }[] }) =>
-                    Array.isArray(item.favorites)
-                      ? item.favorites.flatMap((fav) =>
-                          Array.isArray(fav.images)
-                            ? fav.images.map((img) => img.url)
-                            : [],
-                        )
-                      : [],
-                )
-              : [];
+
+            const favoriteIds =
+              collectionFavorites?.map((fav) => fav.favorite_id) || [];
+            let preview_images: string[] = [];
+            if (favoriteIds.length > 0) {
+              // Get favorites to get image_ids
+              const { data: favorites } = await supabase
+                .from("favorites")
+                .select("id, image_id")
+                .in("id", favoriteIds);
+              const imageIds = favorites?.map((fav) => fav.image_id) || [];
+              if (imageIds.length > 0) {
+                const { data: images } = await supabase
+                  .from("images")
+                  .select("id, url")
+                  .in("id", imageIds);
+                preview_images = images?.map((img) => img.url) || [];
+              }
+            }
             return {
               ...collection,
               image_count: imageCount || 0,
@@ -175,6 +179,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
     );
   }
 
+  console.log({ collections });
   return (
     <div className={styles.container}>
       <div className={styles.header}>

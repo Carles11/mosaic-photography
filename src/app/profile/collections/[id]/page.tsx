@@ -474,17 +474,16 @@ export default function CollectionView() {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _handleDragEnd = (event: React.DragEvent) => {
-    if (!isReordering) return;
+  // const _handleDragEnd = (event: React.DragEvent) => {
+  //   if (!isReordering) return;
 
-    // Reset visual state
-    const target = event.target as HTMLElement;
-    target.style.opacity = "1";
+  //   // Reset visual state
+  //   const target = event.target as HTMLElement;
+  //   target.style.opacity = "1";
 
-    setDraggedItem(null);
-    setDragOverItem(null);
-  };
+  //   setDraggedItem(null);
+  //   setDragOverItem(null);
+  // };
 
   // // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // const _handleDragOver = (event: React.DragEvent, favoriteId: number) => {
