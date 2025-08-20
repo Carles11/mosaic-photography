@@ -71,6 +71,7 @@ const Credits: React.FC = () => {
           <a
             href="https://www.flaticon.com/free-icons/author"
             title="author icons"
+            className="fancy-link"
           >
             Author icons created by Freepik - Flaticon
           </a>
