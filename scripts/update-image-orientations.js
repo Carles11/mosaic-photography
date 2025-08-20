@@ -4,11 +4,11 @@
 // SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY
 // Usage: yarn update-orientations
 
-const { createClient } = require("@supabase/supabase-js");
-const sharp = require("sharp");
-const fetch = require("node-fetch");
-const dotenv = require("dotenv");
-const path = require("path");
+import { createClient } from "@supabase/supabase-js";
+import sharp from "sharp";
+import fetch from "node-fetch";
+import dotenv from "dotenv";
+import path from "path";
 
 // Load environment variables from .env.local
 dotenv.config({ path: path.resolve(__dirname, "../.env.local") });
