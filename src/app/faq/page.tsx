@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import styles from "./faq.module.css";
 import { faqStructuredData } from "@/utils/faqStructuredData";
-import Header from "@/components/header/Header";
+import FaqHeaderClient from "./FaqHeaderClient";
 import Footer from "@/components/footer/Footer";
 
 export const metadata: Metadata = {
@@ -196,7 +196,7 @@ const FAQPage: React.FC = () => {
 
   return (
     <>
-      <Header />
+      <FaqHeaderClient />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
