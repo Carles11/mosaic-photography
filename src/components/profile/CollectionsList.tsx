@@ -58,7 +58,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-      let collectionsWithCounts: any[] = [];
+      let collectionsWithCounts: Collection[] = [];
       if (collectionsData && collectionsData.length > 0) {
         collectionsWithCounts = await Promise.all(
           collectionsData.map(async (collection) => {
