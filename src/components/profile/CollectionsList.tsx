@@ -25,6 +25,9 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   const { user } = useAuthSession();
   const router = useRouter();
   const [collections, setCollections] = useState<Collection[]>([]);
+  const [pendingCollections, setPendingCollections] = useState<Collection[]>(
+    [],
+  );
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingCollection, setEditingCollection] = useState<Collection | null>(
@@ -55,8 +58,9 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
+      let collectionsWithCounts: any[] = [];
       if (collectionsData && collectionsData.length > 0) {
-        const collectionsWithCounts = await Promise.all(
+        collectionsWithCounts = await Promise.all(
           collectionsData.map(async (collection) => {
             // Get image count
             const { count: imageCount } = await supabase
@@ -97,15 +101,19 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
             };
           }),
         );
-        setCollections(collectionsWithCounts);
-      } else {
-        setCollections([]);
       }
+      // Merge pendingCollections (optimistic) with backend, remove dups by id
+      const backendIds = new Set(collectionsWithCounts.map((c) => c.id));
+      const merged = [
+        ...pendingCollections.filter((c) => !backendIds.has(c.id)),
+        ...collectionsWithCounts,
+      ];
+      setCollections(merged);
     } catch {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, pendingCollections]);
 
   useImperativeHandle(
     ref,
@@ -120,15 +128,13 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   }, [user, loadCollections]);
 
   const handleCreateCollection = (newCollection: Collection) => {
-    setCollections((prev) => [
+    // Optimistically add to UI
+    setPendingCollections((prev) => [
       { ...newCollection, image_count: 0, preview_images: [] },
       ...prev,
     ]);
     setShowCreateModal(false);
-
-    setTimeout(() => {
-      loadCollections();
-    }, 1000);
+    loadCollections();
   };
 
   const handleEditCollection = (updatedCollection: Collection) => {
