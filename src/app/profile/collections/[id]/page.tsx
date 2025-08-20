@@ -45,6 +45,9 @@ export default function CollectionView() {
   const [isMobile, setIsMobile] = useState(false);
   const [touchStartTime, setTouchStartTime] = useState(0);
   const [touchStartPos, setTouchStartPos] = useState({ x: 0, y: 0 });
+  const [dropPosition, setDropPosition] = useState<"before" | "after" | null>(
+    null,
+  );
 
   const collectionId = params?.id as string;
   const isEmbedded = searchParams?.get("embed") === "true";
@@ -381,14 +384,39 @@ export default function CollectionView() {
 
   const handleDragStart = (e: React.DragEvent, favoriteId: number) => {
     if (!isReordering) return;
-
     setDraggedItem(favoriteId);
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/plain", favoriteId.toString());
-
     // Add some visual feedback
-    const target = e.target as HTMLElement;
-    target.style.opacity = "0.5";
+    const target = e.currentTarget as HTMLElement;
+    target.classList.add(styles.dragging);
+  };
+
+  const handleDragEnd = (e: React.DragEvent) => {
+    // Always reset visual state
+    const target = e.currentTarget as HTMLElement;
+    target.classList.remove(styles.dragging);
+    setDraggedItem(null);
+    setDragOverItem(null);
+  };
+
+  const handleDragOver = (e: React.DragEvent, favoriteId: number) => {
+    if (!isReordering || !draggedItem) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (favoriteId !== draggedItem) {
+      setDragOverItem(favoriteId);
+      // Determine before/after
+      const targetElement = e.currentTarget as HTMLElement;
+      const rect = targetElement.getBoundingClientRect();
+      let isAfter = false;
+      if (rect.width > rect.height) {
+        isAfter = e.clientX > rect.left + rect.width / 2;
+      } else {
+        isAfter = e.clientY > rect.top + rect.height / 2;
+      }
+      setDropPosition(isAfter ? "after" : "before");
+    }
   };
 
   // Touch event handlers for mobile drag and drop
@@ -500,28 +528,29 @@ export default function CollectionView() {
 
   const handleDragLeave = (e: React.DragEvent) => {
     if (!isReordering) return;
-
     // Only clear dragOverItem if we're leaving the container entirely
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     const x = e.clientX;
     const y = e.clientY;
-
     if (x < rect.left || x >= rect.right || y < rect.top || y >= rect.bottom) {
       setDragOverItem(null);
+      setDropPosition(null);
     }
   };
 
   const handleDrop = async (e: React.DragEvent, targetFavoriteId: number) => {
     if (!isReordering || !draggedItem || !collection || !user) return;
-
     e.preventDefault();
     setDragOverItem(null);
-
+    setDropPosition(null);
+    // Remove dragging class from all image cards
+    document.querySelectorAll(`.${styles.dragging}`).forEach((el) => {
+      el.classList.remove(styles.dragging);
+    });
     if (draggedItem === targetFavoriteId) {
       setDraggedItem(null);
       return;
     }
-
     try {
       // Find current positions
       const draggedIndex = collection.images.findIndex(
@@ -530,21 +559,23 @@ export default function CollectionView() {
       const targetIndex = collection.images.findIndex(
         (img) => img.favorite_id === targetFavoriteId,
       );
-
       if (draggedIndex === -1 || targetIndex === -1) return;
-
+      // Determine before/after
+      let insertIndex = targetIndex;
+      if (dropPosition === "after") insertIndex = targetIndex + 1;
+      // Adjust for removing the dragged item if it comes before the insert point
+      let adjustedIndex = insertIndex;
+      if (draggedIndex < insertIndex) adjustedIndex--;
       // Create new order
       const newImages = [...collection.images];
       const [draggedImage] = newImages.splice(draggedIndex, 1);
-      newImages.splice(targetIndex, 0, draggedImage);
-
+      newImages.splice(adjustedIndex, 0, draggedImage);
       // Update display_order in database
       const updates = newImages.map((image, index) => ({
         collection_id: collection.id,
         favorite_id: image.favorite_id,
         display_order: index,
       }));
-
       // Batch update display orders
       for (const update of updates) {
         await supabase
@@ -553,7 +584,6 @@ export default function CollectionView() {
           .eq("collection_id", update.collection_id)
           .eq("favorite_id", update.favorite_id);
       }
-
       // Reload collection to reflect new order
       await loadCollection();
     } catch (error) {
@@ -769,19 +799,18 @@ export default function CollectionView() {
                 <div
                   key={image.favorite_id}
                   data-favorite-id={image.favorite_id}
-                  className={`${styles.imageCard} ${
-                    selectedImages.has(image.favorite_id) ? styles.selected : ""
-                  } ${isReordering ? styles.reordering : ""} ${
-                    draggedItem === image.favorite_id ? styles.dragging : ""
-                  } ${dragOverItem === image.favorite_id ? styles.dragOver : ""} ${
-                    isMobile ? styles.mobile : ""
-                  }`}
+                  className={`
+                    ${styles.imageCard}
+                    ${selectedImages.has(image.favorite_id) ? " " + styles.selected : ""}
+                    ${isReordering ? " " + styles.reordering : ""}
+                    ${draggedItem === image.favorite_id ? " " + styles.dragging : ""}
+                    ${dragOverItem === image.favorite_id ? " " + styles.dragOver : ""}
+                    ${isMobile ? " " + styles.mobile : ""}
+                  `}
                   draggable={isReordering && !isMobile}
                   onDragStart={(e) => handleDragStart(e, image.favorite_id)}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    setDragOverItem(image.favorite_id);
-                  }}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={(e) => handleDragOver(e, image.favorite_id)}
                   onDragLeave={handleDragLeave}
                   onDrop={(e) => handleDrop(e, image.favorite_id)}
                   onTouchStart={(e) => {
