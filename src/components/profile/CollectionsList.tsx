@@ -219,7 +219,6 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
     );
   }
 
-  console.log({ collections });
   return (
     <div className={styles.container}>
       <div className={styles.header}>
