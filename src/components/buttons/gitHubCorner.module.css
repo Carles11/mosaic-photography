@@ -1,9 +1,6 @@
 .githubCornerSvg {
   fill: var(--tertiary-color);
   color: var(--color-white);
-}
-
-.githubCorner {
   position: absolute;
   top: 0;
   right: 0;

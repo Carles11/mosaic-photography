@@ -6,7 +6,7 @@ const GitHubCorner = ({ url }: { url: string }) => (
     href={url}
     target="_blank"
     rel="noopener noreferrer"
-    className={`no-fancy-link ${styles.githubCorner}`}
+    className={styles.githubCorner}
     aria-label="View source on GitHub"
   >
     <Image
