@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 import Link from "next/link";
 import { sendGTMEvent } from "@next/third-parties/google";
-import GitHubCorner from "@/components/buttons/GitHubCorner";
+// import GitHubCorner from "@/components/buttons/GitHubCorner";
 
 import ThemeImage from "../theme/ThemeImageDark";
 import UserMenu from "./UserMenu/UserMenu";
@@ -33,7 +33,7 @@ const Header = ({ onLoginClick, user, onLogoutClick }: HeaderProps) => {
 
   return (
     <header>
-      <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
+      {/* <GitHubCorner url="https://github.com/Carles11/mosaic-photography" /> */}
       <h2 className="sr-only">
         Mosaic Photography: Iconic Nude Photography Gallery
       </h2>
