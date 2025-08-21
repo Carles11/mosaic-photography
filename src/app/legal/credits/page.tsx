@@ -115,7 +115,7 @@ const Credits: React.FC = () => {
             handleClick={() =>
               navigator.clipboard.writeText("https://www.mosaic.photography")
             }
-          />{" "} */}
+          />{" "} */}{" "}
           to be opensource and free. This site reflects my passion for both{" "}
           <a
             href="https://www.instagram.com/analogue_carles/"

@@ -3,7 +3,6 @@ import {
   FacebookShareButton,
   TwitterShareButton,
   LinkedinShareButton,
-  RedditShareButton,
   WhatsappShareButton,
   EmailIcon,
   FacebookIcon,
@@ -35,9 +34,27 @@ const ShareButtons = ({ url, title }: ShareButtonsProps) => {
       <LinkedinShareButton url={url} title={title}>
         <LinkedinIcon size={32} round />
       </LinkedinShareButton>
-      <RedditShareButton url={url} title={title}>
+      <button
+        type="button"
+        className={styles.redditCustomButton}
+        aria-label="Share on Reddit"
+        onClick={() => {
+          const redditUrl = `https://www.reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`;
+          window.open(
+            redditUrl,
+            "_blank",
+            "noopener,noreferrer,width=900,height=600",
+          );
+        }}
+        style={{
+          background: "none",
+          border: "none",
+          padding: 0,
+          cursor: "pointer",
+        }}
+      >
         <RedditIcon size={32} round />
-      </RedditShareButton>
+      </button>
       <WhatsappShareButton url={url} title={title}>
         <WhatsappIcon size={32} round />
       </WhatsappShareButton>

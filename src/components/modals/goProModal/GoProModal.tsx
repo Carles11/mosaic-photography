@@ -34,7 +34,7 @@ const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
             handleClick={() =>
               navigator.clipboard.writeText("https://www.mosaic.photography")
             }
-          />
+          />{" "}
           to be opensource and free. All its features are and will be forever
           free.
         </p>
