@@ -4,6 +4,18 @@ import { ImageWithOrientation } from "@/types/gallery";
 // Shared cache for gallery data
 let galleryCache: ImageWithOrientation[] | null = null;
 
+// Try to load from sessionStorage on module load (browser only)
+if (typeof window !== "undefined") {
+  try {
+    const cached = window.sessionStorage.getItem("galleryCache");
+    if (cached) {
+      galleryCache = JSON.parse(cached);
+    }
+  } catch {
+    // Ignore JSON parse/storage errors
+  }
+}
+
 export async function preloadGalleryData(): Promise<
   ImageWithOrientation[] | null
 > {
@@ -58,7 +70,14 @@ export async function preloadGalleryData(): Promise<
     }
     galleryCache = processedImages;
     if (typeof window !== "undefined") {
-      // ...removed debug log...
+      try {
+        window.sessionStorage.setItem(
+          "galleryCache",
+          JSON.stringify(processedImages),
+        );
+      } catch {
+        // Ignore storage errors
+      }
     }
     return processedImages;
   } catch {

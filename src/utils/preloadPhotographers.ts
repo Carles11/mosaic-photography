@@ -3,6 +3,18 @@ import { Photographer } from "@/types";
 
 let photographersCache: Photographer[] | null = null;
 
+// Try to load from sessionStorage on module load (browser only)
+if (typeof window !== "undefined") {
+  try {
+    const cached = window.sessionStorage.getItem("photographersCache");
+    if (cached) {
+      photographersCache = JSON.parse(cached);
+    }
+  } catch {
+    // Ignore JSON parse/storage errors
+  }
+}
+
 export async function preloadPhotographersData(): Promise<
   Photographer[] | null
 > {
@@ -60,7 +72,14 @@ export async function preloadPhotographersData(): Promise<
     }
     photographersCache = processedPhotographers;
     if (typeof window !== "undefined") {
-      // ...removed debug log...
+      try {
+        window.sessionStorage.setItem(
+          "photographersCache",
+          JSON.stringify(processedPhotographers),
+        );
+      } catch {
+        // Ignore storage errors
+      }
     }
     return processedPhotographers;
   } catch {
