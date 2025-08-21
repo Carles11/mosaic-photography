@@ -241,7 +241,14 @@ export default function AddToCollectionModal({
           ) : collections.length === 0 ? (
             <div className={styles.empty}>
               <p>You haven&apos;t created any collections yet</p>
-              <button>&quot;Create new collection&quot;</button>
+              <button
+                type="button"
+                onClick={() => {
+                  window.location.href = "/photo-curations?tab=collections";
+                }}
+              >
+                Create new collection
+              </button>
             </div>
           ) : (
             <div className={styles.collectionsList}>

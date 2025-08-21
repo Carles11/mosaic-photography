@@ -318,8 +318,17 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                     <span className={styles.emptyPreviewIcon}>📷</span>
                     <p>No images yet</p>
                     <p>
-                      To add images to this collection, go to your favorites
-                      above and click the yellow folder icon over the image.
+                      To add images to this collection, go to{" "}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          window.location.href =
+                            "/photo-curations?tab=favorites";
+                        }}
+                      >
+                        your favorites tab
+                      </button>{" "}
+                      and click the &apos;+&apos; folders icon over the image.
                     </p>
                   </div>
                 )}
