@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./ImageCard.module.css";
-import { supabase } from "@/lib/supabaseClient";
+import {
+  getPreloadedGalleryData,
+  preloadGalleryData,
+} from "@/utils/preloadGallery";
 import { ImageCardProps, ImageWithOrientation } from "@/types";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
@@ -15,66 +18,26 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
   const imgRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
-    const fetchImages = async (): Promise<void> => {
-      setLoading(true);
-
-      const { data: images, error } = await supabase.from("images").select(
-        `
-          id, url, author, title, description, created_at, orientation
-        `,
-      );
-
-      if (error) {
-        setError(error.message);
-        setLoading(false);
-        return;
+    let mounted = true;
+    setLoading(true);
+    const load = async () => {
+      let data = getPreloadedGalleryData();
+      if (!data) {
+        data = await preloadGalleryData();
       }
-
-      if (!images) {
+      if (!mounted) return;
+      if (!data) {
         setError("No images found.");
         setLoading(false);
         return;
       }
-
-      // Filter out images that start with "000_aaa"
-      const filteredImages = images.filter((img) => {
-        const fileName = img.url.split("/").pop()?.toLowerCase();
-        return !fileName?.startsWith("000_aaa");
-      });
-
-      // Add mosaic logic for more dynamic gallery layout
-      const processedImages: ImageWithOrientation[] = filteredImages.map(
-        (img, index) => {
-          let mosaicType: "normal" | "large" | "wide" | "tall" = "normal";
-
-          // Create mosaic variations with better distribution
-          // Use different intervals for different mosaic types to create more variety
-          const isLargeMosaic = index > 0 && index % 11 === 0; // Every 11th image
-          const isWideMosaic = index > 0 && index % 13 === 7; // Every 13th image, offset by 7
-          const isTallMosaic = index > 0 && index % 17 === 5; // Every 17th image, offset by 5
-
-          if (isLargeMosaic) {
-            mosaicType = "large";
-          } else if (isWideMosaic) {
-            mosaicType = "wide";
-          } else if (isTallMosaic) {
-            mosaicType = "tall";
-          }
-
-          return {
-            ...img,
-            // Use the orientation from the database or default to "vertical" if not available
-            orientation: img.orientation || "vertical",
-            mosaicType,
-          };
-        },
-      );
-
-      setImages(processedImages.sort(() => Math.random() - 0.5)); // Shuffle images
+      setImages(data.sort(() => Math.random() - 0.5));
       setLoading(false);
     };
-
-    fetchImages();
+    load();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   if (error) {

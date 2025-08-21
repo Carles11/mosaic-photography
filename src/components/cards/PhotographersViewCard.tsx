@@ -3,8 +3,11 @@ import Slider, { Settings } from "react-slick";
 import { sendGTMEvent } from "@next/third-parties/google";
 import ImageWrapper from "../wrappers/ImageWrapper";
 import styles from "./PhotographersViewCard.module.css";
-import { supabase } from "@/lib/supabaseClient";
 import { Photographer } from "@/types";
+import {
+  getPreloadedPhotographersData,
+  preloadPhotographersData,
+} from "@/utils/preloadPhotographers";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 
@@ -36,50 +39,46 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
   const imgRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
-    const fetchPhotographersWithImages = async () => {
-      setLoading(true);
-
-      const { data: photographers, error } = await supabase
-        .from("photographers")
-        .select(
-          `
-      name, surname, author, biography, birthdate, deceasedate, origin, website, store, instagram,
-      images (id, url, author, title, description, created_at)
-    `,
-        )
-        .order("random_order", { ascending: true }) // Key change: Orders by the server-generated random value
-        .order("created_at", { ascending: true, foreignTable: "images" }); // Keeps your existing image sorting
-
-      if (error) {
-        setError(error.message);
+    let mounted = true;
+    setLoading(true);
+    if (typeof window !== "undefined") {
+      console.log(
+        "[PhotographersViewCard] useEffect triggered, loading photographers...",
+      );
+    }
+    const load = async () => {
+      let data = getPreloadedPhotographersData();
+      if (typeof window !== "undefined") {
+        console.log(
+          `[PhotographersViewCard] getPreloadedPhotographersData returned: ${data ? "HIT" : "MISS"}`,
+        );
+      }
+      if (!data) {
+        data = await preloadPhotographersData();
+        if (typeof window !== "undefined") {
+          console.log(
+            `[PhotographersViewCard] Awaited preloadPhotographersData, got: ${data ? "SUCCESS" : "FAIL"}`,
+          );
+        }
+      }
+      if (!mounted) return;
+      if (!data) {
+        setError("No photographers found.");
         setLoading(false);
         return;
       }
-
-      // Process images (your existing logic for featured images)
-      const processedPhotographers = (photographers || []).map(
-        (photographer) => {
-          if (!photographer.images) return photographer;
-
-          const featuredIndex = photographer.images.findIndex((img) => {
-            const fileName = img.url.split("/").pop()?.toLowerCase();
-            return fileName?.startsWith("000_aaa");
-          });
-
-          if (featuredIndex > -1) {
-            const [featured] = photographer.images.splice(featuredIndex, 1);
-            photographer.images.unshift(featured);
-          }
-
-          return photographer;
-        },
-      );
-
-      setPhotographers(processedPhotographers);
+      setPhotographers(data);
       setLoading(false);
+      if (typeof window !== "undefined") {
+        console.log(
+          `[PhotographersViewCard] Photographers set in state. Count: ${data.length}`,
+        );
+      }
     };
-
-    fetchPhotographersWithImages();
+    load();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   if (error) {

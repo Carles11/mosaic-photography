@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
 import { HomeTitles } from "../header/titles/HomeTitles";
 import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
@@ -9,6 +9,10 @@ import { useAgeConsent } from "@/context/AgeConsentContext";
 import { SupabaseUser } from "@/lib/supabaseClient";
 
 import Gallery from "@/components/gallery/Gallery";
+
+// Preload gallery and photographers data/images for performance
+import { preloadGalleryData } from "@/utils/preloadGallery";
+import { preloadPhotographersData } from "@/utils/preloadPhotographers";
 
 import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
@@ -34,20 +38,33 @@ function HomeClientWrapper({
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [preloaded, setPreloaded] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   useEffect(() => {
-    // Check for the bot cookie set by the middleware
+    // Improved bot detection: check userAgent for major bots
+    const botRegex =
+      /bot|crawl|slurp|spider|bing|duckduckgo|baidu|yandex|sogou|exabot|facebot|ia_archiver/i;
+    const isBot = botRegex.test(navigator.userAgent);
     const skipForBots = Cookies.get("skip_age_modal") === "1";
-
-    if (skipForBots) {
+    if (isBot || skipForBots) {
       setCrawlerIsBot(true);
       setIsMinimumAgeConfirmed(true); // Automatically confirm age for bots
     }
   }, [setIsMinimumAgeConfirmed]);
+
+  // Preload gallery and photographers data/images in background for performance
+  useEffect(() => {
+    if (!preloaded) {
+      Promise.all([preloadGalleryData(), preloadPhotographersData()]).finally(
+        () => setPreloaded(true),
+      );
+    }
+  }, [preloaded]);
 
   // Don't render until mounted to prevent hydration mismatch
   if (!isMounted) {
@@ -65,7 +82,41 @@ function HomeClientWrapper({
 
       {/* Show AgeConsent only for real users and if age is not confirmed */}
       {!isCrawlerBot && !isMinimumAgeConfirmed && (
-        <AgeConsent setIsMinimumAgeConfirmed={setIsMinimumAgeConfirmed} />
+        <div
+          ref={modalRef}
+          tabIndex={-1}
+          aria-modal="true"
+          role="dialog"
+          aria-labelledby="ageConsentTitle"
+          aria-describedby="ageConsentDescription"
+          onKeyDown={(e) => {
+            // Focus trap: keep focus inside modal
+            if (e.key === "Tab" && modalRef.current) {
+              const focusable = modalRef.current.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+              );
+              const first = focusable[0] as HTMLElement;
+              const last = focusable[focusable.length - 1] as HTMLElement;
+              if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+              } else if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+              }
+            }
+          }}
+        >
+          <AgeConsent
+            setIsMinimumAgeConfirmed={(value) => {
+              setIsMinimumAgeConfirmed(value);
+              // Persist consent in cookie for 1 year
+              if (value) {
+                Cookies.set("isMinimumAgeConfirmed", "true", { expires: 365 });
+              }
+            }}
+          />
+        </div>
       )}
 
       {isMinimumAgeConfirmed && (
