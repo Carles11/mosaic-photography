@@ -44,15 +44,15 @@ const nextConfig: NextConfig = {
     return config;
   },
 
-  // ✅ Rewrites (sitemap path)
-  async rewrites() {
-    return [
-      {
-        source: "/sitemap.xml",
-        destination: "/api/sitemap",
-      },
-    ];
-  },
+  // // ✅ Rewrites (sitemap path)
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/sitemap.xml",
+  //       destination: "/api/sitemap",
+  //     },
+  //   ];
+  // },
 
   // ✅ Headers for static asset access and SEO crawling
   async headers() {
@@ -93,5 +93,5 @@ export default withBundleAnalyzer({
     register: !isDev,
     disable: isDev, // Keep disabled unless going full PWA
     ...pwaConfig,
-  })(nextConfig)
+  })(nextConfig),
 );

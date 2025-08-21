@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 
 import styles from "./credits.module.css";
@@ -72,6 +71,7 @@ const Credits: React.FC = () => {
           <a
             href="https://www.flaticon.com/free-icons/author"
             title="author icons"
+            className="fancy-link"
           >
             Author icons created by Freepik - Flaticon
           </a>
@@ -115,7 +115,7 @@ const Credits: React.FC = () => {
             handleClick={() =>
               navigator.clipboard.writeText("https://www.mosaic.photography")
             }
-          />{" "} */}
+          />{" "} */}{" "}
           to be opensource and free. This site reflects my passion for both{" "}
           <a
             href="https://www.instagram.com/analogue_carles/"

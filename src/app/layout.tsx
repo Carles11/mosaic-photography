@@ -1,14 +1,27 @@
-
 import type { Metadata } from "next";
-import { AgeConsentProvider } from "@/context/AgeConsentContext";
-import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
+import { tradeGothic } from "./fonts";
+
 import { GoogleTagManager } from "@next/third-parties/google";
 import { ThemeProvider } from "next-themes";
 import React from "react";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import WithHeaderFooter from "@/components/wrappers/WithHeaderFooter";
+import { Toaster } from "react-hot-toast";
+import { AgeConsentProvider } from "@/context/AgeConsentContext";
+import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
+import { AuthSessionProvider } from "@/context/AuthSessionContext";
+import { FavoritesProvider } from "@/context/FavoritesContext";
+import { CommentsProvider } from "@/context/CommentsContext";
+import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
+
 import "./globals.css";
+
+// Critical CSS for above-the-fold content
+const criticalCSS = `
+  html,body{height:100%;scroll-behavior:smooth}
+  :root{display:flex;flex-direction:column;min-height:100vh;--background-color: #fff;--text-color: #1d1d1d;--secondary-color: #cccaca;--tertiary-color: #fd6c6c;--text-gradient: linear-gradient(135deg, #4cf6c3 30%, #1faef0 70%);--color-white: #fff;--color-black: #1d1d1d;--link-color: rgb(107, 154, 192)}
+  body{display:flex;flex-direction:column;min-height:100vh;margin:0}
+  body{position:relative;height:100%;font-family: var(--font-trade-gothic), sans-serif;font-weight:400;margin:0;padding:0;box-sizing:border-box;background-color:var(--background-color);color:var(--text-color)}
+  @media (prefers-color-scheme:dark){:root{background-color:var(--background-color);color:var(--text-color)}}
+`;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mosaic.photography"),
@@ -18,10 +31,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://www.mosaic.photography/",
-    languages: {
-      es: "https://www.mosaic.photography/es",
-      de: "https://www.mosaic.photography/de",
-    },
+    // languages: {
+    //   es: "https://www.mosaic.photography/es",
+    //   de: "https://www.mosaic.photography/de",
+    // },
   },
   authors: [
     {
@@ -30,14 +43,18 @@ export const metadata: Metadata = {
     },
   ],
   description:
-    "Discover Mosaic's curated gallery of iconic nude photography, celebrating the timeless beauty of the human form through the lens of legendary photographers.",
+    "Discover Mosaic's curated gallery of public domain nude photography, celebrating the timeless beauty of the human form through the lens of legendary photographers.",
   keywords: [
     // High-Priority Core Niche (Low KD, Solid Volume)
     "public domain nude photography",
     "public domain Vintage nude photography",
     "public domain art",
+    "public domain nudes",
     "nude photography",
+    "vintage nudes",
     "nude art",
+    "free images art",
+    "free art",
     "vintage nude photography ",
     "vintage nude photography public domain",
     "vintage art photography",
@@ -160,14 +177,23 @@ export const metadata: Metadata = {
     title: "Nude photography | Mosaic Photography curated Gallery",
     description:
       "Meet the iconic photographers behind the stunning classic nude photography in our collection.",
-    images: ["/favicons/favicon-32x32.png"],
+    images: [
+      {
+        url: "/images/og-image.jpg", // Create a high-quality OG image
+        width: 1200,
+        height: 630,
+        alt: "Mosaic Photography Gallery featuring vintage nude photography",
+      },
+    ],
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Nude photography | Mosaic Photography curated Gallery",
     description:
       "Explore our stunning image gallery featuring classic nude photography by iconic photographers.",
-    images: ["/favicons/favicon-32x32.png"],
+    images: ["/images/og-image.jpg"],
+    creator: "@mosaicphotography",
   },
 };
 
@@ -181,19 +207,35 @@ type RootLayoutProps = { children: React.ReactNode };
 
 function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${tradeGothic.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
+        {/* <noscript>
+          <link rel="stylesheet" href="/non-critical.css" />
+        </noscript> */}
+
+        <link rel="preconnect" href="https://www.mosaic.photography" />
+      </head>
       <GoogleTagManager gtmId="GTM-N74Q9JC5" />
-      <body>
+      <body className={`font-trade-gothic`}>
+        <NonCriticalCSSLoader />
+        <Toaster position="top-center" />
         <ThemeProvider defaultTheme="dark">
-          <AgeConsentProvider>
-            <ServiceWorkerContext>
-              <WithHeaderFooter>
-                <main style={{ flex: 1 }}>{children}</main>
-              </WithHeaderFooter>
-              <Analytics />
-              <SpeedInsights />
-            </ServiceWorkerContext>
-          </AgeConsentProvider>
+          <ServiceWorkerContext>
+            <AuthSessionProvider>
+              <AgeConsentProvider>
+                <FavoritesProvider>
+                  <CommentsProvider>
+                    <main style={{ flex: 1 }}>{children}</main>
+                  </CommentsProvider>
+                </FavoritesProvider>
+              </AgeConsentProvider>
+            </AuthSessionProvider>
+          </ServiceWorkerContext>
         </ThemeProvider>
       </body>
     </html>

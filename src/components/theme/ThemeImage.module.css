@@ -1,9 +1,9 @@
 .themeImage {
-  width: 100%;
-  max-width: 766px;
+  width: auto; /* Let the Next.js Image component control width */
   height: auto;
   place-self: center;
-  object-fit: contain; /* Ensure the image is not distorted */
+  object-fit: contain;
+  max-width: 100%; /* Ensure it doesn't overflow its container */
 }
 
 .desktopImage {
@@ -14,13 +14,6 @@
   display: none;
 }
 
-/* Media query for tablets Portrait and landscape */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .themeImage {
-    max-width: 800px; /* Adjust as needed for tablets */
-  }
-}
-
 /* Media query for mobile devices */
 @media (max-width: 767px) {
   .desktopImage {
@@ -28,10 +21,8 @@
   }
   .mobileImage {
     display: block;
-    max-width: 90%;
-    width: 90%; /* Ensure the image scales to container width */
+    width: auto; /* Let Next.js Image component control width */
     height: auto;
-
     justify-self: center;
   }
 }

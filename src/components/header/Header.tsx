@@ -6,16 +6,30 @@ import Link from "next/link";
 import { sendGTMEvent } from "@next/third-parties/google";
 import GitHubCorner from "@/components/buttons/GitHubCorner";
 
-import ThemeToggle from "../theme/ThemeToggle";
 import ThemeImage from "../theme/ThemeImageDark";
-import GoProModal from "@/components/modals/goProModal/GoProModal";
-
+import UserMenu from "./UserMenu/UserMenu";
 import styles from "./header.module.css";
+import GoProModal from "@/components/modals/goProModal/GoProModal";
+import { SupabaseUser } from "@/lib/supabaseClient";
 
-const Header = () => {
+interface HeaderProps {
+  onLoginClick?: () => void;
+  user?: SupabaseUser | null;
+  onLogoutClick?: () => void;
+}
+
+const Header = ({ onLoginClick, user, onLogoutClick }: HeaderProps) => {
   const [showGoProModal, setShowGoProModal] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
+
+  const handleGoProClick = () => {
+    setShowGoProModal(true);
+    sendGTMEvent({
+      event: "goProText",
+      value: "Go Pro clicked from user menu",
+    });
+  };
 
   return (
     <header>
@@ -25,7 +39,7 @@ const Header = () => {
       </h2>
       <nav className={styles.navContainer}>
         <ul className={styles.navGrid}>
-          {isHome && (
+          {isHome ? (
             <li className={styles.navLogo}>
               <Link href="/" className="no-fancy-link">
                 <ThemeImage
@@ -39,32 +53,21 @@ const Header = () => {
                 />
               </Link>
             </li>
+          ) : (
+            <li className={styles.navLogo}>
+              <Link href="/" className={styles.backToHomeButton}>
+                ← Return to Mosaic
+              </Link>
+            </li>
           )}
-          <li>
-            <p
-              className={styles.goProText}
-              onClick={() => {
-                setShowGoProModal(true);
-                sendGTMEvent({
-                  event: "goProText",
-                  value: "Go Pro clicked from header"
-                });
-              }}
-            >
-              Go Pro
-            </p>
-          </li>
-
-          <li>
-            <div
-              onClick={() =>
-                sendGTMEvent({
-                  event: "ThemeToggleClicked",
-                  value: "Theme toggle clicked from header"
-                })
-              }
-            >
-              <ThemeToggle />
+          <li className={`${styles.actionSection} ${styles.desktopOnly}`}>
+            <div className={styles.rightActions}>
+              <UserMenu
+                user={user}
+                onLoginClick={onLoginClick}
+                onLogoutClick={onLogoutClick}
+                onGoProClick={handleGoProClick}
+              />
             </div>
           </li>
         </ul>

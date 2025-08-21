@@ -8,10 +8,16 @@
   align-items: center;
 }
 
+.imageContainer {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
 .imageItem {
   height: 100%;
   width: 100%;
-  object-fit: contain;
+  object-fit: cover;
   position: relative;
   cursor: zoom-in;
   overflow: hidden;
@@ -23,7 +29,8 @@
 .image {
   position: relative;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   overflow: hidden;
 }
 

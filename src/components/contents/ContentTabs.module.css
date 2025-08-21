@@ -1,0 +1,81 @@
+.tabsContainer {
+  width: 100%;
+}
+
+.tabNav {
+  display: flex;
+  margin-bottom: 2rem;
+  gap: 0;
+}
+
+.tabButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 3px solid transparent;
+  min-height: 60px;
+}
+
+.tabButton:hover {
+  color: var(--text-color);
+  background-color: rgba(var(--secondary-color), 0.1);
+}
+
+.tabButton.active {
+  color: var(--text-color);
+  border-bottom-color: var(--tertiary-color);
+  font-weight: 600;
+}
+
+.tabIcon {
+  font-size: 1.2rem;
+}
+
+.tabLabel {
+  font-weight: inherit;
+}
+
+.tabContent {
+  min-height: 400px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .tabButton {
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 0.5rem;
+    min-height: 70px;
+  }
+
+  .tabIcon {
+    font-size: 1.1rem;
+  }
+
+  .tabLabel {
+    font-size: 0.875rem;
+  }
+
+  .tabNav {
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tabLabel {
+    font-size: 0.75rem;
+  }
+
+  .tabIcon {
+    font-size: 1rem;
+  }
+}

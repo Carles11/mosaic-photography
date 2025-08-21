@@ -1,4 +1,5 @@
-import React from "react";
+import RioFrancesLink from "./RioFrancesLink";
+
 import styles from "./footer.module.css";
 
 const Footer: React.FC = () => {
@@ -11,20 +12,13 @@ const Footer: React.FC = () => {
           <p>
             <a href="/legal/privacy-policy">Privacy Policy</a> |{" "}
             <a href="/legal/terms-of-service">Terms of Service</a> |{" "}
-            <a href="/legal/credits">Thank you</a>
+            <a href="/legal/credits">Thank you</a> | <a href="/faq">FAQ</a>
           </p>
         </div>{" "}
         <div className={styles.footerItem}>
           <p>Created by </p>
           <p>
-            <a
-              href="https://www.rio-frances.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Carles del Río Francés
-            </a>{" "}
-            |{" "}
+            <RioFrancesLink /> |{" "}
             <a
               href="https://github.com/Carles11"
               target="_blank"

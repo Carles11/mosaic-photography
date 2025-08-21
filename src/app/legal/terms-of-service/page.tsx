@@ -41,21 +41,28 @@ const TermsOfService: React.FC = () => {
         used improperly, please contact me, and I will address the issue
         promptly.
       </p>
-      <p className={styles.text}>
-        Conversely, if you are a photographer and would like to see your
-        pictures featured in the gallery, please feel free to reach out to me at{" "}
-        <a href="mailto:carles@crix.design">carles@crix.design</a>.
-      </p>
+
       <h2 className={styles.subtitle}>Disclaimer</h2>
       <p className={styles.text}>
         We do not claim ownership of the images displayed on this website. All
-        images are the property of their respective owners.
+        images are the property of their respective owners or, in most cases,
+        public domain.
       </p>
       <h2 className={styles.subtitle}>Contact</h2>
       <p className={styles.text}>
         If you have any questions or concerns about our terms of service, please
         contact me at <a href="mailto:carles@crix.design">carles@crix.design</a>
         .
+      </p>
+      <h2 className={styles.subtitle}>Affiliate links</h2>
+      <p className={styles.text}>
+        Some of the links provided under &quot;Make it yours&quot; section may
+        be affiliate links, meaning I may earn a small commission from the store
+        if you make a purchase through them. This helps support my work at no
+        additional cost to you.
+      </p>
+      <p>
+        By accessing this website, you agree to our &quot;Terms of Service&quot;
       </p>
     </section>
   );

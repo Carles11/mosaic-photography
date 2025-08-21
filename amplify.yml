@@ -3,8 +3,9 @@ frontend:
   phases:
     preBuild:
       commands:
-        - nvm install 22
-        - nvm use 22
+        - nvm install 20
+        - nvm use 20
+        - node -v
         - yarn install
     build:
       commands:
@@ -12,7 +13,8 @@ frontend:
   artifacts:
     baseDirectory: .next
     files:
-      - '**/*'
+      - "**/*"
   cache:
     paths:
       - node_modules/**/*
+      - .next/cache/**/*

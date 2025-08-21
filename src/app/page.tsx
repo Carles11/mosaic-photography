@@ -1,5 +1,10 @@
-import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
+import { Suspense } from "react";
+import HomeClient from "./HomeClient";
 
-export default function Home() {
-  return <HomeClientWrapper />;
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div>Loading.....</div>}>
+      <HomeClient />
+    </Suspense>
+  );
 }

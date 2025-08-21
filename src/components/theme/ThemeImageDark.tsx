@@ -23,23 +23,25 @@ const ThemeImage = (props: Props) => {
         ? srcLightMobile
         : srcLight
       : isMobile
-      ? srcDarkMobile
-      : srcDark;
+        ? srcDarkMobile
+        : srcDark;
 
   const dynamicBlurDataBlur = isMobile
     ? "https://dummyimage.com/500x353/000/fff&text=mosaic+photography.png"
     : "https://dummyimage.com/766x541/000/fff&text=mosaic+photography.png";
 
-  const width = isMobile ? 500 : 766;
-  const height = isMobile ? 353 : 541;
+  // Set the display dimensions (half of the actual image size)
+  const displayWidth = isMobile ? 250 : 383;
+  const displayHeight = isMobile ? 176 : 271;
 
   return (
     <Image
       priority={true}
       src={src}
-      width={width}
-      height={height}
-      layout="intrinsic"
+      width={displayWidth} // Use the display dimensions
+      height={displayHeight}
+      // Remove layout="intrinsic" - it's deprecated
+      sizes={isMobile ? "250px" : "383px"} // Explicitly tell Next.js what size to serve
       {...rest}
       className={styles.themeImage}
       alt={`${
@@ -47,6 +49,10 @@ const ThemeImage = (props: Props) => {
       } theme mosaic photography logo ${isMobile ? "mobile" : "desktop"}`}
       placeholder="blur"
       blurDataURL={dynamicBlurDataBlur}
+      style={{
+        maxWidth: "100%",
+        height: "auto",
+      }}
     />
   );
 };

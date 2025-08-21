@@ -7,7 +7,7 @@ import PrimaryButton from "@/components/buttons/PrimaryButton";
 
 const ReactTooltip = dynamic(
   () => import("react-tooltip").then((mod) => mod.Tooltip),
-  { ssr: false } // Disable server-side rendering
+  { ssr: false }, // Disable server-side rendering
 );
 
 import styles from "./goProModal.module.css";
@@ -34,7 +34,7 @@ const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
             handleClick={() =>
               navigator.clipboard.writeText("https://www.mosaic.photography")
             }
-          />
+          />{" "}
           to be opensource and free. All its features are and will be forever
           free.
         </p>

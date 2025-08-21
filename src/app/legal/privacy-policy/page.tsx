@@ -30,19 +30,24 @@ const PrivacyPolicy: React.FC = () => {
       <h2 className={styles.subtitle}>Information Collection</h2>
       <p className={styles.text}>
         We do not collect any personal information from visitors to our website.
-        However, we use Vercel Analytics to collect non-personal information
-        such as your IP address, browser type, and operating system.
+        However, we use Google Analytics (via Google Tag Manager) to collect
+        non-personal information such as your IP address, browser type, and
+        operating system.
       </p>
       <h2 className={styles.subtitle}>Information Use</h2>
       <p className={styles.text}>
-        We use the non-personal information collected by Vercel Analytics to
+        We use the non-personal information collected by Google Analytics to
         improve our website and provide a better user experience.
       </p>
       <h2 className={styles.subtitle}>Information Sharing</h2>
+      <p>We don&apos;t share your information with third parties</p>
+      <h2 className={styles.subtitle}>Google Tag Manager</h2>
       <p className={styles.text}>
-        We do not share any personal information with third parties. However,
-        Vercel Analytics may share non-personal information with third parties
-        for the purpose of improving our website.
+        We use Google Tag Manager to help manage analytics and tracking on our
+        website. Google Tag Manager itself does not collect personal
+        information, but it may deploy tags that collect data for analytics
+        purposes and help us improve the user experience. For more information,
+        please review Google&apos;s privacy policy.
       </p>
       <h2 className={styles.subtitle}>Contact</h2>
       <p className={styles.text}>

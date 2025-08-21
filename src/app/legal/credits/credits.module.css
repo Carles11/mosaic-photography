@@ -25,7 +25,8 @@
 
 .list {
   list-style-type: none;
-  padding: 0;
+  padding: 0 1.8rem;
+  margin: 0 0.4rem 6.4px;
 }
 
 .list li {
