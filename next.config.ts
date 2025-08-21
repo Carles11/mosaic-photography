@@ -3,8 +3,6 @@ import withPWA from "next-pwa";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import pwaConfig from "./pwa.config";
 
-const path = require("path");
-
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
@@ -32,7 +30,7 @@ const nextConfig: NextConfig = {
     ],
     minimumCacheTTL: 31536000, // 1 year
   },
-  webpack: (config, { webpack, isServer }) => {
+  webpack: (config, { isServer }) => {
     config.optimization.splitChunks = {
       chunks: "all",
       minSize: 20000,
