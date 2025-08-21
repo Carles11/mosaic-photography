@@ -8,14 +8,12 @@ export async function preloadPhotographersData(): Promise<
 > {
   if (photographersCache) {
     if (typeof window !== "undefined") {
-      console.log("[Photographers Preload] Using cached photographers data.");
+      // ...removed debug log...
     }
     return photographersCache;
   }
   if (typeof window !== "undefined") {
-    console.log(
-      "[Photographers Preload] Fetching photographers data from Supabase...",
-    );
+    // ...removed debug log...
   }
   try {
     const { data: photographers, error } = await supabase
@@ -30,7 +28,7 @@ export async function preloadPhotographersData(): Promise<
       .order("created_at", { ascending: true, foreignTable: "images" });
     if (error || !photographers) {
       if (typeof window !== "undefined") {
-        console.log("[Photographers Preload] Error or no data returned.");
+        // ...removed debug log...
       }
       return null;
     }
@@ -47,9 +45,7 @@ export async function preloadPhotographersData(): Promise<
       return photographer;
     });
     if (typeof window !== "undefined") {
-      console.log(
-        `[Photographers Preload] Preloading ${processedPhotographers.reduce((acc, p) => acc + (p.images?.length || 0), 0)} images for photographers.`,
-      );
+      // ...removed debug log...
     }
     // Preload all photographer images
     if (typeof window !== "undefined") {
@@ -64,14 +60,12 @@ export async function preloadPhotographersData(): Promise<
     }
     photographersCache = processedPhotographers;
     if (typeof window !== "undefined") {
-      console.log(
-        "[Photographers Preload] Photographers data and images preloaded and cached.",
-      );
+      // ...removed debug log...
     }
     return processedPhotographers;
-  } catch (e) {
+  } catch {
     if (typeof window !== "undefined") {
-      console.log("Error preloading photographers data:", e);
+      // ...removed debug log...
     }
     return null;
   }

@@ -119,25 +119,81 @@ function HomeClientWrapper({
         </div>
       )}
 
-      {isMinimumAgeConfirmed && (
-        <>
-          <script type="application/ld+json">
-            {JSON.stringify(structuredData)}
-          </script>
-          <section
-            className={`${styles.pageContent} ${styles.visible}`}
-            aria-hidden={!isMinimumAgeConfirmed}
-          >
-            <div className={styles.content}>
-              <div className="v-margin">
-                <HomeTitles />
-              </div>
-              <PhotographersCardsSlide onLoginRequired={onLoginClick} />
-              <Gallery id="gallery-section" onLoginRequired={onLoginClick} />
+      {/* Always render main content, but visually obscure and block interaction if age not confirmed */}
+      <>
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+        <section
+          className={`${styles.pageContent} ${styles.visible} ${!isMinimumAgeConfirmed ? "obscuredContent" : ""}`}
+          aria-hidden={!isMinimumAgeConfirmed}
+          style={
+            !isMinimumAgeConfirmed
+              ? { pointerEvents: "none", userSelect: "none" }
+              : {}
+          }
+        >
+          <div className={styles.content}>
+            <div className="v-margin">
+              <HomeTitles />
             </div>
-          </section>
-        </>
-      )}
+            <PhotographersCardsSlide onLoginRequired={onLoginClick} />
+            <Gallery id="gallery-section" onLoginRequired={onLoginClick} />
+          </div>
+        </section>
+        {/* Overlay for modal: visually obscure and block interaction if not confirmed */}
+        {!isCrawlerBot && !isMinimumAgeConfirmed && (
+          <div
+            ref={modalRef}
+            tabIndex={-1}
+            aria-modal="true"
+            role="dialog"
+            aria-labelledby="ageConsentTitle"
+            aria-describedby="ageConsentDescription"
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              background: "rgba(10,10,10,0.45)",
+              zIndex: 10000,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onKeyDown={(e) => {
+              // Focus trap: keep focus inside modal
+              if (e.key === "Tab" && modalRef.current) {
+                const focusable = modalRef.current.querySelectorAll(
+                  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+                );
+                const first = focusable[0] as HTMLElement;
+                const last = focusable[focusable.length - 1] as HTMLElement;
+                if (!e.shiftKey && document.activeElement === last) {
+                  e.preventDefault();
+                  first.focus();
+                } else if (e.shiftKey && document.activeElement === first) {
+                  e.preventDefault();
+                  last.focus();
+                }
+              }
+            }}
+          >
+            <AgeConsent
+              setIsMinimumAgeConfirmed={(value) => {
+                setIsMinimumAgeConfirmed(value);
+                // Persist consent in cookie for 1 year
+                if (value) {
+                  Cookies.set("isMinimumAgeConfirmed", "true", {
+                    expires: 365,
+                  });
+                }
+              }}
+            />
+          </div>
+        )}
+      </>
       <Footer />
 
       {/* Mobile Bottom Navigation */}

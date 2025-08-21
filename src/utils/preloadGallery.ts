@@ -9,12 +9,12 @@ export async function preloadGalleryData(): Promise<
 > {
   if (galleryCache) {
     if (typeof window !== "undefined") {
-      console.log("[Gallery Preload] Using cached gallery data.");
+      // ...removed debug log...
     }
     return galleryCache;
   }
   if (typeof window !== "undefined") {
-    console.log("[Gallery Preload] Fetching gallery data from Supabase...");
+    // ...removed debug log...
   }
   try {
     const { data: images, error } = await supabase
@@ -22,7 +22,7 @@ export async function preloadGalleryData(): Promise<
       .select(`id, url, author, title, description, created_at, orientation`);
     if (error || !images) {
       if (typeof window !== "undefined") {
-        console.log("[Gallery Preload] Error or no data returned.");
+        // ...removed debug log...
       }
       return null;
     }
@@ -47,9 +47,7 @@ export async function preloadGalleryData(): Promise<
       },
     );
     if (typeof window !== "undefined") {
-      console.log(
-        `[Gallery Preload] Preloading ${processedImages.length} gallery images.`,
-      );
+      // ...removed debug log...
     }
     // Preload images in browser
     if (typeof window !== "undefined") {
@@ -60,14 +58,12 @@ export async function preloadGalleryData(): Promise<
     }
     galleryCache = processedImages;
     if (typeof window !== "undefined") {
-      console.log(
-        "[Gallery Preload] Gallery data and images preloaded and cached.",
-      );
+      // ...removed debug log...
     }
     return processedImages;
-  } catch (e) {
+  } catch {
     if (typeof window !== "undefined") {
-      console.log("Error preloading gallery data:", e);
+      // ...removed debug log...
     }
     return null;
   }
