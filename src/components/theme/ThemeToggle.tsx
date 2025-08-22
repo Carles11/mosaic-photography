@@ -22,13 +22,16 @@ const ThemeToggle = () => {
   };
 
   useEffect(() => {
+    // Only set theme if there is no stored theme and theme is undefined
     const storedTheme = localStorage.getItem("theme");
-    const prefersDarkScheme = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
-    const defaultTheme = storedTheme || (prefersDarkScheme ? "dark" : "light");
-    setTheme(defaultTheme);
-  }, [setTheme]);
+    if (!storedTheme && !theme) {
+      const prefersDarkScheme = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
+      const defaultTheme = prefersDarkScheme ? "dark" : "light";
+      setTheme(defaultTheme);
+    }
+  }, [setTheme, theme]);
 
   const theOtherTheme = theme === "light" ? "dark" : "light";
 
