@@ -6,7 +6,6 @@ import ImageCard from "../cards/ImageCard";
 import styles from "./gallery.module.css";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
 
-
 interface GalleryProps extends JSX.IntrinsicAttributes {
   id: string;
   onLoginRequired?: () => void;

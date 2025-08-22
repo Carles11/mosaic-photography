@@ -7,7 +7,6 @@ import {
 import { ImageCardProps, ImageWithOrientation } from "@/types";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
-import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 
 const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
@@ -44,10 +43,22 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
     return <div>Error: {error}</div>;
   }
 
+  // Styled skeleton card
+  const SkeletonCard = ({ key }: { key: number }) => (
+    <div className={styles.skeletonCard} key={key}>
+      <div className={styles.skeletonImage} />
+      <div className={styles.skeletonText} />
+    </div>
+  );
+
   return (
     <>
       {loading ? (
-        ClimbBoxLoaderContainer("var(--text-color)", 16, loading)
+        <div className={styles.skeletonGrid}>
+          {Array.from({ length: 12 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
       ) : (
         <>
           {/* Add structured data for the image gallery */}
