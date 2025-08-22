@@ -211,7 +211,7 @@ function RootLayout({ children }: RootLayoutProps) {
     <html
       lang="en"
       className={`${tradeGothic.variable}`}
-      suppressHydrationWarning
+      data-scroll-behavior="smooth"
     >
       <head>
         <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
