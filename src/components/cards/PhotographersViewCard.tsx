@@ -3,6 +3,7 @@ import Slider, { Settings } from "react-slick";
 import { sendGTMEvent } from "@next/third-parties/google";
 import ImageWrapper from "../wrappers/ImageWrapper";
 import styles from "./PhotographersViewCard.module.css";
+import GallerySkeletonCard from "./GallerySkeletonCard";
 import "./PhotographersViewCard.overlay.css";
 import { Photographer } from "@/types";
 import {
@@ -204,13 +205,14 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
       {showOverlay && <div className={styles.overlay} aria-hidden="true" />}
       <div className={showOverlay ? styles.obscuredContent : undefined}>
         {loading ? (
-          <div className={styles.skeletonPhotographerGrid}>
+          <div className={styles.photographersViewSkeletonGrid}>
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className={styles.skeletonPhotographerCard}>
-                <div className={styles.skeletonPhotographerImage} />
-                <div className={styles.skeletonPhotographerText} />
-                <div className={styles.skeletonPhotographerTextShort} />
-              </div>
+              <GallerySkeletonCard
+                key={i}
+                imageHeight={220}
+                textLines={1}
+                shortText
+              />
             ))}
           </div>
         ) : (

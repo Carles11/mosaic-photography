@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./ImageCard.module.css";
+import GallerySkeletonCard from "./GallerySkeletonCard";
 import {
   getPreloadedGalleryData,
   preloadGalleryData,
@@ -43,20 +44,12 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
     return <div>Error: {error}</div>;
   }
 
-  // Styled skeleton card
-  const SkeletonCard = ({ key }: { key: number }) => (
-    <div className={styles.skeletonCard} key={key}>
-      <div className={styles.skeletonImage} />
-      <div className={styles.skeletonText} />
-    </div>
-  );
-
   return (
     <>
       {loading ? (
-        <div className={styles.skeletonGrid}>
+        <div style={{ display: "contents" }}>
           {Array.from({ length: 12 }).map((_, i) => (
-            <SkeletonCard key={i} />
+            <GallerySkeletonCard key={i} imageHeight={220} textLines={1} />
           ))}
         </div>
       ) : (
