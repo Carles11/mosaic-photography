@@ -11,6 +11,7 @@ import { AuthSessionProvider } from "@/context/AuthSessionContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
 import { CommentsProvider } from "@/context/CommentsContext";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
+import BottomNav from "@/components/navigation/BottomNav/BottomNav";
 
 import "./globals.css";
 
@@ -231,6 +232,8 @@ function RootLayout({ children }: RootLayoutProps) {
                 <FavoritesProvider>
                   <CommentsProvider>
                     <main style={{ flex: 1 }}>{children}</main>
+                    {/* Global Mobile Bottom Navigation */}
+                    <BottomNav />
                   </CommentsProvider>
                 </FavoritesProvider>
               </AgeConsentProvider>
