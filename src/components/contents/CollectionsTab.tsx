@@ -4,7 +4,6 @@ import CollectionsList, {
 } from "@/components/profile/CollectionsList";
 
 const CollectionsTab = forwardRef<CollectionsListRef>((props, ref) => {
-  console.log("🔍 [DEBUG] CollectionsTab rendered");
   return <CollectionsList ref={ref} />;
 });
 

@@ -1,17 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import styles from "./UserMenu.module.css";
+import styles from "./DesktopNav.module.css";
 import ThemeToggle from "@/components/theme/ThemeToggle";
-import type { UserMenuDropdownProps } from "@/types";
+import type { DesktopNavDropdownProps } from "@/types";
 
-const UserMenuDropdown = ({
+const DesktopNavDropdown = ({
   user,
   onLoginClick,
   onLogoutClick,
   onGoProClick,
   onClose,
-}: UserMenuDropdownProps) => {
+}: DesktopNavDropdownProps) => {
   const handleActionAndClose = (action: () => void) => {
     action();
     onClose();
@@ -32,7 +32,6 @@ const UserMenuDropdown = ({
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={onClose}
           >
-            {/* <span className={styles.menuIcon}>⦿</span> */}
             <span className={styles.menuLabel}>Profile</span>
           </Link>
 
@@ -41,7 +40,6 @@ const UserMenuDropdown = ({
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={onClose}
           >
-            {/* <span className={styles.menuIcon}>📋</span> */}
             <span className={styles.menuLabel}>My Content</span>
           </Link>
 
@@ -50,7 +48,6 @@ const UserMenuDropdown = ({
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={onClose}
           >
-            {/* <span className={styles.menuIcon}>❓</span> */}
             <span className={styles.menuLabel}>FAQ</span>
           </Link>
 
@@ -58,7 +55,6 @@ const UserMenuDropdown = ({
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={() => handleActionAndClose(onGoProClick!)}
           >
-            {/* <span className={styles.menuIcon}>⭐</span> */}
             <span className={styles.menuLabel}>Go Pro</span>
           </button>
 
@@ -75,7 +71,6 @@ const UserMenuDropdown = ({
             className={`no-fancy-link ${styles.menuItem} ${styles.logoutItem}`}
             onClick={() => handleActionAndClose(onLogoutClick!)}
           >
-            {/* <span className={styles.menuIcon}>🚪</span> */}
             <span className={styles.menuLabel}>Logout</span>
           </button>
         </>
@@ -85,7 +80,6 @@ const UserMenuDropdown = ({
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={() => handleActionAndClose(onLoginClick!)}
           >
-            {/* <span className={styles.menuIcon}>🔑</span> */}
             <span className={styles.menuLabel}>Login</span>
           </button>
 
@@ -94,7 +88,6 @@ const UserMenuDropdown = ({
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={onClose}
           >
-            {/* <span className={styles.menuIcon}>❓</span> */}
             <span className={styles.menuLabel}>FAQ</span>
           </Link>
 
@@ -102,7 +95,6 @@ const UserMenuDropdown = ({
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={() => handleActionAndClose(onGoProClick!)}
           >
-            {/* <span className={styles.menuIcon}>⭐</span> */}
             <span className={styles.menuLabel}>Go Pro</span>
           </button>
           <div className={styles.themeToggleWrapper}>
@@ -117,4 +109,4 @@ const UserMenuDropdown = ({
   );
 };
 
-export default UserMenuDropdown;
+export default DesktopNavDropdown;

@@ -1,9 +1,9 @@
 "use client";
 import { sendGTMEvent } from "@next/third-parties/google";
-import styles from "./UserMenu.module.css";
-import type { UserMenuButtonProps } from "@/types";
+import styles from "./DesktopNav.module.css";
+import type { DesktopNavButtonProps } from "@/types";
 
-const UserMenuButton = ({ user, isOpen, onClick }: UserMenuButtonProps) => {
+const DesktopNavButton = ({ user, isOpen, onClick }: DesktopNavButtonProps) => {
   const getUserInitial = (email: string) => {
     return email.charAt(0).toUpperCase();
   };
@@ -54,4 +54,4 @@ const UserMenuButton = ({ user, isOpen, onClick }: UserMenuButtonProps) => {
   );
 };
 
-export default UserMenuButton;
+export default DesktopNavButton;

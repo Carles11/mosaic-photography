@@ -45,7 +45,7 @@ export interface LoginFormProps {
   redirectTo?: string;
 }
 
-export interface UserMenuDropdownProps {
+export interface DesktopNavDropdownProps {
   user?: import("@/lib/supabaseClient").SupabaseUser | null;
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
@@ -59,14 +59,14 @@ export interface DropdownProps {
   onToggle?: (isOpen: boolean) => void;
 }
 
-export interface UserMenuProps {
+export interface DesktopNavProps {
   user?: import("@/lib/supabaseClient").SupabaseUser | null;
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
   onGoProClick?: () => void;
 }
 
-export interface UserMenuButtonProps {
+export interface DesktopNavButtonProps {
   user?: import("@/lib/supabaseClient").SupabaseUser | null;
   isOpen: boolean;
   onClick: () => void;

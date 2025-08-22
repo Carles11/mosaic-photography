@@ -7,7 +7,7 @@ import { sendGTMEvent } from "@next/third-parties/google";
 // import GitHubCorner from "@/components/buttons/GitHubCorner";
 
 import ThemeImage from "../theme/ThemeImageDark";
-import UserMenu from "./UserMenu/UserMenu";
+import DesktopNav from "../navigation/DesktopNav/DesktopNav";
 import styles from "./header.module.css";
 import GoProModal from "@/components/modals/goProModal/GoProModal";
 import { SupabaseUser } from "@/lib/supabaseClient";
@@ -62,7 +62,7 @@ const Header = ({ onLoginClick, user, onLogoutClick }: HeaderProps) => {
           )}
           <li className={`${styles.actionSection} ${styles.desktopOnly}`}>
             <div className={styles.rightActions}>
-              <UserMenu
+              <DesktopNav
                 user={user}
                 onLoginClick={onLoginClick}
                 onLogoutClick={onLogoutClick}

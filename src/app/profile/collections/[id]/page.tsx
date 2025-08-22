@@ -269,19 +269,36 @@ export default function CollectionView() {
       for (let index = 0; index < collection.images.length; index++) {
         const image = collection.images[index];
         try {
+          console.debug(`[ZIP DEBUG] Attempting to fetch image:`, {
+            url: image.image_url,
+            title: image.image_title,
+            index,
+          });
           // Try to fetch the image
           const response = await fetch(image.image_url, {
             mode: "cors",
             credentials: "omit",
           });
 
+          console.debug(
+            `[ZIP DEBUG] Fetch response for ${image.image_title}:`,
+            response,
+          );
+
           if (!response.ok) {
+            console.error(
+              `[ZIP DEBUG] Response not ok for ${image.image_title}:`,
+              response.status,
+              response.statusText,
+            );
             throw new Error(`HTTP ${response.status}`);
           }
 
           const blob = await response.blob();
+          console.debug(`[ZIP DEBUG] Blob for ${image.image_title}:`, blob);
 
           if (blob.size === 0) {
+            console.error(`[ZIP DEBUG] Blob size 0 for ${image.image_title}`);
             throw new Error("Empty response");
           }
 
@@ -296,8 +313,7 @@ export default function CollectionView() {
           );
         } catch (error) {
           failCount++;
-          console.warn(`✗ Failed: ${image.image_title} - ${error}`);
-
+          console.warn(`[ZIP DEBUG] ✗ Failed: ${image.image_title} -`, error);
           // Add a text file with the image URL as fallback
           const fileName = `${String(index + 1).padStart(3, "0")}_${image.image_title.replace(/[^a-z0-9]/gi, "_")}_URL.txt`;
           collectionFolder?.file(
@@ -310,7 +326,9 @@ export default function CollectionView() {
       // If no images were successfully downloaded, show alternative options
       if (successCount === 0) {
         setIsExporting(false);
-
+        console.error(
+          `[ZIP DEBUG] All image downloads failed. Likely CORS issue or network error.`,
+        );
         // Use a toast to ask for user choice instead of confirm
         toast(
           "Unable to download images directly due to CORS restrictions. Creating a ZIP with image URLs only.",
@@ -319,7 +337,13 @@ export default function CollectionView() {
         // Continue with URL-only ZIP below
       }
 
-      // Create a text file with all image information
+      // Create a branded Mosaic.photography text file with all image information
+      const now = new Date();
+      const exportDate = now.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
       const imageList = collection.images
         .map(
           (image, index) =>
@@ -329,14 +353,26 @@ export default function CollectionView() {
         )
         .join("\n");
 
-      collectionFolder?.file(
-        "_Image_URLs_and_Info.txt",
-        `Collection: ${collection.name}\n` +
-          `Total Images: ${collection.images.length}\n` +
-          `Successfully Downloaded: ${successCount}\n` +
-          `Failed Downloads: ${failCount}\n\n` +
-          `IMAGE LIST:\n${imageList}`,
-      );
+      const infoText =
+        `========================================\n` +
+        `        Mosaic.photography Collection Export\n` +
+        `========================================\n\n` +
+        `Thank you for using Mosaic.photography!\n` +
+        `This file contains information about your exported image collection.\n\n` +
+        `Collection Name: ${collection.name}\n` +
+        `Exported On: ${exportDate}\n` +
+        `Total Images: ${collection.images.length}\n` +
+        `Successfully Downloaded: ${successCount}\n` +
+        `Failed Downloads: ${failCount}\n\n` +
+        `----------------------------------------\n` +
+        `IMAGE LIST\n` +
+        `----------------------------------------\n\n` +
+        imageList +
+        `\n----------------------------------------\n` +
+        `For more inspiration, visit https://mosaic.photography\n\n` +
+        `© ${now.getFullYear()} Mosaic.photography. All rights reserved.\n`;
+
+      collectionFolder?.file("_Mosaic_Collection_Info.txt", infoText);
 
       // Generate the ZIP file
       const zipBlob = await zip.generateAsync({

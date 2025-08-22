@@ -19,14 +19,9 @@ export async function preloadPhotographersData(): Promise<
   Photographer[] | null
 > {
   if (photographersCache) {
-    if (typeof window !== "undefined") {
-      // ...removed debug log...
-    }
     return photographersCache;
   }
-  if (typeof window !== "undefined") {
-    // ...removed debug log...
-  }
+
   try {
     const { data: photographers, error } = await supabase
       .from("photographers")
@@ -40,7 +35,6 @@ export async function preloadPhotographersData(): Promise<
       .order("created_at", { ascending: true, foreignTable: "images" });
     if (error || !photographers) {
       if (typeof window !== "undefined") {
-        // ...removed debug log...
       }
       return null;
     }
@@ -56,9 +50,7 @@ export async function preloadPhotographersData(): Promise<
       }
       return photographer;
     });
-    if (typeof window !== "undefined") {
-      // ...removed debug log...
-    }
+
     // Preload all photographer images
     if (typeof window !== "undefined") {
       processedPhotographers.forEach((photographer) => {
@@ -83,9 +75,6 @@ export async function preloadPhotographersData(): Promise<
     }
     return processedPhotographers;
   } catch {
-    if (typeof window !== "undefined") {
-      // ...removed debug log...
-    }
     return null;
   }
 }

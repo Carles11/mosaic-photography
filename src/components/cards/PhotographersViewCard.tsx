@@ -37,7 +37,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
   useEffect(() => {
     // Listen for a global event or window property to control overlay
     if (typeof window !== "undefined") {
-      // Example: window.__AGE_CONSENT_OPEN__ = true/false
       const checkOverlay = () => {
         setShowOverlay(Boolean(window.__AGE_CONSENT_OPEN__));
       };
@@ -64,25 +63,13 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
   useEffect(() => {
     let mounted = true;
     setLoading(true);
-    if (typeof window !== "undefined") {
-      console.log(
-        "[PhotographersViewCard] useEffect triggered, loading photographers...",
-      );
-    }
+    // ...existing code...
     const load = async () => {
       let data = getPreloadedPhotographersData();
-      if (typeof window !== "undefined") {
-        console.log(
-          `[PhotographersViewCard] getPreloadedPhotographersData returned: ${data ? "HIT" : "MISS"}`,
-        );
-      }
+      // ...existing code...
       if (!data) {
         data = await preloadPhotographersData();
-        if (typeof window !== "undefined") {
-          console.log(
-            `[PhotographersViewCard] Awaited preloadPhotographersData, got: ${data ? "SUCCESS" : "FAIL"}`,
-          );
-        }
+        // ...existing code...
       }
       if (!mounted) return;
       if (!data) {
@@ -92,11 +79,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
       }
       setPhotographers(data);
       setLoading(false);
-      if (typeof window !== "undefined") {
-        console.log(
-          `[PhotographersViewCard] Photographers set in state. Count: ${data.length}`,
-        );
-      }
+      // ...existing code...
     };
     load();
     return () => {

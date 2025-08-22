@@ -21,12 +21,10 @@ export async function preloadGalleryData(): Promise<
 > {
   if (galleryCache) {
     if (typeof window !== "undefined") {
-      // ...removed debug log...
     }
     return galleryCache;
   }
   if (typeof window !== "undefined") {
-    // ...removed debug log...
   }
   try {
     const { data: images, error } = await supabase
@@ -34,7 +32,6 @@ export async function preloadGalleryData(): Promise<
       .select(`id, url, author, title, description, created_at, orientation`);
     if (error || !images) {
       if (typeof window !== "undefined") {
-        // ...removed debug log...
       }
       return null;
     }
@@ -59,7 +56,6 @@ export async function preloadGalleryData(): Promise<
       },
     );
     if (typeof window !== "undefined") {
-      // ...removed debug log...
     }
     // Preload images in browser
     if (typeof window !== "undefined") {
@@ -82,7 +78,6 @@ export async function preloadGalleryData(): Promise<
     return processedImages;
   } catch {
     if (typeof window !== "undefined") {
-      // ...removed debug log...
     }
     return null;
   }

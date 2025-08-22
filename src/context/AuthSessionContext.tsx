@@ -33,11 +33,11 @@ export function AuthSessionProvider({
           data: { session },
         } = await supabase.auth.getSession();
         if (mounted) {
-          console.log("AuthSessionContext: Session state:", {
-            hasSession: !!session,
-            hasUser: !!session?.user,
-            userEmail: session?.user?.email,
-          });
+          // console.log("AuthSessionContext: Session state:", {
+          //   hasSession: !!session,
+          //   hasUser: !!session?.user,
+          //   userEmail: session?.user?.email,
+          // });
           setUser(session?.user ?? null);
           setLoading(false);
         }

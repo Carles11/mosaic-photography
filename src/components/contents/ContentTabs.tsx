@@ -17,7 +17,6 @@ const ContentTabs = () => {
   );
 
   const handleTabChange = (tab: string) => {
-    console.log("🔍 [DEBUG] Tab changed to:", tab);
     setActiveTab(tab);
     // Update URL without page reload
     const url = new URL(window.location.href);
@@ -26,7 +25,6 @@ const ContentTabs = () => {
   };
 
   const handleCollectionRefresh = () => {
-    console.log("🔍 [DEBUG] Collection refresh requested");
     collectionsRef.current?.refreshCollections();
   };
 
@@ -64,7 +62,6 @@ const ContentTabs = () => {
         )}
         {activeTab === "collections" && (
           <>
-            {/* {console.log("🔍 [DEBUG] Rendering CollectionsTab")} */}
             <CollectionsTab ref={collectionsRef} />
           </>
         )}
