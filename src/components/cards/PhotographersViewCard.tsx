@@ -10,7 +10,6 @@ import {
   preloadPhotographersData,
 } from "@/utils/preloadPhotographers";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
-import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import Dropdown from "@/components/inputs/dropDown";
@@ -205,7 +204,15 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
       {showOverlay && <div className={styles.overlay} aria-hidden="true" />}
       <div className={showOverlay ? styles.obscuredContent : undefined}>
         {loading ? (
-          ClimbBoxLoaderContainer("var(--text-color)", 16, loading)
+          <div className={styles.skeletonPhotographerGrid}>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className={styles.skeletonPhotographerCard}>
+                <div className={styles.skeletonPhotographerImage} />
+                <div className={styles.skeletonPhotographerText} />
+                <div className={styles.skeletonPhotographerTextShort} />
+              </div>
+            ))}
+          </div>
         ) : (
           <>
             {/* Add structured data for photographers and their images */}

@@ -1,3 +1,58 @@
+/* Skeleton styles for loading state */
+.skeletonPhotographerGrid {
+  display: flex;
+  gap: 2em;
+}
+
+.skeletonPhotographerCard {
+  background: var(--background-secondary, #232323);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  padding: 1.2rem 1.2rem 1.5rem 1.2rem;
+  width: 90%;
+  min-height: 420px;
+  display: block;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-color, #333);
+}
+
+.skeletonPhotographerImage {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(90deg, #2c2c2c 25%, #393939 50%, #2c2c2c 75%);
+  border-radius: 8px;
+  margin-bottom: 1.1rem;
+  animation: shimmer 1.2s infinite linear;
+  background-size: 200% 100%;
+}
+
+.skeletonPhotographerText {
+  width: 80%;
+  height: 22px;
+  background: linear-gradient(90deg, #2c2c2c 25%, #393939 50%, #2c2c2c 75%);
+  border-radius: 6px;
+  animation: shimmer 1.2s infinite linear;
+  background-size: 200% 100%;
+  margin-bottom: 0.7rem;
+}
+
+.skeletonPhotographerTextShort {
+  width: 40%;
+  height: 18px;
+  background: linear-gradient(90deg, #2c2c2c 25%, #393939 50%, #2c2c2c 75%);
+  border-radius: 6px;
+  animation: shimmer 1.2s infinite linear;
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
 .photographersViewCardContainer {
   height: 100%;
   width: 100%;
