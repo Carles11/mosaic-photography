@@ -1,15 +1,15 @@
 "use client";
-import { useState } from "react";
+// import { useState } from "react";
 import { usePathname } from "next/navigation";
 
 import Link from "next/link";
-import { sendGTMEvent } from "@next/third-parties/google";
+// import { sendGTMEvent } from "@next/third-parties/google";
 // import GitHubCorner from "@/components/buttons/GitHubCorner";
 
 import ThemeImage from "../theme/ThemeImageDark";
 import DesktopNav from "../navigation/DesktopNav/DesktopNav";
 import styles from "./header.module.css";
-import GoProModal from "@/components/modals/goProModal/GoProModal";
+// import GoProModal from "@/components/modals/goProModal/GoProModal";
 import { SupabaseUser } from "@/lib/supabaseClient";
 
 interface HeaderProps {
@@ -18,18 +18,18 @@ interface HeaderProps {
   onLogoutClick?: () => void;
 }
 
-const Header = ({ onLoginClick, user, onLogoutClick }: HeaderProps) => {
-  const [showGoProModal, setShowGoProModal] = useState(false);
+interface HeaderWithProProps extends HeaderProps {
+  onGoProClick?: () => void;
+}
+
+const Header = ({
+  onLoginClick,
+  user,
+  onLogoutClick,
+  onGoProClick,
+}: HeaderWithProProps) => {
   const pathname = usePathname();
   const isHome = pathname === "/";
-
-  const handleGoProClick = () => {
-    setShowGoProModal(true);
-    sendGTMEvent({
-      event: "goProText",
-      value: "Go Pro clicked from user menu",
-    });
-  };
 
   return (
     <header>
@@ -66,17 +66,12 @@ const Header = ({ onLoginClick, user, onLogoutClick }: HeaderProps) => {
                 user={user}
                 onLoginClick={onLoginClick}
                 onLogoutClick={onLogoutClick}
-                onGoProClick={handleGoProClick}
+                onGoProClick={onGoProClick}
               />
             </div>
           </li>
         </ul>
-        {showGoProModal && (
-          <GoProModal
-            isOpen={showGoProModal}
-            onClose={() => setShowGoProModal(false)}
-          />
-        )}
+        {/* GoProModal is now handled at the HomeClient level */}
       </nav>
     </header>
   );

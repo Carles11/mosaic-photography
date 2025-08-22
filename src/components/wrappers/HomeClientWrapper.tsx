@@ -78,6 +78,7 @@ function HomeClientWrapper({
         onLoginClick={onLoginClick}
         onLogoutClick={onLogoutClick}
         user={user}
+        onGoProClick={onGoProClick}
       />
 
       {/* Show AgeConsent only for real users and if age is not confirmed */}

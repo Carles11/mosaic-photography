@@ -4,7 +4,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 102;
   display: none;
   background: var(--background-color, #232323);
   border-top: 1px solid var(--tertiary-color, rgba(255, 255, 255, 0.1));

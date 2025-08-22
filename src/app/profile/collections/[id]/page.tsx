@@ -296,6 +296,7 @@ export default function CollectionView() {
           );
         } catch (error) {
           failCount++;
+          console.log({ error });
           // Add a text file with the image URL as fallback
           const fileName = `${String(index + 1).padStart(3, "0")}_${image.image_title.replace(/[^a-z0-9]/gi, "_")}_URL.txt`;
           collectionFolder?.file(

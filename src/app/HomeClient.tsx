@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import GoProModal from "@/components/modals/goProModal/GoProModal";
 import { sendGTMEvent } from "@next/third-parties/google";
 import { useAuth } from "@/hooks/useAuth";
 import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
@@ -20,6 +21,7 @@ export default function HomeClient() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authView, setAuthView] = useState<AuthView>("login");
   const [isInitialized, setIsInitialized] = useState(false);
+  const [showGoProModal, setShowGoProModal] = useState(false);
 
   // Handle URL parameters for backward compatibility (email redirects, etc.)
   useEffect(() => {
@@ -62,9 +64,10 @@ export default function HomeClient() {
   };
 
   const handleGoProClick = () => {
+    setShowGoProModal(true);
     sendGTMEvent({
       event: "goProText",
-      value: "Go Pro clicked from bottom nav",
+      value: "Go Pro clicked from user menu",
     });
   };
 
@@ -79,6 +82,12 @@ export default function HomeClient() {
         onLogoutClick={logout}
         user={user}
         onGoProClick={handleGoProClick}
+      />
+
+      {/* Go Pro Modal for both desktop and mobile */}
+      <GoProModal
+        isOpen={showGoProModal}
+        onClose={() => setShowGoProModal(false)}
       />
 
       {/* Keep modal for backward compatibility with email redirects */}
