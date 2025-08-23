@@ -59,7 +59,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
 
   const [expandedOrigin, setExpandedOrigin] = useState<number | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
-
   useEffect(() => {
     let mounted = true;
     setLoading(true);

@@ -24,3 +24,118 @@
 .sectionIntro {
   margin: 0 1rem 2rem 1rem;
 }
+
+.gridItem {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+
+.gridItem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+  display: block;
+}
+
+.landscape {
+  aspect-ratio: 16 / 9;
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.portrait {
+  aspect-ratio: 3 / 4;
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.mosaicLarge {
+  aspect-ratio: 3 / 4;
+  grid-column: span 2;
+  grid-row: span 2;
+  position: relative;
+}
+
+.mosaicLarge img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+}
+
+.mosaicWide {
+  aspect-ratio: 16 / 9;
+  grid-column: span 2;
+  grid-row: span 1;
+  position: relative;
+}
+
+.mosaicWide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+}
+
+.mosaicTall {
+  aspect-ratio: 2 / 3;
+  grid-column: span 1;
+  grid-row: span 2;
+  position: relative;
+}
+
+.mosaicTall img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+}
+
+.mosaicLarge::before,
+.mosaicWide::before,
+.mosaicTall::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 98%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .mosaicLarge {
+    grid-column: span 2;
+    grid-row: span 1;
+    aspect-ratio: 16 / 9;
+  }
+
+  .mosaicWide {
+    grid-column: span 2;
+    grid-row: span 1;
+    aspect-ratio: 16 / 9;
+  }
+
+  .mosaicTall {
+    grid-column: span 1;
+    grid-row: span 2;
+    aspect-ratio: 2 / 3;
+  }
+}
+
+@media (max-width: 480px) {
+  .mosaicLarge,
+  .mosaicWide,
+  .mosaicTall {
+    grid-column: span 1;
+    grid-row: span 1;
+    aspect-ratio: 3 / 4;
+  }
+}

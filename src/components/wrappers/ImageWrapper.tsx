@@ -13,8 +13,8 @@ interface ImageWrapperProps {
     author: string;
     title?: string;
   };
-  imgRef?: React.RefObject<HTMLImageElement | null>; // Add imgRef property
-  onLoginRequired?: () => void; // Callback when user needs to login
+  imgRef?: React.RefObject<HTMLImageElement | null>;
+  onLoginRequired?: () => void;
 }
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({
