@@ -1,25 +1,23 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useAuthSession } from "@/context/AuthSessionContext";
+import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import BottomNavItem from "./BottomNavItem";
 import BottomNavMenu from "./BottomNavMenu";
 import styles from "./BottomNav.module.css";
-import { SupabaseUser } from "@/lib/supabaseClient";
 
 interface BottomNavProps {
-  user?: SupabaseUser | null;
-  onLoginClick?: () => void;
-  onLogoutClick?: () => void;
   onGoProClick?: () => void;
+  onLogoutClick?: () => void;
 }
 
-const BottomNav = ({
-  user,
-  onLoginClick,
-  onLogoutClick,
-  onGoProClick,
-}: BottomNavProps) => {
+const BottomNav = ({ onGoProClick, onLogoutClick }: BottomNavProps) => {
+  const { user } = useAuthSession();
+  const router = useRouter();
+  const onLoginClick = () => router.push("/auth/login");
+  const defaultLogout = () => router.push("/logout");
   const [showMenu, setShowMenu] = useState(false);
   const [visible, setVisible] = useState(true);
   const lastScrollY = useRef(0);
@@ -98,9 +96,11 @@ const BottomNav = ({
       {showMenu && (
         <BottomNavMenu
           user={user}
-          onLoginClick={() => handleMenuAction(onLoginClick!)}
-          onLogoutClick={() => handleMenuAction(onLogoutClick!)}
-          onGoProClick={() => handleMenuAction(onGoProClick!)}
+          onLoginClick={() => handleMenuAction(onLoginClick)}
+          onLogoutClick={() => handleMenuAction(onLogoutClick || defaultLogout)}
+          onGoProClick={
+            onGoProClick ? () => handleMenuAction(onGoProClick) : undefined
+          }
           onClose={() => setShowMenu(false)}
         />
       )}

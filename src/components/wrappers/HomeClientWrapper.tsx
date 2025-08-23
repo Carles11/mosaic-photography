@@ -1,5 +1,7 @@
 "use client";
 
+import BottomNav from "@/components/navigation/BottomNav/BottomNav";
+
 import React, { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
 import { HomeTitles } from "../header/titles/HomeTitles";
@@ -195,8 +197,8 @@ function HomeClientWrapper({
         )}
       </>
       <Footer />
-
-      {/* Mobile Bottom Navigation removed: now globally rendered in layout */}
+      {/* Mobile Bottom Navigation now rendered here with correct props */}
+      <BottomNav onGoProClick={onGoProClick} onLogoutClick={onLogoutClick} />
     </div>
   );
 }

@@ -100,7 +100,7 @@
 /* Media query for mobile devices */
 @media (max-width: 767px) {
   .navGrid {
-    min-height: 40vh;
+    min-height: 8vh;
   }
 
   .themeImage {

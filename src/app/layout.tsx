@@ -1,3 +1,4 @@
+import GlobalNavProvider from "@/components/navigation/BottomNav/GlobalNavProvider";
 import type { Metadata } from "next";
 import { tradeGothic } from "./fonts";
 
@@ -11,14 +12,13 @@ import { AuthSessionProvider } from "@/context/AuthSessionContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
 import { CommentsProvider } from "@/context/CommentsContext";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
-import BottomNav from "@/components/navigation/BottomNav/BottomNav";
 
 import "./globals.css";
 
 // Critical CSS for above-the-fold content
 const criticalCSS = `
   html,body{height:100%;scroll-behavior:smooth}
-  :root{display:flex;flex-direction:column;min-height:100vh;--background-color: #fff;--text-color: #1d1d1d;--secondary-color: #cccaca;--tertiary-color: #fd6c6c;--text-gradient: linear-gradient(135deg, #4cf6c3 30%, #1faef0 70%);--color-white: #fff;--color-black: #1d1d1d;--link-color: rgb(107, 154, 192)}
+  :root{display:flex;flex-direction:column;min-height:100vh;--background-color: #1d1d1d;--text-color: #fff;--secondary-color: #cccaca;--tertiary-color: #fd6c6c;--text-gradient: linear-gradient(135deg, #4cf6c3 30%, #1faef0 70%);--color-white: #fff;--color-black: #1d1d1d;--link-color: rgb(107, 154, 192)}
   body{display:flex;flex-direction:column;min-height:100vh;margin:0}
   body{position:relative;height:100%;font-family: var(--font-trade-gothic), sans-serif;font-weight:400;margin:0;padding:0;box-sizing:border-box;background-color:var(--background-color);color:var(--text-color)}
   @media (prefers-color-scheme:dark){:root{background-color:var(--background-color);color:var(--text-color)}}
@@ -212,6 +212,7 @@ function RootLayout({ children }: RootLayoutProps) {
       lang="en"
       className={`${tradeGothic.variable}`}
       data-scroll-behavior="smooth"
+      suppressHydrationWarning={true}
     >
       <head>
         <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
@@ -255,8 +256,7 @@ function RootLayout({ children }: RootLayoutProps) {
                 <FavoritesProvider>
                   <CommentsProvider>
                     <main style={{ flex: 1 }}>{children}</main>
-                    {/* Global Mobile Bottom Navigation */}
-                    <BottomNav />
+                    <GlobalNavProvider />
                   </CommentsProvider>
                 </FavoritesProvider>
               </AgeConsentProvider>
