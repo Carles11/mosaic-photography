@@ -214,10 +214,33 @@ function RootLayout({ children }: RootLayoutProps) {
     >
       <head>
         <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
-        {/* <noscript>
-          <link rel="stylesheet" href="/non-critical.css" />
-        </noscript> */}
 
+        {/* Preload TradeGothic fonts for faster rendering */}
+        <link
+          rel="preload"
+          as="font"
+          href="/fonts/TradeGothic-Regular.woff2"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          as="font"
+          href="/fonts/TradeGothic-Bold.woff2"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          as="font"
+          href="/fonts/TradeGothic-ExtraBold.woff2"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        {/* noscript fallback for non-critical CSS */}
+        <noscript>
+          <link rel="stylesheet" href="/non-critical.css" />
+        </noscript>
         <link rel="preconnect" href="https://www.mosaic.photography" />
       </head>
       <GoogleTagManager gtmId="GTM-N74Q9JC5" />
