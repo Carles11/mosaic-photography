@@ -1,3 +1,8 @@
+// Minimal critical CSS for above-the-fold layout (no theme variables)
+const criticalCSS = `
+  html, body { height: 100%; scroll-behavior: smooth; }
+  body { display: flex; flex-direction: column; min-height: 100vh; margin: 0; }
+`;
 import GlobalNavProvider from "@/components/navigation/BottomNav/GlobalNavProvider";
 import type { Metadata } from "next";
 import { tradeGothic } from "./fonts";
@@ -14,15 +19,6 @@ import { CommentsProvider } from "@/context/CommentsContext";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
 
 import "./globals.css";
-
-// Critical CSS for above-the-fold content
-const criticalCSS = `
-  html,body{height:100%;scroll-behavior:smooth}
-  :root{display:flex;flex-direction:column;min-height:100vh;--background-color: #1d1d1d;--text-color: #fff;--secondary-color: #cccaca;--tertiary-color: #fd6c6c;--text-gradient: linear-gradient(135deg, #4cf6c3 30%, #1faef0 70%);--color-white: #fff;--color-black: #1d1d1d;--link-color: rgb(107, 154, 192)}
-  body{display:flex;flex-direction:column;min-height:100vh;margin:0}
-  body{position:relative;height:100%;font-family: var(--font-trade-gothic), sans-serif;font-weight:400;margin:0;padding:0;box-sizing:border-box;background-color:var(--background-color);color:var(--text-color)}
-  @media (prefers-color-scheme:dark){:root{background-color:var(--background-color);color:var(--text-color)}}
-`;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mosaic.photography"),
@@ -215,6 +211,7 @@ function RootLayout({ children }: RootLayoutProps) {
       suppressHydrationWarning={true}
     >
       <head>
+        <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
         <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
 
         {/* Preload TradeGothic fonts for faster rendering */}

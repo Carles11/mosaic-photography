@@ -9,12 +9,12 @@
 .title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--text-color, #333);
+  color: var(--text-color);
   margin-bottom: 0.5rem;
 }
 
 .subtitle {
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -24,14 +24,14 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary);
 }
 
 .spinner {
   width: 32px;
   height: 32px;
-  border: 2px solid var(--border-color, #e0e0e0);
-  border-top: 2px solid var(--primary-color, #007bff);
+  border: 2px solid var(--border-color);
+  border-top: 2px solid var(--primary-color);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 1rem;
@@ -49,24 +49,24 @@
 .emptyState {
   text-align: center;
   padding: 3rem 2rem;
-  background: var(--background-secondary, #fff);
+  background: var(--background-secondary);
   border-radius: 8px;
-  border: 2px dashed var(--border-light, #f0f0f0);
+  border: 2px dashed var(--border-light);
 }
 
 .emptyIcon {
   font-size: 4rem;
-  color: var(--text-muted, #6c757d);
+  color: var(--text-muted);
   margin-bottom: 1rem;
 }
 
 .emptyState h3 {
-  color: var(--text-color, #333);
+  color: var(--text-color);
   margin-bottom: 0.5rem;
 }
 
 .emptyState p {
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary);
 }
 
 .commentsList {
@@ -76,8 +76,8 @@
 }
 
 .commentItem {
-  background: var(--background-secondary, #fff);
-  border: 1px solid var(--border-color, #e0e0e0);
+  background: var(--background-secondary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 1.5rem;
   transition: box-shadow 0.2s ease;
@@ -93,7 +93,7 @@
   gap: 1rem;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-light, #f0f0f0);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .imageThumbnail {
@@ -102,7 +102,7 @@
   border-radius: 6px;
   overflow: hidden;
   flex-shrink: 0;
-  background: var(--background-tertiary, #f8f9fa);
+  background: var(--background-tertiary);
 }
 
 .imageThumbnail img {
@@ -115,8 +115,8 @@
   width: 60px;
   height: 60px;
   border-radius: 6px;
-  background: var(--background-tertiary, #f8f9fa);
-  border: 2px dashed var(--border-color, #e0e0e0);
+  background: var(--background-tertiary);
+  border: 2px dashed var(--border-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,7 +125,7 @@
 
 .placeholderText {
   font-size: 1.5rem;
-  color: var(--text-muted, #6c757d);
+  color: var(--text-muted);
 }
 
 .imageDetails {
@@ -139,7 +139,7 @@
 .imageTitle {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--text-color, #333);
+  color: var(--text-color);
   margin: 0 0 0.25rem 0;
   white-space: nowrap;
   overflow: hidden;
@@ -148,13 +148,13 @@
 
 .imageAuthor {
   font-size: 0.85rem;
-  color: var(--text-secondary, #666);
+  color: var(--text-secondary);
   margin: 0;
 }
 
 .imageNotFound {
   font-size: 0.75rem;
-  color: var(--text-muted, #6c757d);
+  color: var(--text-muted);
   font-style: italic;
   margin: 0.25rem 0 0 0;
 }
@@ -164,7 +164,7 @@
 }
 
 .commentText {
-  color: var(--text-color, #333);
+  color: var(--text-color);
   line-height: 1.5;
   margin: 0 0 1rem 0;
   word-wrap: break-word;
