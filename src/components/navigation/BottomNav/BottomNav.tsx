@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import BottomNavItem from "./BottomNavItem";
 import BottomNavMenu from "./BottomNavMenu";
@@ -21,7 +21,30 @@ const BottomNav = ({
   onGoProClick,
 }: BottomNavProps) => {
   const [showMenu, setShowMenu] = useState(false);
+  const [visible, setVisible] = useState(true);
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!ticking.current) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          if (currentScrollY > lastScrollY.current + 8) {
+            setVisible(false);
+          } else if (currentScrollY < lastScrollY.current - 8) {
+            setVisible(true);
+          }
+          lastScrollY.current = currentScrollY;
+          ticking.current = false;
+        });
+        ticking.current = true;
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleMenuAction = (action: () => void) => {
     action();
@@ -30,7 +53,11 @@ const BottomNav = ({
 
   return (
     <>
-      <nav className={styles.bottomNav}>
+      <nav
+        className={
+          styles.bottomNav + (visible ? "" : " " + styles.bottomNavHidden)
+        }
+      >
         <div className={styles.navContainer}>
           <BottomNavItem
             icon="⌂"

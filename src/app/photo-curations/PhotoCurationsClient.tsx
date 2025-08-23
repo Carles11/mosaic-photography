@@ -1,23 +1,16 @@
 "use client";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
-import { sendGTMEvent } from "@next/third-parties/google";
+
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import BottomNav from "@/components/navigation/BottomNav/BottomNav";
+
 import ContentTabs from "@/components/contents/ContentTabs";
 import styles from "./photoCurations.module.css";
 
 export default function PhotoCurationsClient() {
   const { user, logout, loading } = useAuth();
   const router = useRouter();
-
-  const handleGoProClick = () => {
-    sendGTMEvent({
-      event: "goProText",
-      value: "Go Pro clicked from my content bottom nav",
-    });
-  };
 
   if (loading) {
     return (
@@ -46,11 +39,7 @@ export default function PhotoCurationsClient() {
       </main>
       <Footer />
       {/* Mobile Bottom Navigation */}
-      <BottomNav
-        user={user}
-        onLogoutClick={logout}
-        onGoProClick={handleGoProClick}
-      />
+      {/* Mobile Bottom Navigation removed: now globally rendered in layout */}
     </div>
   );
 }

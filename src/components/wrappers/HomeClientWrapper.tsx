@@ -20,7 +20,6 @@ import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
 import GitHubCorner from "@/components/buttons/GitHubCorner";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
-import BottomNav from "@/components/navigation/BottomNav/BottomNav";
 
 interface HomeClientWrapperProps {
   onLoginClick?: () => void;
@@ -197,13 +196,7 @@ function HomeClientWrapper({
       </>
       <Footer />
 
-      {/* Mobile Bottom Navigation */}
-      <BottomNav
-        user={user}
-        onLoginClick={onLoginClick}
-        onLogoutClick={onLogoutClick}
-        onGoProClick={onGoProClick}
-      />
+      {/* Mobile Bottom Navigation removed: now globally rendered in layout */}
     </div>
   );
 }

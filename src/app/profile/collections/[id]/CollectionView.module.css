@@ -418,8 +418,8 @@
 }
 
 .imageCard.mobile .selectCheckbox input[type="checkbox"] {
-  width: 22px;
-  height: 22px;
+  width: 11px;
+  height: 11px;
   transform: scale(1.2);
 }
 
@@ -513,7 +513,7 @@
   .selectCheckbox {
     top: 0.5rem;
     left: 0.5rem;
-    padding: 0.5rem;
+    padding: 0.1rem;
     background: rgba(255, 255, 255, 0.9);
     border-radius: 50%;
   }

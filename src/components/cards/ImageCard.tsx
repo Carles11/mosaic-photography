@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./ImageCard.module.css";
+import GallerySkeletonCard from "./GallerySkeletonCard";
 import {
   getPreloadedGalleryData,
   preloadGalleryData,
@@ -7,7 +8,6 @@ import {
 import { ImageCardProps, ImageWithOrientation } from "@/types";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
-import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 
 const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
@@ -47,7 +47,11 @@ const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
   return (
     <>
       {loading ? (
-        ClimbBoxLoaderContainer("var(--text-color)", 16, loading)
+        <div style={{ display: "contents" }}>
+          {Array.from({ length: 12 }).map((_, i) => (
+            <GallerySkeletonCard key={i} imageHeight={220} textLines={1} />
+          ))}
+        </div>
       ) : (
         <>
           {/* Add structured data for the image gallery */}

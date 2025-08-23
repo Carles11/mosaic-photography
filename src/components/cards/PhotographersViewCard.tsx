@@ -3,6 +3,7 @@ import Slider, { Settings } from "react-slick";
 import { sendGTMEvent } from "@next/third-parties/google";
 import ImageWrapper from "../wrappers/ImageWrapper";
 import styles from "./PhotographersViewCard.module.css";
+import GallerySkeletonCard from "./GallerySkeletonCard";
 import "./PhotographersViewCard.overlay.css";
 import { Photographer } from "@/types";
 import {
@@ -10,7 +11,6 @@ import {
   preloadPhotographersData,
 } from "@/utils/preloadPhotographers";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
-import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import Dropdown from "@/components/inputs/dropDown";
@@ -205,7 +205,16 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
       {showOverlay && <div className={styles.overlay} aria-hidden="true" />}
       <div className={showOverlay ? styles.obscuredContent : undefined}>
         {loading ? (
-          ClimbBoxLoaderContainer("var(--text-color)", 16, loading)
+          <div className={styles.photographersViewSkeletonGrid}>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <GallerySkeletonCard
+                key={i}
+                imageHeight={220}
+                textLines={1}
+                shortText
+              />
+            ))}
+          </div>
         ) : (
           <>
             {/* Add structured data for photographers and their images */}
