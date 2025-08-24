@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Slider, { Settings } from "react-slick";
 import { sendGTMEvent } from "@next/third-parties/google";
 import ImageWrapper from "../wrappers/ImageWrapper";
@@ -206,7 +206,12 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
       <div className={showOverlay ? styles.obscuredContent : undefined}>
         {loading ? (
           <div className={styles.photographersViewSkeletonGrid}>
-            {Array.from({ length: 3 }).map((_, i) => (
+            {Array.from({
+              length:
+                typeof window !== "undefined" && window.innerWidth <= 576
+                  ? 1
+                  : 3,
+            }).map((_, i) => (
               <GallerySkeletonCard
                 key={i}
                 imageHeight={220}
