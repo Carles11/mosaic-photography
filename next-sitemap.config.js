@@ -7,6 +7,10 @@ module.exports = {
   sitemapSize: 5000,
   exclude: ["/admin", "/internal"],
   robotsTxtOptions: {
-    additionalSitemaps: ["https://www.mosaic.photography/api/sitemap.xml"],
+    additionalSitemaps: [
+      "https://www.mosaic.photography/sitemap.xml",
+      "https://www.mosaic.photography/image-sitemap.xml",
+      "https://www.mosaic.photography/collection-sitemap.xml",
+    ],
   },
 };
