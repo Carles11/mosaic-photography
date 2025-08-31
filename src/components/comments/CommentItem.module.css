@@ -31,25 +31,6 @@
   gap: 0.25rem;
 }
 
-.actionButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  transition: background-color 0.2s ease;
-}
-
-.actionButton:hover {
-  background: var(--hover-color, rgba(0, 0, 0, 0.1));
-}
-
-.actionButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 .commentContent {
   margin-top: 0.5rem;
 }

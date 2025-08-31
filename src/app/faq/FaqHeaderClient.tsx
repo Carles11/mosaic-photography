@@ -6,6 +6,12 @@ const HeaderWithAuth = dynamic(
   { ssr: false },
 );
 
-export default function FaqHeaderClient() {
-  return <HeaderWithAuth />;
+interface FaqHeaderClientProps {
+  onGoProClick?: () => void;
+}
+
+export default function FaqHeaderClient({
+  onGoProClick,
+}: FaqHeaderClientProps) {
+  return <HeaderWithAuth onGoProClick={onGoProClick} />;
 }

@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import CreateCollectionModal from "./CreateCollectionModal";
 import EditCollectionModal from "./EditCollectionModal";
 import styles from "./CollectionsList.module.css";
+import buttonStyles from "../shared/ButtonStyles.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { Collection } from "@/types";
@@ -267,7 +268,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                     onClick={() =>
                       router.push(`/profile/collections/${collection.id}`)
                     }
-                    className={styles.viewButton}
+                    className={`${buttonStyles.buttonBase} ${buttonStyles.viewButton}`}
                     title="Share collection"
                   >
                     {/* Options for share icon similar in style to ⌂: */}
@@ -279,14 +280,14 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                   </button>
                   <button
                     onClick={() => setEditingCollection(collection)}
-                    className={styles.editButton}
+                    className={`${buttonStyles.buttonBase} ${buttonStyles.editButton}`}
                     title="Edit collection"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteCollection(collection.id)}
-                    className={styles.deleteButton}
+                    className={`${buttonStyles.buttonBase} ${buttonStyles.deleteButton}`}
                     title="Delete collection"
                   >
                     🗑️

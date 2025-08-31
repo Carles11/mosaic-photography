@@ -28,6 +28,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://www.mosaic.photography/",
+    // languages: {
+    //   es: "https://www.mosaic.photography/es",
+    //   de: "https://www.mosaic.photography/de",
+    // },
   },
   authors: [
     {
@@ -204,36 +208,14 @@ function RootLayout({ children }: RootLayoutProps) {
       lang="en"
       className={`${tradeGothic.variable} dark`}
       data-scroll-behavior="smooth"
-      suppressHydrationWarning
+      suppressHydrationWarning={true}
     >
       <head>
         <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
 
-        {/* Preload TradeGothic fonts for faster rendering */}
-        <link
-          rel="preload"
-          as="font"
-          href="/fonts/TradeGothic-Regular.woff2"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          as="font"
-          href="/fonts/TradeGothic-Bold.woff2"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          as="font"
-          href="/fonts/TradeGothic-ExtraBold.woff2"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
         {/* noscript fallback for non-critical CSS */}
         <noscript>
-          {/* Stylesheet link removed to comply with Next.js requirements */}
+          <link rel="stylesheet" href="/non-critical.css" />
         </noscript>
         <link rel="preconnect" href="https://www.mosaic.photography" />
       </head>

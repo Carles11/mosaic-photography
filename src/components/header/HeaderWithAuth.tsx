@@ -2,7 +2,13 @@
 import { useAuth } from "@/hooks/useAuth";
 import Header from "@/components/header/Header";
 
-export default function HeaderWithAuth() {
+interface HeaderWithAuthProps {
+  onGoProClick?: () => void;
+}
+
+export default function HeaderWithAuth({ onGoProClick }: HeaderWithAuthProps) {
   const { user, logout } = useAuth();
-  return <Header user={user} onLogoutClick={logout} />;
+  return (
+    <Header user={user} onLogoutClick={logout} onGoProClick={onGoProClick} />
+  );
 }

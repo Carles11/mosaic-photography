@@ -177,51 +177,6 @@
   flex-shrink: 0;
 }
 
-.editButton,
-.deleteButton,
-.viewButton {
-  width: 44px;
-  height: 44px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.875rem;
-  transition: all 0.2s ease;
-}
-
-.viewButton {
-  background: var(--background-secondary);
-  color: var(--foreground-muted);
-}
-
-.viewButton:hover {
-  background: var(--button-primary-bg);
-  color: var(--button-primary-text);
-}
-
-.editButton {
-  background: var(--background-secondary);
-  color: var(--foreground-muted);
-}
-
-.editButton:hover {
-  background: var(--button-primary-bg);
-  color: var(--button-primary-text);
-}
-
-.deleteButton {
-  background: var(--background-secondary);
-  color: var(--foreground-muted);
-}
-
-.deleteButton:hover {
-  background: #dc3545;
-  color: white;
-}
-
 .previewContainer {
   padding: 0 1rem;
   margin-bottom: 1rem;

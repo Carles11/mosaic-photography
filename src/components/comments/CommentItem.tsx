@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "./CommentItem.module.css";
+import buttonStyles from "../shared/ButtonStyles.module.css";
 import { Comment } from "@/types";
 import { useComments } from "@/context/CommentsContext";
 
@@ -75,7 +76,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
             {!isEditing && (
               <>
                 <button
-                  className={styles.actionButton}
+                  className={buttonStyles.buttonBase}
                   onClick={handleEdit}
                   disabled={isLoading}
                   title="Edit comment"
@@ -83,7 +84,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                   ✏️
                 </button>
                 <button
-                  className={styles.actionButton}
+                  className={buttonStyles.buttonBase}
                   onClick={handleDelete}
                   disabled={isLoading}
                   title="Delete comment"

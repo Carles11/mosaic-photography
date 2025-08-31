@@ -192,13 +192,23 @@
   gap: 0.5rem;
 }
 
-.editButton,
+.editButton {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 4px;
+  background: var(--button-primary-bg, #fff);
+  color: var(--text-color, #666);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
 .deleteButton {
   padding: 0.25rem 0.75rem;
   border: 1px solid var(--border-color, #e0e0e0);
   border-radius: 4px;
-  background: var(--background-secondary, #fff);
-  color: var(--text-secondary, #666);
+  background: var(--tertiary-color, #fff);
+  color: var(--text-color, #666);
   font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s ease;
