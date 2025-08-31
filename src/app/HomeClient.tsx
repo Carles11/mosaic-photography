@@ -14,7 +14,13 @@ if (process.env.NODE_ENV === "development") {
   import("@/utils/sessionDebug");
 }
 
-export default function HomeClient() {
+import { Photographer } from "@/types/gallery";
+
+interface HomeClientProps {
+  photographers?: Photographer[];
+}
+
+export default function HomeClient({ photographers }: HomeClientProps) {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -78,6 +84,7 @@ export default function HomeClient() {
   return (
     <>
       <HomeClientWrapper
+        photographers={photographers}
         onLoginClick={handleLoginClick}
         onLogoutClick={logout}
         user={user}

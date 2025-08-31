@@ -5,11 +5,6 @@ import ImageWrapper from "../wrappers/ImageWrapper";
 import styles from "./PhotographersViewCard.module.css";
 import GallerySkeletonCard from "./GallerySkeletonCard";
 import "./PhotographersViewCard.overlay.css";
-import { Photographer } from "@/types";
-import {
-  getPreloadedPhotographersData,
-  preloadPhotographersData,
-} from "@/utils/preloadPhotographers";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
 
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
@@ -26,16 +21,19 @@ declare global {
   }
 }
 
-interface PhotographersViewCardProps {
+import { Photographer } from "@/types/gallery";
+
+export interface PhotographersViewCardProps {
+  photographers?: Photographer[];
   onLoginRequired?: () => void;
 }
 
 const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
+  photographers: photographersProp,
   onLoginRequired,
 }) => {
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   useEffect(() => {
-    // Listen for a global event or window property to control overlay
     if (typeof window !== "undefined") {
       const checkOverlay = () => {
         setShowOverlay(Boolean(window.__AGE_CONSENT_OPEN__));
@@ -47,45 +45,21 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
       };
     }
   }, []);
-  const [photographers, setPhotographers] = useState<Photographer[]>([]);
-  const [error, setError] = useState<string | null>(null);
 
-  const [loading, setLoading] = useState<boolean>(true);
+  // SSR/SSG: use prop; fallback to client fetch only if not provided (e.g. for refresh/filter)
+  const [photographers] = useState<Photographer[]>(photographersProp || []);
+  const error = null;
+  const loading = !photographersProp;
   const [selectedPhotographer, setSelectedPhotographer] =
     useState<Photographer | null>(null);
   const [expandedBiography, setExpandedBiography] = useState<number | null>(
     null,
   );
-
   const [expandedOrigin, setExpandedOrigin] = useState<number | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
 
-  useEffect(() => {
-    let mounted = true;
-    setLoading(true);
-    // ...existing code...
-    const load = async () => {
-      let data = getPreloadedPhotographersData();
-      // ...existing code...
-      if (!data) {
-        data = await preloadPhotographersData();
-        // ...existing code...
-      }
-      if (!mounted) return;
-      if (!data) {
-        setError("No photographers found.");
-        setLoading(false);
-        return;
-      }
-      setPhotographers(data);
-      setLoading(false);
-      // ...existing code...
-    };
-    load();
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  // Only allow client fetch for user-triggered refresh/filter, not initial load
+  // Remove initial useEffect data load for SSR
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -223,167 +197,178 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
         ) : (
           <>
             {/* Add structured data for photographers and their images */}
-            {photographers.map((photographer) => (
-              <JsonLdSchema
-                key={`schema-${photographer.surname}`}
-                type="ImageGallery"
-                name={`${photographer.name} ${photographer.surname} Photography Collection`}
-                description={
-                  photographer.biography ||
-                  `Photography collection by ${photographer.name} ${photographer.surname}`
-                }
-                images={photographer.images.map((image) => ({
-                  contentUrl: image.url,
-                  name: image.title || `Image by ${photographer.surname}`,
-                  description:
-                    image.description ||
-                    `Vintage photography by ${photographer.name} ${photographer.surname}`,
-                  creditText: photographer.name + " " + photographer.surname,
-                  width: typeof image.width === "number" ? image.width : 1200,
-                  height: typeof image.height === "number" ? image.height : 800,
-                  encodingFormat:
-                    image.url.endsWith(".jpg") || image.url.endsWith(".jpeg")
-                      ? "image/jpeg"
-                      : image.url.endsWith(".png")
-                        ? "image/png"
-                        : "image/jpeg",
-                  license: "https://creativecommons.org/publicdomain/mark/1.0/",
-                  acquireLicensePage: "https://www.mosaic.photography/license",
-                }))}
-              />
-            ))}
+            {photographers && photographers.length > 0 ? (
+              photographers.map((photographer) => (
+                <JsonLdSchema
+                  key={`schema-${photographer.surname}`}
+                  type="ImageGallery"
+                  name={`${photographer.name} ${photographer.surname} Photography Collection`}
+                  description={
+                    photographer.biography ||
+                    `Photography collection by ${photographer.name} ${photographer.surname}`
+                  }
+                  images={photographer.images.map((image) => ({
+                    contentUrl: image.url,
+                    name: image.title || `Image by ${photographer.surname}`,
+                    description:
+                      image.description ||
+                      `Vintage photography by ${photographer.name} ${photographer.surname}`,
+                    creditText: photographer.name + " " + photographer.surname,
+                    width: typeof image.width === "number" ? image.width : 1200,
+                    height:
+                      typeof image.height === "number" ? image.height : 800,
+                    encodingFormat:
+                      image.url.endsWith(".jpg") || image.url.endsWith(".jpeg")
+                        ? "image/jpeg"
+                        : image.url.endsWith(".png")
+                          ? "image/png"
+                          : "image/jpeg",
+                    license:
+                      "https://creativecommons.org/publicdomain/mark/1.0/",
+                    acquireLicensePage:
+                      "https://www.mosaic.photography/license",
+                  }))}
+                />
+              ))
+            ) : (
+              <div>No photographers found.</div>
+            )}
 
             <SliderTyped {...mainSliderSettings}>
-              {photographers.map((photographer, index) => (
-                <div
-                  key={index}
-                  id={`author-${index}`}
-                  className={styles.photographersViewCard}
-                >
-                  <h3
-                    className={`fancy-link ${styles.authorName}`}
-                    onClick={() => {
-                      setSelectedPhotographer(photographer);
-                      sendGTMEvent({
-                        event: "photographerSelected-top",
-                        value: photographer.surname,
-                      });
-                    }}
-                    role="button"
-                    tabIndex={0}
+              {photographers &&
+                photographers.length > 0 &&
+                photographers.map((photographer, index) => (
+                  <div
+                    key={index}
+                    id={`author-${index}`}
+                    className={styles.photographersViewCard}
                   >
-                    {`${photographer.name} ${photographer.surname}`.toUpperCase()}
-                  </h3>
-                  <PhotoSwipeWrapper
-                    images={photographer.images} // Pass photographer's images array
-                    onLoginRequired={onLoginRequired}
-                    galleryOptions={{
-                      zoom: true,
-                      initialZoomLevel: "fill",
-                      secondaryZoomLevel: 1,
-                      maxZoomLevel: 2,
-                      fullscreenEl: true,
-                      bgOpacity: 1,
-                    }}
-                  >
-                    <SliderTyped {...nestedSliderSettings}>
-                      {photographer.images.map((image) => (
-                        <div key={image.id} className={styles.imageContainer}>
-                          <ImageWrapper
-                            image={image}
-                            imgRef={imgRef}
-                            onLoginRequired={onLoginRequired}
-                          />
-                        </div>
-                      ))}
-                    </SliderTyped>
-                  </PhotoSwipeWrapper>
-                  <p
-                    className={`${styles.biography} ${
-                      expandedBiography === index ? styles.expanded : ""
-                    }`}
-                    onClick={() => toggleBiography(index)}
-                  >
-                    <strong>Biography: </strong>
-                    <br />
-                    {photographer.biography || "No biography available."}
-                  </p>
-                  <p>
-                    <strong>Birthdate: </strong>
-                    {new Date(photographer.birthdate).toLocaleDateString()}
-                  </p>
-                  <p
-                    className={`${styles.origin} ${
-                      expandedOrigin === index ? styles.expanded : ""
-                    }`}
-                    onClick={() => toggleOrigin(index)}
-                  >
-                    <strong>Origin:</strong> {photographer.origin}
-                  </p>
-                  {photographer.deceasedate && (
-                    <p>
-                      <strong>Deceasedate:</strong>{" "}
-                      {new Date(photographer.deceasedate).toLocaleDateString()}
+                    <h3
+                      className={`fancy-link ${styles.authorName}`}
+                      onClick={() => {
+                        setSelectedPhotographer(photographer);
+                        sendGTMEvent({
+                          event: "photographerSelected-top",
+                          value: photographer.surname,
+                        });
+                      }}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      {`${photographer.name} ${photographer.surname}`.toUpperCase()}
+                    </h3>
+                    <PhotoSwipeWrapper
+                      images={photographer.images} // Pass photographer's images array
+                      onLoginRequired={onLoginRequired}
+                      galleryOptions={{
+                        zoom: true,
+                        initialZoomLevel: "fill",
+                        secondaryZoomLevel: 1,
+                        maxZoomLevel: 2,
+                        fullscreenEl: true,
+                        bgOpacity: 1,
+                      }}
+                    >
+                      <SliderTyped {...nestedSliderSettings}>
+                        {photographer.images.map((image) => (
+                          <div key={image.id} className={styles.imageContainer}>
+                            <ImageWrapper
+                              image={image}
+                              imgRef={imgRef}
+                              onLoginRequired={onLoginRequired}
+                            />
+                          </div>
+                        ))}
+                      </SliderTyped>
+                    </PhotoSwipeWrapper>
+                    <p
+                      className={`${styles.biography} ${
+                        expandedBiography === index ? styles.expanded : ""
+                      }`}
+                      onClick={() => toggleBiography(index)}
+                    >
+                      <strong>Biography: </strong>
+                      <br />
+                      {photographer.biography || "No biography available."}
                     </p>
-                  )}
-                  <p
-                    className={`fancy-link ${styles.authorCTA}`}
-                    onClick={() => {
-                      setSelectedPhotographer(photographer);
-                      sendGTMEvent({
-                        event: "photographerSelected-bottom",
-                        value: photographer.surname,
-                      });
-                    }}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    Dive Into {photographer.surname}’s Art
-                  </p>
-                  {/* Add Make it yours Dropdown below */}
-                  {photographer.store &&
-                    photographer.store.length > 0 &&
-                    (() => {
-                      // Parse stores as in PhotographerModal
-                      const parsedStores = photographer.store
-                        .map((storeString: string) => {
-                          try {
-                            const store = JSON.parse(storeString);
-                            return {
-                              store: String(store.store),
-                              website: String(store.website),
-                              affiliate: Boolean(store.affiliate),
-                            };
-                          } catch {
-                            return null;
-                          }
-                        })
-                        .filter(
-                          (
-                            item,
-                          ): item is {
-                            store: string;
-                            website: string;
-                            affiliate: boolean;
-                          } => item !== null,
-                        );
-                      return parsedStores.length > 0 ? (
-                        <div style={{ marginTop: 8 }}>
-                          <Dropdown
-                            buttonText="Make it yours"
-                            items={parsedStores}
-                            onToggle={() => {
-                              sendGTMEvent({
-                                event: "HOME-storesDropdownOpened",
-                                value: photographer.name,
-                              });
-                            }}
-                          />
-                        </div>
-                      ) : null;
-                    })()}
-                </div>
-              ))}
+                    <p>
+                      <strong>Birthdate: </strong>
+                      {new Date(photographer.birthdate).toLocaleDateString()}
+                    </p>
+                    <p
+                      className={`${styles.origin} ${
+                        expandedOrigin === index ? styles.expanded : ""
+                      }`}
+                      onClick={() => toggleOrigin(index)}
+                    >
+                      <strong>Origin:</strong> {photographer.origin}
+                    </p>
+                    {photographer.deceasedate && (
+                      <p>
+                        <strong>Deceasedate:</strong>{" "}
+                        {new Date(
+                          photographer.deceasedate,
+                        ).toLocaleDateString()}
+                      </p>
+                    )}
+                    <p
+                      className={`fancy-link ${styles.authorCTA}`}
+                      onClick={() => {
+                        setSelectedPhotographer(photographer);
+                        sendGTMEvent({
+                          event: "photographerSelected-bottom",
+                          value: photographer.surname,
+                        });
+                      }}
+                      role="button"
+                      tabIndex={0}
+                    >
+                      Dive Into {photographer.surname}’s Art
+                    </p>
+                    {/* Add Make it yours Dropdown below */}
+                    {photographer.store &&
+                      photographer.store.length > 0 &&
+                      (() => {
+                        // Parse stores as in PhotographerModal
+                        const parsedStores = photographer.store
+                          .map((storeString: string) => {
+                            try {
+                              const store = JSON.parse(storeString);
+                              return {
+                                store: String(store.store),
+                                website: String(store.website),
+                                affiliate: Boolean(store.affiliate),
+                              };
+                            } catch {
+                              return null;
+                            }
+                          })
+                          .filter(
+                            (
+                              item,
+                            ): item is {
+                              store: string;
+                              website: string;
+                              affiliate: boolean;
+                            } => item !== null,
+                          );
+                        return parsedStores.length > 0 ? (
+                          <div style={{ marginTop: 8 }}>
+                            <Dropdown
+                              buttonText="Make it yours"
+                              items={parsedStores}
+                              onToggle={() => {
+                                sendGTMEvent({
+                                  event: "HOME-storesDropdownOpened",
+                                  value: photographer.name,
+                                });
+                              }}
+                            />
+                          </div>
+                        ) : null;
+                      })()}
+                  </div>
+                ))}
             </SliderTyped>
           </>
         )}

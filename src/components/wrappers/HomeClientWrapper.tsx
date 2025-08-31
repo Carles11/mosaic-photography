@@ -23,7 +23,10 @@ import GitHubCorner from "@/components/buttons/GitHubCorner";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 
+import { Photographer } from "@/types/gallery";
+
 interface HomeClientWrapperProps {
+  photographers?: Photographer[];
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
   user?: SupabaseUser | null;
@@ -31,6 +34,7 @@ interface HomeClientWrapperProps {
 }
 
 function HomeClientWrapper({
+  photographers,
   onLoginClick,
   onLogoutClick,
   user,
@@ -139,7 +143,10 @@ function HomeClientWrapper({
             <div className="v-margin">
               <HomeTitles />
             </div>
-            <PhotographersCardsSlide onLoginRequired={onLoginClick} />
+            <PhotographersCardsSlide
+              photographers={photographers}
+              onLoginRequired={onLoginClick}
+            />
             <Gallery id="gallery-section" onLoginRequired={onLoginClick} />
           </div>
         </section>
