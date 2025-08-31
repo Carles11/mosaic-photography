@@ -7,4 +7,3 @@ Host: https://www.mosaic.photography
 
 # Sitemaps
 Sitemap: https://www.mosaic.photography/sitemap.xml
-Sitemap: https://www.mosaic.photography/api/sitemap.xml
