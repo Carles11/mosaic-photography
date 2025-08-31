@@ -44,13 +44,9 @@ function HomeClientWrapper({
 }: HomeClientWrapperProps) {
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+
   const [preloaded, setPreloaded] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
     // Improved bot detection: check userAgent for major bots
@@ -72,11 +68,6 @@ function HomeClientWrapper({
       );
     }
   }, [preloaded]);
-
-  // Don't render until mounted to prevent hydration mismatch
-  if (!isMounted) {
-    return null;
-  }
 
   return (
     <div className={styles.container}>

@@ -12,12 +12,6 @@ export const AgeConsent = ({
     setIsMounted(true);
   }, []);
 
-  useEffect(() => {
-    return () => {
-      console.log("[AgeConsent] Modal unmounted at", performance.now());
-    };
-  }, []);
-
   // Don't render until mounted to prevent hydration mismatch
   if (!isMounted) {
     return null;
@@ -47,7 +41,6 @@ export const AgeConsent = ({
             id="ageConsentButton"
             className={styles.consentButton}
             onClick={() => {
-              console.log("[AgeConsent] Button clicked at", performance.now());
               setIsMinimumAgeConfirmed(true);
             }}
           >

@@ -51,7 +51,6 @@ const ThemeImage = (props: Props) => {
       blurDataURL={dynamicBlurDataBlur}
       style={{
         maxWidth: "100%",
-        height: "auto",
       }}
     />
   );

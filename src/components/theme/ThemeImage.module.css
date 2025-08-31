@@ -1,6 +1,4 @@
 .themeImage {
-  width: auto; /* Let the Next.js Image component control width */
-  height: auto;
   place-self: center;
   object-fit: contain;
   max-width: 100%; /* Ensure it doesn't overflow its container */
