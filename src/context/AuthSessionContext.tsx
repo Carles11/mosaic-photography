@@ -54,12 +54,12 @@ export function AuthSessionProvider({
     const { data: listener } = supabase.auth.onAuthStateChange(
       (event, session) => {
         if (mounted) {
-          console.log("AuthSessionContext: Auth state change:", {
-            event,
-            hasSession: !!session,
-            hasUser: !!session?.user,
-            userEmail: session?.user?.email,
-          });
+          // console.log("AuthSessionContext: Auth state change:", {
+          //   event,
+          //   hasSession: !!session,
+          //   hasUser: !!session?.user,
+          //   userEmail: session?.user?.email,
+          // });
           setUser(session?.user ?? null);
           setLoading(false);
         }

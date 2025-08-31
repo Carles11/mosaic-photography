@@ -32,10 +32,6 @@ export async function fetchPhotographersSSR(): Promise<Photographer[] | null> {
       }
       return photographer;
     });
-    console.log(
-      "[SSR fetchPhotographersSSR] processedPhotographers",
-      processedPhotographers,
-    );
     return processedPhotographers;
   } catch {
     return null;

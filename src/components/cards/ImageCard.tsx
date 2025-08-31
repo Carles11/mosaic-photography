@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import styles from "./ImageCard.module.css";
 import GallerySkeletonCard from "./GallerySkeletonCard";
-// import { getPreloadedGalleryData, preloadGalleryData } from "@/utils/preloadGallery";
 import { ImageWithOrientation } from "@/types/gallery";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";

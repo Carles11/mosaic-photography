@@ -48,7 +48,6 @@ export async function fetchGalleryImagesSSR(): Promise<
         };
       },
     );
-    console.log("[SSR fetchGalleryImagesSSR] processedImages", processedImages);
     return processedImages;
   } catch (err) {
     console.error("[SSR fetchGalleryImagesSSR] Exception", err);
