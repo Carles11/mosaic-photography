@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { faqStructuredData } from "@/utils/faqStructuredData";
 import { faqSections } from "@/app/constants/faqSections";
-import FaqClientWrapper from "./FaqClientWrapper";
+import FaqClientWrapper from "@/components/wrappers/FaqClientWrapper";
 
 export const metadata: Metadata = {
   title:

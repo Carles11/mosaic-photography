@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
-import FaqHeaderClient from "./FaqHeaderClient";
+import FaqHeaderClient from "../../app/faq/FaqHeaderClient";
 import GoProModal from "@/components/modals/goProModal/GoProModal";
 import Footer from "@/components/footer/Footer";
-import styles from "./faq.module.css";
+import styles from "../../app/faq/faq.module.css";
 import Link from "next/link";
 
 interface FAQItemProps {
