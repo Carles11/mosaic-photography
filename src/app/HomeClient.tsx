@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import GoProModal from "@/components/modals/goProModal/GoProModal";
 import { sendGTMEvent } from "@next/third-parties/google";
 import { useAuth } from "@/hooks/useAuth";
@@ -60,9 +61,13 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
       // Clear URL parameters when modal is closed
       if (typeof window !== "undefined") {
         const url = new URL(window.location.href);
+        const hadParams =
+          url.searchParams.has("modal") || url.searchParams.has("type");
         url.searchParams.delete("modal");
         url.searchParams.delete("type");
-        router.replace(url.pathname);
+        if (hadParams) {
+          router.replace(url.pathname);
+        }
       }
     }
   }, [showAuthModal, router, isInitialized]);
@@ -81,7 +86,18 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          minHeight: "60vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {ClimbBoxLoaderContainer("var(--text-color)", 32, true)}
+      </div>
+    );
   }
 
   return (
