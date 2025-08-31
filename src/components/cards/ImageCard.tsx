@@ -1,44 +1,25 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import styles from "./ImageCard.module.css";
 import GallerySkeletonCard from "./GallerySkeletonCard";
-import {
-  getPreloadedGalleryData,
-  preloadGalleryData,
-} from "@/utils/preloadGallery";
-import { ImageCardProps, ImageWithOrientation } from "@/types";
+// import { getPreloadedGalleryData, preloadGalleryData } from "@/utils/preloadGallery";
+import { ImageWithOrientation } from "@/types/gallery";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 
-const ImageCard: React.FC<ImageCardProps> = ({ onLoginRequired }) => {
-  const [images, setImages] = useState<ImageWithOrientation[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+interface ImageCardProps {
+  images?: ImageWithOrientation[];
+  onLoginRequired?: () => void;
+}
 
+const ImageCard: React.FC<ImageCardProps> = ({
+  images: imagesProp,
+  onLoginRequired,
+}) => {
+  const [images] = useState<ImageWithOrientation[]>(imagesProp || []);
+  const loading = !imagesProp;
+  const error = null;
   const imgRef = useRef<HTMLImageElement | null>(null);
-
-  useEffect(() => {
-    let mounted = true;
-    setLoading(true);
-    const load = async () => {
-      let data = getPreloadedGalleryData();
-      if (!data) {
-        data = await preloadGalleryData();
-      }
-      if (!mounted) return;
-      if (!data) {
-        setError("No images found.");
-        setLoading(false);
-        return;
-      }
-      setImages(data.sort(() => Math.random() - 0.5));
-      setLoading(false);
-    };
-    load();
-    return () => {
-      mounted = false;
-    };
-  }, []);
 
   if (error) {
     return <div>Error: {error}</div>;

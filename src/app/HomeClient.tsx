@@ -16,11 +16,14 @@ if (process.env.NODE_ENV === "development") {
 
 import { Photographer } from "@/types/gallery";
 
+import { ImageWithOrientation } from "@/types/gallery";
+
 interface HomeClientProps {
   photographers?: Photographer[];
+  images?: ImageWithOrientation[];
 }
 
-export default function HomeClient({ photographers }: HomeClientProps) {
+export default function HomeClient({ photographers, images }: HomeClientProps) {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -85,6 +88,7 @@ export default function HomeClient({ photographers }: HomeClientProps) {
     <>
       <HomeClientWrapper
         photographers={photographers}
+        images={images}
         onLoginClick={handleLoginClick}
         onLogoutClick={logout}
         user={user}

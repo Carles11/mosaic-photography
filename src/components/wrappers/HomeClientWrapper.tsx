@@ -23,10 +23,11 @@ import GitHubCorner from "@/components/buttons/GitHubCorner";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 
-import { Photographer } from "@/types/gallery";
+import { Photographer, ImageWithOrientation } from "@/types/gallery";
 
 interface HomeClientWrapperProps {
   photographers?: Photographer[];
+  images?: ImageWithOrientation[];
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
   user?: SupabaseUser | null;
@@ -35,6 +36,7 @@ interface HomeClientWrapperProps {
 
 function HomeClientWrapper({
   photographers,
+  images,
   onLoginClick,
   onLogoutClick,
   user,
@@ -147,7 +149,11 @@ function HomeClientWrapper({
               photographers={photographers}
               onLoginRequired={onLoginClick}
             />
-            <Gallery id="gallery-section" onLoginRequired={onLoginClick} />
+            <Gallery
+              id="gallery-section"
+              images={images}
+              onLoginRequired={onLoginClick}
+            />
           </div>
         </section>
         {/* Overlay for modal: visually obscure and block interaction if not confirmed */}
