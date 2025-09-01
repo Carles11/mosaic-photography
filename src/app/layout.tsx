@@ -206,7 +206,7 @@ function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       lang="en"
-      className={`${tradeGothic.variable} dark`}
+      className={`${tradeGothic.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning={true}
     >
