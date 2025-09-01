@@ -12,10 +12,6 @@ import { SupabaseUser } from "@/lib/supabaseClient";
 
 import Gallery from "@/components/gallery/Gallery";
 
-// Preload gallery and photographers data/images for performance
-import { preloadGalleryData } from "@/utils/preloadGallery";
-import { preloadPhotographersData } from "@/utils/preloadPhotographers";
-
 import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
 
@@ -45,7 +41,6 @@ function HomeClientWrapper({
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
 
-  const [preloaded, setPreloaded] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -59,15 +54,6 @@ function HomeClientWrapper({
       setIsMinimumAgeConfirmed(true); // Automatically confirm age for bots
     }
   }, [setIsMinimumAgeConfirmed]);
-
-  // Preload gallery and photographers data/images in background for performance
-  useEffect(() => {
-    if (!preloaded) {
-      Promise.all([preloadGalleryData(), preloadPhotographersData()]).finally(
-        () => setPreloaded(true),
-      );
-    }
-  }, [preloaded]);
 
   return (
     <div className={styles.container}>

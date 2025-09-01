@@ -1,3 +1,6 @@
+// ImageWrapper: All images are loaded exclusively via Next.js <Image /> with lazy loading.
+// No manual preloading, pre-caching, or window.Image() logic is used anywhere in the codebase.
+// This ensures optimal SEO, accessibility, and performance. See README for details.
 import React, { useState } from "react";
 import Image from "next/image";
 import { Item } from "./PhotoSwipeWrapper"; // Import Item from PhotoSwipeWrapper

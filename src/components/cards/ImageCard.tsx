@@ -3,6 +3,9 @@ import styles from "./ImageCard.module.css";
 import GallerySkeletonCard from "./GallerySkeletonCard";
 import { ImageWithOrientation } from "@/types/gallery";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
+// ImageCard: All images are loaded exclusively via Next.js <Image /> (via ImageWrapper) with lazy loading.
+// No manual preloading, pre-caching, or window.Image() logic is used anywhere in the codebase.
+// This ensures optimal SEO, accessibility, and performance. See README for details.
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 

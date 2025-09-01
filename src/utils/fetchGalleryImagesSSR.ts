@@ -24,14 +24,14 @@ export async function fetchGalleryImagesSSR(): Promise<
       );
       return null;
     }
-    // Filter out images starting with 000_aaa (like in preloadGalleryData)
+    // Filter out images starting with 000_aaa
     const filteredImages = images.filter((img) => {
       const fileName = img.url.split("/").pop()?.toLowerCase();
       return !fileName?.startsWith("000_aaa");
     });
     // Shuffle for random order
     const shuffledImages = shuffleArray(filteredImages);
-    // Add mosaicType logic (like in preloadGalleryData)
+    // Add mosaicType logic
     const processedImages: ImageWithOrientation[] = shuffledImages.map(
       (img, index) => {
         let mosaicType: "normal" | "large" | "wide" | "tall" = "normal";

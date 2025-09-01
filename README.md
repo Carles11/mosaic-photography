@@ -46,10 +46,22 @@ This project includes precision optimizations for SEO and ranking positioning. B
 
 ### Performance Optimizations
 
-- **Lazy Loading**: Images and other assets are lazy-loaded to improve page load speed.
-- **Next.js Image Optimization**: The `next/image` component is used to serve optimized images with automatic resizing and format conversion (e.g., WebP).
+- **No Manual Image Preloading**: All custom image preloading and pre-caching logic has been removed. Images are loaded exclusively using Next.js `<Image />` with `loading="lazy"` as the default, ensuring only visible images are loaded for optimal performance and SEO.
+- **Next.js Image Optimization**: The `next/image` component is used to serve optimized images with automatic resizing and format conversion (e.g., WebP). All images include proper `alt`, `width`, and `height` attributes for accessibility and SEO.
 - **Code Splitting**: Next.js automatically splits code to reduce initial load time.
 - **Caching and Compression**: Image assets are served with caching headers and gzip compression using optimized AWS-S3 CDN.
+
+#### Image Preloading Policy (2025 Update)
+
+> **Note:** As of September 2025, all manual image preloading utilities (`preloadGallery.ts`, `preloadPhotographers.ts`) have been removed from the codebase. This change was made to maximize SEO and performance, prevent unnecessary bandwidth usage, and ensure that only images visible in the viewport are loaded. No traces of old preloading logic remain.
+
+**Key points:**
+
+- No image preloading except for what browser/Next.js does natively.
+- All gallery and photographer images are loaded via Next.js `<Image />` with lazy loading.
+- No dead code or obsolete preloading utilities remain in the project.
+
+For more details, see code comments in `ImageWrapper` and `ImageCard` components.
 
 ### Mobile Responsiveness
 
