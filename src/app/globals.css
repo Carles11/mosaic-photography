@@ -6,13 +6,34 @@ body {
   height: 100%;
   scroll-behavior: smooth;
 }
-
 :root,
-[data-theme="light"] {
+[data-theme="dark"] {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 
+  --background-color: #1d1d1d;
+  --text-color: #fff;
+  --headfoot-background-gradient: linear-gradient(135deg, #555555, #999999);
+  --secondary-color: #2c106a;
+  --foreground: #fff;
+  --foreground-muted: #aaa;
+  --card-background: #2d2d2d;
+  --background: #1d1d1d;
+  --background-secondary: #333;
+  --border-color: #444;
+  --button-primary-bg: var(--link-color);
+  --button-primary-text: #fff;
+  --button-primary-hover: #5a9bc4;
+  --tertiary-color: #fd6c6c;
+  --accent-color: #f4d35e;
+  --text-gradient: linear-gradient(135deg, #4cf6c3 30%, #1faef0 70%);
+  --color-white: #fff;
+  --color-black: #1d1d1d;
+  --link-color: rgb(107, 154, 192);
+}
+
+[data-theme="light"] {
   --background-color: #fff;
   --text-color: #1d1d1d;
   --secondary-color: #cccaca;
@@ -22,7 +43,6 @@ body {
   --color-white: #fff;
   --color-black: #1d1d1d;
   --link-color: rgb(107, 154, 192);
-  /* Collections & Profile Component Variables */
   --foreground: var(--text-color);
   --foreground-muted: #666;
   --card-background: #fff;
@@ -34,47 +54,15 @@ body {
   --button-primary-hover: #5a9bc4;
 }
 
-[data-theme="dark"] {
-  --background-color: #1d1d1d;
-  --text-color: #fff;
-  --headfoot-background-gradient: linear-gradient(135deg, #555555, #999999);
-  --secondary-color: #2c106a;
-  --foreground: #fff;
-  --foreground-muted: #aaa;
-  --card-background: #2d2d2d;
-  --background: #1d1d1d;
-  --background-secondary: #333;
-  --border-color: #444;
-  --button-primary-bg: var(--link-color);
-  --button-primary-text: #fff;
-  --button-primary-hover: #5a9bc4;
-}
-
-[data-theme="dark"] {
-  --background-color: #1d1d1d;
-  --text-color: #fff;
-  --headfoot-background-gradient: linear-gradient(135deg, #555555, #999999);
-  --secondary-color: #2c106a;
-  --foreground: #fff;
-  --foreground-muted: #aaa;
-  --card-background: #2d2d2d;
-  --background: #1d1d1d;
-  --background-secondary: #333;
-  --border-color: #444;
-  --button-primary-bg: var(--link-color);
-  --button-primary-text: #fff;
-  --button-primary-hover: #5a9bc4;
-}
-
 body {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Ensure the body takes up the full viewport height */
-  margin: 0; /* Remove default margin */
+  min-height: 100vh;
+  margin: 0;
   position: relative;
   height: 100%;
   font-family: var(--font-trade-gothic), sans-serif;
-  font-weight: 400; /* Default weight */
+  font-weight: 400;
   padding: 0;
   box-sizing: border-box;
   background-color: var(--background-color);

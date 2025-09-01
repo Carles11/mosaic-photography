@@ -213,10 +213,6 @@ function RootLayout({ children }: RootLayoutProps) {
       <head>
         <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
 
-        {/* noscript fallback for non-critical CSS */}
-        <noscript>
-          <link rel="stylesheet" href="/non-critical.css" />
-        </noscript>
         <link rel="preconnect" href="https://www.mosaic.photography" />
       </head>
       <GoogleTagManager gtmId="GTM-N74Q9JC5" />

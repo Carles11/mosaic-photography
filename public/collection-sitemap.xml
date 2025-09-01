@@ -12,4 +12,16 @@
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://www.mosaic.photography/profile/collections/2a533f34-b133-4ed6-aa87-01352dee5fd3</loc>
+    <lastmod>2025-08-22T20:19:44.603Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.mosaic.photography/profile/collections/a335556a-c65c-470d-94d7-905d4f1d4ef5</loc>
+    <lastmod>2025-08-31T01:32:04.447Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
 </urlset>
