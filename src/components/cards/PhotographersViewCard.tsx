@@ -12,7 +12,7 @@ import Dropdown from "@/components/inputs/dropDown";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 
 import "slick-carousel/slick/slick.css"; // Import slick-carousel styles
-import "slick-carousel/slick/slick-theme.css"; // Import slick-carousel theme
+import "../../../public/css/slick-theme-custom.css";
 
 // Extend the Window interface to include __AGE_CONSENT_OPEN__
 declare global {

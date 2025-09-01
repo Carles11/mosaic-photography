@@ -30,7 +30,7 @@ export default function Header({
             <li className={styles.navLogo}>
               <Link href="/" className="no-fancy-link">
                 <ThemeImageSSR
-                  src="https://res.cloudinary.com/dktizqbky/image/upload/f_auto,q_auto/v1745436285/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-DESKTOP-light_766x541px_ooxukv.webp"
+                  src="https://res.cloudinary.com/dktizqbky/image/upload/f_auto,q_auto/v1745436286/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp"
                   width={383}
                   height={271}
                   alt="Mosaic Logo"
