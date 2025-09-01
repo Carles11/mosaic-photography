@@ -95,7 +95,7 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
           justifyContent: "center",
         }}
       >
-        {ClimbBoxLoaderContainer("var(--text-color)", 32, true)}
+        {ClimbBoxLoaderContainer("var(--text-color)", 22, true)}
       </div>
     );
   }

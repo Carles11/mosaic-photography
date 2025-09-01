@@ -19,6 +19,7 @@ export interface ImageData {
   author: string;
   title: string;
   description: string;
+  orientation: string;
   created_at: string;
   width?: number;
   height?: number;

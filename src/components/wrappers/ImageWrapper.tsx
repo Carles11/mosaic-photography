@@ -14,10 +14,11 @@ interface ImageWrapperProps {
     id: string;
     url: string;
     author: string;
+    orientation: string;
     title?: string;
   };
-  imgRef?: React.RefObject<HTMLImageElement | null>; // Add imgRef property
-  onLoginRequired?: () => void; // Callback when user needs to login
+  imgRef?: React.RefObject<HTMLImageElement | null>;
+  onLoginRequired?: () => void;
 }
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({
@@ -25,6 +26,24 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   imgRef,
   onLoginRequired,
 }) => {
+  // Set default width/height based on orientation
+  let imgWidth = 200;
+  let imgHeight = 225;
+  let sizes = "(max-width: 600px) 100vw, 200px";
+  if (image.orientation === "horizontal") {
+    imgWidth = 400;
+    imgHeight = 225;
+    sizes = "(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 400px";
+  } else if (image.orientation === "vertical") {
+    imgWidth = 200;
+    imgHeight = 267;
+    sizes = "(max-width: 600px) 100vw, 200px";
+  } else if (image.orientation === "square") {
+    imgWidth = 250;
+    imgHeight = 250;
+    sizes = "(max-width: 600px) 100vw, 250px";
+  }
+
   // Ensure ID is always a string (database might return number)
   const imageIdString = String(image.id);
   const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
@@ -62,19 +81,16 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
               src={image.url}
               alt={image.title || "Gallery Image"}
               className={`${styles.imageItem} ${styles.image}`}
-              width={imgRef?.current?.naturalWidth || 1200} // Use actual width
-              height={imgRef?.current?.naturalHeight || 800} // Use actual height
-              sizes="(max-width: 600px) 100vw, 50vw"
+              width={imgWidth}
+              height={imgHeight}
+              sizes={sizes}
+              quality={40}
               placeholder="blur"
               blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
               loading="lazy"
-              data-image-id={imageIdString} // Add image ID as data attribute for PhotoSwipe
+              data-image-id={imageIdString}
               ref={props.ref}
               onClick={props.open}
-              // ref={(node) => {
-              //   if (node && imgRef?.current !== undefined)
-              //     imgRef.current = node;
-              // }}
             />
           )}
         </Item>
