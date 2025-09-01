@@ -59,7 +59,7 @@ export default function FavoritesList({
         const favoriteImagesData: FavoriteImageData[] = images.map((image) => ({
           ...image,
           favoriteId: image.id,
-          orientation: image.orientation || "portrait",
+          orientation: image.orientation || "portrait", // Default orientation
         }));
 
         setFavoriteImages(favoriteImagesData);
