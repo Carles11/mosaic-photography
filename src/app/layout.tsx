@@ -109,6 +109,7 @@ function RootLayout({ children }: RootLayoutProps) {
       suppressHydrationWarning={true}
     >
       <head>
+        <meta charSet="utf-8" />
         <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
         <link rel="preconnect" href="https://www.mosaic.photography" />
       </head>
