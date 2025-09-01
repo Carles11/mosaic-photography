@@ -15,6 +15,7 @@ import { ImageData } from "@/types";
 
 interface FavoriteImageData extends ImageData {
   favoriteId: string; // To track the favorite relationship
+  orientation: string; // Added orientation field
 }
 
 interface FavoritesListProps {
