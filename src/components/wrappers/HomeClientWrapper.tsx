@@ -59,6 +59,7 @@ function HomeClientWrapper({
     <div className={styles.container}>
       <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
       <Header
+        isHome={true}
         onLoginClick={onLoginClick}
         onLogoutClick={onLogoutClick}
         user={user}
