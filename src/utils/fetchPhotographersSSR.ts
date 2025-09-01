@@ -22,6 +22,24 @@ export async function fetchPhotographersSSR(): Promise<Photographer[] | null> {
     }
     const processedPhotographers = (photographers || []).map((photographer) => {
       if (!photographer.images) return photographer;
+      // Ensure all images have orientation
+      const imagesWithOrientation = (photographer.images as any[]).map(
+        (img) => ({
+          ...img,
+          orientation:
+            "orientation" in img && img.orientation
+              ? img.orientation
+              : "portrait",
+        }),
+      );
+      return {
+        ...photographer,
+        images: imagesWithOrientation,
+      };
+    });
+    // Move featured image logic if needed after this mapping
+    processedPhotographers.forEach((photographer) => {
+      if (!photographer.images) return;
       const featuredIndex = photographer.images.findIndex((img) => {
         const fileName = img.url.split("/").pop()?.toLowerCase();
         return fileName?.startsWith("000_aaa");
@@ -30,7 +48,6 @@ export async function fetchPhotographersSSR(): Promise<Photographer[] | null> {
         const [featured] = photographer.images.splice(featuredIndex, 1);
         photographer.images.unshift(featured);
       }
-      return photographer;
     });
     return processedPhotographers;
   } catch {
