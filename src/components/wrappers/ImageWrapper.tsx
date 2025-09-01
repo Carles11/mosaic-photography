@@ -14,7 +14,7 @@ interface ImageWrapperProps {
     id: string;
     url: string;
     author: string;
-    orientation: string;
+    orientation?: string;
     title?: string;
   };
   imgRef?: React.RefObject<HTMLImageElement | null>;

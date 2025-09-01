@@ -19,7 +19,7 @@ export interface ImageData {
   author: string;
   title: string;
   description: string;
-  orientation: string;
+  orientation?: string;
   created_at: string;
   width?: number;
   height?: number;
@@ -27,7 +27,7 @@ export interface ImageData {
 }
 
 export type ImageWithOrientation = ImageData & {
-  orientation: "vertical" | "horizontal" | "square";
+  orientation?: "vertical" | "horizontal" | "square";
   mosaicType?: "normal" | "large" | "wide" | "tall";
 };
 

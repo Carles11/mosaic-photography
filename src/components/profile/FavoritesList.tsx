@@ -15,7 +15,6 @@ import { ImageData } from "@/types";
 
 interface FavoriteImageData extends ImageData {
   favoriteId: string; // To track the favorite relationship
-  orientation: string; // Added orientation field
 }
 
 interface FavoritesListProps {
@@ -47,7 +46,7 @@ export default function FavoritesList({
 
       const { data: images, error } = await supabase
         .from("images")
-        .select("id, url, author, title, description, created_at, orientation")
+        .select("id, url, author, title, description, created_at")
         .in("id", imageIds);
 
       if (error) {
@@ -60,7 +59,6 @@ export default function FavoritesList({
         const favoriteImagesData: FavoriteImageData[] = images.map((image) => ({
           ...image,
           favoriteId: image.id,
-          orientation: image.orientation || "portrait", // Default orientation
         }));
 
         setFavoriteImages(favoriteImagesData);
