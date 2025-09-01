@@ -46,7 +46,7 @@ export default function FavoritesList({
 
       const { data: images, error } = await supabase
         .from("images")
-        .select("id, url, author, title, description, created_at")
+        .select("id, url, author, title, description, created_at, orientation")
         .in("id", imageIds);
 
       if (error) {
@@ -58,7 +58,8 @@ export default function FavoritesList({
         // Map images and preserve the favorite relationship
         const favoriteImagesData: FavoriteImageData[] = images.map((image) => ({
           ...image,
-          favoriteId: image.id, // Use image.id as the favorite identifier
+          favoriteId: image.id,
+          orientation: image.orientation || "portrait",
         }));
 
         setFavoriteImages(favoriteImagesData);
