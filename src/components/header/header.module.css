@@ -185,12 +185,6 @@
   text-decoration: none;
 }
 
-.welcomeText {
-  color: var(--text-color, #fff);
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
 .leftActions {
   display: flex;
   align-items: center;

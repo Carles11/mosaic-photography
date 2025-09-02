@@ -119,15 +119,6 @@
   -webkit-backdrop-filter: blur(2px);
 }
 
-.menuModal {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  animation: slideUpModal 0.3s ease forwards;
-}
-
 .menuContent {
   background: var(--background-color, #232323);
   border-radius: 16px 16px 0 0;
@@ -142,17 +133,6 @@
   padding: 1.5rem;
   background: var(--background-secondary, rgba(255, 255, 255, 0.05));
   border-bottom: 1px solid var(--tertiary-color, rgba(255, 255, 255, 0.1));
-}
-
-.welcomeText {
-  color: var(--text-color, #fff);
-  font-size: 0.95rem;
-  font-weight: 500;
-  word-break: break-word;
-}
-
-.menuItems {
-  padding: 1rem 0;
 }
 
 .menuItem {

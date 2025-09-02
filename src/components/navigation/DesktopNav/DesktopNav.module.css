@@ -96,13 +96,6 @@
   background: var(--background-secondary, rgba(255, 255, 255, 0.05));
 }
 
-.welcomeText {
-  color: var(--text-color, #fff);
-  font-size: 0.85rem;
-  font-weight: 500;
-  word-break: break-word;
-}
-
 /* Menu Items */
 .menuItem {
   display: flex;
@@ -214,10 +207,6 @@
 
   .userInfo {
     padding: 1.5rem;
-  }
-
-  .welcomeText {
-    font-size: 0.95rem;
   }
 
   .themeToggleWrapper {
