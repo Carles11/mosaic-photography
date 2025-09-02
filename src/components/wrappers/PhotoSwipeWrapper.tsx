@@ -1,5 +1,10 @@
-import React, { PropsWithChildren, useEffect, useState } from "react";
-import { Gallery, Item } from "react-photoswipe-gallery";
+import React, {
+  PropsWithChildren,
+  useEffect,
+  useState,
+  lazy,
+  Suspense,
+} from "react";
 import { createPortal } from "react-dom";
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsButton from "@/components/buttons/CommentsButton";
@@ -7,10 +12,19 @@ import CommentsModal from "@/components/modals/comments/CommentsModal";
 import { ImageWithOrientation } from "@/types";
 import "photoswipe/dist/photoswipe.css";
 
+// LAZY IMPORTS for gallery components
+const Gallery = lazy(() =>
+  import("react-photoswipe-gallery").then((mod) => ({ default: mod.Gallery })),
+);
+// Export lazy Item for use elsewhere
+const Item = lazy(() =>
+  import("react-photoswipe-gallery").then((mod) => ({ default: mod.Item })),
+);
+
 interface PhotoSwipeWrapperProps {
   galleryOptions?: Record<string, string | number | boolean>;
   onLoginRequired?: () => void;
-  images?: Array<{ id: string | number } | ImageWithOrientation>; // Array of images with at least an id field
+  images?: Array<{ id: string | number } | ImageWithOrientation>;
 }
 
 // Global state to prevent multiple PhotoSwipe handlers
@@ -42,13 +56,11 @@ const PhotoSwipeWrapper: React.FC<
 
     const slideData = pswpInstance.currSlide.data;
 
-    // The ID should be in slideData.id (passed from our Item component)
     if (slideData && slideData.id) {
       const imageId = String(slideData.id);
       return imageId;
     }
 
-    // Fallback: try to get from alt attribute
     if (slideData && slideData.alt) {
       const imageId = String(slideData.alt);
       return imageId;
@@ -58,16 +70,13 @@ const PhotoSwipeWrapper: React.FC<
   };
 
   useEffect(() => {
-    // Only one instance should handle PhotoSwipe detection globally
     if (isPhotoSwipeHandlerActive) {
       return;
     }
 
     isPhotoSwipeHandlerActive = true;
 
-    // Create heart button container when PhotoSwipe opens
     const createHeartButtonContainer = (pswpElement: HTMLElement) => {
-      // Avoid creating duplicate containers
       if (pswpElement.querySelector(".pswp__heart-container")) {
         return;
       }
@@ -94,26 +103,20 @@ const PhotoSwipeWrapper: React.FC<
       setPhotoSwipeContainer(container);
     };
 
-    // Setup PhotoSwipe event listeners
-
     const setupPhotoSwipeListeners = (pswpElement: HTMLElement): boolean => {
-      // Try multiple ways to access the PhotoSwipe instance
       let pswpInstance: unknown = (pswpElement as unknown as { pswp?: unknown })
         .pswp;
 
       if (!pswpInstance) {
-        // Try alternative property names
         pswpInstance = (pswpElement as unknown as { photoswipe?: unknown })
           .photoswipe;
       }
 
       if (!pswpInstance) {
-        // Try to find it in the global window object
         pswpInstance = (window as unknown as { pswp?: unknown }).pswp;
       }
 
       if (!pswpInstance) {
-        // Try to access through data attributes or other methods
         const pswpData = pswpElement.getAttribute("data-pswp");
         if (pswpData) {
           try {
@@ -125,7 +128,6 @@ const PhotoSwipeWrapper: React.FC<
       }
 
       if (pswpInstance) {
-        // Set initial image ID
         const initialImageId = getImageIdFromPhotoSwipe(
           pswpInstance as {
             currSlide?: { data?: { id?: string | number; alt?: string } };
@@ -135,7 +137,6 @@ const PhotoSwipeWrapper: React.FC<
           setCurrentImageId(initialImageId);
         }
 
-        // Listen for slide changes
         (
           pswpInstance as { on: (event: string, callback: () => void) => void }
         ).on("change", () => {
@@ -149,7 +150,6 @@ const PhotoSwipeWrapper: React.FC<
           }
         });
 
-        // Clean up when PhotoSwipe closes
         (
           pswpInstance as { on: (event: string, callback: () => void) => void }
         ).on("destroy", () => {
@@ -160,10 +160,9 @@ const PhotoSwipeWrapper: React.FC<
         return true; // Success
       }
 
-      return false; // Failed to find instance
+      return false;
     };
 
-    // Watch for PhotoSwipe modal creation
     const observer = new MutationObserver((mutations: MutationRecord[]) => {
       mutations.forEach((mutation) => {
         if (mutation.type !== "childList") return;
@@ -173,13 +172,11 @@ const PhotoSwipeWrapper: React.FC<
             const element = node as Element;
 
             if (element.classList?.contains("pswp")) {
-              // Create heart button container
               createHeartButtonContainer(element as HTMLElement);
 
-              // Setup event listeners with multiple attempts
               let attemptCount = 0;
               const maxAttempts = 10;
-              const attemptInterval = 100; // ms
+              const attemptInterval = 100;
 
               const trySetupListeners = () => {
                 attemptCount++;
@@ -191,10 +188,8 @@ const PhotoSwipeWrapper: React.FC<
                 if (!success && attemptCount < maxAttempts) {
                   setTimeout(trySetupListeners, attemptInterval);
                 } else if (!success) {
-                  // Fallback: Try to extract image ID from DOM or first image
                   let fallbackImageId: string | null = null;
 
-                  // Try to find image ID from the current slide's img element
                   const currentImg = element.querySelector(
                     ".pswp__img",
                   ) as HTMLImageElement;
@@ -209,7 +204,6 @@ const PhotoSwipeWrapper: React.FC<
                     images &&
                     images.length > 0
                   ) {
-                    // Try to match the image URL with our images array
                     const matchingImage = images.find((img) =>
                       typeof img.id === "string" || typeof img.id === "number"
                         ? currentImg.src.includes(String(img.id)) ||
@@ -230,14 +224,12 @@ const PhotoSwipeWrapper: React.FC<
                   }
 
                   if (!fallbackImageId && images && images.length > 0) {
-                    // Last resort: use first image ID
                     fallbackImageId = String(images[0].id);
                   }
 
                   if (fallbackImageId) {
                     setCurrentImageId(fallbackImageId);
 
-                    // Set up responsive checking for slide changes
                     let lastImageId = fallbackImageId;
                     let lastImageSrc = "";
 
@@ -246,22 +238,19 @@ const PhotoSwipeWrapper: React.FC<
                         ".pswp__img",
                       ) as HTMLImageElement;
 
-                      // Also try to find all images in the current slide
                       const allImages = element.querySelectorAll(".pswp__img");
 
                       const visibleImg = Array.from(allImages).find((img) => {
                         const rect = img.getBoundingClientRect();
-                        // Look for images that are not only visible but also substantially sized and centered
                         const isVisible = rect.width > 0 && rect.height > 0;
                         const isSubstantial =
-                          rect.width > 100 && rect.height > 100; // Ignore tiny images
+                          rect.width > 100 && rect.height > 100;
                         const isCentered =
-                          rect.x > -100 && rect.x < window.innerWidth - 100; // Not too far off-screen
+                          rect.x > -100 && rect.x < window.innerWidth - 100;
 
                         return isVisible && isSubstantial && isCentered;
                       }) as HTMLImageElement;
 
-                      // If no good centered image, fall back to largest visible image
                       let targetImg = visibleImg;
                       if (!targetImg) {
                         const visibleImages = Array.from(allImages).filter(
@@ -272,7 +261,6 @@ const PhotoSwipeWrapper: React.FC<
                         );
 
                         if (visibleImages.length > 0) {
-                          // Find the largest visible image
                           targetImg = visibleImages.reduce(
                             (largest, current) => {
                               const largestRect =
@@ -330,7 +318,6 @@ const PhotoSwipeWrapper: React.FC<
                       return {
                         newImageId,
                         currentImgSrc: targetImg?.src || "",
-                        // totalImages and visibleImages are not used, so omit them
                       };
                     };
 
@@ -338,12 +325,10 @@ const PhotoSwipeWrapper: React.FC<
                       const { newImageId, currentImgSrc } =
                         getCurrentImageInfo();
 
-                      // Only check if we have valid data (avoid null states during transitions)
                       if (!newImageId && !currentImgSrc) {
-                        return; // Skip this check - probably mid-transition
+                        return;
                       }
 
-                      // Check if either the image ID or src changed
                       if (
                         (newImageId && newImageId !== lastImageId) ||
                         (currentImgSrc && currentImgSrc !== lastImageSrc)
@@ -356,18 +341,15 @@ const PhotoSwipeWrapper: React.FC<
                       }
                     };
 
-                    // Use more reasonable interval
                     const slideCheckInterval = setInterval(
                       checkForSlideChanges,
-                      200, // Slower but more stable - 200ms
+                      200,
                     );
 
-                    // Also watch for DOM changes in the PhotoSwipe element (less aggressive)
                     const slideObserver = new MutationObserver((mutations) => {
                       let shouldCheck = false;
 
                       mutations.forEach((mutation) => {
-                        // Only check for significant changes
                         if (mutation.type === "childList") {
                           const hasImageChanges =
                             Array.from(mutation.addedNodes).some(
@@ -386,7 +368,6 @@ const PhotoSwipeWrapper: React.FC<
                           }
                         }
 
-                        // Check for src changes on img elements only
                         if (
                           mutation.type === "attributes" &&
                           mutation.target.nodeType === Node.ELEMENT_NODE &&
@@ -398,7 +379,6 @@ const PhotoSwipeWrapper: React.FC<
                       });
 
                       if (shouldCheck) {
-                        // Single delayed check, no spam
                         setTimeout(checkForSlideChanges, 100);
                       }
                     });
@@ -407,13 +387,11 @@ const PhotoSwipeWrapper: React.FC<
                       childList: true,
                       subtree: true,
                       attributes: true,
-                      attributeFilter: ["src"], // Only watch src changes
+                      attributeFilter: ["src"],
                     });
 
-                    // Listen for keyboard events (more targeted)
                     const handleKeyDown = (_e: KeyboardEvent) => {
                       if (_e.key === "ArrowLeft" || _e.key === "ArrowRight") {
-                        // Check immediately and then again after delays
                         checkForSlideChanges();
                         setTimeout(checkForSlideChanges, 50);
                         setTimeout(checkForSlideChanges, 150);
@@ -423,7 +401,6 @@ const PhotoSwipeWrapper: React.FC<
 
                     document.addEventListener("keydown", handleKeyDown);
 
-                    // Clean up when modal closes
                     const cleanupObserver = new MutationObserver(
                       (mutations) => {
                         mutations.forEach((mutation) => {
@@ -449,13 +426,11 @@ const PhotoSwipeWrapper: React.FC<
                       subtree: true,
                     });
                   } else {
-                    // Last resort: show heart button with generic ID
                     setCurrentImageId("unknown");
                   }
                 }
               };
 
-              // Start trying immediately
               trySetupListeners();
             }
           }
@@ -463,7 +438,6 @@ const PhotoSwipeWrapper: React.FC<
       });
     });
 
-    // Start observing
     observer.observe(document.body, {
       childList: true,
       subtree: true,
@@ -473,14 +447,15 @@ const PhotoSwipeWrapper: React.FC<
       observer.disconnect();
       isPhotoSwipeHandlerActive = false;
     };
-  }, [images]); // Add images as dependency for useEffect
+  }, [images]);
 
   return (
     <>
-      <Gallery withCaption withDownloadButton options={galleryOptions}>
-        {children}
-      </Gallery>
-      {/* Render HeartButton and CommentsButton when PhotoSwipe modal is open and we have the image ID */}
+      <Suspense fallback={null}>
+        <Gallery withCaption withDownloadButton options={galleryOptions}>
+          {children}
+        </Gallery>
+      </Suspense>
       {photoSwipeContainer &&
         currentImageId &&
         createPortal(
@@ -499,7 +474,6 @@ const PhotoSwipeWrapper: React.FC<
           photoSwipeContainer,
         )}
 
-      {/* Comments Modal */}
       {currentImageId && (
         <CommentsModal
           imageId={currentImageId}

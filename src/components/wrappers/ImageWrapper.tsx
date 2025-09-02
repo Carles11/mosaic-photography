@@ -1,13 +1,15 @@
 // ImageWrapper: All images are loaded exclusively via Next.js <Image /> with lazy loading.
 // No manual preloading, pre-caching, or window.Image() logic is used anywhere in the codebase.
 // This ensures optimal SEO, accessibility, and performance. See README for details.
-import React, { useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import Image from "next/image";
-import { Item } from "./PhotoSwipeWrapper"; // Import Item from PhotoSwipeWrapper
+import { Item } from "./PhotoSwipeWrapper";
 import styles from "./image.module.css";
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsButton from "@/components/buttons/CommentsButton";
-import CommentsModal from "@/components/modals/comments/CommentsModal";
+const CommentsModal = lazy(
+  () => import("@/components/modals/comments/CommentsModal"),
+);
 
 interface ImageWrapperProps {
   image: {
@@ -96,13 +98,17 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
         </Item>
       </div>
 
-      {/* Comments Modal */}
-      <CommentsModal
-        imageId={imageIdString}
-        isOpen={isCommentsModalOpen}
-        onClose={handleCloseCommentsModal}
-        onLoginRequired={onLoginRequired}
-      />
+      {/* Comments Modal: lazy loaded and only rendered when needed */}
+      {isCommentsModalOpen && (
+        <Suspense fallback={null}>
+          <CommentsModal
+            imageId={imageIdString}
+            isOpen={isCommentsModalOpen}
+            onClose={handleCloseCommentsModal}
+            onLoginRequired={onLoginRequired}
+          />
+        </Suspense>
+      )}
     </>
   );
 };
