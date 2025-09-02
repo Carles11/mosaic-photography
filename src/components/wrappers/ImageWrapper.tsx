@@ -86,7 +86,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
               width={imgWidth}
               height={imgHeight}
               sizes={sizes}
-              quality={40}
+              quality={25} // <--- Lower quality for grid images!
               placeholder="blur"
               blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
               loading="lazy"

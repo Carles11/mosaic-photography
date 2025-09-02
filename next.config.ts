@@ -31,6 +31,8 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 31536000, // 1 year
     qualities: [25, 40, 75],
     formats: ["image/webp"],
+    deviceSizes: [200, 400, 600], // Only generate for these common grid sizes!
+    imageSizes: [200, 250, 400], // Only generate these for 'sizes' prop values
   },
   webpack: (config, { isServer }) => {
     config.optimization.splitChunks = {
