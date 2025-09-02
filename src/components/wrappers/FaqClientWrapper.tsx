@@ -1,8 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import FaqHeaderClient from "../../app/faq/FaqHeaderClient";
 import GoProModal from "@/components/modals/goProModal/GoProModal";
-import Footer from "@/components/footer/Footer";
 import styles from "../../app/faq/faq.module.css";
 import Link from "next/link";
 
@@ -34,11 +32,9 @@ const FaqClientWrapper: React.FC<FaqClientWrapperProps> = ({
   faqStructuredData,
 }) => {
   const [showGoProModal, setShowGoProModal] = useState(false);
-  const handleGoProClick = () => setShowGoProModal(true);
 
   return (
     <>
-      <FaqHeaderClient onGoProClick={handleGoProClick} />
       <GoProModal
         isOpen={showGoProModal}
         onClose={() => setShowGoProModal(false)}
@@ -124,8 +120,6 @@ const FaqClientWrapper: React.FC<FaqClientWrapperProps> = ({
       <a href="#top" className={styles.goToTopButton} aria-label="Go to top">
         ↑
       </a>
-
-      <Footer />
     </>
   );
 };

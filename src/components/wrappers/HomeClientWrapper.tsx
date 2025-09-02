@@ -16,8 +16,6 @@ import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
 
 import GitHubCorner from "@/components/buttons/GitHubCorner";
-import Header from "@/components/header/Header";
-import Footer from "@/components/footer/Footer";
 
 import { Photographer, ImageWithOrientation } from "@/types/gallery";
 
@@ -35,7 +33,6 @@ function HomeClientWrapper({
   images,
   onLoginClick,
   onLogoutClick,
-  user,
   onGoProClick,
 }: HomeClientWrapperProps) {
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
@@ -58,13 +55,6 @@ function HomeClientWrapper({
   return (
     <div className={styles.container}>
       <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
-      <Header
-        isHome={true}
-        onLoginClick={onLoginClick}
-        onLogoutClick={onLogoutClick}
-        user={user}
-        onGoProClick={onGoProClick}
-      />
 
       {/* Show AgeConsent only for real users and if age is not confirmed */}
       {!isCrawlerBot && !isMinimumAgeConfirmed && (
@@ -187,7 +177,6 @@ function HomeClientWrapper({
           </div>
         )}
       </>
-      <Footer />
       {/* Mobile Bottom Navigation now rendered here with correct props */}
       <BottomNav onGoProClick={onGoProClick} onLogoutClick={onLogoutClick} />
     </div>

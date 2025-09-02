@@ -14,6 +14,7 @@ import { AuthSessionProvider } from "@/context/AuthSessionContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
 import { CommentsProvider } from "@/context/CommentsContext";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
+import ClientLayout from "@/components/layouts/ClientLayout";
 
 import "./globals.css";
 
@@ -123,7 +124,10 @@ function RootLayout({ children }: RootLayoutProps) {
               <AgeConsentProvider>
                 <FavoritesProvider>
                   <CommentsProvider>
-                    <main style={{ flex: 1 }}>{children}</main>
+                    <main style={{ flex: 1 }}>
+                      <ClientLayout>{children}</ClientLayout>
+                    </main>
+
                     <GlobalNavProvider />
                   </CommentsProvider>
                 </FavoritesProvider>
