@@ -18,7 +18,6 @@ interface CommentsContextType {
   commentCounts: Record<string, number>; // imageId -> count (lightweight cache)
   getCommentsForImage: (imageId: string) => Comment[];
   getCommentCount: (imageId: string) => number;
-  loadCommentCount: (imageId: string) => Promise<void>;
   loadCommentCountsBatch: (imageIds: string[]) => Promise<void>;
   addComment: (imageId: string, content: string) => Promise<void>;
   updateComment: (commentId: string, content: string) => Promise<void>;
@@ -52,7 +51,6 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
 
   // Track active requests to prevent duplicates
   const activeRequestsRef = useRef(new Set<string>());
-  const activeCountRequestsRef = useRef(new Set<string>());
 
   // Update refs when state changes
   useEffect(() => {
@@ -77,71 +75,9 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
   );
 
   const getCommentCount = useCallback(
-    (imageId: string): number => {
-      // First try to get from full comments if loaded
-      const fullComments = comments[imageId];
-      if (fullComments !== undefined) {
-        return fullComments.length;
-      }
-      // Otherwise use the lightweight count cache
-      return commentCounts[imageId] || 0;
-    },
-    [comments, commentCounts],
+    (imageId: string): number => commentCounts[imageId] || 0,
+    [commentCounts],
   );
-
-  // Lightweight function to load just the comment count (not full comments)
-  const loadCommentCount = useCallback(async (imageId: string) => {
-    if (!imageId || imageId === "unknown") {
-      return;
-    }
-    // If we already have a count or full comments, don't reload
-    if (
-      commentCountsRef.current[imageId] !== undefined ||
-      commentsRef.current[imageId] !== undefined ||
-      activeCountRequestsRef.current.has(imageId)
-    ) {
-      return;
-    }
-    activeCountRequestsRef.current.add(imageId);
-
-    try {
-      const numericImageId =
-        typeof imageId === "string" ? parseInt(imageId, 10) : imageId;
-
-      if (isNaN(numericImageId)) {
-        setCommentCounts((prev) => ({ ...prev, [imageId]: 0 }));
-        return;
-      }
-
-      const { count, error } = await supabase
-        .from("comments")
-        .select("*", { count: "exact", head: true })
-        .eq("image_id", numericImageId);
-
-      if (error) {
-        console.warn(
-          "Error loading comment count for image",
-          imageId,
-          ":",
-          error,
-        );
-        setCommentCounts((prev) => ({ ...prev, [imageId]: 0 }));
-        return;
-      }
-
-      setCommentCounts((prev) => ({ ...prev, [imageId]: count || 0 }));
-    } catch (error) {
-      console.warn(
-        "Error loading comment count for image",
-        imageId,
-        ":",
-        error,
-      );
-      setCommentCounts((prev) => ({ ...prev, [imageId]: 0 }));
-    } finally {
-      activeCountRequestsRef.current.delete(imageId);
-    }
-  }, []);
 
   // NEW: Batch loader for comment counts
   const loadCommentCountsBatch = useCallback(async (imageIds: string[]) => {
@@ -439,7 +375,6 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
         commentCounts,
         getCommentsForImage,
         getCommentCount,
-        loadCommentCount,
         loadCommentCountsBatch,
         addComment,
         updateComment,

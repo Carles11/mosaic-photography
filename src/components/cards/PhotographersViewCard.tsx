@@ -6,6 +6,7 @@ import styles from "./PhotographersViewCard.module.css";
 import GallerySkeletonCard from "./GallerySkeletonCard";
 import "./PhotographersViewCard.overlay.css";
 import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
+import { useComments } from "@/context/CommentsContext";
 
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import Dropdown from "@/components/inputs/dropDown";
@@ -33,6 +34,30 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
   onLoginRequired,
 }) => {
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
+  const { loadCommentCountsBatch } = useComments();
+  // SSR/SSG: use prop; fallback to client fetch only if not provided (e.g. for refresh/filter)
+  const [photographers] = useState<Photographer[]>(photographersProp || []);
+  const error = null;
+  const loading = !photographersProp;
+  const [selectedPhotographer, setSelectedPhotographer] =
+    useState<Photographer | null>(null);
+  const [expandedBiography, setExpandedBiography] = useState<number | null>(
+    null,
+  );
+  const [expandedOrigin, setExpandedOrigin] = useState<number | null>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    if (!photographers) return;
+    // Flatten all image IDs from all photographers
+    const imageIds = photographers
+      .flatMap((ph) => ph.images || [])
+      .map((img) => String(img.id));
+    if (imageIds.length) {
+      loadCommentCountsBatch(imageIds);
+    }
+  }, [photographers, loadCommentCountsBatch]);
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const checkOverlay = () => {
@@ -45,18 +70,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
       };
     }
   }, []);
-
-  // SSR/SSG: use prop; fallback to client fetch only if not provided (e.g. for refresh/filter)
-  const [photographers] = useState<Photographer[]>(photographersProp || []);
-  const error = null;
-  const loading = !photographersProp;
-  const [selectedPhotographer, setSelectedPhotographer] =
-    useState<Photographer | null>(null);
-  const [expandedBiography, setExpandedBiography] = useState<number | null>(
-    null,
-  );
-  const [expandedOrigin, setExpandedOrigin] = useState<number | null>(null);
-  const imgRef = useRef<HTMLImageElement | null>(null);
 
   // Only allow client fetch for user-triggered refresh/filter, not initial load
   // Remove initial useEffect data load for SSR

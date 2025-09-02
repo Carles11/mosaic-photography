@@ -2,12 +2,6 @@
 
 import styles from "./CommentsButton.module.css";
 import { useComments } from "@/context/CommentsContext";
-// import dynamic from "next/dynamic";
-
-// const Tooltip = dynamic(
-//   () => import("react-tooltip").then((mod) => mod.Tooltip),
-//   { ssr: false }, // Disable server-side rendering
-// );
 
 interface CommentsButtonProps {
   imageId: string;
@@ -21,16 +15,6 @@ const CommentsButton: React.FC<CommentsButtonProps> = ({
   onOpenModal,
 }) => {
   const { getCommentCount, loadCommentsForImage } = useComments();
-
-  // Load lightweight comment count on mount to show badge
-  // useEffect(() => {
-  //   // Use a small random delay to spread out requests when many buttons mount
-  //   const timeoutId = setTimeout(() => {
-  //     loadCommentCount(imageId);
-  //   }, Math.random() * 200); // Random delay between 0-200ms
-
-  //   return () => clearTimeout(timeoutId);
-  // }, [imageId, loadCommentCount]);
 
   // Get comment count for badge display
   const commentCount = getCommentCount(imageId);
@@ -68,10 +52,6 @@ const CommentsButton: React.FC<CommentsButtonProps> = ({
         />
       </svg>
       {commentCount > 0 && <span className={styles.badge}>{commentCount}</span>}
-      {/* <Tooltip
-        anchorSelect="#heart-icon"
-        content={`View comments${commentCount > 0 ? ` (${commentCount})` : ""}`}
-      /> */}
     </button>
   );
 };

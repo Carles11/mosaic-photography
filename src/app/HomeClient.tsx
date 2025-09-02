@@ -6,6 +6,8 @@ import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import GoProModal from "@/components/modals/goProModal/GoProModal";
 import { sendGTMEvent } from "@next/third-parties/google";
 import { useAuth } from "@/hooks/useAuth";
+import { useComments } from "@/context/CommentsContext";
+
 import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
 import AuthModal from "@/components/auth/AuthModal";
 import { AuthView } from "@/types/auth";
@@ -32,6 +34,13 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
   const [authView, setAuthView] = useState<AuthView>("login");
   const [isInitialized, setIsInitialized] = useState(false);
   const [showGoProModal, setShowGoProModal] = useState(false);
+  const { loadCommentCountsBatch } = useComments();
+
+  useEffect(() => {
+    if (!images || images.length === 0) return;
+    const imageIds = images.map((img) => String(img.id));
+    loadCommentCountsBatch(imageIds);
+  }, [images, loadCommentCountsBatch]);
 
   // Handle URL parameters for backward compatibility (email redirects, etc.)
   useEffect(() => {
