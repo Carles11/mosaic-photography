@@ -18,7 +18,8 @@ interface CommentsContextType {
   commentCounts: Record<string, number>; // imageId -> count (lightweight cache)
   getCommentsForImage: (imageId: string) => Comment[];
   getCommentCount: (imageId: string) => number;
-  loadCommentCount: (imageId: string) => Promise<void>; // New lightweight function
+  loadCommentCount: (imageId: string) => Promise<void>;
+  loadCommentCountsBatch: (imageIds: string[]) => Promise<void>;
   addComment: (imageId: string, content: string) => Promise<void>;
   updateComment: (commentId: string, content: string) => Promise<void>;
   deleteComment: (commentId: string, imageId: string) => Promise<void>;
@@ -82,7 +83,6 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
       if (fullComments !== undefined) {
         return fullComments.length;
       }
-
       // Otherwise use the lightweight count cache
       return commentCounts[imageId] || 0;
     },
@@ -94,7 +94,6 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
     if (!imageId || imageId === "unknown") {
       return;
     }
-
     // If we already have a count or full comments, don't reload
     if (
       commentCountsRef.current[imageId] !== undefined ||
@@ -103,7 +102,6 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
     ) {
       return;
     }
-
     activeCountRequestsRef.current.add(imageId);
 
     try {
@@ -115,7 +113,6 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      // Just count the comments, don't fetch full data
       const { count, error } = await supabase
         .from("comments")
         .select("*", { count: "exact", head: true })
@@ -146,143 +143,152 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const loadCommentsForImage = useCallback(
-    async (imageId: string) => {
-      // More aggressive early exits to prevent duplicate requests
-      if (!imageId || imageId === "unknown") {
-        return; // Don't even set state for invalid IDs
+  // NEW: Batch loader for comment counts
+  const loadCommentCountsBatch = useCallback(async (imageIds: string[]) => {
+    if (!imageIds || imageIds.length === 0) return;
+    // Convert string IDs to numbers, and filter out invalid ones
+    const numericIds = imageIds
+      .map((id) => (typeof id === "string" ? parseInt(id, 10) : id))
+      .filter((id) => !isNaN(id));
+    if (numericIds.length === 0) return;
+    try {
+      // This fetches all comment rows for the given image IDs
+      const { data, error } = await supabase
+        .from("comments")
+        .select("image_id")
+        .in("image_id", numericIds);
+
+      if (error) throw error;
+
+      // Aggregate counts by image_id
+      const counts: Record<string, number> = {};
+      data.forEach(({ image_id }) => {
+        const idStr = String(image_id);
+        counts[idStr] = (counts[idStr] ?? 0) + 1;
+      });
+
+      // Fill missing IDs with zero
+      numericIds.forEach((id) => {
+        const idStr = String(id);
+        if (typeof counts[idStr] !== "number") counts[idStr] = 0;
+      });
+
+      setCommentCounts((prev) => ({
+        ...prev,
+        ...counts,
+      }));
+    } catch (err) {
+      console.error("Failed to load comment counts batch", err);
+    }
+  }, []);
+
+  const loadCommentsForImage = useCallback(async (imageId: string) => {
+    if (!imageId || imageId === "unknown") {
+      return;
+    }
+    if (
+      loadingRef.current[imageId] ||
+      commentsRef.current[imageId] !== undefined ||
+      activeRequestsRef.current.has(imageId)
+    ) {
+      return;
+    }
+
+    activeRequestsRef.current.add(imageId);
+    setLoading((prev) => ({ ...prev, [imageId]: true }));
+
+    try {
+      const numericImageId =
+        typeof imageId === "string" ? parseInt(imageId, 10) : imageId;
+
+      if (isNaN(numericImageId)) {
+        setComments((prev) => ({ ...prev, [imageId]: [] }));
+        activeRequestsRef.current.delete(imageId);
+        setLoading((prev) => ({ ...prev, [imageId]: false }));
+        return;
       }
 
-      // Check if already loading, loaded, or has an active request
-      if (
-        loadingRef.current[imageId] ||
-        commentsRef.current[imageId] !== undefined ||
-        activeRequestsRef.current.has(imageId)
-      ) {
-        return; // Already loading, loaded, or request in progress
-      }
-
-      // Mark this imageId as having an active request
-      activeRequestsRef.current.add(imageId);
-      setLoading((prev) => ({ ...prev, [imageId]: true }));
-
-      try {
-        // Convert imageId to number for database query (since image_id is int8)
-        const numericImageId =
-          typeof imageId === "string" ? parseInt(imageId, 10) : imageId;
-
-        // Check if imageId is a valid number
-        if (isNaN(numericImageId)) {
-          console.warn("Invalid imageId:", imageId, "- not a valid number");
-          setComments((prev) => ({ ...prev, [imageId]: [] }));
-          activeRequestsRef.current.delete(imageId);
-          setLoading((prev) => ({ ...prev, [imageId]: false }));
-          return;
-        }
-
-        // Fetch comments with user profiles for display names
-        const { data: commentsData, error } = await supabase
-          .from("comments")
-          .select(
-            `
+      const { data: commentsData, error } = await supabase
+        .from("comments")
+        .select(
+          `
           id,
           user_id,
           image_id,
           content,
           created_at
         `,
-          )
-          .eq("image_id", numericImageId)
-          .order("created_at", { ascending: true });
+        )
+        .eq("image_id", numericImageId)
+        .order("created_at", { ascending: true });
 
-        if (error) {
-          console.error(
-            "Error loading comments for image",
-            imageId,
-            ":",
-            error,
-          );
+      if (error) {
+        setComments((prev) => ({ ...prev, [imageId]: [] }));
+        activeRequestsRef.current.delete(imageId);
+        setLoading((prev) => ({ ...prev, [imageId]: false }));
+        return;
+      }
 
-          // Always set empty array for errors to prevent retrying
+      if (commentsData) {
+        if (commentsData.length === 0) {
           setComments((prev) => ({ ...prev, [imageId]: [] }));
+          setCommentCounts((prev) => ({ ...prev, [imageId]: 0 }));
           activeRequestsRef.current.delete(imageId);
           setLoading((prev) => ({ ...prev, [imageId]: false }));
           return;
         }
 
-        if (commentsData) {
-          // If no comments, just set empty array and exit early
-          if (commentsData.length === 0) {
-            setComments((prev) => ({ ...prev, [imageId]: [] }));
-            setCommentCounts((prev) => ({ ...prev, [imageId]: 0 }));
-            activeRequestsRef.current.delete(imageId);
-            setLoading((prev) => ({ ...prev, [imageId]: false }));
-            return;
-          }
+        const userIds = [
+          ...new Set(commentsData.map((comment) => comment.user_id)),
+        ];
 
-          // Fetch user profiles to get display names only if we have comments
-          const userIds = [
-            ...new Set(commentsData.map((comment) => comment.user_id)),
-          ];
+        const { data: profilesData } = await supabase
+          .from("user_profiles")
+          .select("id, name")
+          .in("id", userIds);
 
-          // Try to fetch user profiles for display names
-          const { data: profilesData } = await supabase
-            .from("user_profiles")
-            .select("id, name")
-            .in("id", userIds);
+        const userProfiles = new Map(
+          profilesData?.map((profile) => [
+            profile.id,
+            profile.name || `User ${profile.id.slice(0, 8)}...`,
+          ]) || [],
+        );
 
-          // Create a map of user_id to display name
-          const userProfiles = new Map(
-            profilesData?.map((profile) => [
-              profile.id,
-              profile.name || `User ${profile.id.slice(0, 8)}...`,
-            ]) || [],
-          );
+        const transformedComments: Comment[] = commentsData.map((comment) => {
+          const displayName =
+            userProfiles.get(comment.user_id) ||
+            `User ${comment.user_id.slice(0, 8)}...`;
 
-          // console.log({ userProfiles });
+          return {
+            id: comment.id,
+            user_id: comment.user_id,
+            image_id: String(comment.image_id),
+            content: comment.content,
+            created_at: comment.created_at,
+            user_email: displayName,
+          };
+        });
 
-          const transformedComments: Comment[] = commentsData.map((comment) => {
-            // Get display name from profile, fallback to abbreviated user ID
-            const displayName =
-              userProfiles.get(comment.user_id) ||
-              `User ${comment.user_id.slice(0, 8)}...`;
+        setComments((prev) => ({
+          ...prev,
+          [imageId]: transformedComments,
+        }));
 
-            return {
-              id: comment.id,
-              user_id: comment.user_id,
-              image_id: String(comment.image_id), // Convert back to string for consistency
-              content: comment.content,
-              created_at: comment.created_at,
-              user_email: displayName, // Using display name instead of email for privacy
-            };
-          });
-
-          setComments((prev) => ({
-            ...prev,
-            [imageId]: transformedComments,
-          }));
-
-          // Also update the count cache
-          setCommentCounts((prev) => ({
-            ...prev,
-            [imageId]: transformedComments.length,
-          }));
-        } else {
-          // No data returned, set empty array
-          setComments((prev) => ({ ...prev, [imageId]: [] }));
-        }
-      } catch (error) {
-        console.error("Error loading comments for image", imageId, ":", error);
-        // Always set empty array for errors to prevent retrying
+        setCommentCounts((prev) => ({
+          ...prev,
+          [imageId]: transformedComments.length,
+        }));
+      } else {
         setComments((prev) => ({ ...prev, [imageId]: [] }));
-      } finally {
-        // Remove from active requests and set loading to false
-        activeRequestsRef.current.delete(imageId);
-        setLoading((prev) => ({ ...prev, [imageId]: false }));
       }
-    },
-    [], // Remove comments and loading from dependencies to prevent infinite loops
-  );
+    } catch (error) {
+      console.log({ error });
+      setComments((prev) => ({ ...prev, [imageId]: [] }));
+    } finally {
+      activeRequestsRef.current.delete(imageId);
+      setLoading((prev) => ({ ...prev, [imageId]: false }));
+    }
+  }, []);
 
   const addComment = useCallback(
     async (imageId: string, content: string) => {
@@ -295,7 +301,6 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
       }
 
       try {
-        // Convert imageId to number for database insertion (since image_id is int8)
         const numericImageId =
           typeof imageId === "string" ? parseInt(imageId, 10) : imageId;
 
@@ -312,12 +317,10 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
           .single();
 
         if (error) {
-          console.error("Error adding comment:", error);
           throw error;
         }
 
         if (newComment) {
-          // Try to get user's display name from profile
           const { data: profileData } = await supabase
             .from("user_profiles")
             .select("name")
@@ -327,10 +330,9 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
           const displayName =
             profileData?.name || user.email?.split("@")[0] || "You";
 
-          // Add to local state with optimistic update
           const commentWithUserInfo: Comment = {
             ...newComment,
-            image_id: String(newComment.image_id), // Convert back to string for consistency
+            image_id: String(newComment.image_id),
             user_email: displayName,
           };
 
@@ -339,14 +341,12 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
             [imageId]: [...(prev[imageId] || []), commentWithUserInfo],
           }));
 
-          // Update the count cache
           setCommentCounts((prev) => ({
             ...prev,
             [imageId]: (prev[imageId] || 0) + 1,
           }));
         }
       } catch (error) {
-        console.error("Error adding comment:", error);
         throw error;
       }
     },
@@ -368,17 +368,15 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
           .from("comments")
           .update({ content: content.trim() })
           .eq("id", commentId)
-          .eq("user_id", user.id) // Ensure user can only update their own comments
+          .eq("user_id", user.id)
           .select()
           .single();
 
         if (error) {
-          console.error("Error updating comment:", error);
           throw error;
         }
 
         if (updatedComment) {
-          // Update local state
           setComments((prev) => {
             const newComments = { ...prev };
             Object.keys(newComments).forEach((imageId) => {
@@ -392,7 +390,6 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
           });
         }
       } catch (error) {
-        console.error("Error updating comment:", error);
         throw error;
       }
     },
@@ -410,14 +407,12 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
           .from("comments")
           .delete()
           .eq("id", commentId)
-          .eq("user_id", user.id); // Ensure user can only delete their own comments
+          .eq("user_id", user.id);
 
         if (error) {
-          console.error("Error deleting comment:", error);
           throw error;
         }
 
-        // Remove from local state
         setComments((prev) => ({
           ...prev,
           [imageId]: (prev[imageId] || []).filter(
@@ -425,13 +420,11 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
           ),
         }));
 
-        // Update the count cache
         setCommentCounts((prev) => ({
           ...prev,
           [imageId]: Math.max((prev[imageId] || 1) - 1, 0),
         }));
       } catch (error) {
-        console.error("Error deleting comment:", error);
         throw error;
       }
     },
@@ -447,6 +440,7 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
         getCommentsForImage,
         getCommentCount,
         loadCommentCount,
+        loadCommentCountsBatch,
         addComment,
         updateComment,
         deleteComment,

@@ -35,9 +35,10 @@ export async function fetchGalleryImagesSSR(): Promise<
     const processedImages: ImageWithOrientation[] = shuffledImages.map(
       (img, index) => {
         let mosaicType: "normal" | "large" | "wide" | "tall" = "normal";
-        const isLargeMosaic = index > 0 && index % 11 === 0;
-        const isWideMosaic = index > 0 && index % 13 === 7;
-        const isTallMosaic = index > 0 && index % 17 === 5;
+        const isLargeMosaic = index > 0 && index % 3 === 0; // every 3rd image
+        const isWideMosaic = index > 0 && index % 4 < 2; // every 2 out of 4 images
+        const isTallMosaic = index > 0 && index % 9 === 2; // every 3 out of 9 images
+
         if (isLargeMosaic) mosaicType = "large";
         else if (isWideMosaic) mosaicType = "wide";
         else if (isTallMosaic) mosaicType = "tall";

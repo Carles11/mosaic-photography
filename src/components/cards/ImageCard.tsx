@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./ImageCard.module.css";
 import GallerySkeletonCard from "./GallerySkeletonCard";
 import { ImageWithOrientation } from "@/types/gallery";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
+import { useComments } from "@/context/CommentsContext";
 // ImageCard: All images are loaded exclusively via Next.js <Image /> (via ImageWrapper) with lazy loading.
 // No manual preloading, pre-caching, or window.Image() logic is used anywhere in the codebase.
 // This ensures optimal SEO, accessibility, and performance. See README for details.
@@ -19,6 +20,16 @@ const ImageCard: React.FC<ImageCardProps> = ({
   onLoginRequired,
 }) => {
   const [images] = useState<ImageWithOrientation[]>(imagesProp || []);
+
+  const { loadCommentCountsBatch } = useComments();
+
+  useEffect(() => {
+    if (!images || images.length === 0) return;
+    // Collect all image IDs as strings
+    const imageIds = images.map((img) => String(img.id));
+    loadCommentCountsBatch(imageIds);
+  }, [images, loadCommentCountsBatch]);
+
   const loading = !imagesProp;
   const error = null;
   const imgRef = useRef<HTMLImageElement | null>(null);

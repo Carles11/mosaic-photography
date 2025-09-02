@@ -29,6 +29,8 @@ const nextConfig: NextConfig = {
       },
     ],
     minimumCacheTTL: 31536000, // 1 year
+    qualities: [25, 40, 75],
+    formats: ["image/webp"],
   },
   webpack: (config, { isServer }) => {
     config.optimization.splitChunks = {

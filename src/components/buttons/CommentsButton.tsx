@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useEffect } from "react";
 import styles from "./CommentsButton.module.css";
 import { useComments } from "@/context/CommentsContext";
 // import dynamic from "next/dynamic";
@@ -21,18 +20,17 @@ const CommentsButton: React.FC<CommentsButtonProps> = ({
   className = "",
   onOpenModal,
 }) => {
-  const { getCommentCount, loadCommentCount, loadCommentsForImage } =
-    useComments();
+  const { getCommentCount, loadCommentsForImage } = useComments();
 
   // Load lightweight comment count on mount to show badge
-  useEffect(() => {
-    // Use a small random delay to spread out requests when many buttons mount
-    const timeoutId = setTimeout(() => {
-      loadCommentCount(imageId);
-    }, Math.random() * 200); // Random delay between 0-200ms
+  // useEffect(() => {
+  //   // Use a small random delay to spread out requests when many buttons mount
+  //   const timeoutId = setTimeout(() => {
+  //     loadCommentCount(imageId);
+  //   }, Math.random() * 200); // Random delay between 0-200ms
 
-    return () => clearTimeout(timeoutId);
-  }, [imageId, loadCommentCount]);
+  //   return () => clearTimeout(timeoutId);
+  // }, [imageId, loadCommentCount]);
 
   // Get comment count for badge display
   const commentCount = getCommentCount(imageId);

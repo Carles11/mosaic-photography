@@ -13,7 +13,8 @@ type Props = Omit<ImageProps, "src" | "priority" | "loading"> & {
 };
 
 const ThemeImage = (props: Props) => {
-  const { srcLight, srcDark, srcLightMobile, srcDarkMobile, ...rest } = props;
+  const { srcLight, srcDark, srcLightMobile, srcDarkMobile, style, ...rest } =
+    props;
   const { resolvedTheme } = useTheme();
   const isMobile = useIsMobile();
 
@@ -50,7 +51,8 @@ const ThemeImage = (props: Props) => {
       placeholder="blur"
       blurDataURL={dynamicBlurDataBlur}
       style={{
-        maxWidth: "100%",
+        height: "auto",
+        ...style,
       }}
     />
   );

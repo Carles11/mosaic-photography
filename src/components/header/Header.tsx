@@ -34,7 +34,7 @@ export default function Header({
                   width={383}
                   height={271}
                   alt="Mosaic Logo"
-                  className={styles.themeImage}
+                  // className={styles.themeImage}
                   priority
                   blurDataURL="https://dummyimage.com/766x541/000/fff&text=mosaic+photography.png"
                   sizes="383px"

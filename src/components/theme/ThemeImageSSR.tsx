@@ -27,7 +27,6 @@ export default function ThemeImageSSR({
   priority = true,
   blurDataURL,
   sizes = "383px",
-  style,
 }: ThemeImageSSRProps) {
   return (
     <Image
@@ -40,10 +39,6 @@ export default function ThemeImageSSR({
       placeholder={blurDataURL ? "blur" : undefined}
       blurDataURL={blurDataURL}
       sizes={sizes}
-      style={{
-        maxWidth: "100%",
-        ...style,
-      }}
     />
   );
 }
