@@ -97,11 +97,11 @@ const Credits: React.FC = () => {
             Mosaic favicons created by favicon.io
           </a>
         </li>
-        <li>
+        {/* <li>
           <a href="https://tholman.com/github-corners/" title="GitHub Corners">
             GitHub Corners created by Tim Holman
           </a>
-        </li>
+        </li> */}
       </ul>
       <div className={styles.kofiWidgetContainer}>
         <h2 className={styles.subtitle}>About me</h2>

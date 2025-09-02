@@ -15,8 +15,6 @@ import Gallery from "@/components/gallery/Gallery";
 import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
 
-import GitHubCorner from "@/components/buttons/GitHubCorner";
-
 import { Photographer, ImageWithOrientation } from "@/types/gallery";
 
 interface HomeClientWrapperProps {
@@ -54,8 +52,6 @@ function HomeClientWrapper({
 
   return (
     <div className={styles.container}>
-      <GitHubCorner url="https://github.com/Carles11/mosaic-photography" />
-
       {/* Show AgeConsent only for real users and if age is not confirmed */}
       {!isCrawlerBot && !isMinimumAgeConfirmed && (
         <div

@@ -38,6 +38,18 @@ module.exports = {
       },
     },
     {
+      // NEW: Cache Next.js image optimization endpoint
+      urlPattern: /^https?:\/\/localhost:3000\/_next\/image\?/i,
+      handler: "StaleWhileRevalidate",
+      options: {
+        cacheName: "next-optimized-images",
+        expiration: {
+          maxEntries: 300,
+          maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+        },
+      },
+    },
+    {
       urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/v1\/.*/i,
       handler: "StaleWhileRevalidate",
       options: {
@@ -61,6 +73,3 @@ module.exports = {
   skipWaiting: true,
   clientsClaim: true,
 };
-// This configuration file is used to set up the PWA with Workbox
-// It includes runtime caching strategies for various resources
-// and ensures that the Service Worker is properly registered and activated.

@@ -733,48 +733,6 @@ p {
   transition: filter 0.3s;
 }
 
-/* GITHUB CORNER */
-.githubCornerSvg {
-  fill: var(--tertiary-color);
-  color: var(--color-white);
-  position: absolute;
-  top: 0;
-  right: 0;
-  border: 0;
-}
-
-.githubCorner .octoArm {
-  transform: rotate(0); /* Prevent animation on load */
-}
-
-.githubCorner:hover .octoArm {
-  animation: octocat-wave 560ms ease-in-out;
-}
-
-@keyframes octocat-wave {
-  0%,
-  100% {
-    transform: rotate(0);
-  }
-  20%,
-  60% {
-    transform: rotate(-25deg);
-  }
-  40%,
-  80% {
-    transform: rotate(10deg);
-  }
-}
-
-@media (max-width: 500px) {
-  .githubCorner:hover .octoArm {
-    animation: none;
-  }
-  .githubCorner .octoArm {
-    animation: octocat-wave 560ms ease-in-out;
-  }
-}
-
 /* TITLES STYLES IN HEADER */
 .mainTitleContainer {
   width: 98%;
