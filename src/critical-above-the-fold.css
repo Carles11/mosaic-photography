@@ -32,6 +32,50 @@ p {
   margin: 0.4rem;
 }
 
+a {
+  font-size: calc(0.9rem + 0.5vw);
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 700;
+  position: relative;
+}
+
+a::before {
+  width: unset;
+  height: unset;
+  z-index: unset;
+  transition: unset;
+}
+
+.no-fancy-link:hover::before {
+  bottom: unset;
+  height: unset;
+}
+
+.fancy-link {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 700;
+  position: relative;
+}
+
+.fancy-link::before {
+  content: "";
+  background-color: var(--link-color);
+  position: absolute;
+  left: 0;
+  bottom: 3px;
+  width: 100%;
+  height: 8px;
+  z-index: -1;
+  transition: all 0.3s ease-in-out;
+}
+
+.fancy-link:hover::before {
+  bottom: 0;
+  height: 100%;
+}
+
 /* === Bottom Navigation Bar - Mobile Only === */
 .bottomNav {
   position: fixed;
@@ -149,14 +193,12 @@ p {
   position: relative;
 }
 
-/* User Info (merged versions) */
 .userInfo {
   padding: 1.5rem;
   background: var(--background-secondary, rgba(255, 255, 255, 0.05));
   border-bottom: 1px solid var(--tertiary-color, rgba(255, 255, 255, 0.1));
 }
 
-/* Menu Items (merged versions) */
 .menuItem {
   display: flex;
   align-items: center;
@@ -474,47 +516,7 @@ p {
   width: 100%;
   height: 100%;
 }
-.landscape {
-  aspect-ratio: 16 / 9;
-  grid-column: span 2;
-}
-.portrait {
-  aspect-ratio: 3 / 4;
-  grid-column: span 1;
-}
-.hide-scrollbar {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.photographer-list-container {
-  display: flex;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  background-color: #ddd;
-  border-radius: 10px;
-  margin: 0;
-}
-.photographer-list-container::-webkit-scrollbar {
-  display: none;
-}
-.photographer-list {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  white-space: nowrap;
-}
-.photographer-list-item {
-  margin: 0 5px;
-  display: inline-block;
-  list-style: none;
-}
+
 .photographer-list-button {
   padding: 5px 10px;
   border: none;
@@ -608,19 +610,7 @@ p.mainText {
   justify-self: flex-end;
   z-index: 1;
 }
-h1.centerText {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  text-align: center;
-}
-h2.centerText {
-  font-size: 1.5rem;
-  text-align: center;
-}
-p.centerText {
-  font-size: 1rem;
-  text-align: center;
-}
+
 @media (max-width: 768px) {
   .homeTitleGrid {
     grid-template-columns: 1fr;
@@ -745,11 +735,6 @@ p.centerText {
   100% {
     background-position: 200% 0;
   }
-}
-
-/* === Photoswipe Gallery zoom styles === */
-.pswp__img {
-  object-fit: contain !important;
 }
 
 /* === React-slick styles === */

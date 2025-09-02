@@ -101,44 +101,6 @@
   grid-column: span 1; /* Portrait images span 1 column */
 }
 
-.hide-scrollbar {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-.hide-scrollbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-
-.photographer-list-container {
-  display: flex;
-  overflow-x: auto; /* Enable horizontal scrolling */
-  overflow-y: hidden; /* Hide vertical scrolling */
-  white-space: nowrap; /* Prevent wrapping of list items */
-  scrollbar-width: none; /* Hide scrollbar in Firefox */
-  -ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
-  background-color: #ddd;
-  border-radius: 10px;
-  margin: 0;
-}
-
-.photographer-list-container::-webkit-scrollbar {
-  display: none; /* Hide scrollbar in Chrome, Safari, Opera */
-}
-
-.photographer-list {
-  display: flex;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  white-space: nowrap; /* Prevent wrapping of list items */
-}
-
-.photographer-list-item {
-  margin: 0 5px;
-  display: inline-block;
-  list-style: none;
-}
-
 .photographer-list-button {
   padding: 5px 10px;
   border: none;

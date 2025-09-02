@@ -111,7 +111,10 @@ function RootLayout({ children }: RootLayoutProps) {
     >
       <head>
         <meta charSet="utf-8" />
-        <style dangerouslySetInnerHTML={{ __html: criticalCSS }} />
+        <style
+          id="critical-above-the-fold"
+          dangerouslySetInnerHTML={{ __html: criticalCSS }}
+        />
         <link rel="preconnect" href="https://www.mosaic.photography" />
       </head>
       <GoogleTagManager gtmId="GTM-N74Q9JC5" />
