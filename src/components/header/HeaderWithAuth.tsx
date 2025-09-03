@@ -6,9 +6,15 @@ import Header from "@/components/header/Header";
 
 interface HeaderWithAuthProps {
   onGoProClick?: () => void;
+  onLoginClick?: () => void;
+  onLogoutClick?: () => void;
 }
 
-export default function HeaderWithAuth({ onGoProClick }: HeaderWithAuthProps) {
+export default function HeaderWithAuth({
+  onGoProClick,
+  onLoginClick,
+  onLogoutClick,
+}: HeaderWithAuthProps) {
   const { user, logout } = useAuth();
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -16,7 +22,8 @@ export default function HeaderWithAuth({ onGoProClick }: HeaderWithAuthProps) {
     <Header
       isHome={isHome}
       user={user}
-      onLogoutClick={logout}
+      onLogoutClick={onLogoutClick || logout}
+      onLoginClick={onLoginClick}
       onGoProClick={onGoProClick}
     />
   );

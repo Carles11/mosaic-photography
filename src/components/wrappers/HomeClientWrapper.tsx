@@ -1,6 +1,7 @@
 "use client";
 
-import BottomNav from "@/components/navigation/BottomNav/BottomNav";
+// BottomNav is now rendered globally by ClientLayout; individual pages should
+// not render another BottomNav directly.
 
 import React, { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
@@ -30,8 +31,6 @@ function HomeClientWrapper({
   photographers,
   images,
   onLoginClick,
-  onLogoutClick,
-  onGoProClick,
 }: HomeClientWrapperProps) {
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
@@ -173,8 +172,6 @@ function HomeClientWrapper({
           </div>
         )}
       </>
-      {/* Mobile Bottom Navigation now rendered here with correct props */}
-      <BottomNav onGoProClick={onGoProClick} onLogoutClick={onLogoutClick} />
     </div>
   );
 }

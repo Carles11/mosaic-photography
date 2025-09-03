@@ -27,7 +27,7 @@ interface HomeClientProps {
 }
 
 export default function HomeClient({ photographers, images }: HomeClientProps) {
-  const { user, loading, logout } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -81,11 +81,6 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
     }
   }, [showAuthModal, router, isInitialized]);
 
-  // Navigate to login page instead of opening modal
-  const handleLoginClick = () => {
-    router.push("/auth/login");
-  };
-
   const handleGoProClick = () => {
     setShowGoProModal(true);
     sendGTMEvent({
@@ -114,8 +109,6 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
       <HomeClientWrapper
         photographers={photographers}
         images={images}
-        onLoginClick={handleLoginClick}
-        onLogoutClick={logout}
         user={user}
         onGoProClick={handleGoProClick}
       />

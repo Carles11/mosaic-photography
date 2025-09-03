@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import GlobalNavProvider from "@/components/navigation/BottomNav/GlobalNavProvider";
 import type { Metadata } from "next";
 import { tradeGothic } from "./fonts";
 
@@ -132,16 +131,6 @@ function RootLayout({ children }: RootLayoutProps) {
       suppressHydrationWarning={true}
     >
       <head>
-        {/*
-            Early inline script: try to demote any Next-generated CSS chunks
-            that would otherwise be render-blocking. This attempts to
-            convert link[rel=stylesheet][href^="/_next/static/css/"] to
-            preload/print and then restore to stylesheet on load. It's a
-            progressive enhancement — if the browser already started fetching
-            the styles, this still tries to make the swap non-blocking.
-          */}
-        {/* No runtime demotion: allow Next's compiled CSS to load normally so
-      component-scoped hashed selectors apply on first load. */}
         <meta charSet="utf-8" />
         {/* Base variables & body rules (inlined) */}
         {/* Inline font-face declarations to ensure fonts are requested early */}
@@ -173,7 +162,7 @@ function RootLayout({ children }: RootLayoutProps) {
                       <ClientLayout>{children}</ClientLayout>
                     </main>
 
-                    <GlobalNavProvider />
+                    {/* Global nav and GoPro modal are provided by ClientLayout now */}
                   </CommentsProvider>
                 </FavoritesProvider>
               </AgeConsentProvider>
