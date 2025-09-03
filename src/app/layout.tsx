@@ -16,7 +16,12 @@ import { CommentsProvider } from "@/context/CommentsContext";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
 import ClientLayout from "@/components/layouts/ClientLayout";
 
-import "./globals.css";
+// NOTE: globals.css was intentionally removed from static imports to avoid
+// Next's automatic CSS extraction which injects render-blocking
+// /_next/static/css/*.css links into the head. Global/non-critical styles
+// are served from `public/non-critical.css` and loaded non-blocking by
+// the client-side `NonCriticalCSSLoader` component. Critical styles are
+// inlined below from `src/critical-above-the-fold.css`.
 
 // Read critical CSS at build time
 const criticalCSSPath = path.resolve(
@@ -29,6 +34,23 @@ try {
 } catch (err) {
   console.error("Failed to read critical-above-the-fold.css:", err);
 }
+
+// Read minimal base/global variables (do not import as module to avoid
+// Next automatic CSS extraction). We inline only the essential parts
+// so fonts, CSS variables and base body rules exist at first paint.
+const baseCSSPath = path.resolve(process.cwd(), "src/app/globals.css");
+let baseCSS = "";
+try {
+  // We'll keep only the variables and body rules from globals.css
+  baseCSS = fs.readFileSync(baseCSSPath, "utf8");
+} catch (err) {
+  console.error("Failed to read src/app/globals.css:", err);
+}
+
+// Inline minimal @font-face declarations so font files are requested
+// immediately and do not depend on any deferred CSS chunk. We use
+// font-display: swap to avoid blocking text rendering.
+const inlineFontsCSS = `@font-face {font-family: 'TradeGothic'; src: url('/fonts/TradeGothic-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap;}@font-face {font-family: 'TradeGothic'; src: url('/fonts/TradeGothic-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap;}@font-face {font-family: 'TradeGothic'; src: url('/fonts/TradeGothic-Light.woff2') format('woff2'); font-weight: 200; font-style: normal; font-display: swap;}@font-face {font-family: 'TradeGothic'; src: url('/fonts/TradeGothic-ExtraBold.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap;}html,body{font-family:'TradeGothic',var(--font-trade-gothic),sans-serif;} .font-trade-gothic{font-family:'TradeGothic',var(--font-trade-gothic),sans-serif;}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mosaic.photography"),
@@ -110,7 +132,27 @@ function RootLayout({ children }: RootLayoutProps) {
       suppressHydrationWarning={true}
     >
       <head>
+        {/*
+            Early inline script: try to demote any Next-generated CSS chunks
+            that would otherwise be render-blocking. This attempts to
+            convert link[rel=stylesheet][href^="/_next/static/css/"] to
+            preload/print and then restore to stylesheet on load. It's a
+            progressive enhancement — if the browser already started fetching
+            the styles, this still tries to make the swap non-blocking.
+          */}
+        {/* No runtime demotion: allow Next's compiled CSS to load normally so
+      component-scoped hashed selectors apply on first load. */}
         <meta charSet="utf-8" />
+        {/* Base variables & body rules (inlined) */}
+        {/* Inline font-face declarations to ensure fonts are requested early */}
+        <style
+          id="inline-fonts"
+          dangerouslySetInnerHTML={{ __html: inlineFontsCSS }}
+        />
+
+        <style id="base-styles" dangerouslySetInnerHTML={{ __html: baseCSS }} />
+
+        {/* Critical above-the-fold styles (inlined) */}
         <style
           id="critical-above-the-fold"
           dangerouslySetInnerHTML={{ __html: criticalCSS }}

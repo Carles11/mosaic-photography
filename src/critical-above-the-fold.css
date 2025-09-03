@@ -82,6 +82,45 @@ a:hover::before {
   height: unset;
 }
 
+/* === Minimal Header critical rules (extracted from header.module.css) === */
+.navContainer {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.navGrid {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  padding: 0;
+  margin: 1rem 0 0 0;
+}
+.navLogo {
+  justify-self: center;
+  padding: 0;
+  margin: 0;
+}
+.actionSection {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+.rightActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-right: 0.5rem;
+}
+.desktopOnly {
+  display: flex;
+}
+
 .fancy-link {
   text-decoration: none;
   color: var(--text-color);

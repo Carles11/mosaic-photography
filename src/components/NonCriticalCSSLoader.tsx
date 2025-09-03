@@ -4,25 +4,23 @@ import { useEffect } from "react";
 
 export default function NonCriticalCSSLoader() {
   useEffect(() => {
-    // Create link element for non-critical CSS
+    // Create link element for non-critical CSS using media-switch pattern
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = "/non-critical.css";
+    // Start as non-blocking
     link.media = "print";
+    link.setAttribute("data-noncritical", "1");
 
-    // Switch media to 'all' once loaded
     link.onload = () => {
       link.media = "all";
     };
 
-    // Add to head
     document.head.appendChild(link);
 
     // Cleanup function
     return () => {
-      if (document.head.contains(link)) {
-        document.head.removeChild(link);
-      }
+      if (document.head.contains(link)) document.head.removeChild(link);
     };
   }, []);
 
