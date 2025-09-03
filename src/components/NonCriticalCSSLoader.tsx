@@ -7,7 +7,8 @@ export default function NonCriticalCSSLoader() {
     // Create link element for non-critical CSS using media-switch pattern
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/non-critical.css";
+    // Add a cache-busting query param (build id or timestamp)
+    link.href = `/non-critical.css?v=${process.env.NEXT_PUBLIC_BUILD_ID || Date.now()}`;
     // Start as non-blocking
     link.media = "print";
     link.setAttribute("data-noncritical", "1");

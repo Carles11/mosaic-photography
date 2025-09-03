@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import QRCode from "qrcode";
-import styles from "./ShareCollectionModal.module.css";
 import { Collection } from "@/types";
+import { useNonCriticalCssLoaded } from "@/hooks/useNonCriticalCssLoaded";
 
 interface ShareCollectionModalProps {
   isOpen: boolean;
@@ -22,6 +22,7 @@ export default function ShareCollectionModal({
     "link",
   );
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
+  const nonCriticalCssLoaded = useNonCriticalCssLoaded();
 
   // Email subject and body state
   const [emailSubject, setEmailSubject] = useState(
@@ -58,6 +59,10 @@ export default function ShareCollectionModal({
   }, [activeTab, shareUrl, qrCodeDataUrl, isOpen]);
 
   if (!isOpen) return null;
+
+  if (!nonCriticalCssLoaded) {
+    return null; // TODO: add a loader or placeholder if needed
+  }
 
   const handleCopyLink = async () => {
     try {
@@ -107,43 +112,43 @@ export default function ShareCollectionModal({
   };
 
   return (
-    <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.header}>
+    <div className="overlay" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <div className="header">
           <h3>Share Collection</h3>
-          <button onClick={onClose} className={styles.closeButton}>
+          <button onClick={onClose} className="closeButton">
             ×
           </button>
         </div>
 
-        <div className={styles.content}>
-          <div className={styles.collectionInfo}>
+        <div className="content">
+          <div className="collectionInfo">
             <h4>{collection.name}</h4>
             {collection.description && <p>{collection.description}</p>}
           </div>
 
           {/* Tab Navigation */}
-          <div className={styles.tabs}>
+          <div className="tabs">
             <button
-              className={`${styles.tab} ${activeTab === "link" ? styles.active : ""}`}
+              className={`tab ${activeTab === "link" ? "active" : ""}`}
               onClick={() => setActiveTab("link")}
             >
               🔗 Link
             </button>
             <button
-              className={`${styles.tab} ${activeTab === "qr" ? styles.active : ""}`}
+              className={`tab ${activeTab === "qr" ? "active" : ""}`}
               onClick={() => setActiveTab("qr")}
             >
               📱 QR Code
             </button>
             <button
-              className={`${styles.tab} ${activeTab === "email" ? styles.active : ""}`}
+              className={`tab ${activeTab === "email" ? "active" : ""}`}
               onClick={() => setActiveTab("email")}
             >
               📧 Email
             </button>
             <button
-              className={`${styles.tab} ${activeTab === "embed" ? styles.active : ""}`}
+              className={`tab ${activeTab === "embed" ? "active" : ""}`}
               onClick={() => setActiveTab("embed")}
             >
               🔗 Embed
@@ -151,57 +156,55 @@ export default function ShareCollectionModal({
           </div>
 
           {/* Tab Content */}
-          <div className={styles.tabContent}>
+          <div className="tabContent">
             {activeTab === "link" && (
-              <div className={styles.urlSection}>
-                <label className={styles.label}>Collection URL:</label>
-                <div className={styles.urlContainer}>
+              <div className="urlSection">
+                <label className="label">Collection URL:</label>
+                <div className="urlContainer">
                   <input
                     type="text"
                     value={shareUrl}
                     readOnly
-                    className={styles.urlInput}
+                    className="urlInput"
                   />
                   <button
                     onClick={handleCopyLink}
-                    className={`${styles.copyButton} ${copied ? styles.copied : ""}`}
+                    className={`copyButton ${copied ? "copied" : ""}`}
                   >
                     {copied ? "Copied!" : "Copy"}
                   </button>
                 </div>
-                <p className={styles.hint}>
+                <p className="hint">
                   Share this link with anyone to let them view your collection.
                 </p>
               </div>
             )}
 
             {activeTab === "qr" && (
-              <div className={styles.qrSection}>
-                <div className={styles.qrContainer}>
+              <div className="qrSection">
+                <div className="qrContainer">
                   {qrCodeDataUrl ? (
                     <Image
                       src={qrCodeDataUrl}
                       alt="QR Code for collection"
-                      className={styles.qrCode}
+                      className="qrCode"
                       width={180}
                       height={180}
                     />
                   ) : (
-                    <div className={styles.qrLoading}>
-                      Generating QR Code...
-                    </div>
+                    <div className="qrLoading">Generating QR Code...</div>
                   )}
                 </div>
-                <div className={styles.qrActions}>
+                <div className="qrActions">
                   <button
                     onClick={handleDownloadQR}
-                    className={styles.downloadButton}
+                    className="downloadButton"
                     disabled={!qrCodeDataUrl}
                   >
                     📥 Download QR Code
                   </button>
                 </div>
-                <p className={styles.hint}>
+                <p className="hint">
                   Scan this QR code with any smartphone camera to open the
                   collection.
                 </p>
@@ -209,11 +212,11 @@ export default function ShareCollectionModal({
             )}
 
             {activeTab === "email" && (
-              <div className={styles.emailSection}>
-                <div className={styles.emailPreview}>
+              <div className="emailSection">
+                <div className="emailPreview">
                   <h5>Email Preview:</h5>
-                  <div className={styles.emailContent}>
-                    <label className={styles.label} htmlFor="emailSubjectInput">
+                  <div className="emailContent">
+                    <label className="label" htmlFor="emailSubjectInput">
                       <strong>Subject:</strong>
                     </label>
                     <input
@@ -221,29 +224,26 @@ export default function ShareCollectionModal({
                       type="text"
                       value={emailSubject}
                       onChange={(e) => setEmailSubject(e.target.value)}
-                      className={styles.urlInput}
+                      className="urlInput"
                     />
                     <br />
                     <br />
-                    <label className={styles.label} htmlFor="emailBodyTextarea">
+                    <label className="label" htmlFor="emailBodyTextarea">
                       <strong>Message:</strong>
                     </label>
                     <textarea
                       id="emailBodyTextarea"
                       value={emailBody}
                       onChange={(e) => setEmailBody(e.target.value)}
-                      className={styles.embedTextarea}
+                      className="embedTextarea"
                       rows={8}
                     />
                   </div>
                 </div>
-                <button
-                  onClick={handleEmailShare}
-                  className={styles.emailButton}
-                >
+                <button onClick={handleEmailShare} className="emailButton">
                   📧 Open in Email App
                 </button>
-                <p className={styles.hint}>
+                <p className="hint">
                   This will open your default email app with your custom
                   message.
                 </p>
@@ -251,30 +251,30 @@ export default function ShareCollectionModal({
             )}
 
             {activeTab === "embed" && (
-              <div className={styles.embedSection}>
-                <label className={styles.label}>Embed Code:</label>
-                <div className={styles.embedContainer}>
+              <div className="embedSection">
+                <label className="label">Embed Code:</label>
+                <div className="embedContainer">
                   <textarea
                     value={embedCode}
                     readOnly
-                    className={styles.embedTextarea}
+                    className="embedTextarea"
                     rows={3}
                   />
                   <button
                     onClick={handleCopyEmbed}
-                    className={`${styles.copyButton} ${embedCopied ? styles.copied : ""}`}
+                    className={`copyButton ${embedCopied ? "copied" : ""}`}
                   >
                     {embedCopied ? "Copied!" : "Copy"}
                   </button>
                 </div>
-                <div className={styles.embedPreview}>
+                <div className="embedPreview">
                   <h5>Preview:</h5>
-                  <div className={styles.embedFrame}>
+                  <div className="embedFrame">
                     <span>📷 {collection.name}</span>
                     <small>{collection.image_count || 0} images</small>
                   </div>
                 </div>
-                <p className={styles.hint}>
+                <p className="hint">
                   Paste this code into any website to embed your collection.
                 </p>
               </div>
