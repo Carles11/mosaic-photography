@@ -3,7 +3,7 @@ import path from "path";
 import type { Metadata } from "next";
 import { tradeGothic } from "./fonts";
 
-import { GoogleTagManager } from "@next/third-parties/google";
+import Script from "next/script";
 import { ThemeProvider } from "next-themes";
 import React from "react";
 import { Toaster } from "react-hot-toast";
@@ -148,11 +148,16 @@ function RootLayout({ children }: RootLayoutProps) {
         />
         <link rel="preconnect" href="https://www.mosaic.photography" />
       </head>
-      <GoogleTagManager gtmId="GTM-N74Q9JC5" />
+      {/* <GoogleTagManager gtmId="GTM-N74Q9JC5" /> */}
       <body className={`font-trade-gothic`}>
         <NonCriticalCSSLoader />
         <Toaster position="top-center" />
         <ThemeProvider defaultTheme="dark">
+          <Script
+            id="gtm"
+            strategy="afterInteractive"
+            src={`https://www.googletagmanager.com/gtm.js?id=GTM-N74Q9JC5`}
+          />
           <ServiceWorkerContext>
             <AuthSessionProvider>
               <AgeConsentProvider>
@@ -161,8 +166,6 @@ function RootLayout({ children }: RootLayoutProps) {
                     <main style={{ flex: 1 }}>
                       <ClientLayout>{children}</ClientLayout>
                     </main>
-
-                    {/* Global nav and GoPro modal are provided by ClientLayout now */}
                   </CommentsProvider>
                 </FavoritesProvider>
               </AgeConsentProvider>
