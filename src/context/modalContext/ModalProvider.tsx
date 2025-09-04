@@ -10,8 +10,9 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import ModalShell from "@/components/modals/ModalShell";
-import { modalRegistry } from "./modalRegistry";
+import { modalRegistry, ModalKey, ModalPropsMap } from "./modalRegistry";
 
+// Internal entry - keep flexible so the stack can hold any modal shape
 type ModalEntry = {
   id: string;
   Component: React.ComponentType<Record<string, unknown>>;
@@ -20,10 +21,10 @@ type ModalEntry = {
 };
 
 export type ModalContextValue = {
-  open: (key: string, props?: Record<string, unknown>) => string | null;
-  openAsync: <T = unknown>(
-    key: string,
-    props?: Record<string, unknown>,
+  open: <K extends ModalKey>(key: K, props?: ModalPropsMap[K]) => string | null;
+  openAsync: <K extends ModalKey, T = unknown>(
+    key: K,
+    props?: ModalPropsMap[K],
   ) => Promise<T>;
   close: (id?: string, result?: unknown) => void;
 };
@@ -45,25 +46,32 @@ export const ModalProvider: React.FC<{ children?: React.ReactNode }> = ({
   const [stack, setStack] = useState<ModalEntry[]>([]);
   const idCounter = useRef(0);
 
-  const open = useCallback((key: string, props?: Record<string, unknown>) => {
-    const loader = modalRegistry[key];
-    if (!loader) {
-      console.warn(`Modal loader not found for key: ${key}`);
-      return null;
-    }
+  const open = useCallback(
+    <K extends ModalKey>(key: K, props?: ModalPropsMap[K]) => {
+      const loader = modalRegistry[key];
+      if (!loader) {
+        console.warn(`Modal loader not found for key: ${key}`);
+        return null;
+      }
 
-    const id = `modal_${++idCounter.current}`;
+      const id = `modal_${++idCounter.current}`;
 
-    // Start loading component async and push a placeholder entry so we can show a loader if needed
-    loader().then((mod) => {
-      setStack((s) => [...s, { id, Component: mod.default, props }]);
-    });
+      // Start loading component async and push the loaded component when ready
+      loader().then((mod) => {
+        // cast loaded component to a component accepting object props
+        const Component = mod.default as unknown as React.ComponentType<
+          Record<string, unknown>
+        >;
+        setStack((s) => [...s, { id, Component, props }]);
+      });
 
-    return id;
-  }, []);
+      return id;
+    },
+    [],
+  );
 
   const openAsync = useCallback(
-    <T,>(key: string, props?: Record<string, unknown>) => {
+    <K extends ModalKey, T = unknown>(key: K, props?: ModalPropsMap[K]) => {
       return new Promise<T>((resolve) => {
         const loader = modalRegistry[key];
         if (!loader) {
@@ -75,12 +83,15 @@ export const ModalProvider: React.FC<{ children?: React.ReactNode }> = ({
         const id = `modal_${++idCounter.current}`;
 
         loader().then((mod) => {
+          const Component = mod.default as unknown as React.ComponentType<
+            Record<string, unknown>
+          >;
           // resolver will be called with unknown; safe to assign
           setStack((s) => [
             ...s,
             {
               id,
-              Component: mod.default,
+              Component,
               props,
               resolver: resolve as (v?: unknown) => void,
             },
@@ -132,14 +143,24 @@ export const ModalProvider: React.FC<{ children?: React.ReactNode }> = ({
       {portalRoot &&
         createPortal(
           <>
-            {stack.map((entry) => (
-              <ModalShell key={entry.id} isOpen onClose={() => close(entry.id)}>
-                <entry.Component
-                  {...(entry.props as Record<string, unknown>)}
-                  onClose={(res?: unknown) => close(entry.id, res)}
-                />
-              </ModalShell>
-            ))}
+            {stack.map((entry) => {
+              const Comp = entry.Component as React.ComponentType<unknown>;
+              return (
+                <ModalShell
+                  key={entry.id}
+                  isOpen
+                  onClose={() => close(entry.id)}
+                >
+                  {(() => {
+                    const propsObj: Record<string, unknown> = {
+                      ...(entry.props ?? {}),
+                      onClose: (res?: unknown) => close(entry.id, res),
+                    };
+                    return <Comp {...propsObj} />;
+                  })()}
+                </ModalShell>
+              );
+            })}
           </>,
           portalRoot,
         )}

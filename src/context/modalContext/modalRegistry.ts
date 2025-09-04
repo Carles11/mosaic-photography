@@ -1,14 +1,36 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// Registry mapping modal keys to dynamic import functions.
-// Add entries here for each modal body you want to lazy-load.
+/*
+  Strongly-typed modal registry
+  - ModalKey: union of supported modal keys
+  - ModalPropsMap: maps each key to the expected props for that modal body
+  - modalRegistry: typed loader map so consumers can infer prop shapes
+
+  Keep the runtime shape (dynamic imports) unchanged; these types only help
+  TypeScript enforce correct `open`/`openAsync` usage.
+*/
 
 import React from "react";
 
-export type ModalLoader<T = any> = () => Promise<{
-  default: React.ComponentType<T>;
+export type ModalKey = "addToCollection" | "goPro";
+
+export type ModalPropsMap = {
+  addToCollection: {
+    imageId: string;
+    imageTitle: string;
+    onClose: () => void;
+    onAddToCollection?: (collectionId: string) => void;
+  };
+  goPro: {
+    onClose?: (result?: unknown) => void;
+  };
+};
+
+export type ModalLoader<TProps> = () => Promise<{
+  default: React.ComponentType<TProps>;
 }>;
 
-export const modalRegistry: Record<string, ModalLoader> = {
+export const modalRegistry: {
+  [K in ModalKey]: ModalLoader<ModalPropsMap[K]>;
+} = {
   addToCollection: () =>
     import("@/components/modals/addToCollection/AddToCollectionModalBody"),
   goPro: () => import("@/components/modals/goProModal/GoProModalBody"),

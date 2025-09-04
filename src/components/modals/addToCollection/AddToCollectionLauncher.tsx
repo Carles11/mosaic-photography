@@ -17,7 +17,11 @@ export default function AddToCollectionLauncher({
   const { open } = useModal();
 
   const handleOpen = () => {
-    open("addToCollection", { imageId, imageTitle });
+    open("addToCollection", {
+      imageId,
+      imageTitle,
+      onClose: (): void => {},
+    });
   };
 
   if (trigger) {
