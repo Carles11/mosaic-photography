@@ -559,23 +559,3 @@ body {
 .urlContainer {
   flex-direction: column;
 }
-
-.privateMessage {
-  text-align: center;
-  padding: 2rem;
-  background: var(--background-tertiary, #f8f9fa);
-  border-radius: 8px;
-  border: 2px dashed var(--border-color, #e0e0e0);
-}
-
-.privateMessage p {
-  margin: 0;
-  color: var(--text-secondary, #666);
-  line-height: 1.5;
-}
-
-.privateMessage p {
-  margin: 0;
-  color: var(--text-secondary, #666);
-  line-height: 1.5;
-}
