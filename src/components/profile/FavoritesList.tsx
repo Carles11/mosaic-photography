@@ -2,16 +2,11 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import AddToCollectionModal from "./AddToCollectionModal";
+import AddToCollectionModal from "../modals/addToCollection/AddToCollectionModal";
 import styles from "./FavoritesList.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useFavorites } from "@/context/FavoritesContext";
 import { ImageData } from "@/types";
-
-// const Tooltip = dynamic(
-//   () => import("react-tooltip").then((mod) => mod.Tooltip),
-//   { ssr: false }, // Disable server-side rendering
-// );
 
 interface FavoriteImageData extends ImageData {
   favoriteId: string; // To track the favorite relationship
@@ -180,10 +175,6 @@ export default function FavoritesList({
                             loading="lazy"
                           />
                         </span>
-                        {/* <Tooltip
-                          anchorSelect="#collection-icon"
-                          content="Add to collection"
-                        /> */}
                       </button>
                       <button
                         onClick={() => handleUnlikeClick(image.id)}
@@ -192,10 +183,6 @@ export default function FavoritesList({
                         title="Remove from favorites"
                       >
                         <span className={styles.heartIcon}>💔</span>
-                        {/* <Tooltip
-                          anchorSelect="#unlike-icon"
-                          content="Remove from favorites"
-                        /> */}
                       </button>
                     </div>
                   </div>

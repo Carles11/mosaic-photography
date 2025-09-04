@@ -9,8 +9,8 @@ import {
 } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import CreateCollectionModal from "./CreateCollectionModal";
-import EditCollectionModal from "./EditCollectionModal";
+import CreateCollectionModal from "../modals/createCollection/CreateCollectionModal";
+import EditCollectionModal from "../modals/editCollection/EditCollectionModal";
 import styles from "./CollectionsList.module.css";
 import buttonStyles from "../shared/ButtonStyles.module.css";
 import { supabase } from "@/lib/supabaseClient";

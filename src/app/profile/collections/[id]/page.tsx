@@ -9,7 +9,7 @@ import styles from "./CollectionView.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { CollectionWithImages } from "@/types";
-import ShareCollectionModal from "@/components/profile/ShareCollectionModal";
+import ShareCollectionModal from "@/components/modals/shareCollection/ShareCollectionModal";
 
 interface CollectionImageData {
   id: string;
