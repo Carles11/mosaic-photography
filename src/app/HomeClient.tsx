@@ -3,8 +3,6 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
-import GoProModal from "@/components/modals/goProModal/GoProModal";
-import { sendGTMEvent } from "@next/third-parties/google";
 import { useAuth } from "@/hooks/useAuth";
 import { useComments } from "@/context/CommentsContext";
 
@@ -33,7 +31,7 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authView, setAuthView] = useState<AuthView>("login");
   const [isInitialized, setIsInitialized] = useState(false);
-  const [showGoProModal, setShowGoProModal] = useState(false);
+
   const { loadCommentCountsBatch } = useComments();
 
   useEffect(() => {
@@ -81,14 +79,6 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
     }
   }, [showAuthModal, router, isInitialized]);
 
-  const handleGoProClick = () => {
-    setShowGoProModal(true);
-    sendGTMEvent({
-      event: "goProText",
-      value: "Go Pro clicked from user menu",
-    });
-  };
-
   if (loading) {
     return (
       <div
@@ -110,14 +100,9 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
         photographers={photographers}
         images={images}
         user={user}
-        onGoProClick={handleGoProClick}
       />
 
-      {/* Go Pro Modal for both desktop and mobile */}
-      <GoProModal
-        isOpen={showGoProModal}
-        onClose={() => setShowGoProModal(false)}
-      />
+      {/* Go Pro Modal is rendered by the global ModalProvider when opened */}
 
       {/* Keep modal for backward compatibility with email redirects */}
       <AuthModal

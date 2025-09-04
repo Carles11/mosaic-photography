@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import GoProModal from "@/components/modals/goProModal/GoProModal";
+import React from "react";
 import styles from "../../app/faq/faq.module.css";
 import Link from "next/link";
 
@@ -31,14 +30,8 @@ const FaqClientWrapper: React.FC<FaqClientWrapperProps> = ({
   faqSections,
   faqStructuredData,
 }) => {
-  const [showGoProModal, setShowGoProModal] = useState(false);
-
   return (
     <>
-      <GoProModal
-        isOpen={showGoProModal}
-        onClose={() => setShowGoProModal(false)}
-      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

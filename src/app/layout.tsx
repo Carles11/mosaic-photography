@@ -14,6 +14,7 @@ import { FavoritesProvider } from "@/context/FavoritesContext";
 import { CommentsProvider } from "@/context/CommentsContext";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
 import ClientLayout from "@/components/layouts/ClientLayout";
+import ModalProviderLoader from "@/components/modals/ModalProviderLoader";
 
 // NOTE: globals.css was intentionally removed from static imports to avoid
 // Next's automatic CSS extraction which injects render-blocking
@@ -163,15 +164,25 @@ function RootLayout({ children }: RootLayoutProps) {
               <AgeConsentProvider>
                 <FavoritesProvider>
                   <CommentsProvider>
-                    <main style={{ flex: 1 }}>
-                      <ClientLayout>{children}</ClientLayout>
-                    </main>
+                    {/* Portal root for modals must exist before the ModalProvider mounts */}
+                    <div id="modal-root" />
+                    <div id="modal-loader-root">
+                      {/* ModalProviderLoader mounts the client ModalProvider lazily */}
+                    </div>
+
+                    {/* ModalProviderLoader must be mounted before ClientLayout so client components can use useModal() */}
+                    <ModalProviderLoader>
+                      <main style={{ flex: 1 }}>
+                        <ClientLayout>{children}</ClientLayout>
+                      </main>
+                    </ModalProviderLoader>
                   </CommentsProvider>
                 </FavoritesProvider>
               </AgeConsentProvider>
             </AuthSessionProvider>
           </ServiceWorkerContext>
         </ThemeProvider>
+        {/* Client-side lazy ModalProvider is mounted above so it can render into #modal-root */}
       </body>
     </html>
   );

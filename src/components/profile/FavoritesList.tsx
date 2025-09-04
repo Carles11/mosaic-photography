@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import AddToCollectionModal from "../modals/addToCollection/AddToCollectionModal";
+import { useModal } from "@/context/modalContext/useModal";
 import styles from "./FavoritesList.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useFavorites } from "@/context/FavoritesContext";
@@ -23,11 +23,7 @@ export default function FavoritesList({
   const [favoriteImages, setFavoriteImages] = useState<FavoriteImageData[]>([]);
   const [imagesLoading, setImagesLoading] = useState(false);
   const [confirmUnlike, setConfirmUnlike] = useState<string | null>(null);
-  const [addToCollectionModal, setAddToCollectionModal] = useState<{
-    isOpen: boolean;
-    imageId: string;
-    imageTitle: string;
-  } | null>(null);
+  const { open } = useModal();
 
   const loadFavoriteImages = useCallback(async () => {
     if (favorites.size === 0) {
@@ -86,15 +82,14 @@ export default function FavoritesList({
   };
 
   const handleAddToCollectionClick = (imageId: string, imageTitle: string) => {
-    setAddToCollectionModal({
-      isOpen: true,
+    open("addToCollection", {
       imageId,
       imageTitle,
+      onAddToCollection: () => {
+        if (onCollectionUpdate) onCollectionUpdate();
+        console.log("Image added to collection successfully");
+      },
     });
-  };
-
-  const handleCloseCollectionModal = () => {
-    setAddToCollectionModal(null);
   };
 
   if (!isUserLoggedIn()) {
@@ -216,22 +211,7 @@ export default function FavoritesList({
         </div>
       )}
 
-      {/* Add to Collection Modal */}
-      {addToCollectionModal && (
-        <AddToCollectionModal
-          isOpen={addToCollectionModal.isOpen}
-          imageId={addToCollectionModal.imageId}
-          imageTitle={addToCollectionModal.imageTitle}
-          onClose={handleCloseCollectionModal}
-          onAddToCollection={() => {
-            // Refresh collections to show updated previews and counts
-            if (onCollectionUpdate) {
-              onCollectionUpdate();
-            }
-            console.log("Image added to collection successfully");
-          }}
-        />
-      )}
+      {/* Add to Collection modal is provided by ModalProvider and opened via useModal().open */}
     </div>
   );
 }

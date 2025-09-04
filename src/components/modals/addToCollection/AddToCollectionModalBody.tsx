@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import styles from "./AddToCollectionModal.module.css";
 import { supabase } from "@/lib/supabaseClient";
@@ -8,21 +8,19 @@ import { useAuthSession } from "@/context/AuthSessionContext";
 
 import { Collection as CollectionType } from "@/types";
 
-interface AddToCollectionModalProps {
-  isOpen: boolean;
+interface AddToCollectionModalBodyProps {
   imageId: string;
   imageTitle: string;
   onClose: () => void;
   onAddToCollection?: (collectionId: string) => void;
 }
 
-export default function AddToCollectionModal({
-  isOpen,
+export default function AddToCollectionModalBody({
   imageId,
   imageTitle,
   onClose,
   onAddToCollection,
-}: AddToCollectionModalProps) {
+}: AddToCollectionModalBodyProps) {
   const { user } = useAuthSession();
   const [collections, setCollections] = useState<CollectionType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,7 +57,6 @@ export default function AddToCollectionModal({
     if (!user) return;
 
     try {
-      // First get the user's favorite record for this image
       const { data: favoriteData, error: favoriteError } = await supabase
         .from("favorites")
         .select("id")
@@ -68,12 +65,10 @@ export default function AddToCollectionModal({
         .single();
 
       if (favoriteError || !favoriteData) {
-        // Image is not favorited, so it can't be in any collections
         setAlreadyInCollections(new Set());
         return;
       }
 
-      // Get all collections that contain this favorite
       const { data, error } = await supabase
         .from("collection_favorites")
         .select("collection_id")
@@ -105,7 +100,6 @@ export default function AddToCollectionModal({
     setAdding(collectionId);
 
     try {
-      // First, find the user's favorite record for this image
       const { data: favoriteData, error: favoriteError } = await supabase
         .from("favorites")
         .select("id")
@@ -121,7 +115,6 @@ export default function AddToCollectionModal({
         return;
       }
 
-      // Check if this favorite is already in this collection
       const { data: existing } = await supabase
         .from("collection_favorites")
         .select("id")
@@ -134,7 +127,6 @@ export default function AddToCollectionModal({
         return;
       }
 
-      // Add favorite to collection
       const { error } = await supabase.from("collection_favorites").insert({
         collection_id: collectionId,
         favorite_id: favoriteData.id,
@@ -146,10 +138,8 @@ export default function AddToCollectionModal({
         return;
       }
 
-      // Update local state
       setAlreadyInCollections((prev) => new Set([...prev, collectionId]));
 
-      // Notify parent
       if (onAddToCollection) {
         onAddToCollection(collectionId);
       }
@@ -167,7 +157,6 @@ export default function AddToCollectionModal({
     setAdding(collectionId);
 
     try {
-      // First, find the user's favorite record for this image
       const { data: favoriteData, error: favoriteError } = await supabase
         .from("favorites")
         .select("id")
@@ -194,14 +183,12 @@ export default function AddToCollectionModal({
         return;
       }
 
-      // Update local state
       setAlreadyInCollections((prev) => {
         const newSet = new Set(prev);
         newSet.delete(collectionId);
         return newSet;
       });
 
-      // Show success message
       const collection = collections.find((c) => c.id === collectionId);
       toast.success(`Removed "${imageTitle}" from "${collection?.name}"`);
     } catch (error) {
@@ -212,97 +199,89 @@ export default function AddToCollectionModal({
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>Add to Collection</h2>
-          <button
-            onClick={onClose}
-            className={styles.closeButton}
-            aria-label="Close modal"
-          >
-            ✕
-          </button>
-        </div>
+    <div>
+      <div className={styles.header}>
+        <h2 className={styles.title}>Add to Collection</h2>
+        <button
+          onClick={onClose}
+          className={styles.closeButton}
+          aria-label="Close modal"
+        >
+          ✕
+        </button>
+      </div>
 
-        <div className={styles.content}>
-          <p className={styles.imageTitle}>
-            <strong>&quot;{imageTitle}&quot;</strong>
-          </p>
+      <div className={styles.content}>
+        <p className={styles.imageTitle}>
+          <strong>&quot;{imageTitle}&quot;</strong>
+        </p>
 
-          {loading ? (
-            <div className={styles.loading}>
-              <div className={styles.spinner}></div>
-              <p>Loading collections...</p>
-            </div>
-          ) : collections.length === 0 ? (
-            <div className={styles.empty}>
-              <p>You haven&apos;t created any collections yet</p>
-              <button
-                type="button"
-                onClick={() => {
-                  window.location.href = "/photo-curations?tab=collections";
-                }}
-              >
-                Create new collection
-              </button>
-            </div>
-          ) : (
-            <div className={styles.collectionsList}>
-              {collections.map((collection) => {
-                const isInCollection = alreadyInCollections.has(collection.id);
-                const isProcessing = adding === collection.id;
+        {loading ? (
+          <div className={styles.loading}>
+            <div className={styles.spinner}></div>
+            <p>Loading collections...</p>
+          </div>
+        ) : collections.length === 0 ? (
+          <div className={styles.empty}>
+            <p>You haven&apos;t created any collections yet</p>
+            <button
+              type="button"
+              onClick={() => {
+                window.location.href = "/photo-curations?tab=collections";
+              }}
+            >
+              Create new collection
+            </button>
+          </div>
+        ) : (
+          <div className={styles.collectionsList}>
+            {collections.map((collection) => {
+              const isInCollection = alreadyInCollections.has(collection.id);
+              const isProcessing = adding === collection.id;
 
-                return (
-                  <div key={collection.id} className={styles.collectionItem}>
-                    <div className={styles.collectionInfo}>
-                      <h4 className={styles.collectionName}>
-                        {collection.name}
-                      </h4>
-                      {collection.description && (
-                        <p className={styles.collectionDescription}>
-                          {collection.description}
-                        </p>
-                      )}
-                    </div>
-
-                    <button
-                      onClick={() =>
-                        isInCollection
-                          ? handleRemoveFromCollection(collection.id)
-                          : handleAddToCollection(collection.id)
-                      }
-                      disabled={isProcessing}
-                      className={`${styles.actionButton} ${
-                        isInCollection ? styles.removeButton : styles.addButton
-                      }`}
-                    >
-                      {isProcessing ? (
-                        <span className={styles.loadingText}>
-                          <span className={styles.buttonSpinner}></span>
-                          {isInCollection ? "Removing..." : "Adding..."}
-                        </span>
-                      ) : isInCollection ? (
-                        <>
-                          <span className={styles.buttonIcon}>✓</span>
-                          Added
-                        </>
-                      ) : (
-                        <>
-                          <span className={styles.buttonIcon}>+</span>
-                          Add
-                        </>
-                      )}
-                    </button>
+              return (
+                <div key={collection.id} className={styles.collectionItem}>
+                  <div className={styles.collectionInfo}>
+                    <h4 className={styles.collectionName}>{collection.name}</h4>
+                    {collection.description && (
+                      <p className={styles.collectionDescription}>
+                        {collection.description}
+                      </p>
+                    )}
                   </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
+
+                  <button
+                    onClick={() =>
+                      isInCollection
+                        ? handleRemoveFromCollection(collection.id)
+                        : handleAddToCollection(collection.id)
+                    }
+                    disabled={isProcessing}
+                    className={`${styles.actionButton} ${isInCollection ? styles.removeButton : styles.addButton}`}
+                  >
+                    {isProcessing ? (
+                      <span className={styles.loadingText}>
+                        <span className={styles.buttonSpinner}></span>
+                        {isInCollection ? "Removing..." : "Adding..."}
+                      </span>
+                    ) : isInCollection ? (
+                      <>
+                        <span className={styles.buttonIcon}>✓</span>
+                        Added
+                      </>
+                    ) : (
+                      <>
+                        <span className={styles.buttonIcon}>+</span>
+                        Add
+                      </>
+                    )}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

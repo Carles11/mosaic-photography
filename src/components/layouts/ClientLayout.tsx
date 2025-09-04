@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import HeaderWithAuth from "@/components/header/HeaderWithAuth";
 import Footer from "@/components/footer/Footer";
 import BottomNav from "@/components/navigation/BottomNav/BottomNav";
-import GoProModal from "@/components/modals/goProModal/GoProModal";
+import { useModal } from "@/context/modalContext/useModal";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 export default function ClientLayout({
   children,
@@ -14,9 +15,15 @@ export default function ClientLayout({
 }) {
   const { logout } = useAuth();
   const router = useRouter();
-  const [showGoProModal, setShowGoProModal] = useState(false);
+  const { open } = useModal();
 
-  const handleGoProClick = () => setShowGoProModal(true);
+  const handleGoProClick = () => {
+    open("goPro");
+    sendGTMEvent({
+      event: "goProText",
+      value: "Go Pro clicked from user menu",
+    });
+  };
   const handleLoginClick = () => router.push("/auth/login");
   const handleLogoutClick = () => logout();
 
@@ -36,10 +43,7 @@ export default function ClientLayout({
         onLogoutClick={handleLogoutClick}
       />
 
-      <GoProModal
-        isOpen={showGoProModal}
-        onClose={() => setShowGoProModal(false)}
-      />
+      {/* ModalProviderLoader is mounted in the root layout so useModal() is available here */}
     </>
   );
 }

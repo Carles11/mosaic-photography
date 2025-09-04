@@ -24,7 +24,6 @@ interface HomeClientWrapperProps {
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
   user?: SupabaseUser | null;
-  onGoProClick?: () => void;
 }
 
 function HomeClientWrapper({

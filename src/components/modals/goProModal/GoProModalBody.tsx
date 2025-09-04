@@ -1,28 +1,27 @@
+"use client";
+
 import Image from "next/image";
 import dynamic from "next/dynamic";
-
-import Modal from "../mainModal";
 import ShareButtons from "@/components/buttons/ShareButtons";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
+import styles from "./goProModal.module.css";
+import React from "react";
 
 const ReactTooltip = dynamic(
   () => import("react-tooltip").then((mod) => mod.Tooltip),
-  { ssr: false }, // Disable server-side rendering
+  { ssr: false },
 );
 
-import styles from "./goProModal.module.css";
-
-interface GoProModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+interface GoProModalBodyProps {
+  onClose?: (result?: unknown) => void;
 }
 
-const url = "https://www.mosaic.photography";
-const title = "Check out this awesome website!";
+export default function GoProModalBody({ onClose }: GoProModalBodyProps) {
+  const url = "https://www.mosaic.photography";
+  const title = "Check out this awesome website!";
 
-const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} btnText="Close">
+    <div>
       <h1 className={styles.goProTitle}>There is no Pro Plan</h1>
       <div className={styles.goProContainer}>
         <p className={styles.goProText}>
@@ -49,12 +48,12 @@ const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
           rel="noopener noreferrer"
         >
           <Image
-            height="36"
-            width="144"
+            height={36}
+            width={144}
             className={styles.kofiImage}
             src="https://storage.ko-fi.com/cdn/kofi6.png?v=6"
             alt="Buy Me a Coffee at ko-fi.com"
-            priority={false} // Set to true for critical images
+            priority={false}
             loading="lazy"
           />
         </a>
@@ -73,16 +72,25 @@ const GoProModal = ({ isOpen, onClose }: GoProModalProps) => {
         <ShareButtons url={url} title={title} />
         <p className={styles.goProText}>Thank you for your support!</p>
       </div>
+
       <ReactTooltip
         anchorSelect="#copyButton"
         content="Copy url to clipboard"
       />
+
       <p className={styles.goProText}>
         Also if you have any questions or feature requests, don&apos;t be shy!
         Hit me up on <a href="mailto:carles@crix.design">carles@crix.design</a>
       </p>
-    </Modal>
-  );
-};
 
-export default GoProModal;
+      <div style={{ marginTop: 18 }}>
+        <PrimaryButton
+          btnText="Close"
+          handleClick={() => onClose?.()}
+          id=""
+          className=""
+        />
+      </div>
+    </div>
+  );
+}
