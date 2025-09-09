@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { sendGTMEvent } from "@next/third-parties/google";
-
 import styles from "./photographerModal.module.css";
-import { Photographer } from "@/types";
 import Dropdown from "@/components/inputs/dropDown";
+import type { ModalPropsMap } from "@/context/modalContext/modalRegistry";
 
-
-interface PhotographerModalProps {
-  photographer: Photographer;
-  onClose: () => void;
-}
-
-const PhotographerModal: React.FC<PhotographerModalProps> = ({
+const PhotographerModalBody: React.FC<ModalPropsMap["photographer"]> = ({
   photographer,
   onClose,
 }) => {
@@ -63,7 +56,7 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [handleClickOutside]);
-  console.log({ photographer });
+
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent} ref={modalRef}>
@@ -83,7 +76,7 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
             height={100}
             className={styles.photographerImage}
             unoptimized
-            priority={false} // Set to true for critical images
+            priority={false}
             loading="lazy"
           />
         </div>
@@ -138,4 +131,4 @@ const PhotographerModal: React.FC<PhotographerModalProps> = ({
   );
 };
 
-export default PhotographerModal;
+export default PhotographerModalBody;

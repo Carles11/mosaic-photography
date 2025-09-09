@@ -15,7 +15,8 @@ export type ModalKey =
   | "goPro"
   | "comments"
   | "createCollection"
-  | "editCollection";
+  | "editCollection"
+  | "photographer";
 
 export type ModalPropsMap = {
   addToCollection: {
@@ -41,6 +42,10 @@ export type ModalPropsMap = {
     onClose: () => void;
     onUpdateCollection: (collection: import("@/types").Collection) => void;
   };
+  photographer: {
+    photographer: import("@/types").Photographer;
+    onClose: () => void;
+  };
 };
 
 export type ModalLoader<TProps> = () => Promise<{
@@ -58,4 +63,6 @@ export const modalRegistry: {
     import("@/components/modals/createCollection/CreateCollectionModalBody"),
   editCollection: () =>
     import("@/components/modals/editCollection/EditCollectionModalBody"),
+  photographer: () =>
+    import("@/components/modals/photographer/PhotographerModalBody"),
 };
