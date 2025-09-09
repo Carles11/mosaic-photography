@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { toast } from "react-hot-toast";
 import Image from "next/image";
 import styles from "./UserCommentsList.module.css";
 import { supabase } from "@/lib/supabaseClient";
@@ -176,26 +177,60 @@ export default function UserCommentsList() {
     }
   };
 
-  const handleDelete = async (commentId: string) => {
-    if (!confirm("Are you sure you want to delete this comment?")) return;
-
-    try {
-      const { error } = await supabase
-        .from("comments")
-        .delete()
-        .eq("id", commentId);
-
-      if (error) {
-        console.error("Error deleting comment:", error);
-      } else {
-        // Remove from local state
-        setComments((prev) =>
-          prev.filter((comment) => comment.id !== commentId),
-        );
-      }
-    } catch (error) {
-      console.error("Error deleting comment:", error);
-    }
+  const handleDelete = (commentId: string) => {
+    toast((t) => (
+      <span>
+        Are you sure you want to delete this comment?
+        <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
+          <button
+            style={{
+              background: "#e53e3e",
+              color: "white",
+              border: "none",
+              borderRadius: 4,
+              padding: "4px 12px",
+              cursor: "pointer",
+            }}
+            onClick={async () => {
+              toast.dismiss(t.id);
+              try {
+                const { error } = await supabase
+                  .from("comments")
+                  .delete()
+                  .eq("id", commentId);
+                if (error) {
+                  toast.error("Error deleting comment.");
+                  console.error("Error deleting comment:", error);
+                } else {
+                  setComments((prev) =>
+                    prev.filter((comment) => comment.id !== commentId),
+                  );
+                  toast.success("Comment deleted.");
+                }
+              } catch (error) {
+                toast.error("Error deleting comment.");
+                console.error("Error deleting comment:", error);
+              }
+            }}
+          >
+            Delete
+          </button>
+          <button
+            style={{
+              background: "#eee",
+              color: "#333",
+              border: "none",
+              borderRadius: 4,
+              padding: "4px 12px",
+              cursor: "pointer",
+            }}
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+        </div>
+      </span>
+    ));
   };
 
   const formatDate = (dateString: string) => {
