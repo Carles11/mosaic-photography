@@ -1,15 +1,12 @@
 // ImageWrapper: All images are loaded exclusively via Next.js <Image /> with lazy loading.
 // No manual preloading, pre-caching, or window.Image() logic is used anywhere in the codebase.
 // This ensures optimal SEO, accessibility, and performance. See README for details.
-import React, { lazy, Suspense, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { Item } from "./PhotoSwipeWrapper";
 import styles from "./image.module.css";
 import HeartButton from "@/components/buttons/HeartButton";
-import CommentsButton from "@/components/buttons/CommentsButton";
-const CommentsModal = lazy(
-  () => import("@/components/modals/comments/CommentsModal"),
-);
+import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 
 interface ImageWrapperProps {
   image: {
@@ -48,15 +45,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
 
   // Ensure ID is always a string (database might return number)
   const imageIdString = String(image.id);
-  const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
-
-  const handleOpenCommentsModal = () => {
-    setIsCommentsModalOpen(true);
-  };
-
-  const handleCloseCommentsModal = () => {
-    setIsCommentsModalOpen(false);
-  };
+  // Modal state and handlers are now managed by modal context
 
   return (
     <>
@@ -65,9 +54,10 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
           imageId={imageIdString}
           onLoginRequired={onLoginRequired}
         />
-        <CommentsButton
+        <CommentsLauncher
           imageId={imageIdString}
-          onOpenModal={handleOpenCommentsModal}
+          onLoginRequired={onLoginRequired}
+          className={styles.commentsButton}
         />
         <Item
           original={image.url}
@@ -98,17 +88,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
         </Item>
       </div>
 
-      {/* Comments Modal: lazy loaded and only rendered when needed */}
-      {isCommentsModalOpen && (
-        <Suspense fallback={null}>
-          <CommentsModal
-            imageId={imageIdString}
-            isOpen={isCommentsModalOpen}
-            onClose={handleCloseCommentsModal}
-            onLoginRequired={onLoginRequired}
-          />
-        </Suspense>
-      )}
+      {/* Comments Modal is now handled by modal context system */}
     </>
   );
 };

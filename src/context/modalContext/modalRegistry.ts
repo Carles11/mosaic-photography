@@ -10,7 +10,7 @@
 
 import React from "react";
 
-export type ModalKey = "addToCollection" | "goPro";
+export type ModalKey = "addToCollection" | "goPro" | "comments";
 
 export type ModalPropsMap = {
   addToCollection: {
@@ -21,6 +21,11 @@ export type ModalPropsMap = {
   };
   goPro: {
     onClose?: (result?: unknown) => void;
+  };
+  comments: {
+    imageId: string;
+    onClose: () => void;
+    onLoginRequired?: () => void;
   };
 };
 
@@ -34,4 +39,5 @@ export const modalRegistry: {
   addToCollection: () =>
     import("@/components/modals/addToCollection/AddToCollectionModalBody"),
   goPro: () => import("@/components/modals/goProModal/GoProModalBody"),
+  comments: () => import("@/components/modals/comments/CommentsModalBody"),
 };

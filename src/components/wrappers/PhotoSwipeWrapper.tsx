@@ -7,8 +7,7 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import HeartButton from "@/components/buttons/HeartButton";
-import CommentsButton from "@/components/buttons/CommentsButton";
-import CommentsModal from "@/components/modals/comments/CommentsModal";
+import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import { ImageWithOrientation } from "@/types";
 import "photoswipe/dist/photoswipe.css";
 
@@ -36,15 +35,7 @@ const PhotoSwipeWrapper: React.FC<
   const [currentImageId, setCurrentImageId] = useState<string | null>(null);
   const [photoSwipeContainer, setPhotoSwipeContainer] =
     useState<HTMLElement | null>(null);
-  const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
-
-  const handleOpenCommentsModal = () => {
-    setIsCommentsModalOpen(true);
-  };
-
-  const handleCloseCommentsModal = () => {
-    setIsCommentsModalOpen(false);
-  };
+  // Modal state and handlers are now managed by modal context
 
   // Extract image ID directly from PhotoSwipe's slide data
   const getImageIdFromPhotoSwipe = (pswpInstance: {
@@ -465,23 +456,16 @@ const PhotoSwipeWrapper: React.FC<
               onLoginRequired={onLoginRequired}
               className="modalView"
             />
-            <CommentsButton
+            <CommentsLauncher
               imageId={currentImageId}
-              onOpenModal={handleOpenCommentsModal}
+              onLoginRequired={onLoginRequired}
               className="modalView"
             />
           </>,
           photoSwipeContainer,
         )}
 
-      {currentImageId && (
-        <CommentsModal
-          imageId={currentImageId}
-          isOpen={isCommentsModalOpen}
-          onClose={handleCloseCommentsModal}
-          onLoginRequired={onLoginRequired}
-        />
-      )}
+      {/* Comments modal is now handled by modal context system */}
     </>
   );
 };
