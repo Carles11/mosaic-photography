@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import styles from "./CommentItem.module.css";
 import buttonStyles from "../shared/ButtonStyles.module.css";
 import { Comment } from "@/types";
@@ -51,18 +52,52 @@ const CommentItem: React.FC<CommentItemProps> = ({
     }
   };
 
-  const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this comment?")) return;
-
-    setIsLoading(true);
-    try {
-      await deleteComment(comment.id, comment.image_id);
-    } catch (error) {
-      console.error("Error deleting comment:", error);
-      // Optionally show error message to user
-    } finally {
-      setIsLoading(false);
-    }
+  const handleDelete = () => {
+    toast((t) => (
+      <span>
+        Are you sure you want to delete this comment?
+        <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
+          <button
+            style={{
+              background: "#e53e3e",
+              color: "white",
+              border: "none",
+              borderRadius: 4,
+              padding: "4px 12px",
+              cursor: "pointer",
+            }}
+            onClick={async () => {
+              toast.dismiss(t.id);
+              setIsLoading(true);
+              try {
+                await deleteComment(comment.id, comment.image_id);
+                toast.success("Comment deleted.");
+              } catch (error) {
+                toast.error("Error deleting comment.");
+                console.error("Error deleting comment:", error);
+              } finally {
+                setIsLoading(false);
+              }
+            }}
+          >
+            Delete
+          </button>
+          <button
+            style={{
+              background: "#eee",
+              color: "#333",
+              border: "none",
+              borderRadius: 4,
+              padding: "4px 12px",
+              cursor: "pointer",
+            }}
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+        </div>
+      </span>
+    ));
   };
   return (
     <div className={styles.commentItem}>
