@@ -10,7 +10,12 @@
 
 import React from "react";
 
-export type ModalKey = "addToCollection" | "goPro" | "comments";
+export type ModalKey =
+  | "addToCollection"
+  | "goPro"
+  | "comments"
+  | "createCollection"
+  | "editCollection";
 
 export type ModalPropsMap = {
   addToCollection: {
@@ -27,6 +32,15 @@ export type ModalPropsMap = {
     onClose: () => void;
     onLoginRequired?: () => void;
   };
+  createCollection: {
+    onClose: () => void;
+    onCreateCollection: (collection: import("@/types").Collection) => void;
+  };
+  editCollection: {
+    collection: import("@/types").Collection;
+    onClose: () => void;
+    onUpdateCollection: (collection: import("@/types").Collection) => void;
+  };
 };
 
 export type ModalLoader<TProps> = () => Promise<{
@@ -40,4 +54,8 @@ export const modalRegistry: {
     import("@/components/modals/addToCollection/AddToCollectionModalBody"),
   goPro: () => import("@/components/modals/goProModal/GoProModalBody"),
   comments: () => import("@/components/modals/comments/CommentsModalBody"),
+  createCollection: () =>
+    import("@/components/modals/createCollection/CreateCollectionModalBody"),
+  editCollection: () =>
+    import("@/components/modals/editCollection/EditCollectionModalBody"),
 };

@@ -9,8 +9,8 @@ import {
 } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import CreateCollectionModal from "../modals/createCollection/CreateCollectionModal";
-import EditCollectionModal from "../modals/editCollection/EditCollectionModal";
+import CreateCollectionLauncher from "../modals/createCollection/CreateCollectionLauncher";
+import EditCollectionLauncher from "../modals/editCollection/EditCollectionLauncher";
 import styles from "./CollectionsList.module.css";
 import buttonStyles from "../shared/ButtonStyles.module.css";
 import { supabase } from "@/lib/supabaseClient";
@@ -30,7 +30,6 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
     [],
   );
   const [loading, setLoading] = useState(true);
-  const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingCollection, setEditingCollection] = useState<Collection | null>(
     null,
   );
@@ -134,7 +133,6 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
       { ...newCollection, image_count: 0, preview_images: [] },
       ...prev,
     ]);
-    setShowCreateModal(false);
     loadCollections();
   };
 
@@ -231,13 +229,14 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
             Organize your favorite images into themed collections
           </p>
         </div>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className={`${styles.createButton} ${isMobile ? styles.mobile : ""}`}
-        >
-          <span className={styles.plusIcon}>+</span>
-          New Collection
-        </button>
+        <CreateCollectionLauncher onCreateCollection={handleCreateCollection}>
+          <button
+            className={`${styles.createButton} ${isMobile ? styles.mobile : ""}`}
+          >
+            <span className={styles.plusIcon}>+</span>
+            New Collection
+          </button>
+        </CreateCollectionLauncher>
       </div>
 
       {collections.length === 0 ? (
@@ -245,14 +244,11 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
           <div className={styles.emptyIcon}>📚</div>
           <h3>No collections yet</h3>
           <p>Create your first collection to organize your favorite images</p>
-          <button
-            onClick={() => {
-              setShowCreateModal(true);
-            }}
-            className={styles.emptyCreateButton}
-          >
-            Create Collection
-          </button>
+          <CreateCollectionLauncher onCreateCollection={handleCreateCollection}>
+            <button className={styles.emptyCreateButton}>
+              Create Collection
+            </button>
+          </CreateCollectionLauncher>
         </div>
       ) : (
         <div className={styles.grid}>
@@ -353,22 +349,14 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
         </div>
       )}
 
-      {/* Modals */}
-      {showCreateModal && (
-        <CreateCollectionModal
-          isOpen={showCreateModal}
-          onClose={() => setShowCreateModal(false)}
-          onCreateCollection={handleCreateCollection}
-        />
-      )}
-
       {editingCollection && (
-        <EditCollectionModal
-          isOpen={!!editingCollection}
+        <EditCollectionLauncher
           collection={editingCollection}
-          onClose={() => setEditingCollection(null)}
           onUpdateCollection={handleEditCollection}
-        />
+        >
+          {/* This can be a hidden span, since the launcher just needs to trigger the modal */}
+          <span style={{ display: "none" }} />
+        </EditCollectionLauncher>
       )}
     </div>
   );
