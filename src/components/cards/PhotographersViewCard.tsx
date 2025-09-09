@@ -5,7 +5,7 @@ import ImageWrapper from "../wrappers/ImageWrapper";
 import styles from "./PhotographersViewCard.module.css";
 import GallerySkeletonCard from "./GallerySkeletonCard";
 import "./PhotographersViewCard.overlay.css";
-import PhotographerModal from "@/components/modals/photographer/PhotographerModal";
+import { useModal } from "@/context/modalContext/useModal";
 import { useComments } from "@/context/CommentsContext";
 
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
@@ -41,11 +41,24 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
   const loading = !photographersProp;
   const [selectedPhotographer, setSelectedPhotographer] =
     useState<Photographer | null>(null);
+  const { open } = useModal();
   const [expandedBiography, setExpandedBiography] = useState<number | null>(
     null,
   );
   const [expandedOrigin, setExpandedOrigin] = useState<number | null>(null);
+
   const imgRef = useRef<HTMLImageElement | null>(null);
+
+  // Open photographer modal when selectedPhotographer changes
+  useEffect(() => {
+    if (selectedPhotographer) {
+      open("photographer", {
+        photographer: selectedPhotographer,
+        onClose: () => setSelectedPhotographer(null),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedPhotographer]);
 
   useEffect(() => {
     if (!photographers) return;
@@ -384,12 +397,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                 ))}
             </SliderTyped>
           </>
-        )}
-        {selectedPhotographer && (
-          <PhotographerModal
-            photographer={selectedPhotographer}
-            onClose={() => setSelectedPhotographer(null)}
-          />
         )}
       </div>
     </div>

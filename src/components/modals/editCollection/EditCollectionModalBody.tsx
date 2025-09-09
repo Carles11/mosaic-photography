@@ -23,8 +23,6 @@ const EditCollectionModalBody: React.FC<ModalPropsMap["editCollection"]> = ({
         name: collection.name,
         description: collection.description || "",
       });
-      setShowPrivacyWarning(false);
-      setPrivacyChangeDirection(null);
     }
   }, [collection]);
 
@@ -52,6 +50,7 @@ const EditCollectionModalBody: React.FC<ModalPropsMap["editCollection"]> = ({
       }
       onUpdateCollection(data);
       toast.success("Collection updated!");
+      onClose();
     } catch (error) {
       console.log({ error });
       toast.error("Failed to update collection. Please try again.");
@@ -65,11 +64,11 @@ const EditCollectionModalBody: React.FC<ModalPropsMap["editCollection"]> = ({
   };
 
   const hasChanges =
-    formData.name !== collection.name ||
-    formData.description !== (collection.description || "");
+    formData.name.trim() !== (collection.name || "") ||
+    (formData.description || "").trim() !== (collection.description || "");
 
   return (
-    <div className={styles.modal}>
+    <>
       <div className={styles.header}>
         <h2 className={styles.title}>Edit Collection</h2>
         <button
@@ -139,7 +138,7 @@ const EditCollectionModalBody: React.FC<ModalPropsMap["editCollection"]> = ({
           </button>
         </div>
       </form>
-    </div>
+    </>
   );
 };
 

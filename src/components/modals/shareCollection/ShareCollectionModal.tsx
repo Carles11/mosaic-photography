@@ -3,20 +3,15 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import QRCode from "qrcode";
-import { Collection } from "@/types";
+//
 import { useNonCriticalCssLoaded } from "@/hooks/useNonCriticalCssLoaded";
 
-interface ShareCollectionModalProps {
-  isOpen: boolean;
-  collection: Collection;
-  onClose: () => void;
-}
+import type { ModalPropsMap } from "@/context/modalContext/modalRegistry";
 
 export default function ShareCollectionModal({
-  isOpen,
   collection,
   onClose,
-}: ShareCollectionModalProps) {
+}: ModalPropsMap["shareCollection"]) {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<"link" | "qr" | "email" | "embed">(
     "link",
@@ -44,7 +39,7 @@ export default function ShareCollectionModal({
 
   // Generate QR Code when needed
   useEffect(() => {
-    if (activeTab === "qr" && !qrCodeDataUrl && isOpen) {
+    if (activeTab === "qr" && !qrCodeDataUrl) {
       QRCode.toDataURL(shareUrl, {
         width: 200,
         margin: 2,
@@ -56,9 +51,7 @@ export default function ShareCollectionModal({
         .then(setQrCodeDataUrl)
         .catch(console.error);
     }
-  }, [activeTab, shareUrl, qrCodeDataUrl, isOpen]);
-
-  if (!isOpen) return null;
+  }, [activeTab, shareUrl, qrCodeDataUrl]);
 
   if (!nonCriticalCssLoaded) {
     return null; // TODO: add a loader or placeholder if needed
@@ -112,176 +105,173 @@ export default function ShareCollectionModal({
   };
 
   return (
-    <div className="overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <div className="header">
-          <h3>Share Collection</h3>
-          <button onClick={onClose} className="closeButton">
-            ×
+    <>
+      <div className="header">
+        <h3>Share Collection</h3>
+        <button onClick={onClose} className="closeButton">
+          ×
+        </button>
+      </div>
+
+      <div className="content">
+        <div className="collectionInfo">
+          <h4>{collection.name}</h4>
+          {collection.description && <p>{collection.description}</p>}
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="tabs">
+          <button
+            className={`tab ${activeTab === "link" ? "active" : ""}`}
+            onClick={() => setActiveTab("link")}
+          >
+            🔗 Link
+          </button>
+          <button
+            className={`tab ${activeTab === "qr" ? "active" : ""}`}
+            onClick={() => setActiveTab("qr")}
+          >
+            📱 QR Code
+          </button>
+          <button
+            className={`tab ${activeTab === "email" ? "active" : ""}`}
+            onClick={() => setActiveTab("email")}
+          >
+            📧 Email
+          </button>
+          <button
+            className={`tab ${activeTab === "embed" ? "active" : ""}`}
+            onClick={() => setActiveTab("embed")}
+          >
+            🔗 Embed
           </button>
         </div>
 
-        <div className="content">
-          <div className="collectionInfo">
-            <h4>{collection.name}</h4>
-            {collection.description && <p>{collection.description}</p>}
-          </div>
+        {/* Tab Content */}
+        <div className="tabContent">
+          {activeTab === "link" && (
+            <div className="urlSection">
+              <label className="label">Collection URL:</label>
+              <div className="urlContainer">
+                <input
+                  type="text"
+                  value={shareUrl}
+                  readOnly
+                  className="urlInput"
+                />
+                <button
+                  onClick={handleCopyLink}
+                  className={`copyButton ${copied ? "copied" : ""}`}
+                >
+                  {copied ? "Copied!" : "Copy"}
+                </button>
+              </div>
+              <p className="hint">
+                Share this link with anyone to let them view your collection.
+              </p>
+            </div>
+          )}
 
-          {/* Tab Navigation */}
-          <div className="tabs">
-            <button
-              className={`tab ${activeTab === "link" ? "active" : ""}`}
-              onClick={() => setActiveTab("link")}
-            >
-              🔗 Link
-            </button>
-            <button
-              className={`tab ${activeTab === "qr" ? "active" : ""}`}
-              onClick={() => setActiveTab("qr")}
-            >
-              📱 QR Code
-            </button>
-            <button
-              className={`tab ${activeTab === "email" ? "active" : ""}`}
-              onClick={() => setActiveTab("email")}
-            >
-              📧 Email
-            </button>
-            <button
-              className={`tab ${activeTab === "embed" ? "active" : ""}`}
-              onClick={() => setActiveTab("embed")}
-            >
-              🔗 Embed
-            </button>
-          </div>
+          {activeTab === "qr" && (
+            <div className="qrSection">
+              <div className="qrContainer">
+                {qrCodeDataUrl ? (
+                  <Image
+                    src={qrCodeDataUrl}
+                    alt="QR Code for collection"
+                    className="qrCode"
+                    width={180}
+                    height={180}
+                  />
+                ) : (
+                  <div className="qrLoading">Generating QR Code...</div>
+                )}
+              </div>
+              <div className="qrActions">
+                <button
+                  onClick={handleDownloadQR}
+                  className="downloadButton"
+                  disabled={!qrCodeDataUrl}
+                >
+                  📥 Download QR Code
+                </button>
+              </div>
+              <p className="hint">
+                Scan this QR code with any smartphone camera to open the
+                collection.
+              </p>
+            </div>
+          )}
 
-          {/* Tab Content */}
-          <div className="tabContent">
-            {activeTab === "link" && (
-              <div className="urlSection">
-                <label className="label">Collection URL:</label>
-                <div className="urlContainer">
+          {activeTab === "email" && (
+            <div className="emailSection">
+              <div className="emailPreview">
+                <h5>Email Preview:</h5>
+                <div className="emailContent">
+                  <label className="label" htmlFor="emailSubjectInput">
+                    <strong>Subject:</strong>
+                  </label>
                   <input
+                    id="emailSubjectInput"
                     type="text"
-                    value={shareUrl}
-                    readOnly
+                    value={emailSubject}
+                    onChange={(e) => setEmailSubject(e.target.value)}
                     className="urlInput"
                   />
-                  <button
-                    onClick={handleCopyLink}
-                    className={`copyButton ${copied ? "copied" : ""}`}
-                  >
-                    {copied ? "Copied!" : "Copy"}
-                  </button>
-                </div>
-                <p className="hint">
-                  Share this link with anyone to let them view your collection.
-                </p>
-              </div>
-            )}
-
-            {activeTab === "qr" && (
-              <div className="qrSection">
-                <div className="qrContainer">
-                  {qrCodeDataUrl ? (
-                    <Image
-                      src={qrCodeDataUrl}
-                      alt="QR Code for collection"
-                      className="qrCode"
-                      width={180}
-                      height={180}
-                    />
-                  ) : (
-                    <div className="qrLoading">Generating QR Code...</div>
-                  )}
-                </div>
-                <div className="qrActions">
-                  <button
-                    onClick={handleDownloadQR}
-                    className="downloadButton"
-                    disabled={!qrCodeDataUrl}
-                  >
-                    📥 Download QR Code
-                  </button>
-                </div>
-                <p className="hint">
-                  Scan this QR code with any smartphone camera to open the
-                  collection.
-                </p>
-              </div>
-            )}
-
-            {activeTab === "email" && (
-              <div className="emailSection">
-                <div className="emailPreview">
-                  <h5>Email Preview:</h5>
-                  <div className="emailContent">
-                    <label className="label" htmlFor="emailSubjectInput">
-                      <strong>Subject:</strong>
-                    </label>
-                    <input
-                      id="emailSubjectInput"
-                      type="text"
-                      value={emailSubject}
-                      onChange={(e) => setEmailSubject(e.target.value)}
-                      className="urlInput"
-                    />
-                    <br />
-                    <br />
-                    <label className="label" htmlFor="emailBodyTextarea">
-                      <strong>Message:</strong>
-                    </label>
-                    <textarea
-                      id="emailBodyTextarea"
-                      value={emailBody}
-                      onChange={(e) => setEmailBody(e.target.value)}
-                      className="embedTextarea"
-                      rows={8}
-                    />
-                  </div>
-                </div>
-                <button onClick={handleEmailShare} className="emailButton">
-                  📧 Open in Email App
-                </button>
-                <p className="hint">
-                  This will open your default email app with your custom
-                  message.
-                </p>
-              </div>
-            )}
-
-            {activeTab === "embed" && (
-              <div className="embedSection">
-                <label className="label">Embed Code:</label>
-                <div className="embedContainer">
+                  <br />
+                  <br />
+                  <label className="label" htmlFor="emailBodyTextarea">
+                    <strong>Message:</strong>
+                  </label>
                   <textarea
-                    value={embedCode}
-                    readOnly
+                    id="emailBodyTextarea"
+                    value={emailBody}
+                    onChange={(e) => setEmailBody(e.target.value)}
                     className="embedTextarea"
-                    rows={3}
+                    rows={8}
                   />
-                  <button
-                    onClick={handleCopyEmbed}
-                    className={`copyButton ${embedCopied ? "copied" : ""}`}
-                  >
-                    {embedCopied ? "Copied!" : "Copy"}
-                  </button>
                 </div>
-                <div className="embedPreview">
-                  <h5>Preview:</h5>
-                  <div className="embedFrame">
-                    <span>📷 {collection.name}</span>
-                    <small>{collection.image_count || 0} images</small>
-                  </div>
-                </div>
-                <p className="hint">
-                  Paste this code into any website to embed your collection.
-                </p>
               </div>
-            )}
-          </div>
+              <button onClick={handleEmailShare} className="emailButton">
+                📧 Open in Email App
+              </button>
+              <p className="hint">
+                This will open your default email app with your custom message.
+              </p>
+            </div>
+          )}
+
+          {activeTab === "embed" && (
+            <div className="embedSection">
+              <label className="label">Embed Code:</label>
+              <div className="embedContainer">
+                <textarea
+                  value={embedCode}
+                  readOnly
+                  className="embedTextarea"
+                  rows={3}
+                />
+                <button
+                  onClick={handleCopyEmbed}
+                  className={`copyButton ${embedCopied ? "copied" : ""}`}
+                >
+                  {embedCopied ? "Copied!" : "Copy"}
+                </button>
+              </div>
+              <div className="embedPreview">
+                <h5>Preview:</h5>
+                <div className="embedFrame">
+                  <span>📷 {collection.name}</span>
+                  <small>{collection.image_count || 0} images</small>
+                </div>
+              </div>
+              <p className="hint">
+                Paste this code into any website to embed your collection.
+              </p>
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 }

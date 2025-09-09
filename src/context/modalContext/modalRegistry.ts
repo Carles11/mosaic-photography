@@ -16,7 +16,8 @@ export type ModalKey =
   | "comments"
   | "createCollection"
   | "editCollection"
-  | "photographer";
+  | "photographer"
+  | "shareCollection";
 
 export type ModalPropsMap = {
   addToCollection: {
@@ -46,6 +47,10 @@ export type ModalPropsMap = {
     photographer: import("@/types").Photographer;
     onClose: () => void;
   };
+  shareCollection: {
+    collection: import("@/types").Collection;
+    onClose: () => void;
+  };
 };
 
 export type ModalLoader<TProps> = () => Promise<{
@@ -65,4 +70,6 @@ export const modalRegistry: {
     import("@/components/modals/editCollection/EditCollectionModalBody"),
   photographer: () =>
     import("@/components/modals/photographer/PhotographerModalBody"),
+  shareCollection: () =>
+    import("@/components/modals/shareCollection/ShareCollectionModal"),
 };

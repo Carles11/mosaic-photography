@@ -43,7 +43,7 @@ const CreateCollectionModalBody: React.FC<
   };
 
   return (
-    <div className={styles.modal}>
+    <>
       <div className={styles.header}>
         <h2 className={styles.title}>Create New Collection</h2>
         <button
@@ -111,7 +111,7 @@ const CreateCollectionModalBody: React.FC<
           </button>
         </div>
       </form>
-    </div>
+    </>
   );
 };
 

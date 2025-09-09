@@ -9,7 +9,7 @@ import styles from "./CollectionView.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { CollectionWithImages } from "@/types";
-import ShareCollectionModal from "@/components/modals/shareCollection/ShareCollectionModal";
+import { useModal } from "@/context/modalContext/useModal";
 
 interface CollectionImageData {
   id: string;
@@ -38,7 +38,6 @@ export default function CollectionView() {
   const [isReordering, setIsReordering] = useState(false);
   const [draggedItem, setDraggedItem] = useState<number | null>(null);
   const [dragOverItem, setDragOverItem] = useState<number | null>(null);
-  const [showShareModal, setShowShareModal] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [touchStartTime, setTouchStartTime] = useState(0);
@@ -46,6 +45,7 @@ export default function CollectionView() {
   const [dropPosition, setDropPosition] = useState<"before" | "after" | null>(
     null,
   );
+  const { open } = useModal();
 
   const collectionId = params?.id as string;
   const isEmbedded = searchParams?.get("embed") === "true";
@@ -693,7 +693,14 @@ export default function CollectionView() {
                 {isReordering ? "Done Reordering" : "Reorder Images"}
               </button>
               <button
-                onClick={() => setShowShareModal(true)}
+                onClick={() => {
+                  if (collection) {
+                    open("shareCollection", {
+                      collection,
+                      onClose: () => {},
+                    });
+                  }
+                }}
                 className={styles.shareButton}
               >
                 Share Collection
@@ -812,13 +819,7 @@ export default function CollectionView() {
       )}
 
       {/* Share Modal */}
-      {collection && (
-        <ShareCollectionModal
-          isOpen={showShareModal}
-          collection={collection}
-          onClose={() => setShowShareModal(false)}
-        />
-      )}
+      {/* Share Modal is now handled by modal context/provider */}
     </div>
   );
 }
