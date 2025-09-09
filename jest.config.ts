@@ -7,6 +7,11 @@ const config = {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
   testPathIgnorePatterns: ["/node_modules/", "/.next/"],
+  transform: {
+    "^.+\\.(ts|tsx)$": "ts-jest",
+  },
+
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 };
 
 export default config;
