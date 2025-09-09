@@ -85,6 +85,7 @@ export default function FavoritesList({
     open("addToCollection", {
       imageId,
       imageTitle,
+      onClose: () => {},
       onAddToCollection: () => {
         if (onCollectionUpdate) onCollectionUpdate();
         console.log("Image added to collection successfully");
