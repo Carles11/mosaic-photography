@@ -39,6 +39,8 @@ export default function ThemeImageSSR({
       placeholder={blurDataURL ? "blur" : undefined}
       blurDataURL={blurDataURL}
       sizes={sizes}
+      loading="eager"
+      fetchPriority="high"
     />
   );
 }
