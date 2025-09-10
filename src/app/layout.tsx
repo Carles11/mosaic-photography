@@ -139,7 +139,28 @@ function RootLayout({ children }: RootLayoutProps) {
           id="critical-above-the-fold"
           dangerouslySetInnerHTML={{ __html: criticalCSS }}
         />
-        <link rel="preconnect" href="https://www.mosaic.photography" />
+        <link
+          rel="preconnect"
+          href="https://cdn.mosaic.photography"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://gdzqgrfitiixbhlhppef.supabase.co"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preconnect"
+          href="https://res.cloudinary.com"
+          crossOrigin="anonymous"
+        />
+        {/* Optional (speed boost for DNS resolution): */}
+        <link rel="dns-prefetch" href="https://cdn.mosaic.photography" />
+        <link
+          rel="dns-prefetch"
+          href="https://gdzqgrfitiixbhlhppef.supabase.co"
+        />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
       </head>
       {/* <GoogleTagManager gtmId="GTM-N74Q9JC5" /> */}
       <body className={`font-trade-gothic`}>
