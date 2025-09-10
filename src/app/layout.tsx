@@ -4,17 +4,9 @@ import type { Metadata } from "next";
 import { tradeGothic } from "./fonts";
 
 import Script from "next/script";
-import { ThemeProvider } from "next-themes";
-import React from "react";
-import { Toaster } from "react-hot-toast";
-import { AgeConsentProvider } from "@/context/AgeConsentContext";
-import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
-import { AuthSessionProvider } from "@/context/AuthSessionContext";
-import { FavoritesProvider } from "@/context/FavoritesContext";
-import { CommentsProvider } from "@/context/CommentsContext";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
 import ClientLayout from "@/components/layouts/ClientLayout";
-import ModalProviderLoader from "@/components/modals/ModalProviderLoader";
+import ClientProviders from "@/context/main/ClientProviders";
 
 // NOTE: globals.css was intentionally removed from static imports to avoid
 // Next's automatic CSS extraction which injects render-blocking
@@ -152,36 +144,16 @@ function RootLayout({ children }: RootLayoutProps) {
       {/* <GoogleTagManager gtmId="GTM-N74Q9JC5" /> */}
       <body className={`font-trade-gothic`}>
         <NonCriticalCSSLoader />
-        <Toaster position="top-center" />
-        <ThemeProvider defaultTheme="dark">
-          <Script
-            id="gtm"
-            strategy="afterInteractive"
-            src={`https://www.googletagmanager.com/gtm.js?id=GTM-N74Q9JC5`}
-          />
-          <ServiceWorkerContext>
-            <AuthSessionProvider>
-              <AgeConsentProvider>
-                <FavoritesProvider>
-                  <CommentsProvider>
-                    {/* Portal root for modals must exist before the ModalProvider mounts */}
-                    <div id="modal-root" />
-                    <div id="modal-loader-root">
-                      {/* ModalProviderLoader mounts the client ModalProvider lazily */}
-                    </div>
-
-                    {/* ModalProviderLoader must be mounted before ClientLayout so client components can use useModal() */}
-                    <ModalProviderLoader>
-                      <main style={{ flex: 1 }}>
-                        <ClientLayout>{children}</ClientLayout>
-                      </main>
-                    </ModalProviderLoader>
-                  </CommentsProvider>
-                </FavoritesProvider>
-              </AgeConsentProvider>
-            </AuthSessionProvider>
-          </ServiceWorkerContext>
-        </ThemeProvider>
+        <Script
+          id="gtm"
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtm.js?id=GTM-N74Q9JC5`}
+        />
+        <ClientProviders>
+          <main style={{ flex: 1 }}>
+            <ClientLayout>{children}</ClientLayout>
+          </main>
+        </ClientProviders>
         {/* Client-side lazy ModalProvider is mounted above so it can render into #modal-root */}
       </body>
     </html>
