@@ -43,6 +43,28 @@ const nextConfig: NextConfig = {
 
     if (!isServer) {
       config.resolve.alias["moment"] = "moment/min/moment-with-locales";
+      // Prevent Node.js polyfills from being injected into the client bundle
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        os: false,
+        crypto: false,
+        stream: false,
+        buffer: false,
+        util: false,
+        assert: false,
+        http: false,
+        https: false,
+        url: false,
+        zlib: false,
+        tty: false,
+        net: false,
+        tls: false,
+        child_process: false,
+        dns: false,
+        module: false,
+      };
     }
 
     return config;

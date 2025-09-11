@@ -38,7 +38,7 @@ module.exports = {
       },
     },
     {
-      // NEW: Cache Next.js image optimization endpoint
+      // Cache Next.js image optimization endpoint (optional, adjust for prod if needed)
       urlPattern: /^https?:\/\/localhost:3000\/_next\/image\?/i,
       handler: "StaleWhileRevalidate",
       options: {
@@ -61,15 +61,18 @@ module.exports = {
       },
     },
   ],
-  // Add a reference to your custom Service Worker
   customWorkerDir: "src/sw-custom.js", // Path to your custom Service Worker file
-  // Exclude JSON files (including app-build-manifest.json) from being precached
-  buildExcludes: [
-    () => {
-      return true;
-    },
+
+  // Exclude node/server-only and other unwanted files from the SW bundle
+  exclude: [
+    /\.map$/, // Exclude source maps
+    /^node_modules/, // Exclude all node_modules
+    /^tr46/, // Exclude tr46 and mappingTable.json
+    /\.json$/, // Exclude all JSON files (except manifest)
+    /^workbox-.*$/, // Exclude workbox files
   ],
-  // General settings to enable seamless updates
+
+  // General settings for seamless SW updates
   skipWaiting: true,
   clientsClaim: true,
 };
