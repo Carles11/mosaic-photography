@@ -126,7 +126,9 @@ const nextConfig: NextConfig = {
     ];
   },
 };
+
 console.log({ isDev });
+
 export default withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 })(
@@ -135,5 +137,5 @@ export default withBundleAnalyzer({
     register: !isDev,
     disable: isDev, // Keep disabled unless going full PWA
     ...pwaConfig,
-  })(nextConfig),
+  })(nextConfig)
 );
