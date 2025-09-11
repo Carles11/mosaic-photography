@@ -15,6 +15,7 @@ interface ImageWrapperProps {
     author: string;
     orientation?: string;
     title?: string;
+    mosaicType?: string;
   };
   imgRef?: React.RefObject<HTMLImageElement | null>;
   onLoginRequired?: () => void;
@@ -25,27 +26,44 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   imgRef,
   onLoginRequired,
 }) => {
-  // Set default width/height based on orientation
-  let imgWidth = 200;
-  let imgHeight = 225;
-  let sizes = "(max-width: 600px) 100vw, 200px";
-  if (image.orientation === "horizontal") {
-    imgWidth = 400;
-    imgHeight = 225;
-    sizes = "(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 400px";
-  } else if (image.orientation === "vertical") {
-    imgWidth = 200;
-    imgHeight = 267;
-    sizes = "(max-width: 600px) 100vw, 200px";
-  } else if (image.orientation === "square") {
-    imgWidth = 250;
-    imgHeight = 250;
-    sizes = "(max-width: 600px) 100vw, 250px";
+  // Default: photographers gallery
+  let imgWidth = 600; // largest desktop width you see
+  let imgHeight = 750; // keep aspect ratio
+  let sizes = `
+    (max-width: 400px) 90vw, 
+    (max-width: 600px) 95vw, 
+    (max-width: 900px) 48vw, 
+    (max-width: 1200px) 450px, 
+    600px
+  `.replace(/\s+/g, " ");
+
+  // Mosaic gallery logic
+  if (typeof image.mosaicType === "string") {
+    if (
+      image.mosaicType === "large" ||
+      image.mosaicType === "wide" ||
+      image.orientation === "horizontal"
+    ) {
+      imgWidth = 471;
+      imgHeight = 300; // or whatever is correct for your grid
+      sizes = "(max-width: 600px) 100vw, 471px";
+    } else if (
+      image.mosaicType === "normal" ||
+      image.mosaicType === "tall" ||
+      image.orientation === "vertical"
+    ) {
+      imgWidth = 231;
+      imgHeight = 300;
+      sizes = "(max-width: 600px) 100vw, 231px";
+    } else if (image.orientation === "square") {
+      imgWidth = 231;
+      imgHeight = 231;
+      sizes = "(max-width: 600px) 100vw, 231px";
+    }
   }
 
   // Ensure ID is always a string (database might return number)
   const imageIdString = String(image.id);
-  // Modal state and handlers are now managed by modal context
 
   return (
     <>
@@ -63,31 +81,38 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
           original={image.url}
           thumbnail={image.url}
           caption={`${image.title}`}
-          width={imgRef?.current?.naturalWidth} // Use actual width
-          height={imgRef?.current?.naturalHeight} // Use actual height
-          id={imageIdString} // Pass image ID to PhotoSwipe for hash navigation and identification
-          alt={imageIdString} // Also pass as alt for fallback access
+          width={imgRef?.current?.naturalWidth}
+          height={imgRef?.current?.naturalHeight}
+          id={imageIdString}
+          alt={imageIdString}
         >
           {(props) => (
             <Image
+              ref={(node) => {
+                if (typeof props.ref === "function") {
+                  props.ref(node);
+                } else if (props.ref) {
+                  (
+                    props.ref as React.MutableRefObject<HTMLImageElement | null>
+                  ).current = node;
+                }
+              }}
               src={image.url}
               alt={image.title || "Gallery Image"}
               className={`${styles.imageItem} ${styles.image}`}
               width={imgWidth}
               height={imgHeight}
               sizes={sizes}
-              quality={60} // <--- Lower quality for grid images!
+              quality={60}
               placeholder="blur"
               blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
               loading="lazy"
               data-image-id={imageIdString}
-              ref={props.ref}
               onClick={props.open}
             />
           )}
         </Item>
       </div>
-
       {/* Comments Modal is now handled by modal context system */}
     </>
   );

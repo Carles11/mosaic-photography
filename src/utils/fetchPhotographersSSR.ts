@@ -8,7 +8,7 @@ export async function fetchPhotographersSSR(): Promise<Photographer[] | null> {
       .select(
         `
         name, surname, author, biography, birthdate, deceasedate, origin, website, store, instagram,
-  images (id, url, author, title, description, created_at)
+  images (id, url, author, title, description, created_at, orientation)
       `,
       )
       .order("random_order", { ascending: true })
