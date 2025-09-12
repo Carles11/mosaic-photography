@@ -9,14 +9,14 @@ export async function fetchPhotographersSSR(): Promise<Photographer[] | null> {
         `
         name, surname, author, biography, birthdate, deceasedate, origin, website, store, instagram,
   images (id, url, author, title, description, created_at, orientation)
-      `,
+      `
       )
       .order("random_order", { ascending: true })
       .order("created_at", { ascending: true, foreignTable: "images" });
     if (error || !photographers) {
       console.error(
         "[SSR fetchPhotographersSSR] Supabase error or no data",
-        error,
+        error
       );
       return null;
     }

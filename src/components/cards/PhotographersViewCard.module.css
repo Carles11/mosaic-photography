@@ -5,6 +5,7 @@
   margin-top: 1rem;
   height: 760px;
 }
+
 .photographersViewCardContainer {
   height: 100%;
   width: 100%;
@@ -24,13 +25,13 @@
 }
 
 .photographersViewCard img {
-  height: 100%;
-  min-height: 750px;
-  max-height: 750px;
   width: 100%;
-  min-width: 450px;
   max-width: 600px;
+  aspect-ratio: 3 / 4;
+  height: auto;
   object-fit: cover;
+  display: block;
+  margin: 0 auto;
 }
 
 .photographersViewCard h3 {
@@ -57,33 +58,33 @@
 }
 
 .biography {
-  display: -webkit-box; /* Use flexbox-like behavior for truncation */
-  -webkit-line-clamp: 4; /* Limit to 4 lines */
-  -webkit-box-orient: vertical; /* Set box orientation to vertical */
-  overflow: hidden; /* Hide overflowing text */
-  text-overflow: ellipsis; /* Show ellipsis for truncated text */
-  white-space: normal; /* Allow text wrapping */
-  line-height: 1.5; /* Adjust line height for readability */
-  margin-top: 10px; /* Add spacing above the biography */
-  cursor: pointer; /* Indicate that the text is clickable */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.5;
+  margin-top: 10px;
+  cursor: pointer;
   padding-top: 2rem;
 }
-.origin {
-  display: -webkit-box; /* Use flexbox-like behavior for truncation */
-  -webkit-line-clamp: 1; /* Limit to 4 lines */
-  -webkit-box-orient: vertical; /* Set box orientation to vertical */
-  overflow: hidden; /* Hide overflowing text */
-  text-overflow: ellipsis; /* Show ellipsis for truncated text */
-  white-space: normal; /* Allow text wrapping */
-  line-height: 1.5; /* Adjust line height for readability */
 
-  cursor: pointer; /* Indicate that the text is clickable */
+.origin {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.5;
+  cursor: pointer;
 }
 
 .expanded {
-  -webkit-line-clamp: unset; /* Remove line clamp */
-  overflow: visible; /* Show full text */
-  text-overflow: unset; /* Remove ellipsis */
+  -webkit-line-clamp: unset;
+  overflow: visible;
+  text-overflow: unset;
 }
 
 .imageContainer {
@@ -93,12 +94,12 @@
 
 .landscape {
   aspect-ratio: 16 / 9;
-  grid-column: span 2; /* Landscape images span 2 columns */
+  grid-column: span 2;
 }
 
 .portrait {
   aspect-ratio: 3/4;
-  grid-column: span 1; /* Portrait images span 1 column */
+  grid-column: span 1;
 }
 
 .photographer-list-button {
@@ -120,7 +121,6 @@
 }
 
 /* for mobiles */
-
 @media (max-width: 768px) {
   .photographersViewSkeletonGrid {
     grid-template-columns: 1fr;
@@ -135,11 +135,11 @@
     margin-bottom: 3rem;
   }
   .photographersViewCard img {
-    height: 400px;
-    min-height: 400px;
-    max-height: 400px;
     width: 100%;
-    min-width: 100%;
     max-width: 100%;
+    aspect-ratio: 3 / 4;
+    height: auto;
+    object-fit: cover;
+    display: block;
   }
 }
