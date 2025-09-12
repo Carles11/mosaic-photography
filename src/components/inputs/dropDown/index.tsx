@@ -11,8 +11,8 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, onToggle }) => {
   return (
     <details className={styles.dropdown} onToggle={handleToggle}>
       <summary role="button">
-        <div className={`fancy-link ${styles.link}`}>
-          {buttonText.toUpperCase()}
+        <div className={`fancy-link ${styles.link} ${styles.paddingLeft}`}>
+          {buttonText}
         </div>
       </summary>
       <ul>

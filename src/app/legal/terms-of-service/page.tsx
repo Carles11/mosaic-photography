@@ -56,7 +56,7 @@ const TermsOfService: React.FC = () => {
       </p>
       <h2 className={styles.subtitle}>Affiliate links</h2>
       <p className={styles.text}>
-        Some of the links provided under &quot;Make it yours&quot; section may
+        Some of the links provided under &quot;Prints & books&quot; section may
         be affiliate links, meaning I may earn a small commission from the store
         if you make a purchase through them. This helps support my work at no
         additional cost to you.

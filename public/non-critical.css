@@ -16,9 +16,7 @@ footer {
 }
 
 body {
-  transition:
-    background-color 0.3s,
-    color 0.3s;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .sr-only {
@@ -558,4 +556,8 @@ body {
 
 .urlContainer {
   flex-direction: column;
+}
+
+.pswp__img {
+  object-fit: contain !important;
 }

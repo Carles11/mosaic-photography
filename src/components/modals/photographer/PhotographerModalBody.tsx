@@ -37,7 +37,7 @@ const PhotographerModalBody: React.FC<ModalPropsMap["photographer"]> = ({
         onClose();
       }
     },
-    [onClose, modalRef],
+    [onClose, modalRef]
   );
 
   const handleDropdownToggle = (isOpen: boolean) => {
@@ -117,7 +117,7 @@ const PhotographerModalBody: React.FC<ModalPropsMap["photographer"]> = ({
       {stores && stores.length > 0 && (
         <div className={styles.externalLinks}>
           <Dropdown
-            buttonText="Make it yours"
+            buttonText="Prints & books"
             items={stores}
             onToggle={handleDropdownToggle}
           />

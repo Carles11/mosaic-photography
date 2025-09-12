@@ -9,15 +9,15 @@ import { createPortal } from "react-dom";
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import { ImageWithOrientation } from "@/types";
-import "photoswipe/dist/photoswipe.css";
+// import "photoswipe/dist/photoswipe.css";
 
 // LAZY IMPORTS for gallery components
 const Gallery = lazy(() =>
-  import("react-photoswipe-gallery").then((mod) => ({ default: mod.Gallery })),
+  import("react-photoswipe-gallery").then((mod) => ({ default: mod.Gallery }))
 );
 // Export lazy Item for use elsewhere
 const Item = lazy(() =>
-  import("react-photoswipe-gallery").then((mod) => ({ default: mod.Item })),
+  import("react-photoswipe-gallery").then((mod) => ({ default: mod.Item }))
 );
 
 interface PhotoSwipeWrapperProps {
@@ -36,6 +36,11 @@ const PhotoSwipeWrapper: React.FC<
   const [photoSwipeContainer, setPhotoSwipeContainer] =
     useState<HTMLElement | null>(null);
   // Modal state and handlers are now managed by modal context
+
+  useEffect(() => {
+    // @ts-ignore
+    import("photoswipe/dist/photoswipe.css");
+  }, []);
 
   // Extract image ID directly from PhotoSwipe's slide data
   const getImageIdFromPhotoSwipe = (pswpInstance: {
@@ -122,7 +127,7 @@ const PhotoSwipeWrapper: React.FC<
         const initialImageId = getImageIdFromPhotoSwipe(
           pswpInstance as {
             currSlide?: { data?: { id?: string | number; alt?: string } };
-          },
+          }
         );
         if (initialImageId) {
           setCurrentImageId(initialImageId);
@@ -134,7 +139,7 @@ const PhotoSwipeWrapper: React.FC<
           const newImageId = getImageIdFromPhotoSwipe(
             pswpInstance as {
               currSlide?: { data?: { id?: string | number; alt?: string } };
-            },
+            }
           );
           if (newImageId) {
             setCurrentImageId(newImageId);
@@ -173,7 +178,7 @@ const PhotoSwipeWrapper: React.FC<
                 attemptCount++;
 
                 const success = setupPhotoSwipeListeners(
-                  element as HTMLElement,
+                  element as HTMLElement
                 );
 
                 if (!success && attemptCount < maxAttempts) {
@@ -182,7 +187,7 @@ const PhotoSwipeWrapper: React.FC<
                   let fallbackImageId: string | null = null;
 
                   const currentImg = element.querySelector(
-                    ".pswp__img",
+                    ".pswp__img"
                   ) as HTMLImageElement;
 
                   if (currentImg && currentImg.dataset.imageId) {
@@ -199,14 +204,14 @@ const PhotoSwipeWrapper: React.FC<
                       typeof img.id === "string" || typeof img.id === "number"
                         ? currentImg.src.includes(String(img.id)) ||
                           String((img as { url?: string }).url || "").includes(
-                            currentImg.src.split("/").pop() || "",
+                            currentImg.src.split("/").pop() || ""
                           ) ||
                           currentImg.src.includes(
                             String((img as { url?: string }).url || "")
                               .split("/")
-                              .pop() || "",
+                              .pop() || ""
                           )
-                        : false,
+                        : false
                     );
 
                     if (matchingImage) {
@@ -226,7 +231,7 @@ const PhotoSwipeWrapper: React.FC<
 
                     const getCurrentImageInfo = () => {
                       const currentImg = element.querySelector(
-                        ".pswp__img",
+                        ".pswp__img"
                       ) as HTMLImageElement;
 
                       const allImages = element.querySelectorAll(".pswp__img");
@@ -248,7 +253,7 @@ const PhotoSwipeWrapper: React.FC<
                           (img) => {
                             const rect = img.getBoundingClientRect();
                             return rect.width > 0 && rect.height > 0;
-                          },
+                          }
                         );
 
                         if (visibleImages.length > 0) {
@@ -265,7 +270,7 @@ const PhotoSwipeWrapper: React.FC<
                               return currentArea > largestArea
                                 ? current
                                 : largest;
-                            },
+                            }
                           ) as HTMLImageElement;
                         } else {
                           targetImg = currentImg;
@@ -289,16 +294,16 @@ const PhotoSwipeWrapper: React.FC<
                           typeof img.id === "number"
                             ? targetImg.src.includes(String(img.id)) ||
                               String(
-                                (img as { url?: string }).url || "",
+                                (img as { url?: string }).url || ""
                               ).includes(
-                                targetImg.src.split("/").pop() || "",
+                                targetImg.src.split("/").pop() || ""
                               ) ||
                               targetImg.src.includes(
                                 String((img as { url?: string }).url || "")
                                   .split("/")
-                                  .pop() || "",
+                                  .pop() || ""
                               )
-                            : false,
+                            : false
                         );
 
                         if (matchingImage) {
@@ -334,7 +339,7 @@ const PhotoSwipeWrapper: React.FC<
 
                     const slideCheckInterval = setInterval(
                       checkForSlideChanges,
-                      200,
+                      200
                     );
 
                     const slideObserver = new MutationObserver((mutations) => {
@@ -346,12 +351,12 @@ const PhotoSwipeWrapper: React.FC<
                             Array.from(mutation.addedNodes).some(
                               (node) =>
                                 node.nodeType === Node.ELEMENT_NODE &&
-                                (node as Element).tagName === "IMG",
+                                (node as Element).tagName === "IMG"
                             ) ||
                             Array.from(mutation.removedNodes).some(
                               (node) =>
                                 node.nodeType === Node.ELEMENT_NODE &&
-                                (node as Element).tagName === "IMG",
+                                (node as Element).tagName === "IMG"
                             );
 
                           if (hasImageChanges) {
@@ -402,14 +407,14 @@ const PhotoSwipeWrapper: React.FC<
                               cleanupObserver.disconnect();
                               document.removeEventListener(
                                 "keydown",
-                                handleKeyDown,
+                                handleKeyDown
                               );
                               setCurrentImageId(null);
                               setPhotoSwipeContainer(null);
                             }
                           });
                         });
-                      },
+                      }
                     );
 
                     cleanupObserver.observe(document.body, {
@@ -462,7 +467,7 @@ const PhotoSwipeWrapper: React.FC<
               className="modalView"
             />
           </>,
-          photoSwipeContainer,
+          photoSwipeContainer
         )}
 
       {/* Comments modal is now handled by modal context system */}

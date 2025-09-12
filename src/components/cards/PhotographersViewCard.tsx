@@ -1,4 +1,8 @@
 import { useState } from "react";
+import Link from "next/link";
+import Dropdown from "@/components/inputs/dropDown";
+import { useModal } from "@/context/modalContext/useModal";
+import type { DropdownItem } from "@/types/dropdown";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import ImageWrapper from "../wrappers/ImageWrapper";
@@ -23,6 +27,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
   onLoginRequired,
 }) => {
   // SSR/SSG compatibility: only initialize keen-slider on client
+
   const [sliderRef] =
     typeof window !== "undefined"
       ? useKeenSlider<HTMLDivElement>({
@@ -37,7 +42,10 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
         })
       : [undefined];
 
-  console.log({ photographersProp });
+  const { open } = useModal();
+
+  // Track which biography is expanded
+  const [expandedBioIdx, setExpandedBioIdx] = useState<number | null>(null);
 
   return (
     <div className={styles.photographersViewCardContainer}>
@@ -47,6 +55,24 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
             const portrait = photographer.images.find((img) =>
               img.url.includes("000_aaa")
             );
+            // Parse stores for dropdown
+            let parsedStores: DropdownItem[] = [];
+            if (photographer.store && photographer.store.length > 0) {
+              parsedStores = photographer.store
+                .map((storeString: string) => {
+                  try {
+                    const store = JSON.parse(storeString);
+                    return {
+                      store: String(store.store),
+                      website: String(store.website),
+                      affiliate: Boolean(store.affiliate),
+                    };
+                  } catch {
+                    return null;
+                  }
+                })
+                .filter((item): item is DropdownItem => item !== null);
+            }
             return (
               <div
                 key={photographer.surname + idx}
@@ -56,12 +82,18 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
               >
                 <div className={styles.imageContainer}>
                   {portrait ? (
-                    <ImageWrapper
-                      image={{
-                        ...portrait,
-                        title: `Portrait of photographer ${photographer.name} ${photographer.surname}`,
-                      }}
-                    />
+                    <Link
+                      href={`/photographers/${idx}`}
+                      className={`no-fancy-link ${styles.authorName}`}
+                      tabIndex={0}
+                    >
+                      <ImageWrapper
+                        image={{
+                          ...portrait,
+                          title: `Portrait of photographer ${photographer.name} ${photographer.surname}`,
+                        }}
+                      />
+                    </Link>
                   ) : (
                     <img
                       src="/images/default-BG-image.png"
@@ -76,11 +108,29 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                     />
                   )}
                 </div>
-                <h3 className={`fancy-link ${styles.authorName}`} tabIndex={0}>
-                  {`${photographer.name} ${photographer.surname}`.toUpperCase()}
+                <h3 className={`fancy-link ${styles.authorName}`}>
+                  <Link
+                    href={`/photographers/${idx}`}
+                    className={styles.authorName}
+                    tabIndex={0}
+                  >
+                    {`${photographer.name} ${photographer.surname}`.toUpperCase()}
+                  </Link>
                 </h3>
+
                 {photographer.biography && (
-                  <p className={styles.biography}>
+                  <p
+                    className={
+                      styles.biography +
+                      (expandedBioIdx === idx ? " " + styles.expanded : "")
+                    }
+                    onClick={() =>
+                      setExpandedBioIdx(expandedBioIdx === idx ? null : idx)
+                    }
+                    tabIndex={0}
+                    role="button"
+                    aria-expanded={expandedBioIdx === idx}
+                  >
                     <strong>Biography: </strong>
                     <br />
                     {photographer.biography}
@@ -97,9 +147,30 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                     {new Date(photographer.deceasedate).toLocaleDateString()}
                   </p>
                 )}
-                <p className={`fancy-link ${styles.authorCTA}`} tabIndex={0}>
+                {parsedStores.length > 0 && (
+                  <Dropdown buttonText="Prints & books" items={parsedStores} />
+                )}
+                {photographer.website && (
+                  <a
+                    href={photographer.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.authorCTA}
+                    onClick={() => {
+                      if (typeof window !== "undefined" && window.gtag) {
+                        window.gtag("event", "websiteClicked", {
+                          event_category: "photographer",
+                          event_label: photographer.website,
+                        });
+                      }
+                    }}
+                  >
+                    Website
+                  </a>
+                )}
+                {/* <p className={`fancy-link ${styles.authorCTA}`} tabIndex={0}>
                   Dive Into {photographer.surname}&rsquo;s Art
-                </p>
+                </p> */}
               </div>
             );
           })

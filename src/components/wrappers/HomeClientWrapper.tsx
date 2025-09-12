@@ -63,7 +63,7 @@ function HomeClientWrapper({
             // Focus trap: keep focus inside modal
             if (e.key === "Tab" && modalRef.current) {
               const focusable = modalRef.current.querySelectorAll(
-                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
               );
               const first = focusable[0] as HTMLElement;
               const last = focusable[focusable.length - 1] as HTMLElement;
@@ -95,7 +95,9 @@ function HomeClientWrapper({
           {JSON.stringify(structuredData)}
         </script>
         <section
-          className={`${styles.pageContent} ${styles.visible} ${!isMinimumAgeConfirmed ? "obscuredContent" : ""}`}
+          className={`${styles.pageContent} ${styles.visible} ${
+            !isMinimumAgeConfirmed ? "obscuredContent" : ""
+          }`}
           aria-hidden={!isMinimumAgeConfirmed}
           style={
             !isMinimumAgeConfirmed
@@ -143,7 +145,7 @@ function HomeClientWrapper({
               // Focus trap: keep focus inside modal
               if (e.key === "Tab" && modalRef.current) {
                 const focusable = modalRef.current.querySelectorAll(
-                  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+                  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
                 );
                 const first = focusable[0] as HTMLElement;
                 const last = focusable[focusable.length - 1] as HTMLElement;
