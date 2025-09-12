@@ -41,6 +41,7 @@
     "react-slick": "^0.30.3",
     "react-spinners": "^0.15.0",
     "react-tooltip": "^5.28.0",
+    "react-window": "^2.1.0",
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
