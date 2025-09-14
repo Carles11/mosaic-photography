@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { fetchPhotographerBySlugSSR } from "@/utils/fetchPhotographerByIdSSR";
-import { slugify } from "@/utils/slugify";
 
 interface Props {
   params: { surname: string };

@@ -1,17 +1,16 @@
 import { supabase } from "@/lib/supabaseClient";
 import { Photographer } from "@/types/gallery";
-import { slugify } from "@/utils/slugify";
 
 // Fetch by slug (recommended for URLs)
 export async function fetchPhotographerBySlugSSR(
-  surname: string
+  slug: string
 ): Promise<Photographer | null> {
   try {
     // Fetch the photographer by surname
     const { data: photographers, error: photographerError } = await supabase
       .from("photographers")
       .select("*")
-      .eq("surname", surname)
+      .eq("slug", slug)
       .limit(1);
 
     if (photographerError || !photographers || photographers.length === 0) {

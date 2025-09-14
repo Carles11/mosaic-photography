@@ -66,8 +66,8 @@ const ImageCard: React.FC<ImageCardProps> = ({
                 image.url.endsWith(".jpg") || image.url.endsWith(".jpeg")
                   ? "image/jpeg"
                   : image.url.endsWith(".png")
-                    ? "image/png"
-                    : "image/jpeg",
+                  ? "image/png"
+                  : "image/jpeg",
               license: "https://creativecommons.org/publicdomain/mark/1.0/",
               acquireLicensePage: "https://www.mosaic.photography/license",
             }))}

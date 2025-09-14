@@ -1,10 +1,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import Dropdown from "@/components/inputs/dropDown";
-import { useModal } from "@/context/modalContext/useModal";
 import type { DropdownItem } from "@/types/dropdown";
 import ImageWrapper from "../wrappers/ImageWrapper";
-
+import { slugify } from "@/utils/slugify";
 import { Photographer } from "@/types/gallery";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
@@ -40,7 +39,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
         })
       : [undefined];
 
-  const { open } = useModal();
   const [expandedBioIdx, setExpandedBioIdx] = useState<number | null>(null);
 
   return (
@@ -76,7 +74,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                 <div className={styles.imageContainer}>
                   {portrait ? (
                     <Link
-                      href={`/photographers/${photographer.surname}`}
+                      href={`/photographers/${slugify(photographer.surname)}`}
                       className={`no-fancy-link ${styles.authorName}`}
                       tabIndex={0}
                     >
@@ -85,6 +83,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                           ...portrait,
                           title: `Portrait of photographer ${photographer.name} ${photographer.surname}`,
                         }}
+                        onLoginRequired={onLoginRequired}
                       />
                     </Link>
                   ) : (
