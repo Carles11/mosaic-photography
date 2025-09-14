@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default async function PhotographerDetailPage(props: Props) {
-  const params = props.params;
+  const params = await props.params;
   if (!params?.surname) return notFound();
 
   // Fetch photographer by surname (not slug)

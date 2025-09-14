@@ -113,11 +113,11 @@ function HomeClientWrapper({
               photographers={photographers}
               onLoginRequired={onLoginClick}
             />
-            <Gallery
+            {/* <Gallery
               id="gallery-section"
               images={images}
               onLoginRequired={onLoginClick}
-            />
+            /> */}
           </div>
         </section>
         {/* Overlay for modal: visually obscure and block interaction if not confirmed */}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import Dropdown from "@/components/inputs/dropDown";
 import type { DropdownItem } from "@/types/dropdown";
@@ -15,7 +15,6 @@ declare global {
     __AGE_CONSENT_OPEN__?: boolean;
   }
 }
-
 export interface PhotographersViewCardProps {
   photographers?: Photographer[];
   onLoginRequired?: () => void;
@@ -28,7 +27,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
   const [sliderRef] =
     typeof window !== "undefined"
       ? useKeenSlider<HTMLDivElement>({
-          loop: false,
+          loop: true,
           mode: "snap",
           slides: { perView: 1, spacing: 24 },
           rubberband: true,
@@ -79,6 +78,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                       tabIndex={0}
                     >
                       <ImageWrapper
+                        photographer
                         image={{
                           ...portrait,
                           title: `Portrait of photographer ${photographer.name} ${photographer.surname}`,
@@ -102,7 +102,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                 </div>
                 <h3 className={`fancy-link ${styles.authorName}`}>
                   <Link
-                    href={`/photographers/${photographer.name}/${photographer.id}`}
+                    href={`/photographers/${slugify(photographer.surname)}`}
                     className={styles.authorName}
                     tabIndex={0}
                   >

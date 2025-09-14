@@ -19,12 +19,16 @@ interface ImageWrapperProps {
   };
   imgRef?: React.RefObject<HTMLImageElement | null>;
   onLoginRequired?: () => void;
+  imgStyleOverride?: React.CSSProperties;
+  photographer?: boolean;
 }
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({
   image,
   imgRef,
   onLoginRequired,
+  imgStyleOverride,
+  photographer,
 }) => {
   // Default: photographers gallery
   let imgWidth = 600; // largest desktop width you see
@@ -65,6 +69,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   // Ensure ID is always a string (database might return number)
   const imageIdString = String(image.id);
 
+  const styleOverride = imgStyleOverride;
   return (
     <>
       <div className={`${styles.imageCard} ${styles.imageContainer}`}>
@@ -77,41 +82,69 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
           onLoginRequired={onLoginRequired}
           className={styles.commentsButton}
         />
-        <Item
-          original={image.url}
-          thumbnail={image.url}
-          caption={`${image.title}`}
-          width={imgRef?.current?.naturalWidth}
-          height={imgRef?.current?.naturalHeight}
-          id={imageIdString}
-          alt={imageIdString}
-        >
-          {(props) => (
-            <Image
-              ref={(node) => {
-                if (typeof props.ref === "function") {
-                  props.ref(node);
-                } else if (props.ref) {
-                  (
-                    props.ref as React.MutableRefObject<HTMLImageElement | null>
-                  ).current = node;
+        {!photographer ? (
+          <Item
+            original={image.url}
+            thumbnail={image.url}
+            caption={`${image.title}`}
+            width={imgRef?.current?.naturalWidth}
+            height={imgRef?.current?.naturalHeight}
+            id={imageIdString}
+            alt={imageIdString}
+          >
+            {(props) => (
+              <Image
+                ref={(node) => {
+                  if (typeof props.ref === "function") {
+                    props.ref(node);
+                  } else if (props.ref) {
+                    (
+                      props.ref as React.MutableRefObject<HTMLImageElement | null>
+                    ).current = node;
+                  }
+                }}
+                src={image.url}
+                alt={image.title || "Gallery Image"}
+                className={`${styles.imageItem} ${styles.image}`}
+                width={imgWidth}
+                height={imgHeight}
+                sizes={sizes}
+                quality={60}
+                placeholder="blur"
+                blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
+                loading="lazy"
+                data-image-id={imageIdString}
+                onClick={props.open}
+                style={
+                  props && "style" in props && props.style
+                    ? {
+                        ...props.style,
+                        ...(typeof styleOverride === "object"
+                          ? styleOverride
+                          : {}),
+                      }
+                    : typeof styleOverride === "object"
+                    ? styleOverride
+                    : undefined
                 }
-              }}
-              src={image.url}
-              alt={image.title || "Gallery Image"}
-              className={`${styles.imageItem} ${styles.image}`}
-              width={imgWidth}
-              height={imgHeight}
-              sizes={sizes}
-              quality={60}
-              placeholder="blur"
-              blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
-              loading="lazy"
-              data-image-id={imageIdString}
-              onClick={props.open}
-            />
-          )}
-        </Item>
+              />
+            )}
+          </Item>
+        ) : (
+          <Image
+            src={image.url}
+            alt={image.title || "Gallery Image"}
+            className={`${styles.imageItem} ${styles.image}`}
+            width={imgWidth}
+            height={imgHeight}
+            sizes={sizes}
+            quality={60}
+            placeholder="blur"
+            blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
+            loading="lazy"
+            data-image-id={imageIdString}
+          />
+        )}
       </div>
       {/* Comments Modal is now handled by modal context system */}
     </>

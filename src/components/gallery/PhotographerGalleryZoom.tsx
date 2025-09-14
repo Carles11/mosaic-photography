@@ -37,7 +37,7 @@ const PhotographerGalleryZoom: React.FC<PhotographerGalleryZoomProps> = ({
               background: "#f8f8f8",
             }}
           >
-            <ImageWrapper image={img} />
+            <ImageWrapper image={img} imgStyleOverride={{ height: "auto" }} />
           </div>
         ))}
       </div>
