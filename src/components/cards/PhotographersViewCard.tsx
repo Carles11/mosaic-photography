@@ -3,19 +3,19 @@ import Link from "next/link";
 import Dropdown from "@/components/inputs/dropDown";
 import { useModal } from "@/context/modalContext/useModal";
 import type { DropdownItem } from "@/types/dropdown";
+import ImageWrapper from "../wrappers/ImageWrapper";
+
+import { Photographer } from "@/types/gallery";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
-import ImageWrapper from "../wrappers/ImageWrapper";
+
 import styles from "./PhotographersViewCard.module.css";
 
-// Extend the Window interface to include __AGE_CONSENT_OPEN__
 declare global {
   interface Window {
     __AGE_CONSENT_OPEN__?: boolean;
   }
 }
-
-import { Photographer } from "@/types/gallery";
 
 export interface PhotographersViewCardProps {
   photographers?: Photographer[];
@@ -26,8 +26,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
   photographers: photographersProp,
   onLoginRequired,
 }) => {
-  // SSR/SSG compatibility: only initialize keen-slider on client
-
   const [sliderRef] =
     typeof window !== "undefined"
       ? useKeenSlider<HTMLDivElement>({
@@ -43,19 +41,14 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
       : [undefined];
 
   const { open } = useModal();
-
-  // Track which biography is expanded
   const [expandedBioIdx, setExpandedBioIdx] = useState<number | null>(null);
 
   return (
     <div className={styles.photographersViewCardContainer}>
-      <div ref={sliderRef} className={"keen-slider"}>
+      <div ref={sliderRef} className="keen-slider">
         {photographersProp && photographersProp.length > 0 ? (
           photographersProp.map((photographer, idx) => {
-            const portrait = photographer.images.find((img) =>
-              img.url.includes("000_aaa")
-            );
-            // Parse stores for dropdown
+            const portrait = photographer.images?.[0];
             let parsedStores: DropdownItem[] = [];
             if (photographer.store && photographer.store.length > 0) {
               parsedStores = photographer.store
@@ -83,7 +76,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                 <div className={styles.imageContainer}>
                   {portrait ? (
                     <Link
-                      href={`/photographers/${idx}`}
+                      href={`/photographers/${photographer.surname}`}
                       className={`no-fancy-link ${styles.authorName}`}
                       tabIndex={0}
                     >
@@ -110,7 +103,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                 </div>
                 <h3 className={`fancy-link ${styles.authorName}`}>
                   <Link
-                    href={`/photographers/${idx}`}
+                    href={`/photographers/${photographer.name}/${photographer.id}`}
                     className={styles.authorName}
                     tabIndex={0}
                   >
@@ -168,9 +161,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                     Website
                   </a>
                 )}
-                {/* <p className={`fancy-link ${styles.authorCTA}`} tabIndex={0}>
-                  Dive Into {photographer.surname}&rsquo;s Art
-                </p> */}
               </div>
             );
           })

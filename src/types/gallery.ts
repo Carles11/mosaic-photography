@@ -1,5 +1,6 @@
 // Gallery and image-related types
 export interface Photographer {
+  id: number;
   name: string;
   surname: string;
   author: string;
@@ -9,7 +10,7 @@ export interface Photographer {
   origin?: string;
   website?: string;
   instagram?: string;
-  images: ImageData[];
+  images?: ImageData[];
   store?: [];
 }
 
