@@ -88,7 +88,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                     </Link>
                   ) : (
                     <img
-                      src="/images/default-BG-image.png"
+                      src="/favicons/android-chrome-512x512.png"
                       alt={`Portrait of photographer ${photographer.name} ${photographer.surname} (not available)`}
                       width={400}
                       height={500}

@@ -33,14 +33,7 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
   const [isInitialized, setIsInitialized] = useState(false);
 
   const { loadCommentCountsBatch } = useComments();
-  useEffect(() => {
-    // Adjust the class selector to match your gallery image card class
-    const allIds = [
-      ...document.querySelectorAll(".image_imageCard__ETN9m"),
-    ].map((card) => card.querySelector("img")?.getAttribute("data-image-id"));
-    const uniqueIds = Array.from(new Set(allIds.filter(Boolean)));
-    console.log("Total cards:", allIds.length, "Unique IDs:", uniqueIds.length);
-  }, []);
+
   useEffect(() => {
     if (!images || images.length === 0) return;
     const imageIds = images.map((img) => String(img.id));
