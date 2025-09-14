@@ -21,6 +21,7 @@ interface ImageWrapperProps {
   onLoginRequired?: () => void;
   imgStyleOverride?: React.CSSProperties;
   photographer?: boolean;
+  sizes?: string;
 }
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({
@@ -29,11 +30,14 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   onLoginRequired,
   imgStyleOverride,
   photographer,
+  sizes: sizesProp,
 }) => {
   // Default: photographers gallery
   let imgWidth = 600; // largest desktop width you see
   let imgHeight = 750; // keep aspect ratio
-  let sizes = `
+  let sizes =
+    sizesProp ||
+    `
     (max-width: 400px) 90vw, 
     (max-width: 600px) 95vw, 
     (max-width: 900px) 48vw, 

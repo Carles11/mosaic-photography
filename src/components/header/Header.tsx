@@ -37,7 +37,7 @@ export default function Header({
                   // className={styles.themeImage}
                   priority
                   blurDataURL="https://dummyimage.com/766x541/000/fff&text=mosaic+photography.png"
-                  sizes="383px"
+                  sizes="(max-width: 600px) 90vw, (max-width: 1200px) 40vw, 383px"
                 />
               </Link>
             </li>

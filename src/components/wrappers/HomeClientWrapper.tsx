@@ -109,10 +109,10 @@ function HomeClientWrapper({
             <div className="v-margin">
               <HomeTitles />
             </div>
-            {/* <PhotographersCardsSlide
+            <PhotographersCardsSlide
               photographers={photographers}
               onLoginRequired={onLoginClick}
-            /> */}
+            />
             <Gallery
               id="gallery-section"
               images={images}

@@ -84,6 +84,12 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                           title: `Portrait of photographer ${photographer.name} ${photographer.surname}`,
                         }}
                         onLoginRequired={onLoginRequired}
+                        imgStyleOverride={{
+                          width: "100%",
+                          height: "auto",
+                          objectFit: "cover",
+                        }}
+                        sizes="(max-width: 600px) 90vw, (max-width: 1200px) 50vw, 575px"
                       />
                     </Link>
                   ) : (

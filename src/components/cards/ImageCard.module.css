@@ -12,6 +12,7 @@
   height: 100%;
   object-fit: cover !important;
   display: block;
+  /* Maintain aspect ratio if only one dimension is set by CSS */
 }
 
 .landscape {
@@ -24,6 +25,13 @@
   aspect-ratio: 3 / 4;
   grid-column: span 1; /* Portrait images span 1 column */
   grid-row: span 1;
+}
+
+.landscape img {
+  height: auto !important;
+}
+.portrait img {
+  height: auto !important;
 }
 
 /* Mosaic variations for portrait images */
