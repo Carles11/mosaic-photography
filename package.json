@@ -25,6 +25,7 @@
     "@next/third-parties": "^15.3.3",
     "@supabase/supabase-js": "^2.49.1",
     "@types/qrcode": "^1.5.5",
+    "critters": "^0.0.25",
     "js-cookie": "^3.0.5",
     "jszip": "^3.10.1",
     "keen-slider": "^6.8.6",

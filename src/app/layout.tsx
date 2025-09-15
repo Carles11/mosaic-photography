@@ -18,7 +18,7 @@ import ClientProviders from "@/context/main/ClientProviders";
 // Read critical CSS at build time
 const criticalCSSPath = path.resolve(
   process.cwd(),
-  "src/critical-above-the-fold.css",
+  "src/critical-above-the-fold.css"
 );
 let criticalCSS = "";
 try {
@@ -143,6 +143,15 @@ function RootLayout({ children }: RootLayoutProps) {
           id="critical-above-the-fold"
           dangerouslySetInnerHTML={{ __html: criticalCSS }}
         />
+
+        <link
+          rel="preload"
+          href="https://cdn.mosaic.photography/fonts/TradeGothic-Light.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+
         <link
           rel="preconnect"
           href="https://cdn.mosaic.photography"

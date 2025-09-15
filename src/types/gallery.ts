@@ -32,7 +32,7 @@ export interface ImageData {
   author: string;
   title: string;
   description: string;
-  orientation?: string;
+  orientation?: "vertical" | "horizontal" | "square";
   created_at: string;
   width?: number;
   height?: number;
