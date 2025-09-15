@@ -6,12 +6,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
 import { HomeTitles } from "../header/titles/HomeTitles";
-// import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
+import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
 import styles from "./home.module.css";
 import { useAgeConsent } from "@/context/AgeConsentContext";
 import { SupabaseUser } from "@/lib/supabaseClient";
 
-import Gallery from "@/components/gallery/Gallery";
+// import Gallery from "@/components/gallery/Gallery";
 
 import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
@@ -26,7 +26,10 @@ interface HomeClientWrapperProps {
   user?: SupabaseUser | null;
 }
 
-function HomeClientWrapper({ images, onLoginClick }: HomeClientWrapperProps) {
+function HomeClientWrapper({
+  photographers,
+  onLoginClick,
+}: HomeClientWrapperProps) {
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
 
@@ -105,15 +108,15 @@ function HomeClientWrapper({ images, onLoginClick }: HomeClientWrapperProps) {
             <div className="v-margin">
               <HomeTitles />
             </div>
-            {/* <PhotographersCardsSlide
+            <PhotographersCardsSlide
               photographers={photographers}
               onLoginRequired={onLoginClick}
-            /> */}
-            <Gallery
+            />
+            {/*     <Gallery
               id="gallery-section"
               images={images}
               onLoginRequired={onLoginClick}
-            />
+            />*/}
           </div>
         </section>
         {/* Overlay for modal: visually obscure and block interaction if not confirmed */}

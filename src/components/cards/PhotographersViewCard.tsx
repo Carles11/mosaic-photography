@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Dropdown from "@/components/inputs/dropDown";
 import type { DropdownItem } from "@/types/dropdown";
@@ -25,12 +25,18 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
   photographers: photographersProp,
   onLoginRequired,
 }) => {
+  const [expandedBioIdx, setExpandedBioIdx] = useState<number | null>(null);
+  const [imagesLoaded, setImagesLoaded] = useState(0);
+  const [sliderReady, setSliderReady] = useState(false);
   const isClient = typeof window !== "undefined";
-  const [sliderRef] = useKeenSlider<HTMLDivElement>(
-    isClient
+  const totalImages = photographersProp?.length ?? 0;
+
+  // Only initialize slider when all images are loaded and on the client
+  const keenSliderOptions =
+    isClient && sliderReady
       ? {
           loop: true,
-          mode: "snap",
+          mode: "snap" as const, // important: as const
           slides: { perView: 1, spacing: 24 },
           rubberband: true,
           breakpoints: {
@@ -38,10 +44,15 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
             "(min-width: 1200px)": { slides: { perView: 3, spacing: 24 } },
           },
         }
-      : {}
-  );
+      : undefined;
 
-  const [expandedBioIdx, setExpandedBioIdx] = useState<number | null>(null);
+  const [sliderRef] = useKeenSlider<HTMLDivElement>(keenSliderOptions);
+
+  useEffect(() => {
+    if (imagesLoaded === totalImages && totalImages > 0) {
+      setSliderReady(true);
+    }
+  }, [imagesLoaded, totalImages]);
 
   return (
     <div className={styles.photographersViewCardContainer}>
@@ -93,6 +104,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                           objectFit: "cover",
                         }}
                         sizes="(max-width: 600px) 90vw, (max-width: 1200px) 50vw, 575px"
+                        onLoad={() => setImagesLoaded((loaded) => loaded + 1)}
                       />
                     </Link>
                   ) : (
@@ -107,6 +119,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                         height: "auto",
                       }}
                       priority
+                      onLoad={() => setImagesLoaded((loaded) => loaded + 1)}
                     />
                   )}
                 </div>

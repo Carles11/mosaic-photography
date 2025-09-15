@@ -22,6 +22,7 @@ interface ImageWrapperProps {
   imgStyleOverride?: React.CSSProperties;
   photographer?: boolean;
   sizes?: string;
+  onLoad?: () => void;
 }
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({
