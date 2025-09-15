@@ -11,7 +11,7 @@ import styles from "./home.module.css";
 import { useAgeConsent } from "@/context/AgeConsentContext";
 import { SupabaseUser } from "@/lib/supabaseClient";
 
-// import Gallery from "@/components/gallery/Gallery";
+import Gallery from "@/components/gallery/Gallery";
 
 import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
@@ -27,6 +27,7 @@ interface HomeClientWrapperProps {
 }
 
 function HomeClientWrapper({
+  images,
   photographers,
   onLoginClick,
 }: HomeClientWrapperProps) {
@@ -112,11 +113,11 @@ function HomeClientWrapper({
               photographers={photographers}
               onLoginRequired={onLoginClick}
             />
-            {/*     <Gallery
+            <Gallery
               id="gallery-section"
               images={images}
               onLoginRequired={onLoginClick}
-            />*/}
+            />
           </div>
         </section>
         {/* Overlay for modal: visually obscure and block interaction if not confirmed */}
