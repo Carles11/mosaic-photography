@@ -146,7 +146,7 @@ function RootLayout({ children }: RootLayoutProps) {
 
         <link
           rel="preload"
-          href="https://cdn.mosaic.photography/fonts/TradeGothic-Light.woff2"
+          href="https://cdn.mosaic.photography/fonts/TradeGothic-Regular.woff2"
           as="font"
           type="font/woff2"
           crossOrigin="anonymous"
