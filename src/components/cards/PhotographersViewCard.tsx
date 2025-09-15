@@ -24,9 +24,10 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
   photographers: photographersProp,
   onLoginRequired,
 }) => {
-  const [sliderRef] =
-    typeof window !== "undefined"
-      ? useKeenSlider<HTMLDivElement>({
+  const isClient = typeof window !== "undefined";
+  const [sliderRef] = useKeenSlider<HTMLDivElement>(
+    isClient
+      ? {
           loop: true,
           mode: "snap",
           slides: { perView: 1, spacing: 24 },
@@ -35,8 +36,9 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
             "(min-width: 768px)": { slides: { perView: 2, spacing: 24 } },
             "(min-width: 1200px)": { slides: { perView: 3, spacing: 24 } },
           },
-        })
-      : [undefined];
+        }
+      : {}
+  );
 
   const [expandedBioIdx, setExpandedBioIdx] = useState<number | null>(null);
 
