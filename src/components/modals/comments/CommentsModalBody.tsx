@@ -5,19 +5,20 @@ import styles from "./CommentsModal.module.css";
 import { useComments } from "@/context/CommentsContext";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import CommentForm from "@/components/comments/CommentForm";
+import { useLoginAndCloseModal } from "@/hooks/useLoginAndCloseModal";
 import CommentItem from "@/components/comments/CommentItem";
 
 interface CommentsModalBodyProps {
   imageId: string;
   onClose: () => void;
-  onLoginRequired?: () => void;
 }
 
 const CommentsModalBody: React.FC<CommentsModalBodyProps> = ({
   imageId,
   onClose,
-  onLoginRequired,
 }) => {
+  // Compose a handler that closes the modal and redirects to login
+  const handleLoginRequired = useLoginAndCloseModal(onClose);
   const { user } = useAuthSession();
   const { getCommentsForImage, loadCommentsForImage, loading } = useComments();
   const comments = getCommentsForImage(imageId);
@@ -44,7 +45,7 @@ const CommentsModalBody: React.FC<CommentsModalBodyProps> = ({
 
       <div className={styles.modalBody}>
         {/* Comment Form */}
-        <CommentForm imageId={imageId} onLoginRequired={onLoginRequired} />
+        <CommentForm imageId={imageId} onLoginRequired={handleLoginRequired} />
 
         {/* Comments List */}
         <div className={styles.commentsList}>
