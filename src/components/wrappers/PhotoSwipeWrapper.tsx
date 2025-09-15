@@ -9,7 +9,7 @@ import React, {
 import { createPortal } from "react-dom";
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
-import { ImageWithOrientation } from "@/types";
+import { ImageWithOrientation, PossiblePSWP } from "@/types";
 
 const Gallery = lazy(() =>
   import("react-photoswipe-gallery").then((mod) => ({ default: mod.Gallery }))
@@ -114,17 +114,18 @@ const PhotoSwipeWrapper: React.FC<
               }
 
               // Try to get the PhotoSwipe instance
-              let pswpInstance:
-                | {
-                    on?: (event: string, cb: () => void) => void;
-                    currSlide?: {
-                      data?: { id?: string | number; alt?: string | number };
-                    };
-                  }
-                | undefined =
-                (pswpElement as any).pswp ||
-                (pswpElement as any).photoswipe ||
-                (window as any).pswp;
+              let pswpInstance: PossiblePSWP | undefined =
+                // @ts-expect-error: pswp is a dynamically injected property by PhotoSwipe
+                ((pswpElement as { [key: string]: unknown })[
+                  "pswp"
+                ] as PossiblePSWP) ||
+                // @ts-expect-error: photoswipe is a dynamically injected property by PhotoSwipe
+                ((pswpElement as { [key: string]: unknown })[
+                  "photoswipe"
+                ] as PossiblePSWP) ||
+                ((window as { [key: string]: unknown })[
+                  "pswp"
+                ] as PossiblePSWP);
 
               if (!pswpInstance) {
                 const pswpData = pswpElement.getAttribute("data-pswp");

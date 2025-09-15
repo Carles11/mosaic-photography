@@ -12,6 +12,11 @@ export interface GalleryProps extends JSX.IntrinsicAttributes {
   onLoginRequired?: () => void;
 }
 
+export type PossiblePSWP = {
+  on?: (event: string, cb: () => void) => void;
+  currSlide?: { data?: { id?: string | number; alt?: string | number } };
+};
+
 export interface Photographer {
   id: number;
   name: string;
