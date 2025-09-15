@@ -20,7 +20,9 @@ const CommentsButton: React.FC<CommentsButtonProps> = ({
   const commentCount = getCommentCount(imageId);
 
   const handleClick = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent triggering image click/zoom
+    // Prevent triggering image click/zoom
+    e.stopPropagation();
+    e.preventDefault();
 
     // Load full comments when user actually wants to see them
     await loadCommentsForImage(imageId);
@@ -32,7 +34,9 @@ const CommentsButton: React.FC<CommentsButtonProps> = ({
       id="heart-icon"
       className={`${styles.commentsButton} ${className}`}
       onClick={handleClick}
-      aria-label={`View comments${commentCount > 0 ? ` (${commentCount})` : ""}`}
+      aria-label={`View comments${
+        commentCount > 0 ? ` (${commentCount})` : ""
+      }`}
       title={`View comments${commentCount > 0 ? ` (${commentCount})` : ""}`}
     >
       <svg

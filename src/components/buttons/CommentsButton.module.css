@@ -12,7 +12,7 @@
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  z-index: 10;
+  z-index: 99;
   color: white;
   backdrop-filter: blur(4px);
 }

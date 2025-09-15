@@ -100,6 +100,7 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
         photographers={photographers}
         images={images}
         user={user}
+        onLoginClick={() => router.push("/auth/login")}
       />
 
       {/* Go Pro Modal is rendered by the global ModalProvider when opened */}

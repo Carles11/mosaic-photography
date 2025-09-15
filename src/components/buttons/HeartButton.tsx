@@ -29,7 +29,7 @@ const HeartButton: React.FC<HeartButtonProps> = ({
         console.log(
           "HeartButton: PhotoSwipe closed for image",
           imageId,
-          "forcing re-check",
+          "forcing re-check"
         );
         // Force a re-render by checking favorite status again
         // The component will automatically re-render when we call isFavorite
@@ -38,19 +38,23 @@ const HeartButton: React.FC<HeartButtonProps> = ({
 
     document.addEventListener(
       "photoswipe-closed",
-      handlePhotoSwipeClose as EventListener,
+      handlePhotoSwipeClose as EventListener
     );
 
     return () => {
       document.removeEventListener(
         "photoswipe-closed",
-        handlePhotoSwipeClose as EventListener,
+        handlePhotoSwipeClose as EventListener
       );
     };
   }, [imageId]);
 
   const handleClick = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent triggering image click/zoom
+    console.log("HeartButton: Clicked for image", imageId);
+
+    // Prevent triggering image click/zoom
+    e.stopPropagation();
+    e.preventDefault();
 
     try {
       if (!isUserLoggedIn()) {
@@ -71,7 +75,9 @@ const HeartButton: React.FC<HeartButtonProps> = ({
   return (
     <button
       id="heart-icon"
-      className={`${styles.heartButton} ${className} ${isLiked ? styles.liked : styles.unliked}`}
+      className={`${styles.heartButton} ${className} ${
+        isLiked ? styles.liked : styles.unliked
+      }`}
       onClick={handleClick}
       aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
       title={isLiked ? "Remove from favorites" : "Add to favorites"}
