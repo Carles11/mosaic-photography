@@ -28,11 +28,15 @@ const nextConfig: NextConfig = {
         pathname: "/dktizqbky/image/upload/**",
       },
     ],
+
     minimumCacheTTL: 31536000, // 1 year
     qualities: [25, 40, 60, 75],
     formats: ["image/webp"],
     deviceSizes: [231, 358, 471, 600, 750, 900, 1200],
     imageSizes: [200, 250, 400], // Only generate these for 'sizes' prop values
+  },
+  experimental: {
+    optimizeCss: true,
   },
   webpack: (config, { isServer }) => {
     config.optimization.splitChunks = {

@@ -116,7 +116,8 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
                 quality={60}
                 placeholder="blur"
                 blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
-                loading="lazy"
+                loading={photographer ? "eager" : "lazy"}
+                fetchPriority={photographer ? "high" : "auto"}
                 data-image-id={imageIdString}
                 onClick={props.open}
                 style={
