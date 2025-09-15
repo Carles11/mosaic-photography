@@ -28,8 +28,11 @@ interface PhotoSwipeWrapperProps {
 let isPhotoSwipeHandlerActive = false;
 
 // Debounce utility
-function debounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
-  let timer: ReturnType<typeof setTimeout> | null;
+function debounce<T extends (...args: any[]) => void>(
+  fn: T,
+  delay: number
+): (...args: Parameters<T>) => void {
+  let timer: ReturnType<typeof setTimeout> | null = null;
   return (...args: Parameters<T>) => {
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => fn(...args), delay);
@@ -46,11 +49,16 @@ const PhotoSwipeWrapper: React.FC<
   const observerRef = useRef<MutationObserver | null>(null);
 
   useEffect(() => {
-    // @ts-ignore
+    // @ts-expect-error
     import("photoswipe/dist/photoswipe.css");
   }, []);
 
-  const getImageIdFromPhotoSwipe = (pswpInstance: any): string | null => {
+  // ----------- FIXED: Specify a type for pswpInstance parameter -----------
+  const getImageIdFromPhotoSwipe = (
+    pswpInstance: {
+      currSlide?: { data?: { id?: string | number; alt?: string | number } };
+    } | null
+  ): string | null => {
     if (!pswpInstance || !pswpInstance.currSlide) return null;
     const slideData = pswpInstance.currSlide.data;
     if (slideData?.id) return String(slideData.id);
@@ -68,24 +76,25 @@ const PhotoSwipeWrapper: React.FC<
     let keydownListener: ((e: KeyboardEvent) => void) | null = null;
 
     // Debounced mutation handler
-    const handleMutations = debounce((mutations: MutationRecord[]) => {
-      for (const mutation of mutations) {
-        if (mutation.type !== "childList") continue;
-        for (const node of mutation.addedNodes) {
-          if (
-            node.nodeType === Node.ELEMENT_NODE &&
-            (node as Element).classList.contains("pswp")
-          ) {
-            const pswpElement = node as HTMLElement;
+    const handleMutations = debounce<MutationCallback>(
+      (mutations, observer) => {
+        for (const mutation of mutations) {
+          if (mutation.type !== "childList") continue;
+          for (const node of mutation.addedNodes) {
+            if (
+              node.nodeType === Node.ELEMENT_NODE &&
+              (node as Element).classList.contains("pswp")
+            ) {
+              const pswpElement = node as HTMLElement;
 
-            // Only observe the PhotoSwipe element subtree from now on
-            observerRef.current?.disconnect();
+              // Only observe the PhotoSwipe element subtree from now on
+              observerRef.current?.disconnect();
 
-            // Create heart/comment container
-            if (!pswpElement.querySelector(".pswp__heart-container")) {
-              const container = document.createElement("div");
-              container.className = "pswp__heart-container";
-              container.style.cssText = `
+              // Create heart/comment container
+              if (!pswpElement.querySelector(".pswp__heart-container")) {
+                const container = document.createElement("div");
+                container.className = "pswp__heart-container";
+                container.style.cssText = `
                 position: absolute;
                 bottom: 20px;
                 right: 20px;
@@ -100,146 +109,165 @@ const PhotoSwipeWrapper: React.FC<
                 backdrop-filter: blur(4px);
                 gap: 10px;
               `;
-              pswpElement.appendChild(container);
-              setPhotoSwipeContainer(container);
-            }
-
-            // Try to get the PhotoSwipe instance
-            let pswpInstance =
-              (pswpElement as any).pswp ||
-              (pswpElement as any).photoswipe ||
-              (window as any).pswp;
-
-            if (!pswpInstance) {
-              const pswpData = pswpElement.getAttribute("data-pswp");
-              if (pswpData) {
-                try {
-                  pswpInstance = JSON.parse(pswpData);
-                } catch {}
+                pswpElement.appendChild(container);
+                setPhotoSwipeContainer(container);
               }
-            }
 
-            // Try event-based (preferred)
-            if (pswpInstance && typeof pswpInstance.on === "function") {
-              const initialImageId = getImageIdFromPhotoSwipe(pswpInstance);
-              if (initialImageId) setCurrentImageId(initialImageId);
+              // Try to get the PhotoSwipe instance
+              let pswpInstance:
+                | {
+                    on?: (event: string, cb: () => void) => void;
+                    currSlide?: {
+                      data?: { id?: string | number; alt?: string | number };
+                    };
+                  }
+                | undefined =
+                (pswpElement as any).pswp ||
+                (pswpElement as any).photoswipe ||
+                (window as any).pswp;
 
-              pswpInstance.on("change", () => {
-                const newImageId = getImageIdFromPhotoSwipe(pswpInstance);
-                if (newImageId) setCurrentImageId(newImageId);
-              });
+              if (!pswpInstance) {
+                const pswpData = pswpElement.getAttribute("data-pswp");
+                if (pswpData) {
+                  try {
+                    pswpInstance = JSON.parse(pswpData);
+                  } catch {}
+                }
+              }
 
-              pswpInstance.on("destroy", () => {
-                setCurrentImageId(null);
-                setPhotoSwipeContainer(null);
-              });
-              return;
-            }
+              // Try event-based (preferred)
+              if (pswpInstance && typeof pswpInstance.on === "function") {
+                const initialImageId = getImageIdFromPhotoSwipe(pswpInstance);
+                if (initialImageId) setCurrentImageId(initialImageId);
 
-            // Fallback: polling and mutation observer (only on PhotoSwipe modal subtree)
-            let lastImageId: string | null = null;
-            let lastImageSrc: string = "";
+                pswpInstance.on("change", () => {
+                  const newImageId = getImageIdFromPhotoSwipe(pswpInstance);
+                  if (newImageId) setCurrentImageId(newImageId);
+                });
 
-            const getCurrentImageInfo = () => {
-              const allImages = Array.from(
-                pswpElement.querySelectorAll(".pswp__img")
-              ) as HTMLImageElement[];
-              const visibleImg = allImages.find((img) => {
-                const rect = img.getBoundingClientRect();
-                return (
-                  rect.width > 100 &&
-                  rect.height > 100 &&
-                  rect.x > -100 &&
-                  rect.x < window.innerWidth - 100
-                );
-              });
-              let targetImg = visibleImg || allImages[0];
-              let newImageId: string | null = null;
-              if (targetImg?.dataset.imageId)
-                newImageId = targetImg.dataset.imageId;
-              else if (targetImg?.alt) newImageId = targetImg.alt;
-              else if (targetImg?.src && images.length > 0) {
-                const match = images.find((img) => {
-                  const id = String((img as any).id);
-                  const url = String((img as any).url || "");
+                pswpInstance.on("destroy", () => {
+                  setCurrentImageId(null);
+                  setPhotoSwipeContainer(null);
+                });
+                return;
+              }
+
+              // Fallback: polling and mutation observer (only on PhotoSwipe modal subtree)
+              let lastImageId: string | null = null;
+              let lastImageSrc: string = "";
+
+              const getCurrentImageInfo = () => {
+                const allImages = Array.from(
+                  pswpElement.querySelectorAll(".pswp__img")
+                ) as HTMLImageElement[];
+                const visibleImg = allImages.find((img) => {
+                  const rect = img.getBoundingClientRect();
                   return (
-                    targetImg.src.includes(id) ||
-                    url.includes(targetImg.src.split("/").pop() || "") ||
-                    targetImg.src.includes(url.split("/").pop() || "")
+                    rect.width > 100 &&
+                    rect.height > 100 &&
+                    rect.x > -100 &&
+                    rect.x < window.innerWidth - 100
                   );
                 });
-                if (match) newImageId = String((match as any).id);
-              }
-              return {
-                newImageId,
-                currentImgSrc: targetImg?.src || "",
-              };
-            };
-
-            const checkForSlideChanges = () => {
-              const { newImageId, currentImgSrc } = getCurrentImageInfo();
-              if (!newImageId && !currentImgSrc) return;
-              if (
-                (newImageId && newImageId !== lastImageId) ||
-                (currentImgSrc && currentImgSrc !== lastImageSrc)
-              ) {
-                if (newImageId) {
-                  setCurrentImageId(newImageId);
-                  lastImageId = newImageId;
+                // ------------- FIXED: Use const instead of let -------------
+                const targetImg = visibleImg || allImages[0];
+                let newImageId: string | null = null;
+                if (targetImg?.dataset.imageId)
+                  newImageId = targetImg.dataset.imageId;
+                else if (targetImg?.alt) newImageId = targetImg.alt;
+                else if (targetImg?.src && images.length > 0) {
+                  // ------------- FIXED: Specify type for img -------------
+                  const match = images.find(
+                    (img: { id: string | number; url?: string }) => {
+                      const id = String(img.id);
+                      const url = String(img.url || "");
+                      return (
+                        targetImg.src.includes(id) ||
+                        url.includes(targetImg.src.split("/").pop() || "") ||
+                        targetImg.src.includes(url.split("/").pop() || "")
+                      );
+                    }
+                  );
+                  if (match) newImageId = String(match.id);
                 }
-                lastImageSrc = currentImgSrc;
-              }
-            };
+                return {
+                  newImageId,
+                  currentImgSrc: targetImg?.src || "",
+                };
+              };
 
-            slideCheckInterval = setInterval(checkForSlideChanges, 250);
+              const checkForSlideChanges = () => {
+                const { newImageId, currentImgSrc } = getCurrentImageInfo();
+                if (!newImageId && !currentImgSrc) return;
+                if (
+                  (newImageId && newImageId !== lastImageId) ||
+                  (currentImgSrc && currentImgSrc !== lastImageSrc)
+                ) {
+                  if (newImageId) {
+                    setCurrentImageId(newImageId);
+                    lastImageId = newImageId;
+                  }
+                  lastImageSrc = currentImgSrc;
+                }
+              };
 
-            // Only observe modal subtree for added/removed images
-            slideObserver = new MutationObserver(() => {
-              setTimeout(checkForSlideChanges, 80);
-            });
-            slideObserver.observe(pswpElement, {
-              childList: true,
-              subtree: true,
-              attributes: true,
-              attributeFilter: ["src"],
-            });
+              slideCheckInterval = setInterval(checkForSlideChanges, 250);
 
-            keydownListener = (e: KeyboardEvent) => {
-              if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-                checkForSlideChanges();
-                setTimeout(checkForSlideChanges, 50);
-                setTimeout(checkForSlideChanges, 150);
-              }
-            };
-            document.addEventListener("keydown", keydownListener);
+              // Only observe modal subtree for added/removed images
+              slideObserver = new MutationObserver(() => {
+                setTimeout(checkForSlideChanges, 80);
+              });
+              slideObserver.observe(pswpElement, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ["src"],
+              });
 
-            // Cleanup when PhotoSwipe element removed
-            cleanupObserver = new MutationObserver((mutations) => {
-              for (const mutation of mutations) {
-                for (const removed of Array.from(mutation.removedNodes)) {
-                  if (removed === pswpElement) {
-                    if (slideCheckInterval) clearInterval(slideCheckInterval);
-                    slideObserver?.disconnect();
-                    cleanupObserver?.disconnect();
-                    if (keydownListener)
-                      document.removeEventListener("keydown", keydownListener);
-                    setCurrentImageId(null);
-                    setPhotoSwipeContainer(null);
+              keydownListener = (e: KeyboardEvent) => {
+                if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+                  checkForSlideChanges();
+                  setTimeout(checkForSlideChanges, 50);
+                  setTimeout(checkForSlideChanges, 150);
+                }
+              };
+              document.addEventListener("keydown", keydownListener);
+
+              // Cleanup when PhotoSwipe element removed
+              cleanupObserver = new MutationObserver(
+                (mutations: MutationRecord[]) => {
+                  for (const mutation of mutations) {
+                    for (const removed of Array.from(mutation.removedNodes)) {
+                      if (removed === pswpElement) {
+                        if (slideCheckInterval)
+                          clearInterval(slideCheckInterval);
+                        slideObserver?.disconnect();
+                        cleanupObserver?.disconnect();
+                        if (keydownListener)
+                          document.removeEventListener(
+                            "keydown",
+                            keydownListener
+                          );
+                        setCurrentImageId(null);
+                        setPhotoSwipeContainer(null);
+                      }
+                    }
                   }
                 }
-              }
-            });
-            cleanupObserver.observe(document.body, {
-              childList: true,
-              subtree: true,
-            });
+              );
+              cleanupObserver.observe(document.body, {
+                childList: true,
+                subtree: true,
+              });
 
-            // Stop further mutation handling for now
-            break;
+              // Stop further mutation handling for now
+              break;
+            }
           }
         }
-      }
-    }, 80);
+      },
+      80
+    );
 
     // Initial observer: only look for .pswp modals being added
     observerRef.current = new MutationObserver(handleMutations);

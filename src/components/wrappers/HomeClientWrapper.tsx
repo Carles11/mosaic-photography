@@ -26,11 +26,7 @@ interface HomeClientWrapperProps {
   user?: SupabaseUser | null;
 }
 
-function HomeClientWrapper({
-  photographers,
-  images,
-  onLoginClick,
-}: HomeClientWrapperProps) {
+function HomeClientWrapper({ images, onLoginClick }: HomeClientWrapperProps) {
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
 
