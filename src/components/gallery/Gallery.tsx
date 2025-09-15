@@ -5,8 +5,6 @@ import type { GalleryProps } from "@/types/gallery";
 import styles from "./gallery.module.css";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
 
-import { ImageWithOrientation } from "@/types/gallery";
-
 const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
   return (
     <div id={id} className={styles.galleryGridContainer}>

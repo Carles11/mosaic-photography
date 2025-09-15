@@ -1,6 +1,11 @@
 // Gallery and image-related types
 import { JSX } from "react";
 
+export type ImageWithOrientation = ImageData & {
+  orientation?: "vertical" | "horizontal" | "square";
+  mosaicType?: "normal" | "large" | "wide" | "tall";
+};
+
 export interface GalleryProps extends JSX.IntrinsicAttributes {
   id: string;
   images?: ImageWithOrientation[];
@@ -34,11 +39,6 @@ export interface ImageData {
   height?: number;
   className?: string;
 }
-
-export type ImageWithOrientation = ImageData & {
-  orientation?: "vertical" | "horizontal" | "square";
-  mosaicType?: "normal" | "large" | "wide" | "tall";
-};
 
 export interface Author {
   name: string;

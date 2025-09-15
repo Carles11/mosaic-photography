@@ -6,7 +6,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
 import { HomeTitles } from "../header/titles/HomeTitles";
-import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
+// import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
 import styles from "./home.module.css";
 import { useAgeConsent } from "@/context/AgeConsentContext";
 import { SupabaseUser } from "@/lib/supabaseClient";
