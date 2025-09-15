@@ -2,12 +2,10 @@ import { notFound } from "next/navigation";
 import PhotographerGalleryZoom from "@/components/gallery/PhotographerGalleryZoom";
 import { fetchPhotographerBySlugSSR } from "@/utils/fetchPhotographerByIdSSR";
 
-interface Props {
-  params: { surname: string };
-}
-
-export default async function PhotographerDetailPage(props: Props) {
-  const params = props.params;
+export default async function PhotographerDetailPage(
+  props: PageProps<"/photographers/[surname]">
+) {
+  const params = await props.params;
   if (!params?.surname) return notFound();
 
   // Fetch photographer by surname (not slug)
