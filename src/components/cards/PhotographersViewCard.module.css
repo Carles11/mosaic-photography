@@ -146,3 +146,27 @@
     display: block;
   }
 }
+
+.keen-slider:not([data-keen-slider-disabled])
+  .keen-slider__slide.PhotographersViewCard_photographersViewCard__tUUix {
+  width: 800px !important;
+  max-width: 96vw !important;
+  min-width: 800px !important;
+  margin: 1rem !important;
+}
+@media (max-width: 1100px) {
+  .keen-slider:not([data-keen-slider-disabled])
+    .keen-slider__slide.PhotographersViewCard_photographersViewCard__tUUix {
+    width: 440px !important;
+    min-width: 440px !important;
+    margin: 0.5rem !important;
+  }
+}
+@media (max-width: 768px) {
+  .keen-slider:not([data-keen-slider-disabled])
+    .keen-slider__slide.PhotographersViewCard_photographersViewCard__tUUix {
+    width: 90vw !important;
+    min-width: 240px !important;
+    margin: 0.25rem !important;
+  }
+}

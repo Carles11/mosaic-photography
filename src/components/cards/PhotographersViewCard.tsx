@@ -29,13 +29,13 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
   const [sliderRef] = useKeenSlider<HTMLDivElement>(
     isClient
       ? {
-          loop: true,
+          loop: false,
           mode: "snap",
-          slides: { perView: 1, spacing: 24 },
+          slides: { perView: 1, spacing: 0 },
           rubberband: true,
           breakpoints: {
-            "(min-width: 768px)": { slides: { perView: 2, spacing: 24 } },
-            "(min-width: 1200px)": { slides: { perView: 3, spacing: 24 } },
+            "(min-width: 768px)": { slides: { perView: 2, spacing: 0 } },
+            "(min-width: 1200px)": { slides: { perView: 3, spacing: 0 } },
           },
         }
       : {}
