@@ -6,12 +6,6 @@ export type ImageWithOrientation = ImageData & {
   mosaicType?: "normal" | "large" | "wide" | "tall";
 };
 
-export interface GalleryProps extends JSX.IntrinsicAttributes {
-  id: string;
-  images?: ImageWithOrientation[];
-  onLoginRequired?: () => void;
-}
-
 export type PossiblePSWP = {
   on?: (event: string, cb: () => void) => void;
   currSlide?: { data?: { id?: string | number; alt?: string | number } };
@@ -43,6 +37,12 @@ export interface ImageData {
   width?: number;
   height?: number;
   className?: string;
+}
+
+export interface GalleryProps extends JSX.IntrinsicAttributes {
+  id?: string;
+  images?: ImageData[];
+  onLoginRequired?: () => void;
 }
 
 export interface Author {
