@@ -28,14 +28,11 @@ interface PhotoSwipeWrapperProps {
 let isPhotoSwipeHandlerActive = false;
 
 // Debounce utility
-function debounce<T extends (...args: unknown[]) => void>(
-  fn: T,
-  delay: number
-): (...args: Parameters<T>) => void {
+function debounce(fn: MutationCallback, delay: number): MutationCallback {
   let timer: ReturnType<typeof setTimeout> | null = null;
-  return (...args: Parameters<T>) => {
+  return (mutations, observer) => {
     if (timer) clearTimeout(timer);
-    timer = setTimeout(() => fn(...args), delay);
+    timer = setTimeout(() => fn(mutations, observer), delay);
   };
 }
 
@@ -76,7 +73,7 @@ const PhotoSwipeWrapper: React.FC<
     let keydownListener: ((e: KeyboardEvent) => void) | null = null;
 
     // Debounced mutation handler
-    const handleMutations = debounce<MutationCallback>((mutations) => {
+    const handleMutations = debounce((mutations) => {
       for (const mutation of mutations) {
         if (mutation.type !== "childList") continue;
         for (const node of mutation.addedNodes) {
