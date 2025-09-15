@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import * as RW from "react-window";
+import { List, RowComponentProps } from "react-window";
 import ImageWrapper from "../../wrappers/ImageWrapper";
 import styles from "../cards/PhotographersViewCard.module.css";
 import { ImageData } from "@/types/gallery";
@@ -21,14 +21,8 @@ const VirtualizedImageSlider: React.FC<VirtualizedImageSliderProps> = ({
 }) => {
   const imgRef = useRef<HTMLImageElement | null>(null);
 
-  // The row renderer receives { index, style }
-  const Row = ({
-    index,
-    style,
-  }: {
-    index: number;
-    style: React.CSSProperties;
-  }) => {
+  // RowComponentProps has index and style
+  const Row = ({ index, style }: RowComponentProps) => {
     const image = images[index];
     return (
       <div style={style} className={styles.imageContainer}>
@@ -41,18 +35,19 @@ const VirtualizedImageSlider: React.FC<VirtualizedImageSliderProps> = ({
     );
   };
 
-  const VirtualList = (RW as any).List as React.ComponentType<any>;
-
   return (
-    <VirtualList
-      height={height}
-      width={width}
-      itemCount={images.length}
-      itemSize={itemSize}
-      layout="horizontal"
-    >
-      {Row as any}
-    </VirtualList>
+    <List
+      defaultHeight={height}
+      rowCount={images.length}
+      rowHeight={itemSize}
+      rowComponent={Row}
+      rowProps={{}}
+      style={{
+        width: width,
+        overflowX: "auto",
+        whiteSpace: "nowrap",
+      }}
+    />
   );
 };
 

@@ -1,18 +1,11 @@
 "use client";
 
-import React, { JSX } from "react";
 import ImageCard from "../cards/ImageCard";
-// import AuthorCard from "../cards/AuthorCard";
+import type { GalleryProps } from "@/types/gallery";
 import styles from "./gallery.module.css";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
 
 import { ImageWithOrientation } from "@/types/gallery";
-
-interface GalleryProps extends JSX.IntrinsicAttributes {
-  id: string;
-  images?: ImageWithOrientation[];
-  onLoginRequired?: () => void;
-}
 
 const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
   return (

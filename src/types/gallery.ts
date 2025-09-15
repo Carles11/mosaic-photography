@@ -1,4 +1,12 @@
 // Gallery and image-related types
+import { JSX } from "react";
+
+export interface GalleryProps extends JSX.IntrinsicAttributes {
+  id: string;
+  images?: ImageWithOrientation[];
+  onLoginRequired?: () => void;
+}
+
 export interface Photographer {
   id: number;
   name: string;

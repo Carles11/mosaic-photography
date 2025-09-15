@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Dropdown from "@/components/inputs/dropDown";
 import type { DropdownItem } from "@/types/dropdown";
@@ -9,6 +9,7 @@ import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 
 import styles from "./PhotographersViewCard.module.css";
+import Image from "next/image";
 
 declare global {
   interface Window {
@@ -95,7 +96,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                       />
                     </Link>
                   ) : (
-                    <img
+                    <Image
                       src="/favicons/android-chrome-512x512.png"
                       alt={`Portrait of photographer ${photographer.name} ${photographer.surname} (not available)`}
                       width={400}
@@ -105,6 +106,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                         width: "100%",
                         height: "auto",
                       }}
+                      priority
                     />
                   )}
                 </div>

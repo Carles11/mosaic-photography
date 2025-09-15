@@ -1,14 +1,9 @@
 "use client";
 import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
+import type { GalleryProps } from "@/types/gallery";
 
-interface PhotographerGalleryZoomProps {
-  images: Array<any>;
-}
-
-const PhotographerGalleryZoom: React.FC<PhotographerGalleryZoomProps> = ({
-  images,
-}) => {
+const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
   if (!images || images.length === 0)
     return <p>No images found for this photographer.</p>;
   return (
