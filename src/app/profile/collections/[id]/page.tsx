@@ -30,7 +30,7 @@ export default function CollectionView() {
   const searchParams = useSearchParams();
   const { user } = useAuthSession();
   const [collection, setCollection] = useState<CollectionWithImages | null>(
-    null,
+    null
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +43,7 @@ export default function CollectionView() {
   const [touchStartTime, setTouchStartTime] = useState(0);
   const [touchStartPos, setTouchStartPos] = useState({ x: 0, y: 0 });
   const [dropPosition, setDropPosition] = useState<"before" | "after" | null>(
-    null,
+    null
   );
   const { open } = useModal();
 
@@ -88,7 +88,7 @@ export default function CollectionView() {
       if (collectionFavoritesError) {
         console.error(
           "Error loading collection favorites:",
-          collectionFavoritesError,
+          collectionFavoritesError
         );
         setError("Error loading collection images");
         setLoading(false);
@@ -99,7 +99,7 @@ export default function CollectionView() {
       if (collectionFavoritesData && collectionFavoritesData.length > 0) {
         // Get favorites to get image_ids
         const favoriteIds = collectionFavoritesData.map(
-          (item) => item.favorite_id,
+          (item) => item.favorite_id
         );
         const { data: favoritesData, error: favoritesError } = await supabase
           .from("favorites")
@@ -136,7 +136,7 @@ export default function CollectionView() {
           imagesData = collectionFavoritesData
             .map((cfItem) => {
               const favorite = favoritesData.find(
-                (f) => f.id === cfItem.favorite_id,
+                (f) => f.id === cfItem.favorite_id
               );
               const image = favorite
                 ? imagesTableData?.find((img) => img.id === favorite.image_id)
@@ -252,7 +252,7 @@ export default function CollectionView() {
       // First, let's try to create a proper ZIP with image downloads
       const zip = new JSZip();
       const collectionFolder = zip.folder(
-        collection.name.replace(/[^a-z0-9]/gi, "_"),
+        collection.name.replace(/[^a-z0-9]/gi, "_")
       );
 
       let successCount = 0;
@@ -280,21 +280,27 @@ export default function CollectionView() {
 
           const fileExtension =
             image.image_url.split(".").pop()?.toLowerCase() || "jpg";
-          const fileName = `${String(index + 1).padStart(3, "0")}_${image.image_title.replace(/[^a-z0-9]/gi, "_")}.${fileExtension}`;
+          const fileName = `${String(index + 1).padStart(
+            3,
+            "0"
+          )}_${image.image_title.replace(/[^a-z0-9]/gi, "_")}.${fileExtension}`;
 
           collectionFolder?.file(fileName, blob);
           successCount++;
           console.log(
-            `✓ Downloaded: ${image.image_title} (${blob.size} bytes)`,
+            `✓ Downloaded: ${image.image_title} (${blob.size} bytes)`
           );
         } catch (error) {
           failCount++;
           console.log({ error });
           // Add a text file with the image URL as fallback
-          const fileName = `${String(index + 1).padStart(3, "0")}_${image.image_title.replace(/[^a-z0-9]/gi, "_")}_URL.txt`;
+          const fileName = `${String(index + 1).padStart(
+            3,
+            "0"
+          )}_${image.image_title.replace(/[^a-z0-9]/gi, "_")}_URL.txt`;
           collectionFolder?.file(
             fileName,
-            `Image URL: ${image.image_url}\nTitle: ${image.image_title}\nAuthor: ${image.image_author}`,
+            `Image URL: ${image.image_url}\nTitle: ${image.image_title}\nAuthor: ${image.image_author}`
           );
         }
       }
@@ -305,7 +311,7 @@ export default function CollectionView() {
         // Use a toast to ask for user choice instead of confirm
         toast(
           "Unable to download images directly due to CORS restrictions. Creating a ZIP with image URLs only.",
-          { icon: "⚠️", duration: 8000 },
+          { icon: "⚠️", duration: 8000 }
         );
         // Continue with URL-only ZIP below
       }
@@ -322,7 +328,7 @@ export default function CollectionView() {
           (image, index) =>
             `${index + 1}. ${image.image_title}\n` +
             `   Author: ${image.image_author}\n` +
-            `   URL: ${image.image_url}\n`,
+            `   URL: ${image.image_url}\n`
         )
         .join("\n");
 
@@ -357,7 +363,10 @@ export default function CollectionView() {
       });
 
       // Create download link
-      const zipFileName = `${collection.name.replace(/[^a-z0-9]/gi, "_")}_collection.zip`;
+      const zipFileName = `${collection.name.replace(
+        /[^a-z0-9]/gi,
+        "_"
+      )}_collection.zip`;
       const link = document.createElement("a");
       link.href = URL.createObjectURL(zipBlob);
       link.download = zipFileName;
@@ -370,17 +379,17 @@ export default function CollectionView() {
 
       if (successCount === collection.images.length) {
         toast.success(
-          `Successfully exported all ${successCount} images as ${zipFileName}!`,
+          `Successfully exported all ${successCount} images as ${zipFileName}!`
         );
       } else if (successCount > 0) {
         toast(
           `Exported ${successCount} images successfully. ${failCount} images failed due to CORS restrictions. Check the _Image_URLs_and_Info.txt file for missing images.`,
-          { icon: "⚠️", duration: 8000 },
+          { icon: "⚠️", duration: 8000 }
         );
       } else {
         toast(
           `Created ZIP with image URLs and info. No images could be downloaded directly due to CORS restrictions.`,
-          { icon: "⚠️", duration: 8000 },
+          { icon: "⚠️", duration: 8000 }
         );
       }
     } catch (error) {
@@ -457,12 +466,12 @@ export default function CollectionView() {
     const touch = e.touches[0];
     const elementBelow = document.elementFromPoint(
       touch.clientX,
-      touch.clientY,
+      touch.clientY
     );
 
     // Find the closest image card
     const imageCard = elementBelow?.closest(
-      "[data-favorite-id]",
+      "[data-favorite-id]"
     ) as HTMLElement;
     if (imageCard) {
       const favoriteId = parseInt(imageCard.dataset.favoriteId || "0");
@@ -539,10 +548,10 @@ export default function CollectionView() {
     try {
       // Find current positions
       const draggedIndex = collection.images.findIndex(
-        (img) => img.favorite_id === draggedItem,
+        (img) => img.favorite_id === draggedItem
       );
       const targetIndex = collection.images.findIndex(
-        (img) => img.favorite_id === targetFavoriteId,
+        (img) => img.favorite_id === targetFavoriteId
       );
       if (draggedIndex === -1 || targetIndex === -1) return;
       // Determine before/after
@@ -756,10 +765,22 @@ export default function CollectionView() {
                 data-favorite-id={image.favorite_id}
                 className={`
                     ${styles.imageCard}
-                    ${selectedImages.has(image.favorite_id) ? " " + styles.selected : ""}
+                    ${
+                      selectedImages.has(image.favorite_id)
+                        ? " " + styles.selected
+                        : ""
+                    }
                     ${isReordering ? " " + styles.reordering : ""}
-                    ${draggedItem === image.favorite_id ? " " + styles.dragging : ""}
-                    ${dragOverItem === image.favorite_id ? " " + styles.dragOver : ""}
+                    ${
+                      draggedItem === image.favorite_id
+                        ? " " + styles.dragging
+                        : ""
+                    }
+                    ${
+                      dragOverItem === image.favorite_id
+                        ? " " + styles.dragOver
+                        : ""
+                    }
                     ${isMobile ? " " + styles.mobile : ""}
                   `}
                 draggable={isReordering && !isMobile}
@@ -817,9 +838,6 @@ export default function CollectionView() {
           </div>
         </>
       )}
-
-      {/* Share Modal */}
-      {/* Share Modal is now handled by modal context/provider */}
     </div>
   );
 }

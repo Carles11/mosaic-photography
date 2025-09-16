@@ -174,7 +174,7 @@ const Credits: React.FC = () => {
         </p>
         <p>
           <strong>Email:</strong>{" "}
-          <a href="mailto:carles@crix.design">carles@crix.design</a>
+          <a href="mailto:carles@rio-frances.com">carles@rio-frances.com</a>
         </p>
         <p>
           <strong>Official Website:</strong>{" "}

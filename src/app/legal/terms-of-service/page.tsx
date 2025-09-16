@@ -51,8 +51,8 @@ const TermsOfService: React.FC = () => {
       <h2 className={styles.subtitle}>Contact</h2>
       <p className={styles.text}>
         If you have any questions or concerns about our terms of service, please
-        contact me at <a href="mailto:carles@crix.design">carles@crix.design</a>
-        .
+        contact me at{" "}
+        <a href="mailto:carles@rio-frances.com">carles@rio-frances.com</a>.
       </p>
       <h2 className={styles.subtitle}>Affiliate links</h2>
       <p className={styles.text}>

@@ -52,8 +52,8 @@ const PrivacyPolicy: React.FC = () => {
       <h2 className={styles.subtitle}>Contact</h2>
       <p className={styles.text}>
         If you have any questions or concerns about our privacy policy, please
-        contact us at <a href="mailto:carles@crix.design">carles@crix.design</a>
-        .
+        contact us at{" "}
+        <a href="mailto:carles@rio-frances.com">carles@rio-frances.com</a>.
       </p>
     </section>
   );

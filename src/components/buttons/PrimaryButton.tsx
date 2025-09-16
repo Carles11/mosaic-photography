@@ -5,7 +5,7 @@ interface PrimaryButtonProps {
   handleClick: () => void;
   btnText: string;
   className: string;
-  id: string;
+  id?: string;
 }
 
 const PrimaryButton: React.FC<PrimaryButtonProps> = ({

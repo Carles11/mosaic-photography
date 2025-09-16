@@ -37,7 +37,7 @@ export const criticalCSSConfig = {
     // Focus states
     ":focus",
     // Third-party libraries
-    ".slick-",
+
     ".pswp",
   ],
 };
@@ -51,7 +51,7 @@ export const validateCriticalCSS = (css: string) => {
 
   if (sizeInKB > 14) {
     console.warn(
-      "⚠️ Critical CSS is larger than 14KB. Consider removing non-critical styles.",
+      "⚠️ Critical CSS is larger than 14KB. Consider removing non-critical styles."
     );
   } else {
     console.log("✅ Critical CSS size is optimal.");

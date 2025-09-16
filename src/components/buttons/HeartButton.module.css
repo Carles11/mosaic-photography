@@ -54,16 +54,3 @@
 }
 
 /* For zoomed/modal view */
-.heartButton.modalView {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 48px;
-  height: 48px;
-  z-index: 9999;
-}
-
-.heartButton.modalView svg {
-  width: 28px;
-  height: 28px;
-}

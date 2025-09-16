@@ -52,27 +52,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Modal view styling (when in PhotoSwipe) */
-.modalView {
-  position: relative;
-  top: auto;
-  left: auto;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-}
-
-.modalView:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.modalView .badge {
-  background: var(--tertiary-color, #dc3545);
-  border: 2px solid rgba(255, 255, 255, 0.8);
-}
-
-/* Ensure proper spacing on mobile */
 @media (max-width: 768px) {
   .icon {
     width: 18px;
