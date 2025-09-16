@@ -36,8 +36,9 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
     loop: false,
     skipSnaps: false,
     align: "start",
-    dragFree: false,
+    dragFree: true,
     axis: "x",
+    slidesToScroll: 1,
   });
   const [expandedBioIdx, setExpandedBioIdx] = useState<number | null>(null);
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
@@ -48,6 +49,9 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
     onPrevButtonClick,
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
+
+  console.log({ scrollSnaps });
+  console.log("photographers", photographersProp);
 
   return (
     <div className={styles.photographersViewCardContainer}>
@@ -73,7 +77,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                   })
                   .filter((item): item is DropdownItem => item !== null);
               }
-
               return (
                 <div
                   key={photographer.surname + idx}
@@ -81,7 +84,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                   tabIndex={0}
                   aria-label={`Photographer card: ${photographer.name} ${photographer.surname}`}
                 >
-                  <h3 className={`fancy-link ${styles.authorName}`}>
+                  <h3 className={styles.authorName}>
                     <Link
                       href={`/photographers/${slugify(photographer.surname)}`}
                       tabIndex={0}
@@ -89,13 +92,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                       {`${photographer.name} ${photographer.surname}`.toUpperCase()}
                     </Link>
                   </h3>
-                  <div
-                    className={`${
-                      photographer
-                        ? styles.imageInSlideContainer
-                        : styles.imageContainer
-                    }`}
-                  >
+                  <div className={styles.imageContainer}>
                     {portrait ? (
                       <Link
                         href={`/photographers/${slugify(photographer.surname)}`}
@@ -193,16 +190,30 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
             <div>No photographers found.</div>
           )}
         </div>
-        {/* Arrow Navigation */}
-        <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-        <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
-        {scrollSnaps.map((_, index) => (
-          <DotButton
-            key={index}
-            onClick={() => onDotButtonClick(index)}
-            selected={index === selectedIndex}
-          />
-        ))}
+        <div className={styles.embla__navigation}>
+          {/* Arrow Navigation */}
+          <div className={styles.embla__navigation__arrows}>
+            <PrevButton
+              onClick={onPrevButtonClick}
+              disabled={prevBtnDisabled}
+            />
+            <NextButton
+              onClick={onNextButtonClick}
+              disabled={nextBtnDisabled}
+            />
+          </div>
+          {/* Dot Navigation */}
+          <div className={styles.embla__navigation__dots}>
+            {scrollSnaps.map((_, index) => (
+              <DotButton
+                key={index}
+                onClick={() => onDotButtonClick(index)}
+                selected={index === selectedIndex}
+                label={photographersProp?.[index]?.surname || ""}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

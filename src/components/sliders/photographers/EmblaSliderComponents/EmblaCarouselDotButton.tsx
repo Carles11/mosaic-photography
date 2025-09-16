@@ -4,6 +4,7 @@ import styles from "./EmblaDots.module.css";
 
 type DotButtonProps = React.ComponentPropsWithRef<"button"> & {
   selected?: boolean;
+  label?: string;
 };
 
 type UseDotButtonType = {
@@ -48,13 +49,18 @@ export const useDotButton = (
   };
 };
 
-type PropType = React.ComponentPropsWithRef<"button">;
-export const DotButton: React.FC<DotButtonProps> = ({ selected, ...rest }) => (
+export const DotButton: React.FC<DotButtonProps> = ({
+  selected,
+  label,
+  ...rest
+}) => (
   <button
     type="button"
     className={
       styles.embla__dot + (selected ? " " + styles["embla__dot--selected"] : "")
     }
     {...rest}
-  />
+  >
+    {label}
+  </button>
 );
