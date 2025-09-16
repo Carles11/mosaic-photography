@@ -19,13 +19,19 @@
   width: 100%;
   object-fit: cover;
   position: relative;
-  cursor: zoom-in;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.zoomInCursor {
+  cursor: zoom-in;
+}
+
+.goToLinkCursor {
+  cursor: pointer;
+}
 .image {
   position: relative;
   width: 100%;

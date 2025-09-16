@@ -109,7 +109,9 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
                 }}
                 src={image.url}
                 alt={image.title || "Gallery Image"}
-                className={`${styles.imageItem} ${styles.image}`}
+                className={`${styles.imageItem} ${styles.image} ${
+                  photographer ? styles.goToLinkCursor : styles.zoomInCursor
+                }`}
                 width={imgWidth}
                 height={imgHeight}
                 sizes={sizes}
