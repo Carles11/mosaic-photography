@@ -1,7 +1,7 @@
 import React from "react";
-import { sendGTMEvent } from "@next/third-parties/google";
 import styles from "./Dropdown.module.css";
 import type { DropdownProps } from "@/types";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, onToggle }) => {
   const handleToggle = (event: React.SyntheticEvent<HTMLDetailsElement>) => {
@@ -25,7 +25,7 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, onToggle }) => {
               className={styles.link}
               onClick={() =>
                 sendGTMEvent({
-                  event: "storeClicked-in-dropdown",
+                  event: "storeClicked",
                   value: item.store,
                 })
               }
