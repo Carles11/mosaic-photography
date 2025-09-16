@@ -25,7 +25,7 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, onToggle }) => {
               className={styles.link}
               onClick={() =>
                 sendGTMEvent({
-                  event: "storeClicked",
+                  event: "storeClicked-in-dropdown",
                   value: item.store,
                 })
               }

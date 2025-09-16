@@ -1,5 +1,6 @@
 "use client";
 import styles from "./PhotographerLinks.module.css";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 interface Store {
   store: string;
@@ -48,14 +49,13 @@ export const PhotographerLinks: React.FC<PhotographerLinksProps> = ({
                     href={store.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => {
-                      if (typeof window !== "undefined" && window.gtag) {
-                        window.gtag("event", "storeClicked", {
-                          event_category: "photographer",
-                          event_label: store.website,
-                        });
-                      }
-                    }}
+                    onClick={() =>
+                      sendGTMEvent({
+                        event: "storeClicked-in-page",
+                        value: store.store,
+                        website: store.website,
+                      })
+                    }
                   >
                     {store.store}
                   </a>
@@ -76,14 +76,12 @@ export const PhotographerLinks: React.FC<PhotographerLinksProps> = ({
             href={website}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => {
-              if (typeof window !== "undefined" && window.gtag) {
-                window.gtag("event", "websiteClicked", {
-                  event_category: "photographer",
-                  event_label: website,
-                });
-              }
-            }}
+            onClick={() =>
+              sendGTMEvent({
+                event: "websiteClicked-in-page",
+                value: website,
+              })
+            }
           >
             {website.toLowerCase().includes("wikipedia")
               ? "Wikipedia"
