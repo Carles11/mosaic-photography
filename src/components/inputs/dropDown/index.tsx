@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./Dropdown.module.css";
 import type { DropdownProps } from "@/types";
 import { sendGTMEvent } from "@next/third-parties/google";
