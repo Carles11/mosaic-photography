@@ -37,6 +37,7 @@
 .authorName {
   cursor: pointer;
   z-index: 1;
+  margin: 1rem;
 }
 
 .authorCTA {
@@ -115,14 +116,15 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
 .embla__navigation__arrows {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  gap: 0.6rem;
 }
 
 .embla__navigation__dots {
@@ -173,5 +175,13 @@
 
   .embla__navigation {
     flex-direction: column;
+  }
+
+  .embla__navigation__dots {
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 1rem 0 0 0;
+
+    gap: calc(0.1rem + 1vw);
   }
 }

@@ -39,6 +39,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
     dragFree: true,
     axis: "x",
     slidesToScroll: 1,
+    containScroll: "trimSnaps",
   });
   const [expandedBioIdx, setExpandedBioIdx] = useState<number | null>(null);
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
@@ -49,9 +50,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
     onPrevButtonClick,
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
-
-  console.log({ scrollSnaps });
-  console.log("photographers", photographersProp);
 
   return (
     <div className={styles.photographersViewCardContainer}>
@@ -84,7 +82,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                   tabIndex={0}
                   aria-label={`Photographer card: ${photographer.name} ${photographer.surname}`}
                 >
-                  <h3 className={styles.authorName}>
+                  <h3 className={`fancy-link ${styles.authorName}`}>
                     <Link
                       href={`/photographers/${slugify(photographer.surname)}`}
                       tabIndex={0}

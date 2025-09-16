@@ -264,45 +264,26 @@ a:hover::before {
 .embla__container {
   display: flex !important;
   flex-direction: row !important;
-  gap: 1rem !important;
+  gap: 0 !important; /* Remove gap for perfect fit */
   width: 100% !important;
   will-change: transform;
   touch-action: pan-x;
   -webkit-overflow-scrolling: touch;
 }
 .embla__slide {
-  flex: 0 0 87vw;
-  max-width: 87vw;
+  flex: 0 0 100vw;
+  max-width: 100vw;
   height: fit-content !important;
 }
-
-.embla__navigation {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-  max-width: 100%;
-}
-
-.embla__navigation__arrows {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.2rem;
-}
-
 @media (min-width: 768px) {
   .embla__slide {
-    flex: 0 0 calc(50vw - 8px);
-    max-width: calc(50vw - 8px);
+    flex: 0 0 50vw;
+    max-width: 50vw;
   }
 }
-
 @media (min-width: 1200px) {
   .embla__slide {
-    flex: 0 0 calc(33.33vw - 8px);
-    max-width: calc(33.33vw - 8px);
+    flex: 0 0 33.33vw;
+    max-width: 33.33vw;
   }
 }
