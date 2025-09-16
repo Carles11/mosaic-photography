@@ -34,12 +34,13 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
 }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
-    skipSnaps: false,
+    skipSnaps: true,
     align: "start",
-    dragFree: true,
+    dragFree: false,
     axis: "x",
     slidesToScroll: 1,
     containScroll: "trimSnaps",
+    duration: 55,
   });
   const [expandedBioIdx, setExpandedBioIdx] = useState<number | null>(null);
   const { selectedIndex, scrollSnaps, onDotButtonClick } =
@@ -162,24 +163,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                       buttonText="Prints & books"
                       items={parsedStores}
                     />
-                  )}
-                  {photographer.website && (
-                    <a
-                      href={photographer.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.authorCTA}
-                      onClick={() => {
-                        if (typeof window !== "undefined" && window.gtag) {
-                          window.gtag("event", "websiteClicked", {
-                            event_category: "photographer",
-                            event_label: photographer.website,
-                          });
-                        }
-                      }}
-                    >
-                      Website
-                    </a>
                   )}
                 </div>
               );

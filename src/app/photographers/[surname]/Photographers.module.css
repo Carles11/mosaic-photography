@@ -1,0 +1,24 @@
+.photographerDetailPage {
+  padding: 22px;
+}
+
+.authorCTA {
+  cursor: pointer;
+  z-index: 1;
+  padding-left: 11px;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+.subsectionHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionTitle {
+  margin: 0;
+  padding-left: 22px;
+}

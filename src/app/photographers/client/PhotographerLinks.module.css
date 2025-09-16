@@ -1,0 +1,10 @@
+.sectionHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.sectionTitle {
+  margin: 0;
+  padding-left: 22px;
+}

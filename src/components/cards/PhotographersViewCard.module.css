@@ -40,12 +40,6 @@
   margin: 1rem;
 }
 
-.authorCTA {
-  cursor: pointer;
-  z-index: 1;
-  padding-left: 11px;
-}
-
 .biography {
   display: -webkit-box;
   -webkit-line-clamp: 4;
