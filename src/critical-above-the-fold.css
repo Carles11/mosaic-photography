@@ -256,7 +256,8 @@ a:hover::before {
 } */
 /* Embla Carousel container and slide width fixes */
 .embla {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
   max-width: 100vw;
 }
@@ -267,7 +268,7 @@ a:hover::before {
   gap: 0 !important; /* Remove gap for perfect fit */
   width: 100% !important;
   will-change: transform;
-  touch-action: pan-x;
+  touch-action: pan-x pan-y;
   -webkit-overflow-scrolling: touch;
 }
 .embla__slide {
