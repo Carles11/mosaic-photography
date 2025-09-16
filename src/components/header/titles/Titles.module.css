@@ -1,12 +1,9 @@
-.mainTitleContainer{
-  width:98%
+.mainTitleContainer {
+  width: 98%;
 }
 
 .mainTitle {
   margin: 0;
-}
-h2.subTitle {
-  margin: 1rem 0;
 }
 
 p.subTitle {
@@ -50,8 +47,5 @@ p.centerText {
   .homeTitleGrid {
     grid-template-columns: 1fr;
     grid-auto-flow: row;
-  }
-  .homeTitleGrid {
-    margin: 6px;
   }
 }

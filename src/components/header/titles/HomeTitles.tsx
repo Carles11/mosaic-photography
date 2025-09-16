@@ -10,12 +10,12 @@ export const HomeTitles = () => {
       </h1>
 
       <div className={styles.homeTitleGrid}>
-        <h2 className={styles.subTitle}>
+        <h2>
           Iconic works by legendary photographers who shaped the history of nude
           art and nude photography.
         </h2>
         <div className={styles.homeTitleGridItemRight}>
-          <h2 className={styles.subTitle}>
+          <h2>
             <a
               className="fancy-link"
               href="#gallery-section"
