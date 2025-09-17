@@ -250,10 +250,6 @@ a:hover::before {
   }
 }
 
-/* === Photoswipe Gallery zoom styles === */
-/* .pswp__img {
-  object-fit: contain !important;
-} */
 /* Embla Carousel container and slide width fixes */
 .embla {
   overflow-x: hidden;

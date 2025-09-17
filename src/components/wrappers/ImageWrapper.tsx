@@ -22,7 +22,6 @@ interface ImageWrapperProps {
   photographer?: boolean;
   sizes?: string;
   onLoad?: () => void;
-  onOpenPhotoSwipe?: () => void;
 }
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({
@@ -31,7 +30,6 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   imgStyleOverride,
   photographer,
   sizes: sizesProp,
-  onOpenPhotoSwipe,
 }) => {
   // Default: photographers gallery
   let imgWidth = 600; // largest desktop width you see
@@ -101,11 +99,6 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
             loading={photographer ? "eager" : "lazy"}
             fetchPriority={photographer ? "high" : "auto"}
             data-image-id={imageIdString}
-            onClick={
-              typeof onOpenPhotoSwipe === "function"
-                ? onOpenPhotoSwipe
-                : undefined
-            }
             style={
               typeof styleOverride === "object" ? styleOverride : undefined
             }

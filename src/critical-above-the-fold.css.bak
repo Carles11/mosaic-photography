@@ -806,7 +806,7 @@ p.mainText {
   }
 }
 
-/* === Photoswipe Gallery zoom styles === */
+/* ...existing code... */
 .pswp__img {
   object-fit: contain !important;
 }

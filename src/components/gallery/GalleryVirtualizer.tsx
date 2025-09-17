@@ -88,22 +88,31 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
         render={{
           slide: (props) => {
             const { slide } = props;
-            // Use customId instead of id
-            const imageId = (slide as { customId?: number }).customId ?? 0;
+            // Define a type for the slide object
+            interface LightboxSlide {
+              src: string;
+              customId?: number;
+              title?: string;
+              width?: number;
+              height?: number;
+            }
+            const typedSlide = slide as LightboxSlide;
+            const imageId = typedSlide.customId ?? 0;
             const slideWithTitle = slide as { title?: string };
+
             return (
               <div
                 style={{ position: "relative", width: "100%", height: "100%" }}
               >
                 <Image
-                  src={slide.src}
+                  src={typedSlide.src}
                   alt={
-                    typeof slideWithTitle.title === "string"
-                      ? slideWithTitle.title
+                    typeof typedSlide.title === "string"
+                      ? typedSlide.title
                       : "Gallery Image"
                   }
-                  width={(slide as any).width ?? 1920}
-                  height={(slide as any).height ?? 1080}
+                  width={typedSlide.width ?? 1920}
+                  height={typedSlide.height ?? 1080}
                   style={{
                     width: "100%",
                     height: "100%",

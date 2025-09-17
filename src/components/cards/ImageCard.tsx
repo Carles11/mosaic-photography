@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styles from "./ImageCard.module.css";
 import GallerySkeletonCard from "./GallerySkeletonCard";
 import { ImageWithOrientation } from "@/types/gallery";
-// import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
+// ...existing code...
 import { useComments } from "@/context/CommentsContext";
 // ImageCard: All images are loaded exclusively via Next.js <Image /> (via ImageWrapper) with lazy loading.
 // Dev log: props.images will be logged inside the component for correct scope

@@ -15,10 +15,8 @@
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
-  transition:
-    opacity 0.3s,
-    visibility 0.3s;
-  z-index: 1000; /* Lower z-index so PhotoSwipe modal (1500+) covers it */
+  transition: opacity 0.3s, visibility 0.3s;
+  z-index: 1000;
 }
 
 .goToTopButton.visible {
@@ -33,5 +31,5 @@
 .tooltip {
   background-color: var(--background-color);
   color: var(--text-color);
-  z-index: 999; /* Lower than PhotoSwipe modal */
+  z-index: 999;
 }
