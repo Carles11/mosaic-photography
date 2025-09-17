@@ -7,13 +7,6 @@
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* Mobile spacing for bottom navigation */
-@media (max-width: 768px) {
-  .container {
-    padding-bottom: calc(80px + env(safe-area-inset-bottom));
-  }
-}
-
 .pageContent {
   flex: 1;
   height: 100%;

@@ -4,6 +4,8 @@
   overflow: hidden;
   position: relative;
   transition: all 0.3s ease-in-out; /* Smooth transition when orientation changes */
+  padding: 8px; /* or margin: 8px; */
+  box-sizing: border-box;
 }
 
 /* Ensure images completely fill their grid cells */
@@ -11,6 +13,11 @@
   width: 100%;
   height: auto; /* Let image height be determined by its aspect ratio */
   object-fit: cover;
+}
+
+.masonryItem {
+  padding: 8px; /* or margin: 8px; */
+  box-sizing: border-box;
 }
 
 .landscape {
@@ -29,7 +36,7 @@
   height: auto !important;
 }
 .portrait img {
-  height: auto !important;
+  height: 100% !important;
 }
 
 /* Mosaic variations for portrait images */
@@ -123,6 +130,10 @@
     grid-row: span 2;
     aspect-ratio: 2 / 3;
   }
+
+  .gridItem {
+    padding: 5px; /* or margin: 8px; */
+  }
 }
 
 @media (max-width: 480px) {
@@ -133,5 +144,8 @@
     grid-column: span 1;
     grid-row: span 1;
     aspect-ratio: 3 / 4; /* Default portrait aspect ratio */
+  }
+  .gridItem {
+    padding: 3px; /* or margin: 8px; */
   }
 }

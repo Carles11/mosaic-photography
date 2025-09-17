@@ -8,7 +8,6 @@
   display: flex; /* Use flexbox for alignment */
   flex-direction: column; /* Stack items vertically */
   justify-content: center; /* Center items vertically */
-  margin-top: 11rem;
 }
 
 .footerContent {

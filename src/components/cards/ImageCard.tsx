@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./ImageCard.module.css";
 import GallerySkeletonCard from "./GallerySkeletonCard";
 import { ImageWithOrientation } from "@/types/gallery";
-import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
+// import PhotoSwipeWrapper from "@/components/wrappers/PhotoSwipeWrapper";
 import { useComments } from "@/context/CommentsContext";
 // ImageCard: All images are loaded exclusively via Next.js <Image /> (via ImageWrapper) with lazy loading.
 // Dev log: props.images will be logged inside the component for correct scope
@@ -101,56 +101,44 @@ const ImageCard: React.FC<ImageCardProps> = ({
             }))}
           />
 
-          <PhotoSwipeWrapper
-            images={images} // Pass images array to PhotoSwipeWrapper
-            onLoginRequired={onLoginRequired}
-            galleryOptions={{
-              zoom: true,
-              maxSpreadZoom: 1,
-              fullscreenEl: true,
-              bgOpacity: 1,
-              wheelToZoom: true,
-            }}
-          >
-            {images.map((image) => {
-              // Dev log: rendering each image in map
-              console.debug("[ImageCard] Rendering image in map:", image);
-              // Determine CSS class based on orientation and mosaic type
-              let cssClass = styles.gridItem;
+          {images.map((image) => {
+            // Dev log: rendering each image in map
+            console.debug("[ImageCard] Rendering image in map:", image);
+            // Determine CSS class based on orientation and mosaic type
+            let cssClass = styles.gridItem;
 
-              if (image.orientation === "horizontal") {
-                cssClass += ` ${styles.landscape}`;
-              } else if (image.orientation === "vertical") {
-                // Vertical image - check for mosaic type (only for vertical images)
-                switch (image.mosaicType) {
-                  case "large":
-                    cssClass += ` ${styles.mosaicLarge}`;
-                    break;
-                  case "wide":
-                    cssClass += ` ${styles.mosaicWide}`;
-                    break;
-                  case "tall":
-                    cssClass += ` ${styles.mosaicTall}`;
-                    break;
-                  default:
-                    cssClass += ` ${styles.portrait}`;
-                }
-              } else if (image.orientation === "square") {
-                // If we need to add special handling for square images in the future
-                cssClass += ` ${styles.portrait}`; // For now, use portrait style for square
+            if (image.orientation === "horizontal") {
+              cssClass += ` ${styles.landscape}`;
+            } else if (image.orientation === "vertical") {
+              // Vertical image - check for mosaic type (only for vertical images)
+              switch (image.mosaicType) {
+                case "large":
+                  cssClass += ` ${styles.mosaicLarge}`;
+                  break;
+                case "wide":
+                  cssClass += ` ${styles.mosaicWide}`;
+                  break;
+                case "tall":
+                  cssClass += ` ${styles.mosaicTall}`;
+                  break;
+                default:
+                  cssClass += ` ${styles.portrait}`;
               }
+            } else if (image.orientation === "square") {
+              // If we need to add special handling for square images in the future
+              cssClass += ` ${styles.portrait}`; // For now, use portrait style for square
+            }
 
-              return (
-                <div key={image.id} className={cssClass}>
-                  <ImageWrapper
-                    image={image}
-                    imgRef={imgRef}
-                    onLoginRequired={onLoginRequired}
-                  />
-                </div>
-              );
-            })}
-          </PhotoSwipeWrapper>
+            return (
+              <div key={image.id} className={cssClass}>
+                <ImageWrapper
+                  image={image}
+                  imgRef={imgRef}
+                  onLoginRequired={onLoginRequired}
+                />
+              </div>
+            );
+          })}
         </>
       )}
     </>
