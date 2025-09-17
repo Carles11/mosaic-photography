@@ -32,7 +32,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
       columnCount={columnCount}
       data={images}
       ItemContent={ItemContent}
-      style={{ height: "100vh", width: "100%" }}
+      style={{ width: "100%", overflow: "visible" }}
       initialItemCount={50}
     />
   );
