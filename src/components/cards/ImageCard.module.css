@@ -1,42 +1,139 @@
 .gridItem {
   width: 100%;
-  /* Remove height: 100% to allow Masonry to control height */
-  position: relative;
+  height: 100%;
   overflow: hidden;
-  transition: all 0.3s ease-in-out;
-  /* Add margin if you want spacing between cards */
-  box-sizing: border-box;
+  position: relative;
+  transition: all 0.3s ease-in-out; /* Smooth transition when orientation changes */
 }
 
+/* Ensure images completely fill their grid cells */
 .gridItem img {
   width: 100%;
-  height: auto; /* Let image height be determined by aspect ratio */
-  object-fit: cover;
+  height: 100%;
+  object-fit: cover !important;
   display: block;
+  /* Maintain aspect ratio if only one dimension is set by CSS */
 }
 
-/* Aspect ratio helpers for different orientations */
 .landscape {
   aspect-ratio: 16 / 9;
+  grid-column: span 2; /* Landscape images span 2 columns */
+  grid-row: span 1;
 }
 
-.portrait,
-.mosaicLarge,
-.mosaicWide,
-.mosaicTall {
+.portrait {
   aspect-ratio: 3 / 4;
+  grid-column: span 1; /* Portrait images span 1 column */
+  grid-row: span 1;
 }
 
-/* You can add custom heights for mosaic variants if needed */
+.landscape img {
+  height: auto !important;
+}
+.portrait img {
+  height: auto !important;
+}
+
+/* Mosaic variations for portrait images */
 .mosaicLarge {
-  /* Example: taller card */
-  min-height: 320px;
+  aspect-ratio: 3 / 4;
+  grid-column: span 2; /* Takes 2 columns */
+  grid-row: span 2; /* Takes 2 rows */
+  position: relative;
 }
+
+.mosaicLarge img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+}
+
 .mosaicWide {
-  /* Example: wider card */
-  min-width: 220px;
+  aspect-ratio: 16 / 9;
+  grid-column: span 2; /* Takes 2 columns */
+  grid-row: span 1; /* Takes 1 row - wide portrait */
+  position: relative;
 }
+
+.mosaicWide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+}
+
 .mosaicTall {
-  /* Example: even taller card */
-  min-height: 400px;
+  aspect-ratio: 2 / 3;
+  grid-column: span 1; /* Takes 1 column */
+  grid-row: span 2; /* Takes 2 rows - tall portrait */
+  position: relative;
+}
+
+.mosaicTall img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover !important;
+}
+
+/* Subtle visual enhancement for mosaic items */
+.mosaicLarge::before,
+.mosaicWide::before,
+.mosaicTall::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 98%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+  border-radius: 2px;
+}
+
+.loadMoreButton {
+  width: 100%;
+  height: 100%;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Responsive adjustments for mosaic layout */
+@media (max-width: 768px) {
+  /* On mobile, reduce mosaic complexity to prevent too small images */
+  .mosaicLarge {
+    grid-column: span 2;
+    grid-row: span 1; /* Reduce to 1 row on mobile */
+    aspect-ratio: 16 / 9;
+  }
+
+  .mosaicWide {
+    grid-column: span 2;
+    grid-row: span 1;
+    aspect-ratio: 16 / 9;
+  }
+
+  .mosaicTall {
+    grid-column: span 1;
+    grid-row: span 2;
+    aspect-ratio: 2 / 3;
+  }
+}
+
+@media (max-width: 480px) {
+  /* On very small screens, simplify further */
+  .mosaicLarge,
+  .mosaicWide,
+  .mosaicTall {
+    grid-column: span 1;
+    grid-row: span 1;
+    aspect-ratio: 3 / 4; /* Default portrait aspect ratio */
+  }
 }

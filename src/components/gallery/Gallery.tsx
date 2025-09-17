@@ -1,17 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
-import VirtualizedGallery from "./GalleryVirtualizer"; // New component
+import ImageCard from "../cards/ImageCard";
+import type { GalleryProps } from "@/types/gallery";
 import styles from "./gallery.module.css";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
-import type { GalleryProps } from "@/types/gallery";
 
-const Gallery: React.FC<GalleryProps> = ({
-  id,
-  images = [],
-  onLoginRequired,
-}) => {
-  const memoizedImages = useMemo(() => images.map((img) => img), [images]);
+const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
   return (
     <div id={id} className={styles.galleryGridContainer}>
       <hr />
@@ -21,11 +15,10 @@ const Gallery: React.FC<GalleryProps> = ({
         public domain, copyright-free, and open access images. All available for
         download and personal or commercial use.
       </p>
-      <VirtualizedGallery
-        images={memoizedImages ?? []}
-        onLoginRequired={onLoginRequired}
-      />
-      <GoToTopButton />
+      <div className={styles.galleryGrid}>
+        <ImageCard images={images} onLoginRequired={onLoginRequired} />
+        <GoToTopButton />
+      </div>
     </div>
   );
 };
