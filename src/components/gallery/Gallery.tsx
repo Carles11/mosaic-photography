@@ -1,6 +1,11 @@
 "use client";
 
-import ImageCard from "../cards/ImageCard";
+// import ImageCard from "../cards/ImageCard";
+import VirtualizedMosaicGallery from "./GalleryVirtualizer";
+import PhotoSwipeWrapper, {
+  Item,
+} from "@/components/wrappers/PhotoSwipeWrapper";
+
 import type { GalleryProps } from "@/types/gallery";
 import styles from "./gallery.module.css";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
@@ -15,10 +20,39 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
         public domain, copyright-free, and open access images. All available for
         download and personal or commercial use.
       </p>
-      <div className={styles.galleryGrid}>
-        <ImageCard images={images} onLoginRequired={onLoginRequired} />
+      <PhotoSwipeWrapper
+        images={images ?? []}
+        onLoginRequired={onLoginRequired}
+        galleryOptions={{
+          zoom: true,
+          maxSpreadZoom: 1,
+          fullscreenEl: true,
+          bgOpacity: 1,
+          wheelToZoom: true,
+        }}
+      >
+        {/* Register all images for PhotoSwipe navigation */}
+        {(images ?? []).map((image) => (
+          <Item
+            key={image.id}
+            original={image.url}
+            thumbnail={image.url}
+            caption={image.title}
+            width={image.width}
+            height={image.height}
+            id={image.id}
+            alt={image.title}
+          >
+            {() => null}
+          </Item>
+        ))}
+        {/* Render the virtualized gallery */}
+        <VirtualizedMosaicGallery
+          images={images ?? []}
+          onLoginRequired={onLoginRequired}
+        />
         <GoToTopButton />
-      </div>
+      </PhotoSwipeWrapper>
     </div>
   );
 };

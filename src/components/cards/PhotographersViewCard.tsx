@@ -114,18 +114,24 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                         />
                       </Link>
                     ) : (
-                      <Image
-                        src="/favicons/android-chrome-512x512.png"
-                        alt={`Portrait of photographer ${photographer.name} ${photographer.surname} (not available)`}
-                        width={400}
-                        height={500}
-                        style={{
-                          objectFit: "cover",
-                          width: "100%",
-                          height: "auto",
-                        }}
-                        priority
-                      />
+                      <Link
+                        href={`/photographers/${slugify(photographer.surname)}`}
+                        className={`no-fancy-link ${styles.authorName}`}
+                        tabIndex={0}
+                      >
+                        <Image
+                          src="/favicons/android-chrome-512x512.png"
+                          alt={`Portrait of photographer ${photographer.name} ${photographer.surname} (not available)`}
+                          width={400}
+                          height={500}
+                          style={{
+                            objectFit: "cover",
+                            width: "100%",
+                            height: "auto",
+                          }}
+                          priority
+                        />
+                      </Link>
                     )}
                   </div>
 

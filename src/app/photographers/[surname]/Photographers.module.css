@@ -1,3 +1,8 @@
+.photographerDetailPageTitle {
+  margin: 0;
+  padding: 22px;
+}
+
 .photographerDetailPage {
   padding: 22px;
 }
@@ -13,6 +18,11 @@
   flex-direction: row;
   align-items: baseline;
 }
+
+.sectionContent p {
+  padding: 0 !important;
+}
+
 .subsectionHeader {
   display: flex;
   flex-direction: column;
@@ -21,4 +31,10 @@
 .sectionTitle {
   margin: 0;
   padding-left: 22px;
+}
+
+@media (max-width: 768px) {
+  .sectionTitle {
+    padding-left: 0;
+  }
 }
