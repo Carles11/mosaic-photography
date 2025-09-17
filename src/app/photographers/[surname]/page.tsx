@@ -16,18 +16,18 @@ export default async function PhotographerDetailPage(
 
   return (
     <div>
-      <h1>
+      <h1 className={styles.photographerDetailPageTitle}>
         {photographer.name} {photographer.surname}
       </h1>
       <main className={styles.photographerDetailPage}>
         <span className={styles.sectionHeader}>
           <h3 className={styles.sectionTitle}>Origin:</h3>
-          <p>{photographer.origin}</p>
+          <p className={styles.sectionContent}>{photographer.origin}</p>
         </span>
 
         <span className={styles.subsectionHeader}>
           <h3 className={styles.sectionTitle}>Biography:</h3>
-          <p>{photographer.biography}</p>
+          <p className={styles.sectionContent}>{photographer.biography}</p>
         </span>
 
         <PhotographerLinks
