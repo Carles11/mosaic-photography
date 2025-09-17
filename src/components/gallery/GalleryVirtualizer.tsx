@@ -7,6 +7,7 @@ import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Image from "next/image";
 import styles from "../cards/ImageCard.module.css";
 
 interface VirtualizedMosaicGalleryProps {
@@ -77,31 +78,36 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
         close={() => setIsLightboxOpen(false)}
         slides={images.map((img) => ({
           src: img.url,
-          title: img.title,
-          id: img.id,
+          customId: img.id, // use customId instead of id
+          title: img.title, // explicitly add title property
         }))}
         index={lightboxIndex}
         plugins={[Zoom]}
         render={{
           slide: (props) => {
             const { slide } = props;
-            const imageId = slide.id ?? 0;
+            // Use customId instead of id
+            const imageId = (slide as { customId?: number }).customId ?? 0;
+            const slideWithTitle = slide as { title?: string };
             return (
               <div
                 style={{ position: "relative", width: "100%", height: "100%" }}
               >
-                <img
+                <Image
                   src={slide.src}
                   alt={
-                    typeof slide.title === "string"
-                      ? slide.title
+                    typeof slideWithTitle.title === "string"
+                      ? slideWithTitle.title
                       : "Gallery Image"
                   }
+                  width={1920}
+                  height={1080}
                   style={{
                     width: "100%",
                     height: "100%",
                     objectFit: "contain",
                   }}
+                  priority
                 />
                 <div
                   style={{
@@ -119,7 +125,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                     zIndex: 1001,
                   }}
                 >
-                  {slide.title || "Untitled"}
+                  {slideWithTitle.title || "Untitled"}
                 </div>
                 <div
                   style={{
