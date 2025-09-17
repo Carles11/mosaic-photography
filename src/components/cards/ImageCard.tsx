@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import styles from "./ImageCard.module.css";
 import GallerySkeletonCard from "./GallerySkeletonCard";
 import { ImageWithOrientation } from "@/types/gallery";
@@ -20,50 +20,29 @@ const ImageCard: React.FC<ImageCardProps> = ({
   images: imagesProp,
   onLoginRequired,
 }) => {
-  // Confirm component mount
-  console.log("[ImageCard] Component mounted");
-  // Dev log: props.images
-  console.debug("[ImageCard] props.images:", imagesProp);
   if (!imagesProp) {
-    console.warn("[ImageCard] imagesProp is undefined or null");
+    // imagesProp is undefined or null
   } else if (Array.isArray(imagesProp) && imagesProp.length === 0) {
-    console.warn("[ImageCard] imagesProp is an empty array");
+    // imagesProp is an empty array
   }
   const [images] = useState<ImageWithOrientation[]>(imagesProp || []);
-  // Dev log: state.images
-  console.debug("[ImageCard] state.images:", images);
 
   const { loadCommentCountsBatch } = useComments();
 
   useEffect(() => {
     if (!images || images.length === 0) {
-      console.warn("[ImageCard] No images to render");
       return;
     }
     // Collect all image IDs as strings
     const imageIds = images.map((img) => String(img.id));
-    console.debug("[ImageCard] imageIds:", imageIds);
     loadCommentCountsBatch(imageIds);
   }, [images, loadCommentCountsBatch]);
 
   const loading = !imagesProp;
-  console.log("[ImageCard] loading:", loading);
-  if (loading) console.log("[ImageCard] Loading state");
   const error = null;
-  const imgRef = useRef<HTMLImageElement | null>(null);
 
   if (error) {
-    console.error("[ImageCard] Error:", error);
     return <div>Error: {error}</div>;
-  }
-
-  // Dev log: images passed to JsonLdSchema and PhotoSwipeWrapper
-  if (!loading) {
-    console.log("[ImageCard] Not loading, rendering images:", images);
-    images.forEach((image) => {
-      console.debug("[ImageCard] Passing image to JsonLdSchema:", image);
-    });
-    console.debug("[ImageCard] Passing images to PhotoSwipeWrapper:", images);
   }
 
   return (
@@ -102,8 +81,7 @@ const ImageCard: React.FC<ImageCardProps> = ({
           />
 
           {images.map((image) => {
-            // Dev log: rendering each image in map
-            console.debug("[ImageCard] Rendering image in map:", image);
+            // ...existing code...
             // Determine CSS class based on orientation and mosaic type
             let cssClass = styles.gridItem;
 
@@ -125,17 +103,12 @@ const ImageCard: React.FC<ImageCardProps> = ({
                   cssClass += ` ${styles.portrait}`;
               }
             } else if (image.orientation === "square") {
-              // If we need to add special handling for square images in the future
               cssClass += ` ${styles.portrait}`; // For now, use portrait style for square
             }
 
             return (
               <div key={image.id} className={cssClass}>
-                <ImageWrapper
-                  image={image}
-                  imgRef={imgRef}
-                  onLoginRequired={onLoginRequired}
-                />
+                <ImageWrapper image={image} onLoginRequired={onLoginRequired} />
               </div>
             );
           })}
@@ -144,5 +117,4 @@ const ImageCard: React.FC<ImageCardProps> = ({
     </>
   );
 };
-
 export default ImageCard;

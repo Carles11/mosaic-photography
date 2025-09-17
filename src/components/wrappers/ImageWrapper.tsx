@@ -2,7 +2,7 @@
 // No manual preloading, pre-caching, or window.Image() logic is used anywhere in the codebase.
 // This ensures optimal SEO, accessibility, and performance. See README for details.
 import Image from "next/image";
-import { Item } from "./PhotoSwipeWrapper";
+
 import styles from "./image.module.css";
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
@@ -16,21 +16,22 @@ interface ImageWrapperProps {
     title?: string;
     mosaicType?: string;
   };
-  imgRef?: React.RefObject<HTMLImageElement | null>;
+
   onLoginRequired?: () => void;
   imgStyleOverride?: React.CSSProperties;
   photographer?: boolean;
   sizes?: string;
   onLoad?: () => void;
+  onOpenPhotoSwipe?: () => void;
 }
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({
   image,
-  imgRef,
   onLoginRequired,
   imgStyleOverride,
   photographer,
   sizes: sizesProp,
+  onOpenPhotoSwipe,
 }) => {
   // Default: photographers gallery
   let imgWidth = 600; // largest desktop width you see
@@ -87,56 +88,28 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
           className={styles.commentsButton}
         />
         {!photographer ? (
-          <Item
-            original={image.url}
-            thumbnail={image.url}
-            caption={`${image.title}`}
-            width={imgRef?.current?.naturalWidth}
-            height={imgRef?.current?.naturalHeight}
-            id={imageIdString}
-            alt={imageIdString}
-          >
-            {(props) => (
-              <Image
-                ref={(node) => {
-                  if (typeof props.ref === "function") {
-                    props.ref(node);
-                  } else if (props.ref) {
-                    (
-                      props.ref as React.MutableRefObject<HTMLImageElement | null>
-                    ).current = node;
-                  }
-                }}
-                src={image.url}
-                alt={image.title || "Gallery Image"}
-                className={`${styles.imageItem} ${styles.image} ${
-                  photographer ? styles.goToLinkCursor : styles.zoomInCursor
-                }`}
-                width={imgWidth}
-                height={imgHeight}
-                sizes={sizes}
-                quality={60}
-                placeholder="blur"
-                blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
-                loading={photographer ? "eager" : "lazy"}
-                fetchPriority={photographer ? "high" : "auto"}
-                data-image-id={imageIdString}
-                onClick={props.open}
-                style={
-                  props && "style" in props && props.style
-                    ? {
-                        ...props.style,
-                        ...(typeof styleOverride === "object"
-                          ? styleOverride
-                          : {}),
-                      }
-                    : typeof styleOverride === "object"
-                    ? styleOverride
-                    : undefined
-                }
-              />
-            )}
-          </Item>
+          <Image
+            src={image.url}
+            alt={image.title || "Gallery Image"}
+            className={`${styles.imageItem} ${styles.image} ${styles.zoomInCursor}`}
+            width={imgWidth}
+            height={imgHeight}
+            sizes={sizes}
+            quality={60}
+            placeholder="blur"
+            blurDataURL="https://dummyimage.com/340x4:3/000/fff&text=mosaic+photography.png"
+            loading={photographer ? "eager" : "lazy"}
+            fetchPriority={photographer ? "high" : "auto"}
+            data-image-id={imageIdString}
+            onClick={
+              typeof onOpenPhotoSwipe === "function"
+                ? onOpenPhotoSwipe
+                : undefined
+            }
+            style={
+              typeof styleOverride === "object" ? styleOverride : undefined
+            }
+          />
         ) : (
           <Image
             src={image.url}

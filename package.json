@@ -39,10 +39,12 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hot-toast": "^2.5.2",
+    "react-image-lightbox": "^5.1.4",
     "react-photoswipe-gallery": "^3.0.2",
     "react-share": "^5.2.2",
     "react-spinners": "^0.15.0",
-    "react-tooltip": "^5.28.0"
+    "react-tooltip": "^5.28.0",
+    "yet-another-react-lightbox": "^3.25.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
