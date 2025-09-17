@@ -9,10 +9,8 @@
 /* Ensure images completely fill their grid cells */
 .gridItem img {
   width: 100%;
-  height: 100%;
-  object-fit: cover !important;
-  display: block;
-  /* Maintain aspect ratio if only one dimension is set by CSS */
+  height: auto; /* Let image height be determined by its aspect ratio */
+  object-fit: cover;
 }
 
 .landscape {

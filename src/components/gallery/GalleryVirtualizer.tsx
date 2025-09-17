@@ -1,35 +1,41 @@
-import { Masonry, RenderComponentProps } from "masonic";
+import { VirtuosoMasonry } from "@virtuoso.dev/masonry";
 import ImageCard from "../cards/ImageCard";
 import type { ImageWithOrientation } from "@/types/gallery";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
-interface GalleryMosaicProps {
+interface VirtualizedMosaicGalleryProps {
   images: ImageWithOrientation[];
   onLoginRequired?: () => void;
 }
 
-const GalleryMosaic: React.FC<GalleryMosaicProps> = ({
+const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
   images,
   onLoginRequired,
 }) => {
-  // Cell renderer for each image, using your ImageCard logic
-  const renderImage = useCallback(
-    ({ data }: RenderComponentProps<ImageWithOrientation>) => {
-      console.debug("[GalleryMosaic] Rendering image", data);
-      return <ImageCard images={[data]} onLoginRequired={onLoginRequired} />;
-    },
+  // Responsive column count
+  const columnCount = useMemo(() => {
+    if (window.innerWidth < 500) return 2;
+    if (window.innerWidth < 800) return 3;
+    return 4;
+  }, []);
+
+  // Item renderer
+  const ItemContent = useCallback(
+    ({ data }: { data: ImageWithOrientation }) => (
+      <ImageCard images={[data]} onLoginRequired={onLoginRequired} />
+    ),
     [onLoginRequired]
   );
 
   return (
-    <Masonry<ImageWithOrientation>
-      items={images}
-      columnGutter={8}
-      columnWidth={220}
-      overscanBy={2}
-      render={renderImage}
+    <VirtuosoMasonry
+      columnCount={columnCount}
+      data={images}
+      ItemContent={ItemContent}
+      style={{ height: "100vh", width: "100%" }}
+      initialItemCount={50}
     />
   );
 };
 
-export default GalleryMosaic;
+export default VirtualizedMosaicGallery;

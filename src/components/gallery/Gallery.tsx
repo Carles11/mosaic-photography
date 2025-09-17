@@ -1,6 +1,8 @@
 "use client";
 
-import ImageCard from "../cards/ImageCard";
+// import ImageCard from "../cards/ImageCard";
+import VirtualizedMosaicGallery from "./GalleryVirtualizer";
+
 import type { GalleryProps } from "@/types/gallery";
 import styles from "./gallery.module.css";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
@@ -15,10 +17,13 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
         public domain, copyright-free, and open access images. All available for
         download and personal or commercial use.
       </p>
-      <div className={styles.galleryGrid}>
-        <ImageCard images={images} onLoginRequired={onLoginRequired} />
-        <GoToTopButton />
-      </div>
+      {/* <div className={styles.galleryGrid}> */}
+      <VirtualizedMosaicGallery
+        images={images ?? []}
+        onLoginRequired={onLoginRequired}
+      />
+      <GoToTopButton />
+      {/* </div> */}
     </div>
   );
 };
