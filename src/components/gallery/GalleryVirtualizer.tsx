@@ -78,8 +78,10 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
         close={() => setIsLightboxOpen(false)}
         slides={images.map((img) => ({
           src: img.url,
-          customId: img.id, // use customId instead of id
-          title: img.title, // explicitly add title property
+          customId: img.id,
+          title: img.title,
+          width: img.width ?? 1920,
+          height: img.height ?? 1080,
         }))}
         index={lightboxIndex}
         plugins={[Zoom]}
@@ -100,8 +102,8 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       ? slideWithTitle.title
                       : "Gallery Image"
                   }
-                  width={1920}
-                  height={1080}
+                  width={(slide as any).width ?? 1920}
+                  height={(slide as any).height ?? 1080}
                   style={{
                     width: "100%",
                     height: "100%",
