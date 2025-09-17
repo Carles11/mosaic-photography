@@ -1,6 +1,7 @@
 import { Masonry, RenderComponentProps } from "masonic";
 import ImageCard from "../cards/ImageCard";
 import type { ImageWithOrientation } from "@/types/gallery";
+import { useCallback } from "react";
 
 interface GalleryMosaicProps {
   images: ImageWithOrientation[];
@@ -12,10 +13,12 @@ const GalleryMosaic: React.FC<GalleryMosaicProps> = ({
   onLoginRequired,
 }) => {
   // Cell renderer for each image, using your ImageCard logic
-  const renderImage = ({
-    data,
-  }: RenderComponentProps<ImageWithOrientation>) => (
-    <ImageCard images={[data]} onLoginRequired={onLoginRequired} />
+  const renderImage = useCallback(
+    ({ data }: RenderComponentProps<ImageWithOrientation>) => {
+      console.debug("[GalleryMosaic] Rendering image", data);
+      return <ImageCard images={[data]} onLoginRequired={onLoginRequired} />;
+    },
+    [onLoginRequired]
   );
 
   return (
