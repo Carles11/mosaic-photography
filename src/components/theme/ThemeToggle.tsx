@@ -4,12 +4,13 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
+import Cookies from "js-cookie";
 
 import styles from "./ThemeToggle.module.css";
 
 const Tooltip = dynamic(
   () => import("react-tooltip").then((mod) => mod.Tooltip),
-  { ssr: false }, // Disable server-side rendering
+  { ssr: false } // Disable server-side rendering
 );
 
 const ThemeToggle = () => {
@@ -18,18 +19,19 @@ const ThemeToggle = () => {
   const toggleTheme = () => {
     const newTheme = resolvedTheme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
+    Cookies.set("theme", newTheme, { expires: 365 }); // <-- Use cookie instead of localStorage
   };
 
   useEffect(() => {
     // Only set theme if there is no stored theme and theme is undefined
-    const storedTheme = localStorage.getItem("theme");
+    const storedTheme = Cookies.get("theme"); // <-- Check cookie, not localStorage
     if (!storedTheme && !theme) {
       const prefersDarkScheme = window.matchMedia(
-        "(prefers-color-scheme: dark)",
+        "(prefers-color-scheme: dark)"
       ).matches;
       const defaultTheme = prefersDarkScheme ? "dark" : "light";
       setTheme(defaultTheme);
+      Cookies.set("theme", defaultTheme, { expires: 365 }); // <-- Set cookie on first run
     }
   }, [setTheme, theme]);
 
@@ -47,7 +49,7 @@ const ThemeToggle = () => {
           width={32}
           height={32}
           alt="dark mode icon"
-          priority={false} // Set to true for critical images
+          priority={false}
           loading="lazy"
         />
       ) : (
@@ -56,7 +58,7 @@ const ThemeToggle = () => {
           width={32}
           height={32}
           alt="light mode icon"
-          priority={false} // Set to true for critical images
+          priority={false}
           loading="lazy"
         />
       )}

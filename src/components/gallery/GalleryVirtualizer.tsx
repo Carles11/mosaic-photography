@@ -90,16 +90,16 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
             }
             height={
               data.orientation === "vertical" && data.mosaicType === "large"
-                ? Math.round((630 * 4) / 3)
+                ? Math.round((630 * 4) / 3) // 3:4 aspect for large
                 : data.orientation === "vertical" && data.mosaicType === "tall"
-                ? Math.round((777 * 3) / 2)
+                ? Math.round((777 * 3) / 2) // 2:3 aspect for tall
                 : data.orientation === "vertical" && data.mosaicType === "wide"
-                ? Math.round((896 * 9) / 16)
+                ? Math.round((896 * 9) / 16) // 16:9 aspect for wide
                 : data.orientation === "vertical"
-                ? Math.round((600 * 4) / 3)
+                ? Math.round((600 * 4) / 3) // 3:4 aspect for portrait
                 : data.orientation === "horizontal"
-                ? Math.round((623 * 9) / 16)
-                : Math.round((600 * 4) / 3)
+                ? Math.round((623 * 9) / 16) // 16:9 aspect for landscape
+                : Math.round((600 * 4) / 3) // fallback: 3:4 aspect
             }
           />
         </div>

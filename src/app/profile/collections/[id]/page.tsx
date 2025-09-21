@@ -821,9 +821,11 @@ export default function CollectionView() {
                   <Image
                     src={image.image_url}
                     alt={image.image_title}
-                    fill
+                    width={279} // largest desktop width (matches your CSS/grid)
+                    height={200} // fixed height for all images
                     className={styles.image}
-                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                    sizes="(max-width: 480px) 169px, (max-width: 768px) 168px, (max-width: 965px) 275px, (max-width: 1200px) 270px, (max-width: 1600px) 279px, 279px"
+                    style={{ width: "100%", height: "auto" }}
                   />
                 </div>
 

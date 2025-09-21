@@ -24,8 +24,8 @@ const ThemeImage = (props: Props) => {
         ? srcLightMobile
         : srcLight
       : isMobile
-        ? srcDarkMobile
-        : srcDark;
+      ? srcDarkMobile
+      : srcDark;
 
   const dynamicBlurDataBlur = isMobile
     ? "https://dummyimage.com/500x353/000/fff&text=mosaic+photography.png"
