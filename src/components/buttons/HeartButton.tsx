@@ -18,7 +18,7 @@ const HeartButton: React.FC<HeartButtonProps> = ({
   const { isFavorite, toggleFavorite, isUserLoggedIn } = useFavorites();
   const router = useRouter();
 
-  const handleClick = async (e: React.MouseEvent) => {
+  const handleClick = async () => {
     console.log("HeartButton: Clicked for image", imageId);
 
     try {
