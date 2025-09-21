@@ -1,12 +1,15 @@
-# *
+# Allow all user agents to crawl the main site
 User-agent: *
 Allow: /
 
-# Host
-Host: https://www.mosaic.photography
+# Disallow authentication and private pages
+Disallow: /login
+Disallow: /signup
+Disallow: /auth/
+Disallow: /profile
+Disallow: /error
 
 # Sitemaps
 Sitemap: https://www.mosaic.photography/sitemap.xml
 Sitemap: https://www.mosaic.photography/image-sitemap.xml
 Sitemap: https://www.mosaic.photography/collection-sitemap.xml
-
