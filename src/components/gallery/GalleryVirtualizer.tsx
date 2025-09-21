@@ -47,8 +47,9 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
             cssClass += ` ${styles.portrait}`;
         }
       } else if (data.orientation === "square") {
-        cssClass += ` ${styles.portrait}`;
+        cssClass += ` ${styles.portrait}`; // For now, use portrait style for square
       }
+
       return (
         <div
           className={cssClass}
