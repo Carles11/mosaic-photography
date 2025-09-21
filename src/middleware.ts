@@ -22,6 +22,12 @@ export async function middleware(req: NextRequest) {
   // Create response
   const response = NextResponse.next();
 
+  // Detect theme cookie and set x-theme header
+  const themeCookie = req.cookies.get("theme")?.value;
+  if (themeCookie === "dark" || themeCookie === "light") {
+    response.headers.set("x-theme", themeCookie);
+  }
+
   // Handle bot cookie logic
   if (isBot) {
     response.cookies.set("skip_age_modal", "1", {
@@ -80,7 +86,7 @@ export async function middleware(req: NextRequest) {
       const redirectTo = searchParams.get("redirect");
       const homeUrl = new URL(
         getAuthenticatedRedirect(redirectTo || undefined),
-        req.url,
+        req.url
       );
       return NextResponse.redirect(homeUrl);
     }

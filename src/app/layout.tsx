@@ -2,18 +2,12 @@ import fs from "fs";
 import path from "path";
 import type { Metadata } from "next";
 import { tradeGothic } from "./fonts";
+import { headers } from "next/headers";
 
 import Script from "next/script";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
 import ClientLayout from "@/components/layouts/ClientLayout";
 import ClientProviders from "@/context/main/ClientProviders";
-
-// NOTE: globals.css was intentionally removed from static imports to avoid
-// Next's automatic CSS extraction which injects render-blocking
-// /_next/static/css/*.css links into the head. Global/non-critical styles
-// are served from `public/non-critical.css` and loaded non-blocking by
-// the client-side `NonCriticalCSSLoader` component. Critical styles are
-// inlined below from `src/critical-above-the-fold.css`.
 
 // Read critical CSS at build time
 const criticalCSSPath = path.resolve(
@@ -27,21 +21,16 @@ try {
   console.error("Failed to read critical-above-the-fold.css:", err);
 }
 
-// Read minimal base/global variables (do not import as module to avoid
-// Next automatic CSS extraction). We inline only the essential parts
-// so fonts, CSS variables and base body rules exist at first paint.
+// Read minimal base/global variables (do not import as module to avoid Next CSS extraction)
 const baseCSSPath = path.resolve(process.cwd(), "src/app/globals.css");
 let baseCSS = "";
 try {
-  // We'll keep only the variables and body rules from globals.css
   baseCSS = fs.readFileSync(baseCSSPath, "utf8");
 } catch (err) {
   console.error("Failed to read src/app/globals.css:", err);
 }
 
-// Inline minimal @font-face declarations so font files are requested
-// immediately and do not depend on any deferred CSS chunk. We use
-// font-display: swap to avoid blocking text rendering.
+// Inline minimal @font-face declarations for early font loading
 const inlineFontsCSS = `@font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap;}
 @font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap;}
 @font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Light.woff2') format('woff2'); font-weight: 200; font-style: normal; font-display: swap;}
@@ -93,7 +82,7 @@ export const metadata: Metadata = {
       "Meet the iconic photographers behind the stunning classic nude photography in our collection.",
     images: [
       {
-        url: "/images/og-image.jpg", // Create a high-quality OG image
+        url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Mosaic Photography Gallery featuring vintage nude photography",
@@ -119,31 +108,33 @@ export const viewport = {
 
 type RootLayoutProps = { children: React.ReactNode };
 
-function RootLayout({ children }: RootLayoutProps) {
+async function RootLayout({ children }: RootLayoutProps) {
+  // SSR theme from x-theme header (set in middleware)
+  const hdrs = await headers();
+  const theme = hdrs.get("x-theme") || "light";
+
   return (
     <html
       lang="en"
-      className={`${tradeGothic.variable}`}
+      className={`${tradeGothic.variable} ${theme}`}
+      data-theme={theme}
       data-scroll-behavior="smooth"
       suppressHydrationWarning={true}
     >
       <head>
         <meta charSet="utf-8" />
-        {/* Base variables & body rules (inlined) */}
         {/* Inline font-face declarations to ensure fonts are requested early */}
         <style
           id="inline-fonts"
           dangerouslySetInnerHTML={{ __html: inlineFontsCSS }}
         />
-
+        {/* Base variables & body rules (inlined) */}
         <style id="base-styles" dangerouslySetInnerHTML={{ __html: baseCSS }} />
-
         {/* Critical above-the-fold styles (inlined) */}
         <style
           id="critical-above-the-fold"
           dangerouslySetInnerHTML={{ __html: criticalCSS }}
         />
-
         <link
           rel="preload"
           href="https://cdn.mosaic.photography/fonts/TradeGothic-Regular.woff2"
@@ -158,7 +149,6 @@ function RootLayout({ children }: RootLayoutProps) {
           type="font/woff2"
           crossOrigin="anonymous"
         />
-
         <link
           rel="preconnect"
           href="https://cdn.mosaic.photography"
@@ -174,7 +164,6 @@ function RootLayout({ children }: RootLayoutProps) {
           href="https://res.cloudinary.com"
           crossOrigin="anonymous"
         />
-        {/* Optional (speed boost for DNS resolution): */}
         <link rel="dns-prefetch" href="https://cdn.mosaic.photography" />
         <link
           rel="dns-prefetch"
@@ -182,8 +171,7 @@ function RootLayout({ children }: RootLayoutProps) {
         />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
       </head>
-      {/* <GoogleTagManager gtmId="GTM-N74Q9JC5" /> */}
-      <body className={`font-trade-gothic`}>
+      <body className="font-trade-gothic">
         <NonCriticalCSSLoader />
         <Script
           id="gtm"

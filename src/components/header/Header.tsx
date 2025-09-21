@@ -2,7 +2,8 @@ import Link from "next/link";
 import DesktopNav from "../navigation/DesktopNav/DesktopNav";
 import styles from "./header.module.css";
 import { SupabaseUser } from "@/lib/supabaseClient";
-import ThemeImageSSR from "../theme/ThemeImageSSR";
+// ✅ Update this import to use your new logo component
+import ThemedLogo from "../logo/ThemedLogo";
 
 export interface HeaderProps {
   onLoginClick?: () => void;
@@ -29,15 +30,11 @@ export default function Header({
           {isHome ? (
             <li className={styles.navLogo}>
               <Link href="/" className="no-fancy-link">
-                <ThemeImageSSR
-                  src="https://res.cloudinary.com/dktizqbky/image/upload/f_auto,q_auto/v1745436286/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp"
-                  width={383}
-                  height={271}
+                {/* ✅ Use ThemedLogo here */}
+                <ThemedLogo
                   alt="Mosaic Logo"
-                  // className={styles.themeImage}
-                  priority
-                  blurDataURL="https://dummyimage.com/766x541/000/fff&text=mosaic+photography.png"
-                  sizes="(max-width: 600px) 90vw, (max-width: 1200px) 40vw, 383px"
+                  // Pass down theme and forceMobile if needed
+                  className={styles.themeImage}
                 />
               </Link>
             </li>
