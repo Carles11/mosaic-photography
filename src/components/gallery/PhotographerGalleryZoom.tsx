@@ -48,7 +48,17 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
               setIsLightboxOpen(true);
             }}
           >
-            <ImageWrapper image={img} imgStyleOverride={{ height: "auto" }} />
+            <ImageWrapper
+              image={img}
+              imgStyleOverride={{ height: "auto" }}
+              sizes="
+  (max-width: 430px) 45vw,
+  (max-width: 1200px) 18vw,
+  186px
+"
+              width={186}
+              height={186}
+            />
           </div>
         ))}
       </div>

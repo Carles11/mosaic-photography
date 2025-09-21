@@ -59,7 +59,49 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
             setIsLightboxOpen(true);
           }}
         >
-          <ImageWrapper image={data} onLoginRequired={onLoginRequired} />
+          <ImageWrapper
+            image={data}
+            onLoginRequired={onLoginRequired}
+            sizes={
+              data.orientation === "vertical" && data.mosaicType === "large"
+                ? "(max-width: 400px) 90vw, (max-width: 900px) 50vw, (max-width: 1600px) 630px, 875px"
+                : data.orientation === "vertical" && data.mosaicType === "tall"
+                ? "(max-width: 400px) 90vw, (max-width: 900px) 48vw, (max-width: 1600px) 777px, 912px"
+                : data.orientation === "vertical" && data.mosaicType === "wide"
+                ? "(max-width: 400px) 90vw, (max-width: 900px) 52vw, (max-width: 1600px) 896px, 896px"
+                : data.orientation === "vertical"
+                ? "(max-width: 400px) 90vw, (max-width: 900px) 48vw, (max-width: 1600px) 600px, 896px"
+                : data.orientation === "horizontal"
+                ? "(max-width: 400px) 90vw, (max-width: 900px) 52vw, (max-width: 1600px) 623px, 875px"
+                : "(max-width: 400px) 90vw, (max-width: 900px) 48vw, (max-width: 1600px) 600px, 896px"
+            }
+            width={
+              data.orientation === "vertical" && data.mosaicType === "large"
+                ? 630
+                : data.orientation === "vertical" && data.mosaicType === "tall"
+                ? 777
+                : data.orientation === "vertical" && data.mosaicType === "wide"
+                ? 896
+                : data.orientation === "vertical"
+                ? 600
+                : data.orientation === "horizontal"
+                ? 623
+                : 600
+            }
+            height={
+              data.orientation === "vertical" && data.mosaicType === "large"
+                ? Math.round((630 * 4) / 3)
+                : data.orientation === "vertical" && data.mosaicType === "tall"
+                ? Math.round((777 * 3) / 2)
+                : data.orientation === "vertical" && data.mosaicType === "wide"
+                ? Math.round((896 * 9) / 16)
+                : data.orientation === "vertical"
+                ? Math.round((600 * 4) / 3)
+                : data.orientation === "horizontal"
+                ? Math.round((623 * 9) / 16)
+                : Math.round((600 * 4) / 3)
+            }
+          />
         </div>
       );
     },
