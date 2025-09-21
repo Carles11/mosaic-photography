@@ -38,6 +38,8 @@ interface ImageWrapperProps {
   photographer?: boolean;
   sizes?: string;
   onLoad?: () => void;
+  width?: number;
+  height?: number;
 }
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({
