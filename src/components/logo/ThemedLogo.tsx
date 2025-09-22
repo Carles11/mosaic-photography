@@ -14,14 +14,14 @@ type ThemedLogoProps = {
 
 const LOGO_URLS = {
   desktop: {
-    dark: "https://res.cloudinary.com/dktizqbky/image/upload/v1745436286/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp",
+    dark: "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp",
     light:
-      "https://res.cloudinary.com/dktizqbky/image/upload/v1745436285/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-DESKTOP-light_766x541px_ooxukv.webp",
+      "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent-DESKTOP-light_766x541px_ooxukv.webp",
   },
   mobile: {
-    dark: "https://res.cloudinary.com/dktizqbky/image/upload/v1745436069/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-DARK_500x353px_szzmkn.webp",
+    dark: "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent-mobile-DARK_500x353px_szzmkn.webp",
     light:
-      "https://res.cloudinary.com/dktizqbky/image/upload/v1745436165/mosaic.photography/logos/WEBPs/used-in-app/mosaic-high-resolution-logo-grayscale-transparent-mobile-light_500x353px_v6gwqg.webp",
+      "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent-mobile-light_500x353px_v6gwqg.webp",
   },
 };
 
