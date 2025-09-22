@@ -42,9 +42,6 @@ const ThemedLogo: React.FC<ThemedLogoProps> = ({
     ? LOGO_URLS.mobile[theme]
     : LOGO_URLS.desktop[theme];
 
-  // Next/Image loader for Cloudinary (identity)
-  const cloudinaryLoader = ({ src }: { src: string }) => src;
-
   return (
     <Image
       src={logoUrl}
@@ -52,7 +49,6 @@ const ThemedLogo: React.FC<ThemedLogoProps> = ({
       width={effectiveIsMobile ? 500 : 766}
       height={effectiveIsMobile ? 353 : 541}
       className={className}
-      loader={cloudinaryLoader}
       priority
       style={{ display: "block", maxWidth: "100%", height: "auto" }}
       sizes="(max-width: 600px) 250px, (max-width: 1200px) 500px, 766px"

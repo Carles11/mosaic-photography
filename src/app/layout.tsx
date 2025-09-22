@@ -159,17 +159,12 @@ async function RootLayout({ children }: RootLayoutProps) {
           href="https://gdzqgrfitiixbhlhppef.supabase.co"
           crossOrigin="anonymous"
         />
-        <link
-          rel="preconnect"
-          href="https://res.cloudinary.com"
-          crossOrigin="anonymous"
-        />
+
         <link rel="dns-prefetch" href="https://cdn.mosaic.photography" />
         <link
           rel="dns-prefetch"
           href="https://gdzqgrfitiixbhlhppef.supabase.co"
         />
-        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
       </head>
       <body className="font-trade-gothic">
         <NonCriticalCSSLoader />

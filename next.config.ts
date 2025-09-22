@@ -21,12 +21,6 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-        port: "",
-        pathname: "/dktizqbky/image/upload/**",
-      },
     ],
 
     minimumCacheTTL: 31536000, // 1 year
@@ -88,11 +82,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self';",
-              "img-src 'self' data: https://cdn.mosaic.photography https://storage.ko-fi.com https://res.cloudinary.com;",
+              "img-src 'self' data: https://cdn.mosaic.photography https://storage.ko-fi.com;",
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:;",
               "style-src 'self' 'unsafe-inline' https:;",
               "font-src 'self' data: https:;",
-              "connect-src 'self' https://cdn.mosaic.photography https://*.supabase.co wss://*.supabase.co https://storage.ko-fi.com https://res.cloudinary.com;",
+              "connect-src 'self' https://cdn.mosaic.photography https://*.supabase.co wss://*.supabase.co https://storage.ko-fi.com;",
               // add additional services as needed
             ].join(" "),
           },
