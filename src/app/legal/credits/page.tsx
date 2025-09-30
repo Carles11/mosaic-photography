@@ -46,6 +46,20 @@ const Credits: React.FC = () => {
         </a>
         .
       </p>
+      <h2 className={styles.subtitle}>Image processing credits</h2>
+      <p className={styles.text}>
+        The image resizing and optimization functionality on this website is
+        powered by{" "}
+        <a
+          href="https://sharp.pixelplumbing.com/"
+          title="Sharp - High performance Node.js image processing"
+        >
+          Sharp
+        </a>
+        , a high-performance Node.js image processing library. We thank the
+        Sharp team for creating this excellent tool that ensures optimal
+        performance and quality.
+      </p>
       <h2 className={styles.subtitle}>Font Credits</h2>
       <p className={styles.text}>
         The font used on this website, Trade Gothic, was downloaded for free

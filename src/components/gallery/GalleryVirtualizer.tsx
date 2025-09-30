@@ -48,7 +48,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
             cssClass += ` ${styles.portrait}`;
         }
       } else if (data.orientation === "square") {
-        cssClass += ` ${styles.portrait}`; // For now, use portrait style for square
+        cssClass += ` ${styles.portrait}`;
       }
 
       return (
@@ -75,32 +75,8 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                 ? "(max-width: 400px) 90vw, (max-width: 900px) 52vw, (max-width: 1600px) 623px, 875px"
                 : "(max-width: 400px) 90vw, (max-width: 900px) 48vw, (max-width: 1600px) 600px, 896px"
             }
-            width={
-              data.orientation === "vertical" && data.mosaicType === "large"
-                ? 630
-                : data.orientation === "vertical" && data.mosaicType === "tall"
-                ? 777
-                : data.orientation === "vertical" && data.mosaicType === "wide"
-                ? 896
-                : data.orientation === "vertical"
-                ? 600
-                : data.orientation === "horizontal"
-                ? 623
-                : 600
-            }
-            height={
-              data.orientation === "vertical" && data.mosaicType === "large"
-                ? Math.round((630 * 4) / 3) // 3:4 aspect for large
-                : data.orientation === "vertical" && data.mosaicType === "tall"
-                ? Math.round((777 * 3) / 2) // 2:3 aspect for tall
-                : data.orientation === "vertical" && data.mosaicType === "wide"
-                ? Math.round((896 * 9) / 16) // 16:9 aspect for wide
-                : data.orientation === "vertical"
-                ? Math.round((600 * 4) / 3) // 3:4 aspect for portrait
-                : data.orientation === "horizontal"
-                ? Math.round((623 * 9) / 16) // 16:9 aspect for landscape
-                : Math.round((600 * 4) / 3) // fallback: 3:4 aspect
-            }
+            width={data.width ?? 600}
+            height={data.height ?? 800}
           />
         </div>
       );
@@ -121,19 +97,25 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
         <Lightbox
           open={isLightboxOpen}
           close={() => setIsLightboxOpen(false)}
-          slides={images.map((img) => ({
-            src: img.url,
-            customId: img.id,
-            title: img.title,
-            width: img.width ?? 1920,
-            height: img.height ?? 1080,
-          }))}
+          slides={images.map((img) => {
+            // For originalsWEBP, always .webp
+            const filename = img.filename.replace(
+              /\.(jpg|jpeg|png)$/i,
+              ".webp"
+            );
+            return {
+              src: `${img.base_url}/originalsWEBP/${filename}`,
+              customId: img.id,
+              title: img.title,
+              width: img.width ?? 1920,
+              height: img.height ?? 1080,
+            };
+          })}
           index={lightboxIndex}
           plugins={[Zoom]}
           render={{
             slide: (props) => {
               const { slide } = props;
-              // Define a type for the slide object
               interface LightboxSlide {
                 src: string;
                 customId?: number;
@@ -162,12 +144,14 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                     }
                     width={typedSlide.width ?? 1920}
                     height={typedSlide.height ?? 1080}
+                    sizes="100vw"
                     style={{
                       width: "100%",
                       height: "100%",
                       objectFit: "contain",
                     }}
                     priority
+                    unoptimized
                   />
                   <div
                     style={{
