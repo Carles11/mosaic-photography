@@ -99,14 +99,15 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
           close={() => setIsLightboxOpen(false)}
           slides={images.map((img) => {
             // For originalsWEBP, always .webp
-            const filename = img.filename.replace(
+            const filename = (img.filename ?? "").replace(
               /\.(jpg|jpeg|png)$/i,
               ".webp"
             );
             return {
               src: `${img.base_url}/originalsWEBP/${filename}`,
               customId: img.id,
-              title: img.title,
+              author: img.author,
+              description: img.description,
               width: img.width ?? 1920,
               height: img.height ?? 1080,
             };
@@ -119,13 +120,15 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
               interface LightboxSlide {
                 src: string;
                 customId?: number;
-                title?: string;
+                author?: string;
+                description?: string;
                 width?: number;
                 height?: number;
               }
               const typedSlide = slide as LightboxSlide;
               const imageId = typedSlide.customId ?? 0;
-              const slideWithTitle = slide as { title?: string };
+              const slideWithAuthor = slide as { author?: string };
+              const slideWithDescription = slide as { description?: string };
 
               return (
                 <div
@@ -135,11 +138,30 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                     height: "100%",
                   }}
                 >
+                  {" "}
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      top: 0,
+                      width: "100%",
+                      textAlign: "center",
+                      color: "#fff",
+                      fontSize: "1.2rem",
+                      padding: "16px 24px 24px 24px",
+                      background: "rgba(0,0,0,0.6)",
+                      borderTopLeftRadius: "12px",
+                      borderTopRightRadius: "12px",
+                      zIndex: 1001,
+                    }}
+                  >
+                    {slideWithAuthor.author || "Untitled"}
+                  </div>
                   <Image
                     src={typedSlide.src}
                     alt={
-                      typeof typedSlide.title === "string"
-                        ? typedSlide.title
+                      typeof typedSlide.description === "string"
+                        ? typedSlide.description
                         : "Gallery Image"
                     }
                     width={typedSlide.width ?? 1920}
@@ -169,7 +191,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       zIndex: 1001,
                     }}
                   >
-                    {slideWithTitle.title || "Untitled"}
+                    {slideWithDescription.description || ""}
                   </div>
                   <div
                     style={{

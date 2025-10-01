@@ -44,12 +44,17 @@ export async function fetchGalleryImagesSSR(): Promise<
     // Shuffle for random order
     const shuffledImages = shuffleArray(filteredImages);
 
-    // Add mosaicType logic
+    // Add mosaicType logic. Here is the "mosaic" pattern in the gallery created:
+    // - Every 3rd image is "large" (spans two rows)
+    // - Every 4th image is "wide" (spans two columns)
+    // - Every 9th image is "tall" (spans two rows, but less wide than large)
+    // The rest are "normal"
     const processedImages: ImageWithOrientation[] = shuffledImages.map(
       (img, index) => {
         let mosaicType: "normal" | "large" | "wide" | "tall" = "normal";
         const isLargeMosaic = index > 0 && index % 3 === 0;
-        const isWideMosaic = index > 0 && index % 4 < 2;
+        const isWideMosaic =
+          index > 0 && img.orientation === "horizontal" && index % 4 < 2;
         const isTallMosaic = index > 0 && index % 9 === 2;
 
         if (isLargeMosaic) mosaicType = "large";

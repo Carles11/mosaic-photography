@@ -9,7 +9,7 @@ import GoToTopButton from "@/components/buttons/GoToTopButton";
 
 const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
   return (
-    <div id={id} className={styles.galleryGridContainer}>
+    <div id={id} className={styles.galleryContainer}>
       <hr />
       <h2>THE MOSAIC COLLECTION </h2>
       <p className={styles.sectionIntro}>

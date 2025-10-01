@@ -37,6 +37,8 @@ export interface ImageData {
   width?: number;
   height?: number;
   className?: string;
+  filename?: string;
+  base_url?: string;
 }
 
 export interface GalleryProps extends JSX.IntrinsicAttributes {

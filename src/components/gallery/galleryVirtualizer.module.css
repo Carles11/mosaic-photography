@@ -39,7 +39,7 @@
   height: 100% !important;
 }
 
-/* Mosaic variations for portrait images */
+/* MosaicType variations for portrait images */
 .mosaicLarge {
   aspect-ratio: 3 / 4;
   grid-column: span 2; /* Takes 2 columns */
@@ -97,17 +97,6 @@
   pointer-events: none;
   z-index: 1;
   border-radius: 2px;
-}
-
-.loadMoreButton {
-  width: 100%;
-  height: 100%;
-  background-color: var(--secondary-color);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
 }
 
 /* Responsive adjustments for mosaic layout */
