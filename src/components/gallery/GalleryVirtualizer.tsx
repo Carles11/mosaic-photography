@@ -24,27 +24,26 @@ function getBestS3FolderForWidth(
   image: ImageWithOrientation,
   renderedWidth: number
 ) {
-  // Defensive: use fallback values if undefined
+  // Defensive
   const imgWidth = image.width ?? 1920;
   const imgFilename = image.filename ?? "";
   const imgBaseUrl = image.base_url ?? "";
-
   // Find the smallest available S3 size >= renderedWidth, or largest available
-  const availableSizes = S3_SIZE_WIDTHS.filter((w) => w <= imgWidth);
+  const availableSizes = S3_SIZE_WIDTHS.filter(
+    (w) => w >= renderedWidth && w <= imgWidth
+  );
   const bestSize =
-    availableSizes.find((w) => w >= renderedWidth) ??
-    availableSizes[availableSizes.length - 1] ??
-    imgWidth;
+    availableSizes.length > 0
+      ? availableSizes[0]
+      : S3_SIZE_WIDTHS.filter((w) => w <= imgWidth).slice(-1)[0] ?? imgWidth;
+
   const folder = bestSize === imgWidth ? "originalsWEBP" : `w${bestSize}`;
-  const filename =
-    folder === "originals" || !imgFilename
-      ? imgFilename
-      : imgFilename.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+  const filename = imgFilename.replace(/\.(jpg|jpeg|png)$/i, ".webp");
   return {
     url:
       imgBaseUrl && filename
         ? `${imgBaseUrl}/${folder}/${filename}`
-        : image.url,
+        : image.url ?? "",
     width: bestSize,
     folder,
     filename,
@@ -180,6 +179,12 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
           slides={progressiveSlides}
           index={lightboxIndex}
           plugins={[Zoom]}
+          zoom={{
+            maxZoomPixelRatio: 3, // or 3 for even further zoom
+            minZoom: 1,
+            zoomInMultiplier: 2,
+            scrollToZoom: true, // optional for mouse/trackpad users
+          }}
           render={{
             slide: (props) => {
               const { slide, offset, zoom } = props;
