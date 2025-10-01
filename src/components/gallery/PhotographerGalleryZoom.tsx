@@ -1,6 +1,7 @@
 "use client";
 import { useState, lazy, Suspense } from "react";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
+
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
@@ -13,9 +14,23 @@ const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const router = useRouter();
 
   if (!images || images.length === 0)
     return <p>No images found for this photographer.</p>;
+
+  // Defensive mapping: ensure each image always has a valid url and s3Progressive
+  const imagesWithUrl = images.map((img) => ({
+    ...img,
+    url: img.s3Progressive?.[0]?.url ?? "/favicons/android-chrome-512x512.png",
+    s3Progressive: Array.isArray(img.s3Progressive) ? img.s3Progressive : [],
+    width: img.width ?? 900,
+    height: img.height ?? 900,
+    title: img.title ?? "Untitled",
+    id: img.id,
+    author: img.author ?? "",
+    description: img.description ?? "",
+  }));
 
   return (
     <>
@@ -29,7 +44,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
           margin: "0 auto",
         }}
       >
-        {images.map((img, idx) => (
+        {imagesWithUrl.map((img, idx) => (
           <div
             key={img.id}
             style={{
@@ -52,10 +67,12 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
               image={img}
               imgStyleOverride={{ height: "auto" }}
               sizes="
-  (max-width: 430px) 45vw,
-  (max-width: 1200px) 18vw,
-  186px
-"
+                (max-width: 400px) 90vw,
+                (max-width: 600px) 95vw,
+                (max-width: 900px) 800px,
+                (max-width: 1200px) 1200px,
+                1600px
+              "
               width={186}
               height={186}
             />
@@ -66,18 +83,55 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
         <Lightbox
           open={isLightboxOpen}
           close={() => setIsLightboxOpen(false)}
-          slides={images.map((img) => ({
+          slides={imagesWithUrl.map((img) => ({
             src: img.url,
             title: img.title,
             id: img.id,
+            author: img.author,
+            description: img.description,
+            width: img.width,
+            height: img.height,
+            s3Progressive: img.s3Progressive,
           }))}
           index={lightboxIndex}
           plugins={[Zoom]}
+          zoom={{
+            maxZoomPixelRatio: 3,
+            minZoom: 1,
+            zoomInMultiplier: 2,
+            scrollToZoom: true,
+          }}
           render={{
             slide: (props) => {
-              const { slide } = props;
-              const imageId = (slide as { id?: number }).id ?? 0;
-              const slideWithTitle = slide as { title?: string };
+              const { slide, zoom } = props;
+              // Progressive zoom: pick best S3 image for current zoom scale
+              const typedSlide = slide as {
+                src: string;
+                id?: number | string;
+                author?: string;
+                description?: string;
+                width?: number;
+                height?: number;
+                s3Progressive?: Array<{ url: string; width: number }>;
+                title?: string;
+              };
+              const imageId = typedSlide.id ?? 0;
+              const safeZoom = typeof zoom === "number" && zoom > 1 ? zoom : 1;
+              const safeWidth = typedSlide.width ?? 900;
+
+              // Find best progressive image for zoom
+              let bestZoomImgUrl = typedSlide.src;
+              if (Array.isArray(typedSlide.s3Progressive)) {
+                const found = typedSlide.s3Progressive.find(
+                  (imgObj) => imgObj.width >= safeWidth * safeZoom
+                );
+                bestZoomImgUrl =
+                  found?.url ??
+                  typedSlide.s3Progressive[typedSlide.s3Progressive.length - 1]
+                    ?.url ??
+                  typedSlide.src;
+              }
+
               return (
                 <div
                   style={{
@@ -86,21 +140,43 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
                     height: "100%",
                   }}
                 >
-                  <Image
-                    src={slide.src}
-                    alt={
-                      typeof slideWithTitle.title === "string"
-                        ? slideWithTitle.title
-                        : "Gallery Image"
-                    }
-                    width={1920}
-                    height={1080}
+                  <div
                     style={{
+                      position: "absolute",
+                      left: 0,
+                      top: 20,
+                      width: "100%",
+                      textAlign: "center",
+                      color: "#fff",
+                      fontSize: "1.2rem",
+                      padding: "16px 24px 24px 24px",
+                      background: "rgba(0,0,0,0.2)",
+                      borderTopLeftRadius: "12px",
+                      borderTopRightRadius: "12px",
+                      zIndex: 1001,
+                    }}
+                  >
+                    {typedSlide.author || "Untitled"}
+                  </div>
+
+                  <ImageWrapper
+                    image={{
+                      ...typedSlide,
+                      id: String(typedSlide.id ?? ""),
+                      url: bestZoomImgUrl,
+                      width: typedSlide.width ?? 1920,
+                      height: typedSlide.height ?? 1080,
+                      title: typedSlide.title,
+                      author: typedSlide.author ?? "", // <-- ensure it's always a string
+                    }}
+                    imgStyleOverride={{
                       width: "100%",
                       height: "100%",
                       objectFit: "contain",
                     }}
-                    priority
+                    sizes="100vw"
+                    width={typedSlide.width ?? 1920}
+                    height={typedSlide.height ?? 1080}
                   />
                   <div
                     style={{
@@ -112,14 +188,14 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
                       color: "#fff",
                       fontSize: "1.2rem",
                       padding: "16px 24px 24px 24px",
-                      background: "rgba(0,0,0,0.6)",
+                      background: "rgba(0,0,0,0.2)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
                       zIndex: 1001,
                     }}
                   >
-                    {slideWithTitle.title || "Untitled"}
-                  </div>{" "}
+                    {typedSlide.description || ""}
+                  </div>
                   <div
                     style={{
                       position: "fixed",
@@ -131,8 +207,14 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
                       pointerEvents: "auto",
                     }}
                   >
-                    <HeartButton imageId={imageId} />
-                    <CommentsLauncher imageId={imageId.toString()} />
+                    <HeartButton
+                      imageId={imageId}
+                      onLoginRequired={() => router.push("/auth/login")}
+                    />
+                    <CommentsLauncher
+                      imageId={String(imageId)}
+                      onLoginRequired={() => router.push("/auth/login")}
+                    />
                   </div>
                 </div>
               );

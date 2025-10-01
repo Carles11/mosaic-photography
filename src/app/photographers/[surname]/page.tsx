@@ -10,9 +10,15 @@ export default async function PhotographerDetailPage(
   const params = await props.params;
   if (!params?.surname) return notFound();
 
-  // Fetch photographer by surname (not slug)
+  // Fetch photographer by slug (not just surname)
   const photographer = await fetchPhotographerBySlugSSR(params.surname);
   if (!photographer) return notFound();
+
+  // Ensure all images have a valid url property
+  const imagesWithUrl = (photographer.images ?? []).map((img) => ({
+    ...img,
+    url: img.s3Progressive?.[0]?.url ?? "/favicons/android-chrome-512x512.png",
+  }));
 
   return (
     <div>
@@ -35,8 +41,13 @@ export default async function PhotographerDetailPage(
           website={photographer.website}
         />
       </main>
-      <h2>Gallery</h2>
-      <PhotographerGalleryZoom images={photographer.images || []} />
+      <h2>
+        Gallery{" "}
+        <span
+          className={styles.galleryCount}
+        >{`(${imagesWithUrl.length})`}</span>
+      </h2>
+      <PhotographerGalleryZoom images={imagesWithUrl} />
     </div>
   );
 }

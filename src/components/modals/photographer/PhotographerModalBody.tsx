@@ -65,8 +65,9 @@ const PhotographerModalBody: React.FC<ModalPropsMap["photographer"]> = ({
       <div className={styles.photographerImageContainer}>
         <Image
           src={
-            photographer.images?.find((img) => img.url.startsWith("000_aaa"))
-              ?.url ||
+            photographer.images?.find((img) =>
+              (img.url ?? "").startsWith("000_aaa")
+            )?.url ||
             photographer.images?.[0]?.url ||
             ""
           }

@@ -28,17 +28,22 @@ export interface Photographer {
 
 export interface ImageData {
   id: string;
-  url: string;
+  url?: string;
+  base_url?: string;
+  filename?: string;
   author: string;
+  orientation?: "vertical" | "horizontal" | "square";
+  mosaicType?: "normal" | "large" | "wide" | "tall";
   title: string;
   description: string;
-  orientation?: "vertical" | "horizontal" | "square";
   created_at: string;
   width?: number;
   height?: number;
+  s3Progressive?: Array<{
+    url: string;
+    width: number;
+  }>;
   className?: string;
-  filename?: string;
-  base_url?: string;
 }
 
 export interface GalleryProps extends JSX.IntrinsicAttributes {

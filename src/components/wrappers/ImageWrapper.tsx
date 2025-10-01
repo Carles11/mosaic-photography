@@ -130,7 +130,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
           sizesLocal = "(max-width: 600px) 100vw, 231px";
         }
       }
-      let src = img.url;
+      let src;
       let imgWidthFinal = imgWidth;
       let imgHeightFinal = imgHeight;
       if (img.base_url && img.filename) {
@@ -166,19 +166,19 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
           name="Mosaic Photography Gallery"
           description="A curated collection of high-quality vintage photography from our archives"
           images={processedImages.map((img) => ({
-            contentUrl: img.src ?? img.url,
+            contentUrl: img.src ?? img.url ?? "",
             name: img.title || "Untitled Image",
             description:
               img.description || "Vintage photography from Mosaic's archives",
             creditText: img.author || "Unknown Photographer",
             width: typeof img.imgWidth === "number" ? img.imgWidth : 1200,
             height: typeof img.imgHeight === "number" ? img.imgHeight : 800,
-            encodingFormat: (img.src ?? img.url).endsWith(".webp")
+            encodingFormat: (img.src ?? img.url ?? "").endsWith(".webp")
               ? "image/webp"
-              : (img.src ?? img.url).endsWith(".png")
+              : (img.src ?? img.url ?? "").endsWith(".png")
               ? "image/png"
-              : (img.src ?? img.url).endsWith(".jpg") ||
-                (img.src ?? img.url).endsWith(".jpeg")
+              : (img.src ?? img.url ?? "").endsWith(".jpg") ||
+                (img.src ?? img.url ?? "").endsWith(".jpeg")
               ? "image/jpeg"
               : "image/webp",
             license: "https://creativecommons.org/publicdomain/mark/1.0/",
@@ -202,7 +202,9 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
                 className={styles.commentsButton}
               />
               <Image
-                src={img.src ?? img.url}
+                src={
+                  img.src ?? img.url ?? "/favicons/android-chrome-512x512.png"
+                }
                 alt={img.title || "Gallery Image"}
                 className={`${styles.imageItem} ${styles.image} ${styles.zoomInCursor}`}
                 width={img.imgWidth}
@@ -232,7 +234,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   if (image) {
     let imgWidthFinal = image.width ?? defaultImgWidth;
     let imgHeightFinal = image.height ?? defaultImgHeight;
-    let src = image.url;
+    let src = image.url ?? "";
 
     if (image.base_url && image.filename) {
       src = buildSrc({
@@ -255,6 +257,10 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
           defaultImgHeight * (renderedWidth / defaultImgWidth)
         );
       }
+    }
+
+    if (!src) {
+      src = "/favicons/android-chrome-512x512.png";
     }
 
     const imageIdString = image ? String(image.id) : undefined;
@@ -282,7 +288,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
           }
           images={[
             {
-              contentUrl: src,
+              contentUrl: src ?? "/favicons/android-chrome-512x512.png",
               name: image.title || "Untitled Image",
               description:
                 image.description ||
@@ -290,20 +296,21 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
               creditText: image.author || "Unknown Photographer",
               width: imgWidthFinal,
               height: imgHeightFinal,
-              encodingFormat: src.endsWith(".webp")
-                ? "image/webp"
-                : src.endsWith(".png")
-                ? "image/png"
-                : src.endsWith(".jpg") || src.endsWith(".jpeg")
-                ? "image/jpeg"
-                : "image/webp",
+              encodingFormat:
+                src && src.endsWith(".webp")
+                  ? "image/webp"
+                  : src && src.endsWith(".png")
+                  ? "image/png"
+                  : src && (src.endsWith(".jpg") || src.endsWith(".jpeg"))
+                  ? "image/jpeg"
+                  : "image/webp",
               license: "https://creativecommons.org/publicdomain/mark/1.0/",
               acquireLicensePage: "https://www.mosaic.photography/license",
             },
           ]}
         />
         <Image
-          src={src}
+          src={src ?? "/favicons/android-chrome-512x512.png"}
           alt={image.title || "Gallery Image"}
           className={`${styles.imageItem} ${styles.image} ${styles.zoomInCursor}`}
           width={imgWidthFinal}

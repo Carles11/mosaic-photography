@@ -139,7 +139,7 @@ export default function FavoritesList({
               <div key={image.id} className={styles.favoriteItem}>
                 <div className={styles.imageContainer}>
                   <Image
-                    src={image.url}
+                    src={image.url ?? "/favicons/android-chrome-512x512.png"}
                     alt={image.title}
                     className={styles.image}
                     loading="lazy"

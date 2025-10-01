@@ -5,6 +5,7 @@ import { Photographer, ImageData } from "@/types/gallery";
 /**
  * Fetch all photographers, each with only their featured image (if any),
  * for SSR gallery main page.
+ * Now images include s3Progressive info.
  */
 export async function fetchPhotographersWithFeaturedSSR(): Promise<
   Photographer[] | null

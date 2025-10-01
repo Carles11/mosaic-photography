@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
-import { Photographer } from "@/types/gallery";
+import { Photographer, ImageData } from "@/types/gallery";
+import { getAllS3Urls } from "@/utils/imageResizingS3";
 
 // Fetch by slug (recommended for URLs)
 export async function fetchPhotographerBySlugSSR(
@@ -25,9 +26,17 @@ export async function fetchPhotographerBySlugSSR(
 
     // Fetch all images for this photographer
     const { data: images, error: imagesError } = await supabase
-      .from("images")
+      .from("images_resize")
       .select("*")
       .eq("author", photographer.author);
+
+    let imagesWithProgressive: ImageData[] = [];
+    if (images) {
+      imagesWithProgressive = images.map((img: ImageData) => ({
+        ...img,
+        s3Progressive: getAllS3Urls(img),
+      }));
+    }
 
     if (imagesError) {
       console.error(
@@ -38,7 +47,7 @@ export async function fetchPhotographerBySlugSSR(
       return photographer as Photographer;
     }
 
-    photographer.images = images || [];
+    photographer.images = imagesWithProgressive;
     return photographer as Photographer;
   } catch (err) {
     console.error("[fetchPhotographerBySlugSSR] Unexpected error", err);

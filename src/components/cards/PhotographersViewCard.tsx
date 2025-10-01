@@ -103,6 +103,9 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                           image={{
                             ...portrait,
                             title: `Portrait of photographer ...`,
+                            url:
+                              portrait.s3Progressive?.[0]?.url ??
+                              "/favicons/android-chrome-512x512.png",
                           }}
                           onLoginRequired={onLoginRequired}
                           imgStyleOverride={{
@@ -111,12 +114,13 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                             objectFit: "cover",
                           }}
                           sizes="
-    (max-width: 430px) 95vw, 
-    (max-width: 820px) 80vw, 
-    (max-width: 1200px) 450px, 
-    (min-width: 1201px) 600px
-  "
-                          width={600}
+                            (max-width: 400px) 90vw,
+                            (max-width: 600px) 95vw,
+                            (max-width: 900px) 800px,
+                            (max-width: 1200px) 1200px,
+                            1600px
+                          "
+                          width={600} // matches S3 bucket and card aspect
                           height={750}
                         />
                       </Link>
