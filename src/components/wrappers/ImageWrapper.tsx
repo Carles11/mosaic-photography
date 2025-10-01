@@ -64,6 +64,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   imgStyleOverride,
   photographer,
   sizes: sizesProp,
+  showOverlayButtons = true, // Default to true for backward compatibility
 }) => {
   const defaultImgWidth = 600;
   const defaultImgHeight = 750;
@@ -192,15 +193,19 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
               key={img.id}
               className={`${styles.imageCard} ${styles.imageContainer}`}
             >
-              <HeartButton
-                imageId={imageIdString ?? ""}
-                onLoginRequired={onLoginRequired}
-              />
-              <CommentsLauncher
-                imageId={imageIdString ?? ""}
-                onLoginRequired={onLoginRequired}
-                className={styles.commentsButton}
-              />
+              {showOverlayButtons && (
+                <>
+                  <HeartButton
+                    imageId={imageIdString ?? ""}
+                    onLoginRequired={onLoginRequired}
+                  />
+                  <CommentsLauncher
+                    imageId={imageIdString ?? ""}
+                    onLoginRequired={onLoginRequired}
+                    className={styles.commentsButton}
+                  />
+                </>
+              )}
               <Image
                 src={
                   img.src ?? img.url ?? "/favicons/android-chrome-512x512.png"
@@ -271,15 +276,19 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
         ref={containerRef}
         className={`${styles.imageCard} ${styles.imageContainer}`}
       >
-        <HeartButton
-          imageId={imageIdString ?? ""}
-          onLoginRequired={onLoginRequired}
-        />
-        <CommentsLauncher
-          imageId={imageIdString ?? ""}
-          onLoginRequired={onLoginRequired}
-          className={styles.commentsButton}
-        />
+        {showOverlayButtons && (
+          <>
+            <HeartButton
+              imageId={imageIdString ?? ""}
+              onLoginRequired={onLoginRequired}
+            />
+            <CommentsLauncher
+              imageId={imageIdString ?? ""}
+              onLoginRequired={onLoginRequired}
+              className={styles.commentsButton}
+            />
+          </>
+        )}
         <JsonLdSchema
           type="ImageObject"
           name={image.title || "Untitled Image"}

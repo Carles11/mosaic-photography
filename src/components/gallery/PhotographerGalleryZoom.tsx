@@ -1,9 +1,9 @@
 "use client";
 import { useState, lazy, Suspense } from "react";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-// import HeartButton from "@/components/buttons/HeartButton";
-// import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
+import HeartButton from "@/components/buttons/HeartButton";
+import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
@@ -11,10 +11,10 @@ import type { GalleryProps } from "@/types/gallery";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
-const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
+const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images, onLoginRequired }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  // const router = useRouter();
+  const router = useRouter();
 
   if (!images || images.length === 0)
     return <p>No images found for this photographer.</p>;
@@ -65,6 +65,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
           >
             <ImageWrapper
               image={img}
+              onLoginRequired={onLoginRequired}
               imgStyleOverride={{ height: "auto" }}
               sizes="
                 (max-width: 400px) 90vw,
@@ -145,8 +146,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
                       sorted[sorted.length - 1];
                 bestZoomImgUrl = found?.url ?? typedSlide.src;
               }
-              console.log("s3Progressive array:", typedSlide.s3Progressive);
-              console.log("safeWidth * safeZoom:", safeWidth * safeZoom);
+
               return (
                 <div
                   style={{
@@ -194,6 +194,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
                     sizes="100vw"
                     width={typedSlide.width ?? 1920}
                     height={typedSlide.height ?? 1080}
+                    showOverlayButtons={false}
                   />
                   <div
                     style={{
@@ -213,7 +214,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
                   >
                     {typedSlide.description || ""}
                   </div>
-                  {/* <div
+                  <div
                     style={{
                       position: "fixed",
                       bottom: 20,
@@ -225,14 +226,14 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images }) => {
                     }}
                   >
                     <HeartButton
-                      imageId={imageId}
-                      onLoginRequired={() => router.push("/auth/login")}
+                      imageId={String(typedSlide.id ?? "")}
+                      onLoginRequired={onLoginRequired || (() => router.push("/auth/login"))}
                     />
                     <CommentsLauncher
-                      imageId={String(imageId)}
-                      onLoginRequired={() => router.push("/auth/login")}
+                      imageId={String(typedSlide.id ?? "")}
+                      onLoginRequired={onLoginRequired || (() => router.push("/auth/login"))}
                     />
-                  </div> */}
+                  </div>
                 </div>
               );
             },

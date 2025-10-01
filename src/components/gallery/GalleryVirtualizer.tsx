@@ -220,6 +220,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                     sizes="100vw"
                     width={imgWidth}
                     height={imgHeight}
+                    showOverlayButtons={false}
                   />
                   <div
                     style={{

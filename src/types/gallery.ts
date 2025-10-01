@@ -150,4 +150,5 @@ export interface ImageWrapperProps {
   onLoad?: () => void;
   width?: number;
   height?: number;
+  showOverlayButtons?: boolean; // Whether to show HeartButton and CommentsLauncher overlays
 }

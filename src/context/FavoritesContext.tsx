@@ -67,10 +67,18 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      // Convert imageId to number for database operations (since image_id is int8)
-      const numericImageId =
-        typeof imageId === "string" ? parseInt(imageId, 10) : imageId;
-      const stringImageId = String(imageId); // For local state management
+      // Convert imageId to string for database operations (since image_id is TEXT in database)
+      const stringImageId = String(imageId);
+
+      // Validate that we have a valid image ID
+      if (
+        !stringImageId ||
+        stringImageId === "undefined" ||
+        stringImageId === "null"
+      ) {
+        console.error("Invalid imageId:", imageId);
+        return;
+      }
 
       const isFavorited = favorites.has(stringImageId);
 
@@ -80,7 +88,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
           .from("favorites")
           .delete()
           .eq("user_id", user.id)
-          .eq("image_id", numericImageId);
+          .eq("image_id", stringImageId);
 
         if (error) {
           console.error("Error removing favorite:", error);
@@ -95,7 +103,7 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
         // Add to favorites
         const { error } = await supabase
           .from("favorites")
-          .insert([{ user_id: user.id, image_id: numericImageId }]);
+          .insert([{ user_id: user.id, image_id: stringImageId }]);
 
         if (error) {
           console.error("Error adding favorite:", error);
