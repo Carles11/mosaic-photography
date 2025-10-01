@@ -9,11 +9,72 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Image from "next/image";
 import styles from "./galleryVirtualizer.module.css";
 
+// S3 image sizes available
+const S3_SIZE_WIDTHS = [400, 600, 800, 1200, 1600];
+
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
 interface VirtualizedMosaicGalleryProps {
   images: ImageWithOrientation[];
   onLoginRequired?: () => void;
+}
+
+// Helper for best image size for zoomed view
+function getBestS3FolderForWidth(
+  image: ImageWithOrientation,
+  renderedWidth: number
+) {
+  // Defensive: use fallback values if undefined
+  const imgWidth = image.width ?? 1920;
+  const imgFilename = image.filename ?? "";
+  const imgBaseUrl = image.base_url ?? "";
+
+  // Find the smallest available S3 size >= renderedWidth, or largest available
+  const availableSizes = S3_SIZE_WIDTHS.filter((w) => w <= imgWidth);
+  const bestSize =
+    availableSizes.find((w) => w >= renderedWidth) ??
+    availableSizes[availableSizes.length - 1] ??
+    imgWidth;
+  const folder = bestSize === imgWidth ? "originalsWEBP" : `w${bestSize}`;
+  const filename =
+    folder === "originals" || !imgFilename
+      ? imgFilename
+      : imgFilename.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+  return {
+    url:
+      imgBaseUrl && filename
+        ? `${imgBaseUrl}/${folder}/${filename}`
+        : image.url,
+    width: bestSize,
+    folder,
+    filename,
+  };
+}
+
+// Helper to get all S3 URLs for progressive loading
+function getAllS3Urls(image: ImageWithOrientation) {
+  const imgWidth = image.width ?? 1920;
+  const imgFilename = image.filename ?? "";
+  const imgBaseUrl = image.base_url ?? "";
+  if (!imgBaseUrl || !imgFilename) return [];
+  return S3_SIZE_WIDTHS.filter((w) => w <= imgWidth)
+    .map((w) => {
+      const folder = `w${w}`;
+      const filename = imgFilename.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+      return {
+        url: `${imgBaseUrl}/${folder}/${filename}`,
+        width: w,
+      };
+    })
+    .concat([
+      {
+        url: `${imgBaseUrl}/originalsWEBP/${imgFilename.replace(
+          /\.(jpg|jpeg|png)$/i,
+          ".webp"
+        )}`,
+        width: imgWidth,
+      },
+    ]);
 }
 
 const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
@@ -22,11 +83,26 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
 }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+
   const columnCount = useMemo(() => {
     if (typeof window !== "undefined" && window.innerWidth < 500) return 2;
     if (typeof window !== "undefined" && window.innerWidth < 800) return 3;
     return 4;
   }, []);
+
+  const sizesForMosaic = (data: ImageWithOrientation) => {
+    if (data.orientation === "vertical" && data.mosaicType === "large")
+      return "(max-width: 400px) 90vw, (max-width: 900px) 800px, (max-width: 1200px) 1200px, 1600px";
+    if (data.orientation === "vertical" && data.mosaicType === "tall")
+      return "(max-width: 400px) 90vw, (max-width: 900px) 800px, (max-width: 1200px) 1200px, 1600px";
+    if (data.orientation === "vertical" && data.mosaicType === "wide")
+      return "(max-width: 400px) 90vw, (max-width: 900px) 1200px, 1600px";
+    if (data.orientation === "vertical")
+      return "(max-width: 400px) 90vw, (max-width: 900px) 600px, 800px";
+    if (data.orientation === "horizontal")
+      return "(max-width: 400px) 90vw, (max-width: 900px) 800px, (max-width: 1200px) 1200px, 1600px";
+    return "(max-width: 400px) 90vw, (max-width: 900px) 600px, 800px";
+  };
 
   const ItemContent = useCallback(
     ({ data, index }: { data: ImageWithOrientation; index: number }) => {
@@ -62,19 +138,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
           <ImageWrapper
             image={data}
             onLoginRequired={onLoginRequired}
-            sizes={
-              data.orientation === "vertical" && data.mosaicType === "large"
-                ? "(max-width: 400px) 90vw, (max-width: 900px) 50vw, (max-width: 1600px) 630px, 875px"
-                : data.orientation === "vertical" && data.mosaicType === "tall"
-                ? "(max-width: 400px) 90vw, (max-width: 900px) 48vw, (max-width: 1600px) 777px, 912px"
-                : data.orientation === "vertical" && data.mosaicType === "wide"
-                ? "(max-width: 400px) 90vw, (max-width: 900px) 52vw, (max-width: 1600px) 896px, 896px"
-                : data.orientation === "vertical"
-                ? "(max-width: 400px) 90vw, (max-width: 900px) 48vw, (max-width: 1600px) 600px, 896px"
-                : data.orientation === "horizontal"
-                ? "(max-width: 400px) 90vw, (max-width: 900px) 52vw, (max-width: 1600px) 623px, 875px"
-                : "(max-width: 400px) 90vw, (max-width: 900px) 48vw, (max-width: 1600px) 600px, 896px"
-            }
+            sizes={sizesForMosaic(data)}
             width={data.width ?? 600}
             height={data.height ?? 800}
           />
@@ -83,6 +147,22 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     },
     [onLoginRequired]
   );
+
+  // Get progressive image srcs for lightbox slides
+  const progressiveSlides = images.map((img) => ({
+    src: getBestS3FolderForWidth(
+      img,
+      typeof window !== "undefined"
+        ? Math.min(window.innerWidth * 0.9, 1600)
+        : 900
+    ).url,
+    customId: img.id,
+    author: img.author,
+    description: img.description,
+    width: img.width ?? 1920,
+    height: img.height ?? 1080,
+    s3Progressive: getAllS3Urls(img), // all available S3 urls for zoom steps
+  }));
 
   return (
     <>
@@ -97,26 +177,13 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
         <Lightbox
           open={isLightboxOpen}
           close={() => setIsLightboxOpen(false)}
-          slides={images.map((img) => {
-            // For originalsWEBP, always .webp
-            const filename = (img.filename ?? "").replace(
-              /\.(jpg|jpeg|png)$/i,
-              ".webp"
-            );
-            return {
-              src: `${img.base_url}/originalsWEBP/${filename}`,
-              customId: img.id,
-              author: img.author,
-              description: img.description,
-              width: img.width ?? 1920,
-              height: img.height ?? 1080,
-            };
-          })}
+          slides={progressiveSlides}
           index={lightboxIndex}
           plugins={[Zoom]}
           render={{
             slide: (props) => {
-              const { slide } = props;
+              const { slide, offset, zoom } = props;
+              // For progressive zoom, we pick the best S3 image for the current zoom scale
               interface LightboxSlide {
                 src: string;
                 customId?: number;
@@ -124,11 +191,35 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                 description?: string;
                 width?: number;
                 height?: number;
+                s3Progressive?: Array<{ url: string; width: number }>;
               }
               const typedSlide = slide as LightboxSlide;
               const imageId = typedSlide.customId ?? 0;
               const slideWithAuthor = slide as { author?: string };
               const slideWithDescription = slide as { description?: string };
+
+              // Defensive: fallback for zoom
+              const safeZoom = typeof zoom === "number" && zoom > 1 ? zoom : 1;
+              const safeWidth = typedSlide.width ?? 900;
+
+              // Find best progressive image for zoom (only if s3Progressive exists)
+              let bestZoomImg = undefined;
+              if (Array.isArray(typedSlide.s3Progressive)) {
+                bestZoomImg =
+                  typedSlide.s3Progressive.find(
+                    (imgObj) => imgObj.width >= safeWidth * safeZoom
+                  ) ||
+                  typedSlide.s3Progressive[typedSlide.s3Progressive.length - 1];
+              }
+
+              const imgSrc = bestZoomImg?.url ?? typedSlide.src;
+              const imgWidth = bestZoomImg?.width ?? safeWidth;
+              const imgHeight = typedSlide.height
+                ? Math.round(
+                    typedSlide.height *
+                      (imgWidth / (typedSlide.width ?? imgWidth))
+                  )
+                : 1080;
 
               return (
                 <div
@@ -138,18 +229,17 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                     height: "100%",
                   }}
                 >
-                  {" "}
                   <div
                     style={{
                       position: "absolute",
                       left: 0,
-                      top: 0,
+                      top: 20,
                       width: "100%",
                       textAlign: "center",
                       color: "#fff",
                       fontSize: "1.2rem",
                       padding: "16px 24px 24px 24px",
-                      background: "rgba(0,0,0,0.6)",
+                      background: "rgba(0,0,0,0.2)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
                       zIndex: 1001,
@@ -158,14 +248,14 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                     {slideWithAuthor.author || "Untitled"}
                   </div>
                   <Image
-                    src={typedSlide.src}
+                    src={imgSrc}
                     alt={
-                      typeof typedSlide.description === "string"
-                        ? typedSlide.description
+                      typeof slideWithDescription.description === "string"
+                        ? slideWithDescription.description
                         : "Gallery Image"
                     }
-                    width={typedSlide.width ?? 1920}
-                    height={typedSlide.height ?? 1080}
+                    width={imgWidth}
+                    height={imgHeight}
                     sizes="100vw"
                     style={{
                       width: "100%",
@@ -185,7 +275,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       color: "#fff",
                       fontSize: "1.2rem",
                       padding: "16px 24px 24px 24px",
-                      background: "rgba(0,0,0,0.6)",
+                      background: "rgba(0,0,0,0.2)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
                       zIndex: 1001,

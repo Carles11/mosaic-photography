@@ -133,3 +133,40 @@ export interface CollectionWithImages extends Collection {
     added_at: string;
   }>;
 }
+
+export interface ImageWrapperProps {
+  image?: {
+    id: string;
+    url: string;
+    base_url?: string;
+    filename?: string;
+    author: string;
+    orientation?: string;
+    title?: string;
+    mosaicType?: string;
+    description?: string;
+    width?: number;
+    height?: number;
+  };
+  images?: Array<{
+    id: string;
+    url: string;
+    base_url?: string;
+    filename?: string;
+    author: string;
+    orientation?: string;
+    title?: string;
+    mosaicType?: string;
+    description?: string;
+    width?: number;
+    height?: number;
+  }>;
+  loading?: boolean;
+  onLoginRequired?: () => void;
+  imgStyleOverride?: React.CSSProperties;
+  photographer?: boolean;
+  sizes?: string;
+  onLoad?: () => void;
+  width?: number;
+  height?: number;
+}

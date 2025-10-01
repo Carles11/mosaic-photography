@@ -1,8 +1,10 @@
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import GallerySkeletonCard from "@/components/cards/GallerySkeletonCard";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import styles from "./image.module.css";
 import HeartButton from "@/components/buttons/HeartButton";
+import { ImageWrapperProps } from "@/types/gallery";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 
 const sizeFolders = [
@@ -15,96 +17,43 @@ const sizeFolders = [
   "originals",
 ];
 
-// Helper type for processed images
-type ProcessedImage = {
-  id: string;
-  url: string;
-  base_url?: string;
-  filename?: string;
-  author: string;
-  orientation?: string;
-  title?: string;
-  mosaicType?: string;
-  description?: string;
-  width?: number;
-  height?: number;
-  src: string;
-  imgWidth: number;
-  imgHeight: number;
-  sizes: string;
-};
+function getAvailableSizes(img: { width?: number }) {
+  return sizeFolders
+    .filter((size) => size.startsWith("w"))
+    .map((folder) => ({
+      folder,
+      width: Number(folder.replace("w", "")),
+    }))
+    .filter((obj) => (img.width ? obj.width <= img.width : true))
+    .concat(img.width ? [{ folder: "originalsWEBP", width: img.width }] : []);
+}
 
-function buildSrcSet(img: {
+function getBestSizeFolder(
+  renderedWidth: number,
+  availableSizes: Array<{ folder: string; width: number }>
+) {
+  // Find the smallest size that's >= renderedWidth, else use the largest available
+  const sorted = availableSizes.sort((a, b) => a.width - b.width);
+  for (const size of sorted) {
+    if (size.width >= renderedWidth) return size.folder;
+  }
+  return sorted[sorted.length - 1].folder;
+}
+
+function buildSrc(img: {
   base_url: string;
   filename: string;
   width?: number;
   height?: number;
+  renderedWidth: number;
 }) {
-  return sizeFolders
-    .filter((size) => {
-      if (size === "originalsWEBP" || size === "originals") return true;
-      const targetWidth = Number(size.replace("w", ""));
-      return img.width ? targetWidth <= img.width : true;
-    })
-    .map((size) => {
-      let filename = img.filename;
-      if (size !== "originals") {
-        filename = filename.replace(/\.(jpg|jpeg|png)$/i, ".webp");
-      }
-      let targetWidth: number;
-      let targetHeight: number;
-      if (size === "originalsWEBP" || size === "originals") {
-        targetWidth = img.width ?? 1920;
-        targetHeight = img.height ?? 1080;
-      } else {
-        targetWidth = Number(size.replace("w", ""));
-        // scale height to maintain aspect ratio
-        if (img.width && img.height) {
-          targetHeight = Math.round(img.height * (targetWidth / img.width));
-        } else {
-          targetHeight = Math.round(1080 * (targetWidth / 1920)); // fallback
-        }
-      }
-      const url = `${img.base_url}/${size}/${filename}`;
-      return { url, width: targetWidth, height: targetHeight };
-    });
-}
-
-interface ImageWrapperProps {
-  image?: {
-    id: string;
-    url: string;
-    base_url?: string;
-    filename?: string;
-    author: string;
-    orientation?: string;
-    title?: string;
-    mosaicType?: string;
-    description?: string;
-    width?: number;
-    height?: number;
-  };
-  images?: Array<{
-    id: string;
-    url: string;
-    base_url?: string;
-    filename?: string;
-    author: string;
-    orientation?: string;
-    title?: string;
-    mosaicType?: string;
-    description?: string;
-    width?: number;
-    height?: number;
-  }>;
-  loading?: boolean;
-  onLoginRequired?: () => void;
-  imgStyleOverride?: React.CSSProperties;
-  photographer?: boolean;
-  sizes?: string;
-  onLoad?: () => void;
-  width?: number;
-  height?: number;
+  const availableSizes = getAvailableSizes(img);
+  const bestFolder = getBestSizeFolder(img.renderedWidth, availableSizes);
+  const filename =
+    bestFolder === "originals"
+      ? img.filename
+      : img.filename.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+  return `${img.base_url}/${bestFolder}/${filename}`;
 }
 
 const ImageWrapper: React.FC<ImageWrapperProps> = ({
@@ -124,14 +73,37 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
     (max-width: 400px) 90vw, 
     (max-width: 600px) 95vw, 
     (max-width: 900px) 48vw, 
-    (max-width: 1200px) 450px, 
-    600px
+    (max-width: 1200px) 600px, 
+    1200px
   `.replace(/\s+/g, " ");
 
-  let processedImages: ProcessedImage[] = [];
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [renderedWidth, setRenderedWidth] = useState<number>(defaultImgWidth);
 
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const obs = new window.ResizeObserver(([entry]) => {
+      setRenderedWidth(Math.round(entry.contentRect.width));
+    });
+    obs.observe(containerRef.current);
+    return () => obs.disconnect();
+  }, []);
+
+  // Gallery skeleton logic untouched
+  if (loading) {
+    return (
+      <div style={{ display: "contents" }}>
+        {Array.from({ length: 12 }).map((_, i) => (
+          <GallerySkeletonCard key={i} imageHeight={220} textLines={1} />
+        ))}
+      </div>
+    );
+  }
+
+  // Multiple images logic untouched
   if (images && images.length > 0) {
-    processedImages = images.map((img) => {
+    // Existing logic as before (could be adapted for per-image responsiveness if needed)
+    const processedImages = images.map((img) => {
       let imgWidth = img.width ?? defaultImgWidth;
       let imgHeight = img.height ?? defaultImgHeight;
       let sizesLocal = sizes;
@@ -158,29 +130,25 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
           sizesLocal = "(max-width: 600px) 100vw, 231px";
         }
       }
-      let srcSetArray: Array<{ url: string; width: number; height: number }> =
-        [];
       let src = img.url;
       let imgWidthFinal = imgWidth;
       let imgHeightFinal = imgHeight;
-
       if (img.base_url && img.filename) {
-        srcSetArray = buildSrcSet({
-          base_url: img.base_url,
-          filename: img.filename,
-          width: img.width,
-          height: img.height,
-        });
-
-        // Choose the largest available width (closest to original, but not exceeding it)
-        const bestOption =
-          srcSetArray
-            .filter((obj) => obj.width <= (img.width ?? defaultImgWidth))
-            .sort((a, b) => b.width - a.width)[0] || srcSetArray[0];
-
-        src = bestOption.url;
-        imgWidthFinal = bestOption.width;
-        imgHeightFinal = bestOption.height;
+        // Use the fallback logic (choose best available <= img.width)
+        const availableSizes = getAvailableSizes(img);
+        const bestFolder = getBestSizeFolder(imgWidth, availableSizes);
+        const filename =
+          bestFolder === "originals"
+            ? img.filename
+            : img.filename.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+        src = `${img.base_url}/${bestFolder}/${filename}`;
+        imgWidthFinal =
+          availableSizes.find((s) => s.folder === bestFolder)?.width ??
+          imgWidth;
+        // scale height to maintain aspect ratio
+        if (img.width && img.height) {
+          imgHeightFinal = Math.round(img.height * (imgWidthFinal / img.width));
+        }
       }
       return {
         ...img,
@@ -190,22 +158,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
         src,
       };
     });
-  }
 
-  const imageIdString = image ? String(image.id) : undefined;
-  const styleOverride = imgStyleOverride;
-
-  if (loading) {
-    return (
-      <div style={{ display: "contents" }}>
-        {Array.from({ length: 12 }).map((_, i) => (
-          <GallerySkeletonCard key={i} imageHeight={220} textLines={1} />
-        ))}
-      </div>
-    );
-  }
-
-  if (processedImages.length > 0) {
     return (
       <>
         <JsonLdSchema
@@ -262,7 +215,9 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
                 fetchPriority={photographer ? "high" : "auto"}
                 data-image-id={imageIdString}
                 style={
-                  typeof styleOverride === "object" ? styleOverride : undefined
+                  typeof imgStyleOverride === "object"
+                    ? imgStyleOverride
+                    : undefined
                 }
                 unoptimized
               />
@@ -273,32 +228,43 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
     );
   }
 
+  // Single image: responsive S3 selection based on container width
   if (image) {
-    let srcSetArray: Array<{ url: string; width: number; height: number }> = [];
-    let src = image.url;
     let imgWidthFinal = image.width ?? defaultImgWidth;
     let imgHeightFinal = image.height ?? defaultImgHeight;
+    let src = image.url;
 
     if (image.base_url && image.filename) {
-      srcSetArray = buildSrcSet({
+      src = buildSrc({
         base_url: image.base_url,
         filename: image.filename,
         width: image.width,
         height: image.height,
+        renderedWidth,
       });
 
-      // Choose the largest available width (closest to original, but not exceeding it)
-      const bestOption =
-        srcSetArray
-          .filter((obj) => obj.width <= (image.width ?? defaultImgWidth))
-          .sort((a, b) => b.width - a.width)[0] || srcSetArray[0];
-
-      src = bestOption.url;
-      imgWidthFinal = bestOption.width;
-      imgHeightFinal = bestOption.height;
+      // scale height to maintain aspect ratio
+      if (image.width && image.height) {
+        imgHeightFinal = Math.round(
+          image.height * (renderedWidth / image.width)
+        );
+        imgWidthFinal = renderedWidth;
+      } else {
+        imgWidthFinal = renderedWidth;
+        imgHeightFinal = Math.round(
+          defaultImgHeight * (renderedWidth / defaultImgWidth)
+        );
+      }
     }
+
+    const imageIdString = image ? String(image.id) : undefined;
+    const styleOverride = imgStyleOverride;
+
     return (
-      <div className={`${styles.imageCard} ${styles.imageContainer}`}>
+      <div
+        ref={containerRef}
+        className={`${styles.imageCard} ${styles.imageContainer}`}
+      >
         <HeartButton
           imageId={imageIdString ?? ""}
           onLoginRequired={onLoginRequired}
@@ -307,6 +273,34 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
           imageId={imageIdString ?? ""}
           onLoginRequired={onLoginRequired}
           className={styles.commentsButton}
+        />
+        <JsonLdSchema
+          type="ImageObject"
+          name={image.title || "Untitled Image"}
+          description={
+            image.description || "Vintage photography from Mosaic's archives"
+          }
+          images={[
+            {
+              contentUrl: src,
+              name: image.title || "Untitled Image",
+              description:
+                image.description ||
+                "Vintage photography from Mosaic's archives",
+              creditText: image.author || "Unknown Photographer",
+              width: imgWidthFinal,
+              height: imgHeightFinal,
+              encodingFormat: src.endsWith(".webp")
+                ? "image/webp"
+                : src.endsWith(".png")
+                ? "image/png"
+                : src.endsWith(".jpg") || src.endsWith(".jpeg")
+                ? "image/jpeg"
+                : "image/webp",
+              license: "https://creativecommons.org/publicdomain/mark/1.0/",
+              acquireLicensePage: "https://www.mosaic.photography/license",
+            },
+          ]}
         />
         <Image
           src={src}
