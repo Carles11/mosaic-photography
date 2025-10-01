@@ -70,11 +70,11 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
   const sizes =
     sizesProp ||
     `
-    (max-width: 400px) 90vw, 
-    (max-width: 600px) 95vw, 
-    (max-width: 900px) 48vw, 
-    (max-width: 1200px) 600px, 
-    1200px
+    (max-width: 400px) 90vw,
+    (max-width: 600px) 95vw,
+    (max-width: 900px) 800px,
+    (max-width: 1200px) 1200px,
+    1600px
   `.replace(/\s+/g, " ");
 
   const containerRef = useRef<HTMLDivElement>(null);
