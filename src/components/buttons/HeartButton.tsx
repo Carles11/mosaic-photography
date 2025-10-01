@@ -19,8 +19,6 @@ const HeartButton: React.FC<HeartButtonProps> = ({
   const router = useRouter();
 
   const handleClick = async () => {
-    console.log("HeartButton: Clicked for image", imageId);
-
     try {
       if (!isUserLoggedIn()) {
         // User is not logged in, trigger login modal
@@ -48,7 +46,11 @@ const HeartButton: React.FC<HeartButtonProps> = ({
       className={`${styles.heartButton} ${className} ${
         isLiked ? styles.liked : styles.unliked
       }`}
-      onClick={handleClick}
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        handleClick();
+      }}
       aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
       title={isLiked ? "Remove from favorites" : "Add to favorites"}
     >
