@@ -6,7 +6,7 @@ import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
-import Image from "next/image";
+
 import { getBestS3FolderForWidth, getAllS3Urls } from "@/utils/imageResizingS3";
 import styles from "./galleryVirtualizer.module.css";
 
@@ -148,6 +148,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
               const imageId = typedSlide.customId ?? 0;
               const slideWithAuthor = slide as { author?: string };
               const slideWithDescription = slide as { description?: string };
+              const slideWithCreatedAt = slide as { created_at?: string };
 
               // Defensive: fallback for zoom
               const safeZoom = typeof zoom === "number" && zoom > 1 ? zoom : 1;
@@ -198,23 +199,27 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                   >
                     {slideWithAuthor.author || "Untitled"}
                   </div>
-                  <Image
-                    src={imgSrc}
-                    alt={
-                      typeof slideWithDescription.description === "string"
-                        ? slideWithDescription.description
-                        : "Gallery Image"
-                    }
-                    width={imgWidth}
-                    height={imgHeight}
-                    sizes="100vw"
-                    style={{
+                  <ImageWrapper
+                    image={{
+                      url: imgSrc,
+                      id: String(imageId),
+                      author: slideWithAuthor.author ?? "",
+                      description: slideWithDescription.description ?? "",
+                      width: imgWidth,
+                      height: imgHeight,
+                      title:
+                        slideWithDescription.description ?? "Gallery Image",
+                      s3Progressive: typedSlide.s3Progressive ?? [],
+                      created_at: slideWithCreatedAt.created_at ?? "",
+                    }}
+                    imgStyleOverride={{
                       width: "100%",
                       height: "100%",
                       objectFit: "contain",
                     }}
-                    priority
-                    unoptimized
+                    sizes="100vw"
+                    width={imgWidth}
+                    height={imgHeight}
                   />
                   <div
                     style={{

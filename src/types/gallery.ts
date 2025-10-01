@@ -140,32 +140,8 @@ export interface CollectionWithImages extends Collection {
 }
 
 export interface ImageWrapperProps {
-  image?: {
-    id: string;
-    url: string;
-    base_url?: string;
-    filename?: string;
-    author: string;
-    orientation?: string;
-    title?: string;
-    mosaicType?: string;
-    description?: string;
-    width?: number;
-    height?: number;
-  };
-  images?: Array<{
-    id: string;
-    url: string;
-    base_url?: string;
-    filename?: string;
-    author: string;
-    orientation?: string;
-    title?: string;
-    mosaicType?: string;
-    description?: string;
-    width?: number;
-    height?: number;
-  }>;
+  image?: ImageData;
+  images?: ImageData[];
   loading?: boolean;
   onLoginRequired?: () => void;
   imgStyleOverride?: React.CSSProperties;
