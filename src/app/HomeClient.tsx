@@ -103,8 +103,6 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
         onLoginClick={() => router.push("/auth/login")}
       />
 
-      {/* Go Pro Modal is rendered by the global ModalProvider when opened */}
-
       {/* Keep modal for backward compatibility with email redirects */}
       <AuthModal
         isOpen={showAuthModal}

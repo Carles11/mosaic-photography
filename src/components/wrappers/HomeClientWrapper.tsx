@@ -89,7 +89,7 @@ function HomeClientWrapper({
         </div>
       )}
 
-      {/* Always render main content, but visually obscure and block interaction if age not confirmed */}
+      {/* Always render main content for SEO, but visually obscure and block interaction if age not confirmed */}
       <>
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}

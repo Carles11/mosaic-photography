@@ -31,6 +31,7 @@ export async function fetchPhotographerBySlugSSR(
       .eq("author", photographer.author);
 
     let imagesWithProgressive: ImageData[] = [];
+
     if (images) {
       imagesWithProgressive = images.map((img: ImageData) => ({
         ...img,

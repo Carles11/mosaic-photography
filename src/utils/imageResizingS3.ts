@@ -33,7 +33,7 @@ export function getBestS3FolderForWidth(
   };
 }
 
-// Helper to get all S3 URLs for progressive loading
+// Helper to mount all S3 URLs for progressive loading
 export function getAllS3Urls(image: ImageWithOrientation) {
   const imgWidth = image.width ?? 1920;
   const imgFilename = image.filename ?? "";

@@ -11,7 +11,10 @@ import type { GalleryProps } from "@/types/gallery";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
-const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images, onLoginRequired }) => {
+const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
+  images,
+  onLoginRequired,
+}) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const router = useRouter();
@@ -227,11 +230,15 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({ images, onLoginRequir
                   >
                     <HeartButton
                       imageId={String(typedSlide.id ?? "")}
-                      onLoginRequired={onLoginRequired || (() => router.push("/auth/login"))}
+                      onLoginRequired={
+                        onLoginRequired || (() => router.push("/auth/login"))
+                      }
                     />
                     <CommentsLauncher
                       imageId={String(typedSlide.id ?? "")}
-                      onLoginRequired={onLoginRequired || (() => router.push("/auth/login"))}
+                      onLoginRequired={
+                        onLoginRequired || (() => router.push("/auth/login"))
+                      }
                     />
                   </div>
                 </div>

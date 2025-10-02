@@ -106,7 +106,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     description: img.description,
     width: img.width ?? 1920,
     height: img.height ?? 1080,
-    s3Progressive: getAllS3Urls(img), // all available S3 urls for zoom steps
+    s3Progressive: getAllS3Urls(img), // get all available S3 urls for zoom steps
   }));
 
   return (
