@@ -6,7 +6,6 @@
   justify-content: center;
   background: rgba(0, 0, 0, 0.5);
   z-index: 10001;
-  pointer-events: auto !important;
 }
 
 .modalContent {
@@ -20,5 +19,4 @@
   transform: translateY(0);
   transition: opacity 160ms ease, transform 160ms ease;
   z-index: 10002;
-  pointer-events: auto !important;
 }
