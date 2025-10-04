@@ -9,7 +9,11 @@ import { supabase } from "@/lib/supabaseClient";
 import { useFavorites } from "@/context/FavoritesContext";
 import { ImageData } from "@/types";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
-import { getAllS3Urls, getProgressiveZoomSrc } from "@/utils/imageResizingS3";
+import {
+  getAllS3Urls,
+  getProgressiveZoomSrc,
+  getBestS3FolderForWidth,
+} from "@/utils/imageResizingS3";
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import "yet-another-react-lightbox/styles.css";
@@ -52,7 +56,7 @@ export default function FavoritesList({
       const { data: images, error } = await supabase
         .from("images_resize")
         .select(
-          "id, base_url, filename, author, title, description, created_at"
+          "id, base_url, filename, author, title, description, created_at, width, height"
         )
         .in("id", imageIds);
 
@@ -67,10 +71,11 @@ export default function FavoritesList({
           const s3Progressive = getAllS3Urls(image);
           return {
             ...image,
-            url:
-              s3Progressive?.[0]?.url ?? "/favicons/android-chrome-512x512.png",
+            url: getBestS3FolderForWidth(image, 900).url,
             s3Progressive,
             favoriteId: image.id,
+            width: image.width ?? 1920,
+            height: image.height ?? 1080,
           };
         });
 
@@ -269,14 +274,19 @@ export default function FavoritesList({
           slides={favoriteImages.map((image) => {
             const s3Progressive = getAllS3Urls(image);
             return {
-              src:
-                s3Progressive[s3Progressive.length - 1]?.url || image.url || "",
+              src: getProgressiveZoomSrc(
+                s3Progressive,
+                1,
+                image.width ?? 900,
+                image.url ?? ""
+              ),
               alt: image.title,
               width: image.width,
               height: image.height,
               id: image.id,
               title: image.title,
               author: image.author,
+              description: image.description,
               s3Progressive: s3Progressive,
             };
           })}
@@ -293,7 +303,7 @@ export default function FavoritesList({
             scrollToZoom: true,
           }}
           render={{
-            slide: ({ slide, rect }) => {
+            slide: ({ slide, zoom }) => {
               const typedSlide = slide as {
                 src: string;
                 alt?: string;
@@ -302,24 +312,28 @@ export default function FavoritesList({
                 id?: string;
                 title?: string;
                 author?: string;
+                description?: string;
                 s3Progressive?: Array<{ url: string; width: number }>;
               };
               const s3Progressive = typedSlide.s3Progressive || [];
-              const getImageSrc = () => {
-                if (!rect || s3Progressive.length === 0) {
-                  return typedSlide.src;
-                }
-                const zoomLevel = Math.max(
-                  rect.width / (slide.width || 1),
-                  rect.height / (slide.height || 1)
-                );
-                return getProgressiveZoomSrc(
-                  s3Progressive,
-                  zoomLevel,
-                  typedSlide.width ?? 900,
-                  typedSlide.src
-                );
-              };
+              const safeZoom = typeof zoom === "number" && zoom > 1 ? zoom : 1;
+              const safeWidth = typedSlide.width ?? 900;
+              const imgSrc = getProgressiveZoomSrc(
+                s3Progressive,
+                safeZoom,
+                safeWidth,
+                typedSlide.src
+              );
+              const selectedImgObj = s3Progressive.find(
+                (imgObj) => imgObj.url === imgSrc
+              );
+              const imgWidth = selectedImgObj?.width ?? safeWidth;
+              const imgHeight = typedSlide.height
+                ? Math.round(
+                    typedSlide.height *
+                      (imgWidth / (typedSlide.width ?? imgWidth))
+                  )
+                : 1080;
               return (
                 <div
                   style={{
@@ -328,17 +342,35 @@ export default function FavoritesList({
                     height: "100%",
                   }}
                 >
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      top: 20,
+                      width: "100%",
+                      textAlign: "center",
+                      color: "#fff",
+                      fontSize: "1.2rem",
+                      padding: "16px 24px 24px 24px",
+                      background: "rgba(0,0,0,0.2)",
+                      borderTopLeftRadius: "12px",
+                      borderTopRightRadius: "12px",
+                      zIndex: 1,
+                    }}
+                  >
+                    {typedSlide.author || "Untitled"}
+                  </div>
                   <ImageWrapper
                     image={{
                       ...typedSlide,
                       id: String(typedSlide.id ?? ""),
-                      url: getImageSrc(),
-                      width: typedSlide.width ?? 1920,
-                      height: typedSlide.height ?? 1080,
+                      url: imgSrc,
+                      width: imgWidth,
+                      height: imgHeight,
                       title: typedSlide.title ?? "",
                       author: typedSlide.author ?? "",
                       created_at: "",
-                      description: "",
+                      description: typedSlide.description ?? "",
                     }}
                     imgStyleOverride={{
                       width: "100%",
@@ -346,10 +378,28 @@ export default function FavoritesList({
                       objectFit: "contain",
                     }}
                     sizes="100vw"
-                    width={typedSlide.width ?? 1920}
-                    height={typedSlide.height ?? 1080}
+                    width={imgWidth}
+                    height={imgHeight}
                     showOverlayButtons={false}
                   />
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      bottom: 0,
+                      width: "100%",
+                      textAlign: "center",
+                      color: "#fff",
+                      fontSize: "1.2rem",
+                      padding: "16px 24px 24px 24px",
+                      background: "rgba(0,0,0,0.2)",
+                      borderTopLeftRadius: "12px",
+                      borderTopRightRadius: "12px",
+                      zIndex: 1001,
+                    }}
+                  >
+                    {typedSlide.description || ""}
+                  </div>
                   <div
                     style={{
                       position: "fixed",

@@ -12,20 +12,24 @@ export function getBestS3FolderForWidth(
   image: ImageWithOrientation,
   renderedWidth: number
 ) {
-  // Defensive
   const imgWidth = image.width ?? 1920;
   const imgFilename = image.filename ?? "";
   const imgBaseUrl = image.base_url ?? "";
+  // Only include sizes that exist for this image
+  const availableSizes = S3_SIZE_WIDTHS.filter((w) => w <= imgWidth);
   // Find the smallest available S3 size >= renderedWidth, or largest available
-  const availableSizes = S3_SIZE_WIDTHS.filter(
-    (w) => w >= renderedWidth && w <= imgWidth
-  );
+  const largerOrEqual = availableSizes.filter((w) => w >= renderedWidth);
   const bestSize =
-    availableSizes.length > 0
-      ? availableSizes[0]
-      : S3_SIZE_WIDTHS.filter((w) => w <= imgWidth).slice(-1)[0] ?? imgWidth;
+    largerOrEqual.length > 0
+      ? largerOrEqual[0]
+      : availableSizes.length > 0
+      ? availableSizes[availableSizes.length - 1]
+      : imgWidth;
 
-  const folder = bestSize === imgWidth ? "originalsWEBP" : `w${bestSize}`;
+  // If bestSize equals imgWidth and it's not in availableSizes, use originalsWEBP
+  const folder = availableSizes.includes(bestSize)
+    ? `w${bestSize}`
+    : "originalsWEBP";
   const filename = convertToWebpExtension(imgFilename);
   return {
     url:
@@ -88,13 +92,10 @@ export function getProgressiveZoomSrc(
     targetWidth = Math.min(safeWidth, 1600); // Never pick originals for normal view
   }
 
-  // Find best fit: largest size <= targetWidth, or smallest size >= targetWidth
-  const bestFit = sorted.filter((imgObj) => imgObj.width <= targetWidth);
+  // Find the smallest size >= targetWidth, or largest available
+  const largerOrEqual = sorted.filter((imgObj) => imgObj.width >= targetWidth);
   const found =
-    bestFit.length > 0
-      ? bestFit[bestFit.length - 1]
-      : sorted.find((imgObj) => imgObj.width >= targetWidth) ??
-        sorted[sorted.length - 1];
+    largerOrEqual.length > 0 ? largerOrEqual[0] : sorted[sorted.length - 1];
 
   return found?.url ?? fallbackSrc ?? "";
 }

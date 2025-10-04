@@ -15,7 +15,11 @@ import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import { useModal } from "@/context/modalContext/useModal";
 
-import { getBestS3FolderForWidth, getAllS3Urls } from "@/utils/imageResizingS3";
+import {
+  getBestS3FolderForWidth,
+  getAllS3Urls,
+  getProgressiveZoomSrc,
+} from "@/utils/imageResizingS3";
 import styles from "./galleryVirtualizer.module.css";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
@@ -149,7 +153,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
           }}
           render={{
             slide: (props) => {
-              const { slide, offset, zoom } = props;
+              const { slide, zoom } = props;
               // For progressive zoom, we pick the best S3 image for the current zoom scale
               interface LightboxSlide {
                 src: string;
@@ -170,18 +174,18 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
               const safeZoom = typeof zoom === "number" && zoom > 1 ? zoom : 1;
               const safeWidth = typedSlide.width ?? 900;
 
-              // Find best progressive image for zoom (only if s3Progressive exists)
-              let bestZoomImg = undefined;
-              if (Array.isArray(typedSlide.s3Progressive)) {
-                bestZoomImg =
-                  typedSlide.s3Progressive.find(
-                    (imgObj) => imgObj.width >= safeWidth * safeZoom
-                  ) ||
-                  typedSlide.s3Progressive[typedSlide.s3Progressive.length - 1];
-              }
-
-              const imgSrc = bestZoomImg?.url ?? typedSlide.src;
-              const imgWidth = bestZoomImg?.width ?? safeWidth;
+              // Use getProgressiveZoomSrc to select best image for zoom
+              const imgSrc = getProgressiveZoomSrc(
+                typedSlide.s3Progressive ?? [],
+                safeZoom,
+                safeWidth,
+                typedSlide.src
+              );
+              // Find the width of the selected image
+              const selectedImgObj = (typedSlide.s3Progressive ?? []).find(
+                (imgObj) => imgObj.url === imgSrc
+              );
+              const imgWidth = selectedImgObj?.width ?? safeWidth;
               const imgHeight = typedSlide.height
                 ? Math.round(
                     typedSlide.height *
@@ -210,6 +214,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       background: "rgba(0,0,0,0.2)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
+                      zIndex: 1,
                     }}
                   >
                     {slideWithAuthor.author || "Untitled"}
