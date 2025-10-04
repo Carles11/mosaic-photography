@@ -27,11 +27,11 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   const router = useRouter();
   const [collections, setCollections] = useState<Collection[]>([]);
   const [pendingCollections, setPendingCollections] = useState<Collection[]>(
-    [],
+    []
   );
   const [loading, setLoading] = useState(true);
   const [editingCollection, setEditingCollection] = useState<Collection | null>(
-    null,
+    null
   );
   const [isMobile, setIsMobile] = useState(false);
 
@@ -88,10 +88,15 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
               const imageIds = favorites?.map((fav) => fav.image_id) || [];
               if (imageIds.length > 0) {
                 const { data: images } = await supabase
-                  .from("images")
-                  .select("id, url")
+                  .from("images_resize")
+                  .select("id, base_url, filename")
                   .in("id", imageIds);
-                preview_images = images?.map((img) => img.url) || [];
+                preview_images =
+                  images?.map((img) =>
+                    img.base_url && img.filename
+                      ? `${img.base_url}/w400/${img.filename}`
+                      : "/favicons/android-chrome-512x512.png"
+                  ) || [];
               }
             }
             return {
@@ -99,7 +104,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
               image_count: imageCount || 0,
               preview_images,
             };
-          }),
+          })
         );
       }
       // Merge pendingCollections (optimistic) with backend, remove dups by id
@@ -120,7 +125,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
     () => ({
       refreshCollections: loadCollections,
     }),
-    [loadCollections],
+    [loadCollections]
   );
 
   useEffect(() => {
@@ -139,10 +144,8 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   const handleEditCollection = (updatedCollection: Collection) => {
     setCollections((prev) =>
       prev.map((col) =>
-        col.id === updatedCollection.id
-          ? { ...col, ...updatedCollection }
-          : col,
-      ),
+        col.id === updatedCollection.id ? { ...col, ...updatedCollection } : col
+      )
     );
     setEditingCollection(null);
   };
@@ -166,7 +169,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                   toast.error("Failed to delete collection. Please try again.");
                 } else {
                   setCollections((prev) =>
-                    prev.filter((col) => col.id !== collectionId),
+                    prev.filter((col) => col.id !== collectionId)
                   );
                   toast.success("Collection deleted.");
                 }
@@ -201,7 +204,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
           </button>
         </span>
       ),
-      { duration: 8000 },
+      { duration: 8000 }
     );
   };
 
@@ -231,7 +234,9 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
         </div>
         <CreateCollectionLauncher onCreateCollection={handleCreateCollection}>
           <button
-            className={`${styles.createButton} ${isMobile ? styles.mobile : ""}`}
+            className={`${styles.createButton} ${
+              isMobile ? styles.mobile : ""
+            }`}
           >
             <span className={styles.plusIcon}>+</span>
             New Collection
@@ -255,7 +260,9 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
           {collections.map((collection) => (
             <div
               key={collection.id}
-              className={`${styles.collectionCard} ${isMobile ? styles.mobile : ""}`}
+              className={`${styles.collectionCard} ${
+                isMobile ? styles.mobile : ""
+              }`}
             >
               <div className={styles.cardHeader}>
                 <h4 className={styles.collectionName}>{collection.name}</h4>

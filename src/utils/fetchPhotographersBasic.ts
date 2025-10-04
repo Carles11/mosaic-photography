@@ -11,7 +11,8 @@ export async function fetchPhotographersBasic(): Promise<
   Photographer[] | null
 > {
   try {
-    const { data, error } = await supabase
+    // First, fetch all photographers
+    const { data: photographers, error: photographersError } = await supabase
       .from("photographers")
       .select(
         `
@@ -26,43 +27,57 @@ export async function fetchPhotographersBasic(): Promise<
         website,
         store,
         instagram,
-        random_order,
-        images_resize!left (
-          id,
-          author,
-          filename,
-          base_url,
-          orientation,
-          width,
-          height,
-          title,
-          description,
-          created_at
-        )
+        random_order
       `
       )
-      .order("random_order", { ascending: true })
-      .ilike("images_resize.filename", "000_aaa%");
+      .order("random_order", { ascending: true });
 
-    if (error || !data) {
+    if (photographersError || !photographers) {
       console.error(
-        "[SSR fetchPhotographersBasic] Supabase error or no data",
-        error
+        "[SSR fetchPhotographersBasic] Photographers fetch error",
+        photographersError
       );
       return null;
     }
 
-    // Transform the data to match expected Photographer structure
-    return data.map((photographer) => {
-      // Since we're filtering at DB level, images_resize contains only portrait images
-      const portraitImage = photographer.images_resize?.[0]; // Take the first (and likely only) portrait image
+    // Then, fetch portrait images for all photographers
+    const photographerAuthors = photographers.map((p) => p.author);
+    const { data: portraitImages, error: imagesError } = await supabase
+      .from("images_resize")
+      .select(
+        `
+        id,
+        author,
+        filename,
+        base_url,
+        orientation,
+        width,
+        height,
+        title,
+        description,
+        created_at
+      `
+      )
+      .in("author", photographerAuthors)
+      .ilike("filename", "000_aaa%");
 
-      // Destructure to exclude images_resize from the final result
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { images_resize, ...photographerData } = photographer;
+    if (imagesError) {
+      console.error(
+        "[SSR fetchPhotographersBasic] Images fetch error",
+        imagesError
+      );
+      // Continue without portrait images rather than failing completely
+    }
+
+    // Transform the data to match expected Photographer structure
+    return photographers.map((photographer) => {
+      // Find portrait image for this photographer
+      const portraitImage = portraitImages?.find(
+        (img) => img.author === photographer.author
+      );
 
       return {
-        ...photographerData,
+        ...photographer,
         images: portraitImage
           ? [
               {

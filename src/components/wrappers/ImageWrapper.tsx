@@ -6,6 +6,7 @@ import styles from "./image.module.css";
 import HeartButton from "@/components/buttons/HeartButton";
 import { ImageWrapperProps } from "@/types/gallery";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
+import { convertToWebpExtension } from "@/utils/imageResizingS3";
 
 const sizeFolders = [
   "w400",
@@ -52,7 +53,7 @@ function buildSrc(img: {
   const filename =
     bestFolder === "originals"
       ? img.filename
-      : img.filename.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+      : convertToWebpExtension(img.filename);
   return `${img.base_url}/${bestFolder}/${filename}`;
 }
 
@@ -141,7 +142,7 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
         const filename =
           bestFolder === "originals"
             ? img.filename
-            : img.filename.replace(/\.(jpg|jpeg|png)$/i, ".webp");
+            : convertToWebpExtension(img.filename);
         src = `${img.base_url}/${bestFolder}/${filename}`;
         imgWidthFinal =
           availableSizes.find((s) => s.folder === bestFolder)?.width ??

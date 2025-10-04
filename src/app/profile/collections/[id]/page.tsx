@@ -118,11 +118,11 @@ export default function CollectionView() {
         }
 
         if (favoritesData && favoritesData.length > 0) {
-          // Get image details from images table
+          // Get image details from images_resize table
           const imageIds = favoritesData.map((fav) => fav.image_id);
           const { data: imagesTableData, error: imagesError } = await supabase
-            .from("images")
-            .select("id, url, title, author")
+            .from("images_resize")
+            .select("id, base_url, filename, title, author")
             .in("id", imageIds);
 
           if (imagesError) {
@@ -142,21 +142,29 @@ export default function CollectionView() {
                 ? imagesTableData?.find((img) => img.id === favorite.image_id)
                 : null;
 
+              // Construct URL from base_url and filename
+              const imageUrl =
+                image?.base_url && image?.filename
+                  ? `${image.base_url}/w800/${image.filename}`
+                  : "/favicons/android-chrome-512x512.png";
+
               return {
                 id: favorite?.image_id || "", // Use image_id as id
-                url: image?.url || "", // Use image.url as url
+                url: imageUrl, // Constructed URL
                 title: image?.title || "Image not found",
                 description: undefined, // No description available
                 // Additional properties for later use
                 favorite_id: cfItem.favorite_id,
                 image_id: favorite?.image_id || "",
-                image_url: image?.url || "",
+                image_url: imageUrl,
                 image_title: image?.title || "Image not found",
                 image_author: image?.author || "Unknown",
                 added_at: cfItem.added_at,
               };
             })
-            .filter((item) => item.url); // Filter out items where image wasn't found
+            .filter(
+              (item) => item.url !== "/favicons/android-chrome-512x512.png"
+            ); // Filter out items where image wasn't found
         }
       }
 

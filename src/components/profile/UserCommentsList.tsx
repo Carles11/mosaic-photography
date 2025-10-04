@@ -41,7 +41,7 @@ export default function UserCommentsList() {
             image_id,
             content,
             created_at
-          `,
+          `
           )
           .eq("user_id", user.id)
           .order("created_at", { ascending: false })
@@ -70,8 +70,8 @@ export default function UserCommentsList() {
 
         // Fetch image details for these IDs
         const { data: imagesData, error: imagesError } = await supabase
-          .from("images")
-          .select("id, title, url, author")
+          .from("images_resize")
+          .select("id, title, base_url, filename, author")
           .in("id", imageIds);
 
         if (imagesError) {
@@ -82,7 +82,14 @@ export default function UserCommentsList() {
         const imageMap = new Map();
         if (imagesData) {
           imagesData.forEach((image) => {
-            imageMap.set(image.id, image);
+            const imageWithUrl = {
+              ...image,
+              url:
+                image.base_url && image.filename
+                  ? `${image.base_url}/w800/${image.filename}`
+                  : "/favicons/android-chrome-512x512.png",
+            };
+            imageMap.set(image.id, imageWithUrl);
           });
         }
 
@@ -102,7 +109,7 @@ export default function UserCommentsList() {
               image_url: imageDetails?.url,
               image_author: imageDetails?.author,
             };
-          },
+          }
         );
 
         if (reset) {
@@ -118,7 +125,7 @@ export default function UserCommentsList() {
         setLoading(false);
       }
     },
-    [user],
+    [user]
   );
 
   useEffect(() => {
@@ -164,8 +171,8 @@ export default function UserCommentsList() {
                   ...comment,
                   content: editContent.trim(),
                 }
-              : comment,
-          ),
+              : comment
+          )
         );
         setEditingComment(null);
         setEditContent("");
@@ -203,7 +210,7 @@ export default function UserCommentsList() {
                   console.error("Error deleting comment:", error);
                 } else {
                   setComments((prev) =>
-                    prev.filter((comment) => comment.id !== commentId),
+                    prev.filter((comment) => comment.id !== commentId)
                   );
                   toast.success("Comment deleted.");
                 }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
+import { getProgressiveZoomSrc } from "@/utils/imageResizingS3";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import type { GalleryProps } from "@/types/gallery";
@@ -71,11 +72,9 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
               onLoginRequired={onLoginRequired}
               imgStyleOverride={{ height: "auto" }}
               sizes="
-                (max-width: 400px) 90vw,
-                (max-width: 600px) 95vw,
-                (max-width: 900px) 800px,
-                (max-width: 1200px) 1200px,
-                1600px
+                (max-width: 480px) 160px,
+                (max-width: 768px) 180px,
+                200px
               "
               width={186}
               height={186}
@@ -123,32 +122,13 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
               const safeZoom = typeof zoom === "number" && zoom > 1 ? zoom : 1;
               const safeWidth = typedSlide.width ?? 900;
 
-              // Find best progressive image for zoom
-              let bestZoomImgUrl = typedSlide.src;
-              if (
-                Array.isArray(typedSlide.s3Progressive) &&
-                typedSlide.s3Progressive.length > 0
-              ) {
-                const sorted = [...typedSlide.s3Progressive].sort(
-                  (a, b) => a.width - b.width
-                );
-
-                // Default target is safeWidth * safeZoom, but clamp to 1600 if zoom is 1
-                let targetWidth = safeWidth * safeZoom;
-                if (safeZoom === 1) {
-                  targetWidth = Math.min(safeWidth, 1600); // Never pick originals for normal view
-                }
-
-                const bestFit = sorted.filter(
-                  (imgObj) => imgObj.width <= targetWidth
-                );
-                const found =
-                  bestFit.length > 0
-                    ? bestFit[bestFit.length - 1]
-                    : sorted.find((imgObj) => imgObj.width >= targetWidth) ??
-                      sorted[sorted.length - 1];
-                bestZoomImgUrl = found?.url ?? typedSlide.src;
-              }
+              // Use shared utility for progressive zoom image selection
+              const bestZoomImgUrl = getProgressiveZoomSrc(
+                typedSlide.s3Progressive || [],
+                safeZoom,
+                safeWidth,
+                typedSlide.src
+              );
 
               return (
                 <div
