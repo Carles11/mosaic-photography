@@ -15,6 +15,7 @@ import { modalRegistry, ModalKey, ModalPropsMap } from "./modalRegistry";
 // Internal entry - keep flexible so the stack can hold any modal shape
 type ModalEntry = {
   id: string;
+  key: string;
   Component: React.ComponentType<Record<string, unknown>>;
   props?: Record<string, unknown>;
   resolver?: (value?: unknown) => void;
@@ -24,14 +25,15 @@ export type ModalContextValue = {
   open: <K extends ModalKey>(key: K, props?: ModalPropsMap[K]) => string | null;
   openAsync: <K extends ModalKey, T = unknown>(
     key: K,
-    props?: ModalPropsMap[K],
+    props?: ModalPropsMap[K]
   ) => Promise<T>;
   close: (id?: string, result?: unknown) => void;
+  currentModal: string | null;
 };
 
 // Export a loosely typed context so hooks can import it without strict generics
 export const ModalContext = createContext<ModalContextValue | undefined>(
-  undefined,
+  undefined
 );
 
 export function useInternalModalContext() {
@@ -44,6 +46,7 @@ export const ModalProvider: React.FC<{ children?: React.ReactNode }> = ({
   children,
 }) => {
   const [stack, setStack] = useState<ModalEntry[]>([]);
+  const [currentModal, setCurrentModal] = useState<string | null>(null);
   const idCounter = useRef(0);
 
   const open = useCallback(
@@ -57,17 +60,16 @@ export const ModalProvider: React.FC<{ children?: React.ReactNode }> = ({
       const id = `modal_${++idCounter.current}`;
 
       // Start loading component async and push the loaded component when ready
+      setCurrentModal(key);
       loader().then((mod) => {
-        // cast loaded component to a component accepting object props
         const Component = mod.default as unknown as React.ComponentType<
           Record<string, unknown>
         >;
-        setStack((s) => [...s, { id, Component, props }]);
+        setStack((s) => [...s, { id, key, Component, props }]);
       });
-
       return id;
     },
-    [],
+    []
   );
 
   const openAsync = useCallback(
@@ -82,15 +84,16 @@ export const ModalProvider: React.FC<{ children?: React.ReactNode }> = ({
 
         const id = `modal_${++idCounter.current}`;
 
+        setCurrentModal(key);
         loader().then((mod) => {
           const Component = mod.default as unknown as React.ComponentType<
             Record<string, unknown>
           >;
-          // resolver will be called with unknown; safe to assign
           setStack((s) => [
             ...s,
             {
               id,
+              key,
               Component,
               props,
               resolver: resolve as (v?: unknown) => void,
@@ -99,21 +102,27 @@ export const ModalProvider: React.FC<{ children?: React.ReactNode }> = ({
         });
       });
     },
-    [],
+    []
   );
 
   const close = useCallback((id?: string, result?: unknown) => {
     setStack((s) => {
+      let newStack;
       if (!id) {
         const last = s[s.length - 1];
         if (last && last.resolver) last.resolver(result);
-        return s.slice(0, -1);
+        newStack = s.slice(0, -1);
+      } else {
+        const idx = s.findIndex((e) => e.id === id);
+        if (idx === -1) return s;
+        const entry = s[idx];
+        if (entry && entry.resolver) entry.resolver(result);
+        newStack = [...s.slice(0, idx), ...s.slice(idx + 1)];
       }
-      const idx = s.findIndex((e) => e.id === id);
-      if (idx === -1) return s;
-      const entry = s[idx];
-      if (entry && entry.resolver) entry.resolver(result);
-      return [...s.slice(0, idx), ...s.slice(idx + 1)];
+      setCurrentModal(
+        newStack.length > 0 ? newStack[newStack.length - 1].key : null
+      );
+      return newStack;
     });
   }, []);
 
@@ -138,7 +147,7 @@ export const ModalProvider: React.FC<{ children?: React.ReactNode }> = ({
   }, []);
 
   return (
-    <ModalContext.Provider value={{ open, openAsync, close }}>
+    <ModalContext.Provider value={{ open, openAsync, close, currentModal }}>
       {children}
       {portalRoot &&
         createPortal(
@@ -162,7 +171,7 @@ export const ModalProvider: React.FC<{ children?: React.ReactNode }> = ({
               );
             })}
           </>,
-          portalRoot,
+          portalRoot
         )}
     </ModalContext.Provider>
   );

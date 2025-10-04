@@ -6,7 +6,15 @@ const ORIGINALS_PATH = "C:\\Users\\elcar\\Documents\\WEBs\\Mosaic\\IMGs";
 const TARGET_WIDTHS = [400, 600, 800, 1200, 1600];
 const INPUT_FOLDER = "originals";
 const OUTPUT_BASE_PATH = ORIGINALS_PATH;
-const supportedExtensions = [".jpg", ".jpeg", ".png", ".tiff", ".bmp", ".webp"];
+const supportedExtensions = [
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".tiff",
+  ".tif",
+  ".bmp",
+  ".webp",
+];
 
 // Utility: check if file is an image we want to process
 function isSupportedImage(file) {

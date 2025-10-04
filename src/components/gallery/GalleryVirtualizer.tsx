@@ -1,11 +1,19 @@
 import { VirtuosoMasonry } from "@virtuoso.dev/masonry";
-import { useCallback, useMemo, useState, lazy, Suspense } from "react";
+import {
+  useCallback,
+  useMemo,
+  useState,
+  lazy,
+  Suspense,
+  useEffect,
+} from "react";
 import type { ImageWithOrientation } from "@/types/gallery";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import { useModal } from "@/context/modalContext/useModal";
 
 import { getBestS3FolderForWidth, getAllS3Urls } from "@/utils/imageResizingS3";
 import styles from "./galleryVirtualizer.module.css";
@@ -23,6 +31,14 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
 }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const { currentModal } = useModal();
+
+  // Close lightbox automatically if a modal opens
+  useEffect(() => {
+    if (currentModal && isLightboxOpen) {
+      setIsLightboxOpen(false);
+    }
+  }, [currentModal, isLightboxOpen]);
 
   const columnCount = useMemo(() => {
     if (typeof window !== "undefined" && window.innerWidth < 500) return 2;
@@ -194,7 +210,6 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       background: "rgba(0,0,0,0.2)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
-                      zIndex: 1001,
                     }}
                   >
                     {slideWithAuthor.author || "Untitled"}

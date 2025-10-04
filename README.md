@@ -81,17 +81,6 @@ This project is a gallery of high-resolution images with the following features 
 - **Frontend Framework**: Built with **Next.js**, leveraging its server-side rendering (SSR) and static site generation (SSG) capabilities for optimal performance and SEO.
 - **Image Loading**: High-resolution images are dynamically loaded and optimized using the `next/image` component, ensuring fast load times and reduced bandwidth usage.
 
-### Image Orientation Script
-
-The project includes a utility script to automatically detect and correct image orientation:
-
-- **Script Location**: Located at `scripts/update-image-orientation.md`
-- **Purpose**: Automatically detects and corrects the orientation of images based on their EXIF data
-- **Usage**: Follow the instructions in the script file to process new images before they are displayed in the gallery
-- **Benefits**: Ensures consistent presentation of images regardless of the camera settings used during capture
-
-This script is particularly useful when uploading new images from various sources, as it standardizes their orientation for proper display in the gallery.
-
 ### Image Sitemap Generator
 
 The project includes a script to generate an XML sitemap specifically for images:

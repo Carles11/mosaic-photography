@@ -17,7 +17,6 @@
     "lint:imports": "eslint --ext .js,.jsx,.ts,.tsx src/ --quiet --rule \"import/order: error\" --rule \"import/no-duplicates: error\"",
     "analyze": "cross-env ANALYZE=true next build",
     "generate-image-sitemap": "tsx scripts/generate-image-sitemap.ts",
-    "update-orientations": "node scripts/update-image-orientations.js",
     "clean": "rimraf .next"
   },
   "dependencies": {

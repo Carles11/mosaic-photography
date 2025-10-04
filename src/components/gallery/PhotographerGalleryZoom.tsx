@@ -1,6 +1,7 @@
 "use client";
-import { useState, lazy, Suspense } from "react";
+import { useState, lazy, Suspense, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useModal } from "@/context/modalContext/useModal";
 
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
@@ -19,6 +20,14 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const router = useRouter();
+  const { currentModal } = useModal();
+
+  // Close lightbox automatically if a modal opens
+  useEffect(() => {
+    if (currentModal && isLightboxOpen) {
+      setIsLightboxOpen(false);
+    }
+  }, [currentModal, isLightboxOpen]);
 
   if (!images || images.length === 0)
     return <p>No images found for this photographer.</p>;

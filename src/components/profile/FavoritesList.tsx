@@ -36,7 +36,7 @@ export default function FavoritesList({
   const [confirmUnlike, setConfirmUnlike] = useState<string | null>(null);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const { open } = useModal();
+  const { open, currentModal } = useModal();
   const router = useRouter();
 
   const loadFavoriteImages = useCallback(async () => {
@@ -82,6 +82,13 @@ export default function FavoritesList({
       setImagesLoading(false);
     }
   }, [favorites]);
+
+  // Close lightbox automatically if a modal opens
+  useEffect(() => {
+    if (currentModal && isLightboxOpen) {
+      setIsLightboxOpen(false);
+    }
+  }, [currentModal, isLightboxOpen]);
 
   // Fix useEffect dependencies
   useEffect(() => {
@@ -178,10 +185,9 @@ export default function FavoritesList({
                       objectFit: "cover",
                     }}
                     sizes="
-                      (max-width: 480px) 280px,
-                      (max-width: 768px) 350px,
-                      (max-width: 1200px) 400px,
-                      500px
+                      (max-width: 480px) 160px,
+                      (max-width: 768px) 180px,
+                      200px
                     "
                     width={200}
                     height={200}
@@ -268,7 +274,6 @@ export default function FavoritesList({
               alt: image.title,
               width: image.width,
               height: image.height,
-              // Add the full image data to each slide for access in render
               id: image.id,
               title: image.title,
               author: image.author,
@@ -289,7 +294,6 @@ export default function FavoritesList({
           }}
           render={{
             slide: ({ slide, rect }) => {
-              // Get the image data from the slide itself
               const typedSlide = slide as {
                 src: string;
                 alt?: string;
@@ -300,10 +304,7 @@ export default function FavoritesList({
                 author?: string;
                 s3Progressive?: Array<{ url: string; width: number }>;
               };
-
               const s3Progressive = typedSlide.s3Progressive || [];
-
-              // Progressive zoom: choose image based on zoom level
               const getImageSrc = () => {
                 if (!rect || s3Progressive.length === 0) {
                   return typedSlide.src;
@@ -312,7 +313,6 @@ export default function FavoritesList({
                   rect.width / (slide.width || 1),
                   rect.height / (slide.height || 1)
                 );
-
                 return getProgressiveZoomSrc(
                   s3Progressive,
                   zoomLevel,
@@ -320,7 +320,6 @@ export default function FavoritesList({
                   typedSlide.src
                 );
               };
-
               return (
                 <div
                   style={{
