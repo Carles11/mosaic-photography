@@ -18,7 +18,7 @@ export async function fetchGalleryImagesSSR(): Promise<
     const { data: images, error } = await supabase
       .from("images_resize")
       .select(
-        "id, base_url, filename, author, title, description, created_at, orientation, width, height"
+        "id, base_url, filename, author, title, description, created_at, orientation, width, height, gender, color, nudity"
       );
     if (error || !images) {
       console.error(

@@ -6,6 +6,7 @@ import { ServiceWorkerContext } from "@/context/ServiceWorkerContext";
 import { AuthSessionProvider } from "@/context/AuthSessionContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
 import { CommentsProvider } from "@/context/CommentsContext";
+import { FiltersProvider } from "@/context/settingsContext/filters";
 import ModalProviderLoader from "@/components/modals/ModalProviderLoader";
 
 export default function ClientProviders({
@@ -22,12 +23,15 @@ export default function ClientProviders({
             <AgeConsentProvider>
               <FavoritesProvider>
                 <CommentsProvider>
-                  {/* Portal root for modals must exist before the ModalProvider mounts */}
-                  <div id="modal-root" />
-                  <div id="modal-loader-root">
-                    {/* ModalProviderLoader mounts the client ModalProvider lazily */}
-                  </div>
-                  <ModalProviderLoader>{children}</ModalProviderLoader>
+                  {" "}
+                  <FiltersProvider>
+                    {/* Portal root for modals must exist before the ModalProvider mounts */}
+                    <div id="modal-root" />
+                    <div id="modal-loader-root">
+                      {/* ModalProviderLoader mounts the client ModalProvider lazily */}
+                    </div>
+                    <ModalProviderLoader>{children}</ModalProviderLoader>
+                  </FiltersProvider>
                 </CommentsProvider>
               </FavoritesProvider>
             </AgeConsentProvider>

@@ -44,6 +44,9 @@ export interface ImageData {
     width: number;
   }>;
   className?: string;
+  gender?: "female" | "male" | "mixed";
+  color?: string;
+  nudity?: string;
 }
 
 export interface GalleryProps extends JSX.IntrinsicAttributes {
@@ -81,6 +84,16 @@ export type ImageCardProps = {
 
 export type SwipeGalleryProps = {
   images: { src: string; thumbnail: string; width: number; height: number }[];
+};
+
+export type GalleryFilter = {
+  orientation?: "vertical" | "horizontal" | null;
+  color?: "bw" | "color" | null;
+  nudity?: "nude" | "not-nude" | null;
+  gender?: "male" | "female" | "mixed" | null;
+  print_quality?: "good" | "standard" | "excellent" | "professional" | null;
+  year?: { from: number; to: number } | null;
+  // Add other filter fields as needed
 };
 
 // Comment Types

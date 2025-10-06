@@ -8,8 +8,6 @@
   TypeScript enforce correct `open`/`openAsync` usage.
 */
 
-import React from "react";
-
 export type ModalKey =
   | "addToCollection"
   | "goPro"
@@ -17,7 +15,8 @@ export type ModalKey =
   | "createCollection"
   | "editCollection"
   | "photographer"
-  | "shareCollection";
+  | "shareCollection"
+  | "galleryFilters";
 
 export type ModalPropsMap = {
   addToCollection: {
@@ -51,6 +50,11 @@ export type ModalPropsMap = {
     collection: import("@/types").Collection;
     onClose: () => void;
   };
+  galleryFilters: {
+    filters: import("@/types").GalleryFilter;
+    onApply: (filters: import("@/types").GalleryFilter) => void;
+    onClose: () => void;
+  };
 };
 
 export type ModalLoader<TProps> = () => Promise<{
@@ -72,4 +76,6 @@ export const modalRegistry: {
     import("@/components/modals/photographer/PhotographerModalBody"),
   shareCollection: () =>
     import("@/components/modals/shareCollection/ShareCollectionModal"),
+  galleryFilters: () =>
+    import("@/components/modals/galleryFilters/GalleryFiltersModalBody"),
 };

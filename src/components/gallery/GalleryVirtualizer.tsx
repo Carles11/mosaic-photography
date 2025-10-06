@@ -66,6 +66,10 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
 
   const ItemContent = useCallback(
     ({ data, index }: { data: ImageWithOrientation; index: number }) => {
+      if (!data) {
+        // Optionally, you can render a placeholder or just return null
+        return null;
+      }
       let cssClass = styles.gridItem;
       if (data.orientation === "horizontal") {
         cssClass += ` ${styles.landscape}`;
