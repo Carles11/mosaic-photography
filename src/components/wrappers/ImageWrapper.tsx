@@ -161,6 +161,8 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
       };
     });
 
+    console.log("photographer", photographer);
+
     return (
       <>
         <JsonLdSchema
@@ -212,7 +214,12 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
                   img.src ?? img.url ?? "/favicons/android-chrome-512x512.png"
                 }
                 alt={img.title || "Gallery Image"}
-                className={`${styles.imageItem} ${styles.image} ${styles.zoomInCursor}`}
+                className={
+                  `${styles.imageItem} ${styles.image} ` +
+                  (photographer
+                    ? ` ${styles.goToLinkCursor}`
+                    : `${styles.zoomInCursor}`)
+                }
                 width={img.imgWidth}
                 height={img.imgHeight}
                 sizes={img.sizes}
@@ -322,7 +329,10 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
         <Image
           src={src ?? "/favicons/android-chrome-512x512.png"}
           alt={image.title || "Gallery Image"}
-          className={`${styles.imageItem} ${styles.image} ${styles.zoomInCursor}`}
+          className={
+            `${styles.imageItem} ${styles.image} ${styles.zoomInCursor}` +
+            (photographer ? ` ${styles.goToLink}` : "")
+          }
           width={imgWidthFinal}
           height={imgHeightFinal}
           sizes={sizes}

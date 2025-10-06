@@ -9,21 +9,19 @@ const Timeline: React.FC<TimelineProps> = ({
   width = "100%",
   height = "auto",
 }) => {
-  const isMobile = useIsMobile(768);
-  const responsiveOrientation = isMobile ? "HORIZONTAL" : "HORIZONTAL";
-  console.log("responsiveOrientation", responsiveOrientation);
+  const isMobile = useIsMobile();
   return (
     <div style={{ width, height }}>
       <Chrono
         disableToolbar={true}
         items={events}
-        mode={responsiveOrientation}
+        mode={"HORIZONTAL"}
         semanticTags={{
           title: "h1",
           cardTitle: "h2",
           cardDetailedText: "p",
         }}
-        itemWidth={100}
+        itemWidth={isMobile ? 100 : 150}
         theme={{
           primary: "var(--accent-color)",
           secondary: "var(--foreground)",

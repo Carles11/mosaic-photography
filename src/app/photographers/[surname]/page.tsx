@@ -13,8 +13,10 @@ export default async function PhotographerDetailPage(
   const params = await props.params;
   if (!params?.surname) return notFound();
 
-  const photographerTimeline = getTimelineBySlug(params.surname);
+  // Remove any "-" from the surname before searching
+  const cleanSurname = params.surname.replace(/-/g, "");
 
+  const photographerTimeline = getTimelineBySlug(cleanSurname);
   // Fetch photographer by slug (not just surname)
   const photographer = await fetchPhotographerBySlugSSR(params.surname);
   if (!photographer) return notFound();

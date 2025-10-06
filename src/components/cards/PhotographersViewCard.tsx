@@ -102,7 +102,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                           photographer
                           image={{
                             ...portrait,
-                            title: `Portrait of photographer ...`,
+                            title: `Portrait of photographer ${photographer.name} ${photographer.surname}`,
                             url:
                               portrait.s3Progressive?.[0]?.url ??
                               "/favicons/android-chrome-512x512.png",

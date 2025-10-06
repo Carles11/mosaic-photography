@@ -563,17 +563,17 @@ body {
 }
 
 .cBdiWt {
-  font-size: 1.5rem !important;
+  font-size: 1.3rem !important;
 }
 
 @media (max-width: 678px) {
   .cBdiWt {
-    font-size: 1.3rem !important;
+    font-size: 1.2rem !important;
   }
 }
 
 @media (max-width: 480px) {
   .cBdiWt {
-    font-size: 0.9rem !important;
+    font-size: 0.8rem !important;
   }
 }

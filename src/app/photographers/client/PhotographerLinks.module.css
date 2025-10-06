@@ -1,10 +1,17 @@
 .sectionHeader {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: baseline;
+  margin: 22px 0 11px 0;
 }
 
 .sectionTitle {
   margin: 0;
-  padding-left: 22px;
+  padding-left: 11px;
+}
+
+@media (max-width: 768px) {
+  .sectionTitle {
+    padding-left: 0;
+  }
 }
