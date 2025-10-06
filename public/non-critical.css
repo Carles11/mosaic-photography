@@ -557,7 +557,23 @@ body {
 .urlContainer {
   flex-direction: column;
 }
+/* Fix for react-chrono timeline background issue */
+.gqkRuK::after {
+  background: none !important;
+}
 
-.pswp__img {
-  object-fit: contain !important;
+.cBdiWt {
+  font-size: 1.5rem !important;
+}
+
+@media (max-width: 678px) {
+  .cBdiWt {
+    font-size: 1.3rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .cBdiWt {
+    font-size: 0.9rem !important;
+  }
 }

@@ -33,6 +33,20 @@
   padding-left: 22px;
 }
 
+.timelineContainer {
+  display: flex;
+  justify-self: center;
+  margin-top: 22px;
+  margin-bottom: 22px;
+}
+
+.timelineTitle {
+  margin-bottom: 22px;
+}
+.timelineSubtitle {
+  margin-bottom: 22px;
+}
+
 .galleryCount {
   font-size: 0.8em;
   font-weight: normal;
@@ -42,5 +56,10 @@
 @media (max-width: 768px) {
   .sectionTitle {
     padding-left: 0;
+  }
+
+  .timelineContainer {
+    width: 100%;
+    max-width: 94vw;
   }
 }

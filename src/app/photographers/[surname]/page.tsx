@@ -2,6 +2,9 @@ import { notFound } from "next/navigation";
 import PhotographerGalleryZoom from "@/components/gallery/PhotographerGalleryZoom";
 import { fetchPhotographerBySlugSSR } from "@/utils/fetchPhotographerByIdSSR";
 import { PhotographerLinks } from "../client/PhotographerLinks";
+import Timeline from "@/components/timeline/Timeline";
+import { getTimelineBySlug } from "@/lib/timeline/photographersTimelines";
+import { TimelineItemModelProps } from "@/types/components";
 import styles from "./Photographers.module.css";
 
 export default async function PhotographerDetailPage(
@@ -9,6 +12,8 @@ export default async function PhotographerDetailPage(
 ) {
   const params = await props.params;
   if (!params?.surname) return notFound();
+
+  const photographerTimeline = getTimelineBySlug(params.surname);
 
   // Fetch photographer by slug (not just surname)
   const photographer = await fetchPhotographerBySlugSSR(params.surname);
@@ -41,6 +46,13 @@ export default async function PhotographerDetailPage(
           website={photographer.website}
         />
       </main>
+      <h2 className={styles.timelineTitle}>Timeline</h2>
+      <p className={styles.timelineTitle}>
+        Events in {photographer.name} {photographer.surname}&apos;s life time
+      </p>
+      <div className={styles.timelineContainer}>
+        <Timeline events={photographerTimeline as TimelineItemModelProps[]} />
+      </div>
       <h2>
         Gallery{" "}
         <span

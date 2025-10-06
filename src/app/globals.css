@@ -43,7 +43,7 @@ body {
   --color-white: #fff;
   --color-black: #1d1d1d;
   --link-color: rgb(107, 154, 192);
-  --foreground: var(--text-color);
+  --foreground: var(--secondary-color);
   --foreground-muted: #666;
   --card-background: #fff;
   --background: #fff;
