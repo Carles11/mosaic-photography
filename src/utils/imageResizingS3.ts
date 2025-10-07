@@ -99,3 +99,20 @@ export function getProgressiveZoomSrc(
 
   return found?.url ?? fallbackSrc ?? "";
 }
+
+export function getImageStyle(
+  orientation: string,
+  imgStyleOverride?: React.CSSProperties
+) {
+  let style: React.CSSProperties = {};
+  if (orientation === "vertical") {
+    style = { width: "auto", height: "100%", objectFit: "contain" };
+  } else if (orientation === "horizontal") {
+    style = { width: "100%", height: "auto", objectFit: "contain" };
+  } else {
+    // For square or unknown, default to width 100%
+    style = { width: "100%", height: "auto", objectFit: "contain" };
+  }
+  // Merge with any overrides
+  return { ...style, ...(imgStyleOverride || {}) };
+}

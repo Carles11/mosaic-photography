@@ -20,6 +20,7 @@ import {
   getAllS3Urls,
   getProgressiveZoomSrc,
 } from "@/utils/imageResizingS3";
+import { getMosaicImageProps } from "@/utils/mosaicLayout";
 import styles from "./galleryVirtualizer.module.css";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
@@ -50,50 +51,32 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     return 4;
   }, []);
 
-  const sizesForMosaic = (data: ImageWithOrientation) => {
-    if (data.orientation === "vertical" && data.mosaicType === "large")
-      return "(max-width: 400px) 90vw, (max-width: 900px) 800px, (max-width: 1200px) 1200px, 1600px";
-    if (data.orientation === "vertical" && data.mosaicType === "tall")
-      return "(max-width: 400px) 90vw, (max-width: 900px) 800px, (max-width: 1200px) 1200px, 1600px";
-    if (data.orientation === "vertical" && data.mosaicType === "wide")
-      return "(max-width: 400px) 90vw, (max-width: 900px) 1200px, 1600px";
-    if (data.orientation === "vertical")
-      return "(max-width: 400px) 90vw, (max-width: 900px) 600px, 800px";
-    if (data.orientation === "horizontal")
-      return "(max-width: 400px) 90vw, (max-width: 900px) 800px, (max-width: 1200px) 1200px, 1600px";
-    return "(max-width: 400px) 90vw, (max-width: 900px) 600px, 800px";
-  };
+  // DRY: Remove sizesForMosaic, use getMosaicImageProps instead
 
   const ItemContent = useCallback(
     ({ data, index }: { data: ImageWithOrientation; index: number }) => {
       if (!data) {
-        // Optionally, you can render a placeholder or just return null
         return null;
       }
-      let cssClass = styles.gridItem;
-      if (data.orientation === "horizontal") {
-        cssClass += ` ${styles.landscape}`;
-      } else if (data.orientation === "vertical") {
-        switch (data.mosaicType) {
-          case "large":
-            cssClass += ` ${styles.mosaicLarge}`;
-            break;
-          case "wide":
-            cssClass += ` ${styles.mosaicWide}`;
-            break;
-          case "tall":
-            cssClass += ` ${styles.mosaicTall}`;
-            break;
-          default:
-            cssClass += ` ${styles.portrait}`;
-        }
-      } else if (data.orientation === "square") {
-        cssClass += ` ${styles.portrait}`;
+      // DRY: Use getMosaicImageProps for layout
+      const {
+        cssClass: mosaicClass,
+        aspectRatio,
+        sizes: sizesLocal,
+        width: imgWidth,
+        height: imgHeight,
+      } = getMosaicImageProps(data.mosaicType, data.orientation);
+
+      // Compose CSS class
+      let cssClass = `${styles.gridItem} ${styles.imageContainer}`;
+      if (mosaicClass && styles[mosaicClass]) {
+        cssClass += ` ${styles[mosaicClass]}`;
       }
 
       return (
         <div
           className={cssClass}
+          style={{ aspectRatio }}
           onClick={() => {
             setLightboxIndex(index);
             setIsLightboxOpen(true);
@@ -107,9 +90,9 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                 "/favicons/android-chrome-512x512.png",
             }}
             onLoginRequired={onLoginRequired}
-            sizes={sizesForMosaic(data)}
-            width={data.width ?? 600}
-            height={data.height ?? 800}
+            sizes={sizesLocal}
+            width={imgWidth}
+            height={imgHeight}
           />
         </div>
       );
@@ -118,20 +101,26 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
   );
 
   // Get progressive image srcs for lightbox slides
-  const progressiveSlides = images.map((img) => ({
-    src: getBestS3FolderForWidth(
-      img,
-      typeof window !== "undefined"
-        ? Math.min(window.innerWidth * 0.9, 1600)
-        : 900
-    ).url,
-    customId: img.id,
-    author: img.author,
-    description: img.description,
-    width: img.width ?? 1920,
-    height: img.height ?? 1080,
-    s3Progressive: getAllS3Urls(img), // get all available S3 urls for zoom steps
-  }));
+  const progressiveSlides = images.map((img) => {
+    const { width: imgWidth, height: imgHeight } = getMosaicImageProps(
+      img.mosaicType,
+      img.orientation
+    );
+    return {
+      src: getBestS3FolderForWidth(
+        img,
+        typeof window !== "undefined"
+          ? Math.min(window.innerWidth * 0.9, 1600)
+          : imgWidth
+      ).url,
+      customId: img.id,
+      author: img.author,
+      description: img.description,
+      width: img.width ?? imgWidth,
+      height: img.height ?? imgHeight,
+      s3Progressive: getAllS3Urls(img), // get all available S3 urls for zoom steps
+    };
+  });
 
   return (
     <>
@@ -150,15 +139,14 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
           index={lightboxIndex}
           plugins={[Zoom]}
           zoom={{
-            maxZoomPixelRatio: 3, // or 3 for even further zoom
+            maxZoomPixelRatio: 3,
             minZoom: 1,
             zoomInMultiplier: 2,
-            scrollToZoom: true, // optional for mouse/trackpad users
+            scrollToZoom: true,
           }}
           render={{
             slide: (props) => {
               const { slide, zoom } = props;
-              // For progressive zoom, we pick the best S3 image for the current zoom scale
               interface LightboxSlide {
                 src: string;
                 customId?: number;
@@ -174,18 +162,15 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
               const slideWithDescription = slide as { description?: string };
               const slideWithCreatedAt = slide as { created_at?: string };
 
-              // Defensive: fallback for zoom
               const safeZoom = typeof zoom === "number" && zoom > 1 ? zoom : 1;
               const safeWidth = typedSlide.width ?? 900;
 
-              // Use getProgressiveZoomSrc to select best image for zoom
               const imgSrc = getProgressiveZoomSrc(
                 typedSlide.s3Progressive ?? [],
                 safeZoom,
                 safeWidth,
                 typedSlide.src
               );
-              // Find the width of the selected image
               const selectedImgObj = (typedSlide.s3Progressive ?? []).find(
                 (imgObj) => imgObj.url === imgSrc
               );
