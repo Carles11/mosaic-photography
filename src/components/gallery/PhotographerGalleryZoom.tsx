@@ -1,8 +1,15 @@
 "use client";
-import { useState, lazy, Suspense, useEffect } from "react";
+import {
+  useState,
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/context/modalContext/useModal";
-
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
@@ -22,28 +29,63 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
   const router = useRouter();
   const { currentModal } = useModal();
 
-  // Close lightbox automatically if a modal opens
+  // Track previous modal and last lightbox index for restore logic
+  const lastLightboxIndex = useRef<number | null>(null);
+  const prevModal = useRef<string>(null);
+
+  // Defensive mapping: ensure each image always has a valid url and s3Progressive, and created_at
+  const imagesWithUrl = useMemo(
+    () =>
+      images?.map((img) => ({
+        ...img,
+        url:
+          img.s3Progressive?.[0]?.url ?? "/favicons/android-chrome-512x512.png",
+        s3Progressive: Array.isArray(img.s3Progressive)
+          ? img.s3Progressive
+          : [],
+        width: img.width ?? 900,
+        height: img.height ?? 900,
+        title: img.title ?? "Untitled",
+        id: img.id,
+        author: img.author ?? "",
+        description: img.description ?? "",
+        created_at: img.created_at ?? "",
+      })),
+    [images]
+  );
+
+  // Save last lightbox index before closing for modal
   useEffect(() => {
     if (currentModal && isLightboxOpen) {
+      lastLightboxIndex.current = lightboxIndex;
       setIsLightboxOpen(false);
     }
-  }, [currentModal, isLightboxOpen]);
+  }, [currentModal, isLightboxOpen, lightboxIndex]);
 
-  if (!images || images.length === 0)
+  // Restore lightbox when modal closes
+  useEffect(() => {
+    if (
+      prevModal.current &&
+      !currentModal &&
+      lastLightboxIndex.current !== null
+    ) {
+      setLightboxIndex(lastLightboxIndex.current);
+      setIsLightboxOpen(true);
+      lastLightboxIndex.current = null;
+    }
+    prevModal.current = currentModal;
+  }, [currentModal]);
+
+  const openLightbox = useCallback((idx: number) => {
+    setLightboxIndex(
+      lastLightboxIndex.current !== null ? lastLightboxIndex.current : idx
+    );
+    setIsLightboxOpen(true);
+    lastLightboxIndex.current = null;
+  }, []);
+
+  if (!imagesWithUrl || imagesWithUrl.length === 0)
     return <p>No images found for this photographer.</p>;
-
-  // Defensive mapping: ensure each image always has a valid url and s3Progressive
-  const imagesWithUrl = images.map((img) => ({
-    ...img,
-    url: img.s3Progressive?.[0]?.url ?? "/favicons/android-chrome-512x512.png",
-    s3Progressive: Array.isArray(img.s3Progressive) ? img.s3Progressive : [],
-    width: img.width ?? 900,
-    height: img.height ?? 900,
-    title: img.title ?? "Untitled",
-    id: img.id,
-    author: img.author ?? "",
-    description: img.description ?? "",
-  }));
 
   return (
     <>
@@ -72,10 +114,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
               background: "#f8f8f8",
               cursor: "pointer",
             }}
-            onClick={() => {
-              setLightboxIndex(idx);
-              setIsLightboxOpen(true);
-            }}
+            onClick={() => openLightbox(idx)}
           >
             <ImageWrapper
               image={img}
@@ -91,7 +130,25 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
           </div>
         ))}
       </div>
-      <Suspense fallback={null}>
+      <Suspense
+        fallback={
+          <div style={{ textAlign: "center", padding: "2em" }}>
+            <div
+              className="spinner"
+              style={{
+                margin: "0 auto",
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                border: "4px solid #ccc",
+                borderTop: "4px solid #333",
+                animation: "spin 1s linear infinite",
+              }}
+            ></div>
+            <p>Loading lightbox...</p>
+          </div>
+        }
+      >
         <Lightbox
           open={isLightboxOpen}
           close={() => setIsLightboxOpen(false)}
@@ -104,6 +161,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
             width: img.width,
             height: img.height,
             s3Progressive: img.s3Progressive,
+            created_at: img.created_at,
           }))}
           index={lightboxIndex}
           plugins={[Zoom]}
@@ -114,9 +172,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
             scrollToZoom: true,
           }}
           render={{
-            slide: (props) => {
-              const { slide, zoom } = props;
-              // Progressive zoom: pick best S3 image for current zoom scale
+            slide: ({ slide, zoom }) => {
               const typedSlide = slide as {
                 src: string;
                 id?: number | string;
@@ -130,15 +186,12 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
               };
               const safeZoom = typeof zoom === "number" && zoom > 1 ? zoom : 1;
               const safeWidth = typedSlide.width ?? 900;
-
-              // Use shared utility for progressive zoom image selection
               const bestZoomImgUrl = getProgressiveZoomSrc(
                 typedSlide.s3Progressive || [],
                 safeZoom,
                 safeWidth,
                 typedSlide.src
               );
-
               return (
                 <div
                   style={{
@@ -165,7 +218,6 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                   >
                     {typedSlide.author || "Untitled"}
                   </div>
-
                   <ImageWrapper
                     image={{
                       ...typedSlide,

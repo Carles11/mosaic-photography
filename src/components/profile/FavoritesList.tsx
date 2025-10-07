@@ -1,6 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback, lazy, Suspense } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  lazy,
+  Suspense,
+  useRef,
+  useMemo,
+} from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/context/modalContext/useModal";
@@ -9,11 +17,8 @@ import { supabase } from "@/lib/supabaseClient";
 import { useFavorites } from "@/context/FavoritesContext";
 import { ImageData } from "@/types";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
-import {
-  getAllS3Urls,
-  getProgressiveZoomSrc,
-  getBestS3FolderForWidth,
-} from "@/utils/imageResizingS3";
+import { getAllS3Urls, getProgressiveZoomSrc } from "@/utils/imageResizingS3";
+import { getMosaicImageProps } from "@/utils/mosaicLayout";
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import "yet-another-react-lightbox/styles.css";
@@ -22,7 +27,7 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
 interface FavoriteImageData extends ImageData {
-  favoriteId: string; // To track the favorite relationship
+  favoriteId: string;
 }
 
 interface FavoritesListProps {
@@ -42,6 +47,16 @@ export default function FavoritesList({
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const { open, currentModal } = useModal();
   const router = useRouter();
+  const lastLightboxIndex = useRef<number | null>(null);
+  const prevModal = useRef<string | null>(null);
+
+  // Memoize mapped favorite images for performance
+  const mappedFavoriteImages = useMemo(() => {
+    return favoriteImages.map((image) => ({
+      ...image,
+      ...getMosaicImageProps(image.mosaicType, image.orientation),
+    }));
+  }, [favoriteImages]);
 
   const loadFavoriteImages = useCallback(async () => {
     if (favorites.size === 0) {
@@ -62,57 +77,70 @@ export default function FavoritesList({
 
       if (error) {
         console.error("Error loading favorite images:", error);
+        // Optional: set error state and show UI feedback
+        setImagesLoading(false);
         return;
       }
 
       if (images) {
-        // Map images and preserve the favorite relationship
-        const favoriteImagesData: FavoriteImageData[] = images.map((image) => {
-          const s3Progressive = getAllS3Urls(image);
-          return {
-            ...image,
-            url: getBestS3FolderForWidth(image, 900).url,
-            s3Progressive,
-            favoriteId: image.id,
-            width: image.width ?? 1920,
-            height: image.height ?? 1080,
-          };
-        });
+        const favoriteImagesData: FavoriteImageData[] = images.map((image) => ({
+          ...image,
+          favoriteId: image.id,
+          width: image.width ?? 1920,
+          height: image.height ?? 1080,
+        }));
 
         setFavoriteImages(favoriteImagesData);
       }
     } catch (error) {
       console.error("Error loading favorite images:", error);
+      // Optional: set error state and show UI feedback
     } finally {
       setImagesLoading(false);
     }
   }, [favorites]);
 
+  const openLightbox = useCallback((index?: number) => {
+    setLightboxIndex(
+      lastLightboxIndex.current !== null
+        ? lastLightboxIndex.current
+        : index ?? 0
+    );
+    setIsLightboxOpen(true);
+    lastLightboxIndex.current = null;
+  }, []);
+
   // Close lightbox automatically if a modal opens
   useEffect(() => {
     if (currentModal && isLightboxOpen) {
+      lastLightboxIndex.current = lightboxIndex;
       setIsLightboxOpen(false);
     }
-  }, [currentModal, isLightboxOpen]);
+  }, [currentModal, isLightboxOpen, lightboxIndex]);
 
-  // Fix useEffect dependencies
   useEffect(() => {
     loadFavoriteImages();
   }, [loadFavoriteImages]);
+
+  useEffect(() => {
+    // Modal just closed: was open, now null/undefined
+    if (
+      prevModal.current &&
+      !currentModal &&
+      lastLightboxIndex.current !== null
+    ) {
+      openLightbox();
+    }
+    prevModal.current = currentModal;
+  }, [currentModal, openLightbox]);
 
   const handleUnlikeClick = (imageId: string) => {
     setConfirmUnlike(imageId);
   };
 
-  const openLightbox = (index: number) => {
-    setLightboxIndex(index);
-    setIsLightboxOpen(true);
-  };
-
   const handleConfirmUnlike = async (imageId: string) => {
     await toggleFavorite(imageId);
     setConfirmUnlike(null);
-    // Remove from local state immediately for better UX
     setFavoriteImages((prev) => prev.filter((img) => img.id !== imageId));
   };
 
@@ -145,7 +173,7 @@ export default function FavoritesList({
     );
   }
 
-  if (favoriteImages.length === 0 && !imagesLoading) {
+  if (mappedFavoriteImages.length === 0 && !imagesLoading) {
     return (
       <div className={styles.emptyState}>
         <div className={styles.emptyIcon}>♡</div>
@@ -159,7 +187,7 @@ export default function FavoritesList({
     <div className={styles.container}>
       <div className={styles.header}>
         <h3 className={styles.title}>
-          Your Favorites ({favoriteImages.length})
+          Your Favorites ({mappedFavoriteImages.length})
         </h3>
         <p className={styles.subtitle}>
           Images you&apos;ve saved to your collection
@@ -174,28 +202,26 @@ export default function FavoritesList({
       ) : (
         <div className={styles.scrollContainer}>
           <div className={styles.grid}>
-            {favoriteImages.map((image, index) => (
+            {mappedFavoriteImages.map((image, index) => (
               <div key={image.id} className={styles.favoriteItem}>
                 <div
-                  className={styles.imageContainer}
+                  className={`${styles.imageContainer} ${
+                    image.cssClass ? styles[image.cssClass] : ""
+                  }`}
                   onClick={() => openLightbox(index)}
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", aspectRatio: image.aspectRatio }}
                 >
                   <ImageWrapper
                     image={image}
                     onLoginRequired={() => {}}
+                    sizes={image.sizes}
+                    width={image.width}
+                    height={image.height}
                     imgStyleOverride={{
                       width: "100%",
                       height: "auto",
                       objectFit: "cover",
                     }}
-                    sizes="
-                      (max-width: 480px) 160px,
-                      (max-width: 768px) 180px,
-                      200px
-                    "
-                    width={200}
-                    height={200}
                     showOverlayButtons={false}
                   />
                   <div className={styles.imageOverlay}>
@@ -211,6 +237,7 @@ export default function FavoritesList({
                         }
                         className={styles.addToCollectionButton}
                         title="Add to collection"
+                        aria-label="Add to collection"
                       >
                         <span className={styles.collectionIcon}>
                           <Image
@@ -218,7 +245,7 @@ export default function FavoritesList({
                             width={24}
                             height={24}
                             alt="add to collection icon"
-                            priority={false} // Set to true for critical images
+                            priority={false}
                             loading="lazy"
                           />
                         </span>
@@ -228,6 +255,7 @@ export default function FavoritesList({
                         className={styles.unlikeButton}
                         id="unlike-icon"
                         title="Remove from favorites"
+                        aria-label="Remove from favorites"
                       >
                         <span className={styles.heartIcon}>💔</span>
                       </button>
@@ -235,7 +263,6 @@ export default function FavoritesList({
                   </div>
                 </div>
 
-                {/* Confirmation Modal */}
                 {confirmUnlike === image.id && (
                   <div className={styles.confirmModal}>
                     <div className={styles.confirmContent}>
@@ -263,21 +290,25 @@ export default function FavoritesList({
         </div>
       )}
 
-      {/* Add to Collection modal is provided by ModalProvider and opened via useModal().open */}
-
-      {/* Lightbox for zooming */}
-      <Suspense fallback={<div>Loading lightbox...</div>}>
+      <Suspense
+        fallback={
+          <div className={styles.loading}>
+            <div className={styles.spinner}></div>
+            <p>Loading lightbox...</p>
+          </div>
+        }
+      >
         <Lightbox
           open={isLightboxOpen}
           close={() => setIsLightboxOpen(false)}
           index={lightboxIndex}
-          slides={favoriteImages.map((image) => {
+          slides={mappedFavoriteImages.map((image) => {
             const s3Progressive = getAllS3Urls(image);
             return {
               src: getProgressiveZoomSrc(
                 s3Progressive,
                 1,
-                image.width ?? 900,
+                image.width,
                 image.url ?? ""
               ),
               alt: image.title,
@@ -287,7 +318,7 @@ export default function FavoritesList({
               title: image.title,
               author: image.author,
               description: image.description,
-              s3Progressive: s3Progressive,
+              s3Progressive,
             };
           })}
           plugins={[Zoom]}

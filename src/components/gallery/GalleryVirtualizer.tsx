@@ -6,6 +6,7 @@ import {
   lazy,
   Suspense,
   useEffect,
+  useRef,
 } from "react";
 import type { ImageWithOrientation } from "@/types/gallery";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
@@ -38,27 +39,45 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const { currentModal } = useModal();
 
-  // Close lightbox automatically if a modal opens
-  useEffect(() => {
-    if (currentModal && isLightboxOpen) {
-      setIsLightboxOpen(false);
-    }
-  }, [currentModal, isLightboxOpen]);
+  // Track previous modal and last lightbox index for restore logic
+  const lastLightboxIndex = useRef<number | null>(null);
+  const prevModal = useRef<unknown>(null);
 
+  // Memoize progressiveSlides for performance
+  const progressiveSlides = useMemo(() => {
+    return images.map((img) => {
+      const { width: imgWidth, height: imgHeight } = getMosaicImageProps(
+        img.mosaicType,
+        img.orientation
+      );
+      return {
+        src: getBestS3FolderForWidth(
+          img,
+          typeof window !== "undefined"
+            ? Math.min(window.innerWidth * 0.9, 1600)
+            : imgWidth
+        ).url,
+        customId: img.id,
+        author: img.author,
+        description: img.description,
+        width: img.width ?? imgWidth,
+        height: img.height ?? imgHeight,
+        s3Progressive: getAllS3Urls(img),
+      };
+    });
+  }, [images]);
+
+  // Memoize column count for responsiveness
   const columnCount = useMemo(() => {
     if (typeof window !== "undefined" && window.innerWidth < 500) return 2;
     if (typeof window !== "undefined" && window.innerWidth < 800) return 3;
     return 4;
   }, []);
 
-  // DRY: Remove sizesForMosaic, use getMosaicImageProps instead
-
+  // Memoize ItemContent for clean renders
   const ItemContent = useCallback(
     ({ data, index }: { data: ImageWithOrientation; index: number }) => {
-      if (!data) {
-        return null;
-      }
-      // DRY: Use getMosaicImageProps for layout
+      if (!data) return null;
       const {
         cssClass: mosaicClass,
         aspectRatio,
@@ -67,7 +86,6 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
         height: imgHeight,
       } = getMosaicImageProps(data.mosaicType, data.orientation);
 
-      // Compose CSS class
       let cssClass = `${styles.gridItem} ${styles.imageContainer}`;
       if (mosaicClass && styles[mosaicClass]) {
         cssClass += ` ${styles[mosaicClass]}`;
@@ -100,27 +118,27 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     [onLoginRequired]
   );
 
-  // Get progressive image srcs for lightbox slides
-  const progressiveSlides = images.map((img) => {
-    const { width: imgWidth, height: imgHeight } = getMosaicImageProps(
-      img.mosaicType,
-      img.orientation
-    );
-    return {
-      src: getBestS3FolderForWidth(
-        img,
-        typeof window !== "undefined"
-          ? Math.min(window.innerWidth * 0.9, 1600)
-          : imgWidth
-      ).url,
-      customId: img.id,
-      author: img.author,
-      description: img.description,
-      width: img.width ?? imgWidth,
-      height: img.height ?? imgHeight,
-      s3Progressive: getAllS3Urls(img), // get all available S3 urls for zoom steps
-    };
-  });
+  // Save last lightbox index before closing for modal
+  useEffect(() => {
+    if (currentModal && isLightboxOpen) {
+      lastLightboxIndex.current = lightboxIndex;
+      setIsLightboxOpen(false);
+    }
+  }, [currentModal, isLightboxOpen, lightboxIndex]);
+
+  // Restore lightbox when modal closes
+  useEffect(() => {
+    if (
+      prevModal.current &&
+      !currentModal &&
+      lastLightboxIndex.current !== null
+    ) {
+      setLightboxIndex(lastLightboxIndex.current);
+      setIsLightboxOpen(true);
+      lastLightboxIndex.current = null;
+    }
+    prevModal.current = currentModal;
+  }, [currentModal]);
 
   return (
     <>
@@ -131,7 +149,14 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
         style={{ width: "100%", overflow: "visible" }}
         initialItemCount={50}
       />
-      <Suspense fallback={null}>
+      <Suspense
+        fallback={
+          <div className={styles.loading}>
+            <div className={styles.spinner}></div>
+            <p>Loading lightbox...</p>
+          </div>
+        }
+      >
         <Lightbox
           open={isLightboxOpen}
           close={() => setIsLightboxOpen(false)}
@@ -152,15 +177,13 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                 customId?: number;
                 author?: string;
                 description?: string;
+                created_at?: string;
                 width?: number;
                 height?: number;
                 s3Progressive?: Array<{ url: string; width: number }>;
               }
               const typedSlide = slide as LightboxSlide;
               const imageId = typedSlide.customId ?? 0;
-              const slideWithAuthor = slide as { author?: string };
-              const slideWithDescription = slide as { description?: string };
-              const slideWithCreatedAt = slide as { created_at?: string };
 
               const safeZoom = typeof zoom === "number" && zoom > 1 ? zoom : 1;
               const safeWidth = typedSlide.width ?? 900;
@@ -206,20 +229,19 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       zIndex: 1,
                     }}
                   >
-                    {slideWithAuthor.author || "Untitled"}
+                    {typedSlide.author || "Untitled"}
                   </div>
                   <ImageWrapper
                     image={{
                       url: imgSrc,
                       id: String(imageId),
-                      author: slideWithAuthor.author ?? "",
-                      description: slideWithDescription.description ?? "",
+                      author: typedSlide.author ?? "",
+                      description: typedSlide.description ?? "",
                       width: imgWidth,
                       height: imgHeight,
-                      title:
-                        slideWithDescription.description ?? "Gallery Image",
+                      title: typedSlide.description ?? "Gallery Image",
                       s3Progressive: typedSlide.s3Progressive ?? [],
-                      created_at: slideWithCreatedAt.created_at ?? "",
+                      created_at: typedSlide.created_at ?? "",
                     }}
                     imgStyleOverride={{
                       width: "100%",
@@ -247,7 +269,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       zIndex: 1001,
                     }}
                   >
-                    {slideWithDescription.description || ""}
+                    {typedSlide.description || ""}
                   </div>
                   <div
                     style={{
