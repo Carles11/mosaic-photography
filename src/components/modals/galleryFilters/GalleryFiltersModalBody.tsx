@@ -26,8 +26,8 @@ const genderOptions = [
   { value: "mixed", label: "Mixed" },
 ];
 const printQualityOptions = [
-  { value: "good", label: "Good" },
   { value: "standard", label: "Standard" },
+  { value: "good", label: "Good" },
   { value: "excellent", label: "Excellent" },
   { value: "professional", label: "Professional" },
 ];

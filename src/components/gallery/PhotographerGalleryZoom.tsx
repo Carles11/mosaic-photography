@@ -16,6 +16,7 @@ import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import { getProgressiveZoomSrc } from "@/utils/imageResizingS3";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Download from "yet-another-react-lightbox/plugins/download";
 import type { GalleryProps } from "@/types/gallery";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
@@ -162,9 +163,16 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
             height: img.height,
             s3Progressive: img.s3Progressive,
             created_at: img.created_at,
+            download:
+              img.filename && img.base_url
+                ? {
+                    url: `${img.base_url}/originals/${img.filename}`,
+                    filename: img.filename,
+                  }
+                : undefined,
           }))}
           index={lightboxIndex}
-          plugins={[Zoom]}
+          plugins={[Zoom, Download]}
           zoom={{
             maxZoomPixelRatio: 3,
             minZoom: 1,
@@ -288,6 +296,16 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
           }}
           on={{
             view: ({ index }) => setLightboxIndex(index),
+            download: ({ slide }) => {
+              if (
+                slide.quality &&
+                (slide.quality === "medium" || slide.quality === "low")
+              ) {
+                window.alert(
+                  `Warning: This image's quality is "${slide.quality}". For best results, download images with quality "good".`
+                );
+              }
+            },
           }}
         />
       </Suspense>

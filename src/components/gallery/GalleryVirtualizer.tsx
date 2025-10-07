@@ -14,6 +14,7 @@ import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Download from "yet-another-react-lightbox/plugins/download";
 import { useModal } from "@/context/modalContext/useModal";
 import { getMosaicImageProps } from "@/utils/mosaicLayout";
 import styles from "./galleryVirtualizer.module.css";
@@ -128,9 +129,16 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
             src:
               img.url || img.base_url || "/favicons/android-chrome-512x512.png",
             ...img,
+            download:
+              img.filename && img.base_url
+                ? {
+                    url: `${img.base_url}/originals/${img.filename}`,
+                    filename: img.filename,
+                  }
+                : undefined,
           }))}
           index={lightboxIndex}
-          plugins={[Zoom]}
+          plugins={[Zoom, Download]} // <-- Add Download plugin
           zoom={{
             maxZoomPixelRatio: 3,
             minZoom: 1,

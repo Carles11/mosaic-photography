@@ -23,6 +23,7 @@ import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Download from "yet-another-react-lightbox/plugins/download";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
@@ -319,9 +320,16 @@ export default function FavoritesList({
               author: image.author,
               description: image.description,
               s3Progressive,
+              download:
+                image.filename && image.base_url
+                  ? {
+                      url: `${image.base_url}/originals/${image.filename}`,
+                      filename: image.filename,
+                    }
+                  : undefined,
             };
           })}
-          plugins={[Zoom]}
+          plugins={[Zoom, Download]}
           zoom={{
             maxZoomPixelRatio: 3,
             zoomInMultiplier: 2,
@@ -461,6 +469,18 @@ export default function FavoritesList({
           }}
           on={{
             view: ({ index }) => setLightboxIndex(index),
+            download: ({ slide }) => {
+              // Check quality before download
+              if (
+                slide.quality &&
+                (slide.quality === "medium" || slide.quality === "low")
+              ) {
+                window.alert(
+                  `Warning: This image's quality is "${slide.quality}". For best results, download images with quality "good".`
+                );
+              }
+              // Download proceeds as normal
+            },
           }}
         />
       </Suspense>

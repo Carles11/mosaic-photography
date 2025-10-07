@@ -73,9 +73,9 @@
   color: var(--color-white);
 }
 
-@media (min-width: 480px) {
+@media (max-width: 480px) {
   .filtersInfo {
-    margin: 1rem 32px;
+    margin: 1rem 22px;
   }
   .filtersButton {
     gap: 4px;
