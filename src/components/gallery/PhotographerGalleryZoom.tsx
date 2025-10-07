@@ -63,6 +63,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
             style={{
               position: "relative",
               width: "100%",
+              height: "auto",
               aspectRatio: "1/1",
               minHeight: 0,
               borderRadius: 8,
@@ -79,7 +80,6 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
             <ImageWrapper
               image={img}
               onLoginRequired={onLoginRequired}
-              imgStyleOverride={{ height: "auto" }}
               sizes="
                 (max-width: 480px) 160px,
                 (max-width: 768px) 180px,

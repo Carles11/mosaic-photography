@@ -45,7 +45,7 @@ body {
   --link-color: rgb(107, 154, 192);
   --foreground: var(--secondary-color);
   --foreground-muted: #666;
-  --card-background: #fff;
+  --card-background: #ffffff;
   --background: #fff;
   --background-secondary: #f8f9fa;
   --border-color: #e0e0e0;

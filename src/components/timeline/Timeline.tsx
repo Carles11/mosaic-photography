@@ -3,6 +3,7 @@
 import { Chrono } from "react-chrono";
 import type { TimelineProps } from "@/types/components";
 import useIsMobile from "@/hooks/useIsMobile";
+import { getCssVar } from "@/helpers/colors";
 
 const Timeline: React.FC<TimelineProps> = ({
   events,
@@ -10,6 +11,7 @@ const Timeline: React.FC<TimelineProps> = ({
   height = "auto",
 }) => {
   const isMobile = useIsMobile();
+
   return (
     <div style={{ width, height }}>
       <Chrono
@@ -25,7 +27,7 @@ const Timeline: React.FC<TimelineProps> = ({
         theme={{
           primary: "var(--accent-color)",
           secondary: "var(--foreground)",
-          cardBgColor: "var(--card-background)",
+          cardBgColor: getCssVar("--card-background", "#2d2d2d"),
           cardDetailsBackGround: "transparent",
           cardDetailsColor: "var(--text-color)",
           cardSubtitleColor: "var(--text-color)",

@@ -161,8 +161,6 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
       };
     });
 
-    console.log("photographer", photographer);
-
     return (
       <>
         <JsonLdSchema
