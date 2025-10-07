@@ -172,7 +172,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                 : undefined,
           }))}
           index={lightboxIndex}
-          plugins={[Zoom, Download]}
+          plugins={[Zoom, Download]} // <-- Add Download plugin
           zoom={{
             maxZoomPixelRatio: 3,
             minZoom: 1,
@@ -296,16 +296,6 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
           }}
           on={{
             view: ({ index }) => setLightboxIndex(index),
-            download: ({ slide }) => {
-              if (
-                slide.quality &&
-                (slide.quality === "medium" || slide.quality === "low")
-              ) {
-                window.alert(
-                  `Warning: This image's quality is "${slide.quality}". For best results, download images with quality "good".`
-                );
-              }
-            },
           }}
         />
       </Suspense>

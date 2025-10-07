@@ -329,7 +329,7 @@ export default function FavoritesList({
                   : undefined,
             };
           })}
-          plugins={[Zoom, Download]}
+          plugins={[Zoom, Download]} // <-- Add Download plugin
           zoom={{
             maxZoomPixelRatio: 3,
             zoomInMultiplier: 2,
@@ -469,18 +469,6 @@ export default function FavoritesList({
           }}
           on={{
             view: ({ index }) => setLightboxIndex(index),
-            download: ({ slide }) => {
-              // Check quality before download
-              if (
-                slide.quality &&
-                (slide.quality === "medium" || slide.quality === "low")
-              ) {
-                window.alert(
-                  `Warning: This image's quality is "${slide.quality}". For best results, download images with quality "good".`
-                );
-              }
-              // Download proceeds as normal
-            },
           }}
         />
       </Suspense>
