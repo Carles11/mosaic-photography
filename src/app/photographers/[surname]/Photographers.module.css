@@ -54,6 +54,10 @@
   opacity: 0.7;
 }
 
+.TimelineMain-sc-cif21b-2 {
+  justify-self: anchor-center;
+}
+
 @media (max-width: 768px) {
   .sectionTitle {
     padding-left: 0;

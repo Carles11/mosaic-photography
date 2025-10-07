@@ -557,13 +557,17 @@ body {
 .urlContainer {
   flex-direction: column;
 }
-/* Fix for react-chrono timeline background issue */
+/* Fix for react-chrono timeline background issues */
 .gqkRuK::after {
   background: none !important;
 }
 
 .cBdiWt {
   font-size: 1.3rem !important;
+}
+
+.TimelineMain-sc-cif21b-2 {
+  justify-self: anchor-center;
 }
 
 @media (max-width: 678px) {
