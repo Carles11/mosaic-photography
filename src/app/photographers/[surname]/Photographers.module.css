@@ -54,8 +54,40 @@
   opacity: 0.7;
 }
 
+/* Override styles for react-chrono */
+/* Helps centering of timeline at first load - added in non-critical.css too*/
 .TimelineMain-sc-cif21b-2 {
   justify-self: anchor-center;
+}
+
+/* Helps keeping the text off cardDetailedText inside its content - added in non-critical.css too*/
+
+.TimelineContentDetailsWrapper-sc-d7qjm1-9 {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  white-space: break-spaces !important;
+  /* If you want scrollbars for lots of text, use: overflow-y: auto; */
+}
+
+/* Helps keeping the height and width of cardDetailedText adjusted to its content - added in non-critical.css too*/
+
+.iTacdZ {
+  min-height: auto !important;
+  width: 98% !important;
+}
+
+.TimelineContentContainer-sc-18iuiou-5 {
+  overflow: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.TimelineItemContentWrapper-sc-d7qjm1-0 {
+  width: 100%;
+  box-sizing: border-box;
+  /* Optional: force wrapping */
+  word-break: break-word;
 }
 
 @media (max-width: 768px) {
@@ -66,5 +98,11 @@
   .timelineContainer {
     width: 100%;
     max-width: 94vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .cuOcjp {
+    margin: 0 !important;
   }
 }

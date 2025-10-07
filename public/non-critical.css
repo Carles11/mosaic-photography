@@ -566,8 +566,37 @@ body {
   font-size: 1.3rem !important;
 }
 
+/* Helps centering of timeline at first load - added in Photographers.module.css too*/
 .TimelineMain-sc-cif21b-2 {
   justify-self: anchor-center;
+}
+
+/* Helps keeping the text off cardDetailedText inside its content - added in Photographers.module.css too*/
+.TimelineContentDetailsWrapper-sc-d7qjm1-9 {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  white-space: break-spaces !important;
+  /* If you want scrollbars for lots of text, use: overflow-y: auto; */
+}
+
+/* Helps keeping the height and width of cardDetailedText adjusted to its content - added in Photographers.module.css too*/
+.iTacdZ {
+  min-height: auto !important;
+  width: 98% !important;
+}
+
+.TimelineContentContainer-sc-18iuiou-5 {
+  overflow: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.TimelineItemContentWrapper-sc-d7qjm1-0 {
+  width: 100%;
+  box-sizing: border-box;
+  /* Optional: force wrapping */
+  word-break: break-word;
 }
 
 @media (max-width: 678px) {
@@ -579,5 +608,8 @@ body {
 @media (max-width: 480px) {
   .cBdiWt {
     font-size: 0.8rem !important;
+  }
+  .cuOcjp {
+    margin: 0 !important;
   }
 }

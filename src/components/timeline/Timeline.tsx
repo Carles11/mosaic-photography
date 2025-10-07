@@ -21,7 +21,7 @@ const Timeline: React.FC<TimelineProps> = ({
           cardTitle: "h2",
           cardDetailedText: "p",
         }}
-        itemWidth={isMobile ? 100 : 150}
+        itemWidth={isMobile ? 85 : 150}
         theme={{
           primary: "var(--accent-color)",
           secondary: "var(--foreground)",
