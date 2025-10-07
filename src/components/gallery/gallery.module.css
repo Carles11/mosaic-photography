@@ -7,3 +7,37 @@
 .sectionIntro {
   margin: 0 1rem 2rem 1rem;
 }
+
+.filtersInfo {
+  margin: 1rem 22px;
+}
+
+.filtersButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 26px;
+  font-size: 1.08rem;
+  font-weight: 500;
+  color: var(--button-primary-text); /* #fff or #1d1d1d dep. on theme */
+  background: var(--button-primary-bg); /* uses --link-color variable */
+  border: 1px solid var(--button-primary-text);
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(40, 40, 40, 0.08);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+  outline: none;
+  margin-bottom: 16px;
+}
+
+.filtersButton:hover,
+.filtersButton:focus {
+  background: var(--button-primary-hover); /* #5a9bc4 on both themes */
+  color: var(--color-white);
+  box-shadow: 0 4px 16px rgba(107, 154, 192, 0.16);
+}
+
+.filtersButton svg {
+  vertical-align: middle;
+  color: inherit;
+}

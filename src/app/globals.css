@@ -22,7 +22,7 @@ body {
   --background: #1d1d1d;
   --background-secondary: #333;
   --border-color: #444;
-  --button-primary-bg: var(--link-color);
+  --button-primary-bg: var(--background-color);
   --button-primary-text: #fff;
   --button-primary-hover: #5a9bc4;
   --tertiary-color: #fd6c6c;

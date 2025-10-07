@@ -1,6 +1,5 @@
 "use client";
 
-// import ImageCard from "../cards/ImageCard";
 import VirtualizedMosaicGallery from "./GalleryVirtualizer";
 import { useFilters } from "@/context/settingsContext/filters";
 import { useModal } from "@/context/modalContext/useModal";
@@ -40,9 +39,31 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
         public domain, copyright-free, and open access images. All available for
         download and personal or commercial use.
       </p>
-      <button onClick={handleOpenFiltersModal} style={{ marginBottom: 16 }}>
-        Filters
-      </button>
+      <div className={styles.filtersInfo}>
+        <button
+          className={styles.filtersButton}
+          onClick={handleOpenFiltersModal}
+          aria-label="Open filters"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            fill="none"
+            viewBox="0 0 24 24"
+            style={{ marginRight: 8 }}
+          >
+            <path
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4 6h16M6 12h12M10 18h4"
+            />
+          </svg>
+          <span>Filters</span>
+        </button>
+      </div>
       <VirtualizedMosaicGallery
         images={filteredImages ?? []}
         onLoginRequired={onLoginRequired}
