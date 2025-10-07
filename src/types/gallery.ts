@@ -47,6 +47,7 @@ export interface ImageData {
   gender?: "female" | "male" | "mixed";
   color?: string;
   nudity?: string;
+  year?: number;
 }
 
 export interface GalleryProps extends JSX.IntrinsicAttributes {

@@ -19,17 +19,32 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
   }
 
   const filteredImages = images?.filter((img) => {
-    // Gender filter
     if (filters.gender && img.gender !== filters.gender) return false;
-    // Orientation filter
     if (filters.orientation && img.orientation !== filters.orientation)
       return false;
-    // Color filter
     if (filters.color && img.color !== filters.color) return false;
-    // Nudity filter (if you implement it later)
     if (filters.nudity && img.nudity !== filters.nudity) return false;
+
+    if (filters.year?.from && filters.year?.to) {
+      if (typeof img.year === "undefined" || img.year === null) return false;
+      const imgYear =
+        typeof img.year === "string" ? parseInt(img.year) : img.year;
+      if (!imgYear || isNaN(imgYear)) return false;
+      if (imgYear < filters.year.from || imgYear > filters.year.to)
+        return false;
+    }
     return true;
   });
+
+  // Helper: are filters active?
+  const filtersActive =
+    !!filters.gender ||
+    !!filters.orientation ||
+    !!filters.color ||
+    !!filters.nudity ||
+    !!filters.print_quality ||
+    (filters.year?.from && filters.year?.to);
+
   return (
     <div id={id} className={styles.galleryContainer}>
       <hr />
@@ -64,10 +79,28 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
           <span>Filters</span>
         </button>
       </div>
-      <VirtualizedMosaicGallery
-        images={filteredImages ?? []}
-        onLoginRequired={onLoginRequired}
-      />
+
+      {/* Show an empty state if no images */}
+      {filteredImages?.length === 0 ? (
+        <div className={styles.emptyState}>
+          <h3>No images match your filters</h3>
+          <p>Try adjusting your filter settings to see more images!</p>
+          {filtersActive && (
+            <button
+              className={styles.resetButton}
+              onClick={() => setFilters({})}
+            >
+              Reset Filters
+            </button>
+          )}
+        </div>
+      ) : (
+        <VirtualizedMosaicGallery
+          images={filteredImages ?? []}
+          onLoginRequired={onLoginRequired}
+        />
+      )}
+
       <GoToTopButton />
     </div>
   );

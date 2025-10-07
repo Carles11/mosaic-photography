@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { GalleryFilter } from "@/types";
+import styles from "./GalleryFiltersModalBody.module.css";
 
 type Props = {
   filters: GalleryFilter;
@@ -38,7 +39,6 @@ export default function GalleryFiltersModalBody({
 }: Props) {
   const [localFilters, setLocalFilters] = useState<GalleryFilter>(filters);
 
-  // For the year slider, set some reasonable defaults
   const minYear = 1830;
   const maxYear = 2000;
 
@@ -57,12 +57,13 @@ export default function GalleryFiltersModalBody({
   }
 
   return (
-    <div style={{ padding: "2rem", minWidth: 300 }}>
-      <h2>Gallery Filters</h2>
+    <div className={styles.modalBody}>
+      <h2 className={styles.heading}>Gallery Filters</h2>
 
-      <div style={{ marginBottom: "1.5rem" }}>
-        <label>Orientation:</label>
+      <div className={styles.field}>
+        <label className={styles.label}>Orientation:</label>
         <select
+          className={styles.select}
           value={localFilters.orientation ?? ""}
           onChange={(e) =>
             setLocalFilters({
@@ -82,9 +83,10 @@ export default function GalleryFiltersModalBody({
         </select>
       </div>
 
-      <div style={{ marginBottom: "1.5rem" }}>
-        <label>Image Color:</label>
+      <div className={styles.field}>
+        <label className={styles.label}>Image Color:</label>
         <select
+          className={styles.select}
           value={localFilters.color ?? ""}
           onChange={(e) =>
             setLocalFilters({
@@ -102,9 +104,10 @@ export default function GalleryFiltersModalBody({
         </select>
       </div>
 
-      <div style={{ marginBottom: "1.5rem" }}>
-        <label>Nudity:</label>
+      <div className={styles.field}>
+        <label className={styles.label}>Nudity:</label>
         <select
+          className={styles.select}
           value={localFilters.nudity ?? ""}
           onChange={(e) =>
             setLocalFilters({
@@ -124,9 +127,10 @@ export default function GalleryFiltersModalBody({
         </select>
       </div>
 
-      <div style={{ marginBottom: "1.5rem" }}>
-        <label>Gender:</label>
+      <div className={styles.field}>
+        <label className={styles.label}>Gender:</label>
         <select
+          className={styles.select}
           value={localFilters.gender ?? ""}
           onChange={(e) =>
             setLocalFilters({
@@ -146,9 +150,10 @@ export default function GalleryFiltersModalBody({
         </select>
       </div>
 
-      <div style={{ marginBottom: "1.5rem" }}>
-        <label>Print Quality:</label>
+      <div className={styles.field}>
+        <label className={styles.label}>Print Quality:</label>
         <select
+          className={styles.select}
           value={localFilters.print_quality ?? ""}
           onChange={(e) =>
             setLocalFilters({
@@ -172,40 +177,40 @@ export default function GalleryFiltersModalBody({
         </select>
       </div>
 
-      <div style={{ marginBottom: "1.5rem" }}>
-        <label>Year:</label>
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+      <div className={styles.field}>
+        <label className={styles.label}>Year:</label>
+        <div className={styles.yearRow}>
           <input
+            className={styles.yearInput}
             type="number"
             min={minYear}
             max={maxYear}
             value={localFilters.year?.from ?? minYear}
             onChange={(e) => handleYearChange(e, "from")}
-            style={{ width: 80 }}
           />
-          <span>to</span>
+          <span className={styles.yearSeparator}>to</span>
           <input
+            className={styles.yearInput}
             type="number"
             min={minYear}
             max={maxYear}
             value={localFilters.year?.to ?? maxYear}
             onChange={(e) => handleYearChange(e, "to")}
-            style={{ width: 80 }}
           />
         </div>
       </div>
 
-      <div style={{ display: "flex", gap: "1rem" }}>
+      <div className={styles.buttonRow}>
         <button
+          className={styles.applyButton}
           onClick={() => {
             onApply(localFilters);
             onClose();
           }}
-          style={{ padding: "0.5rem 1.5rem" }}
         >
           Apply
         </button>
-        <button onClick={onClose} style={{ padding: "0.5rem 1.5rem" }}>
+        <button className={styles.cancelButton} onClick={onClose}>
           Cancel
         </button>
       </div>

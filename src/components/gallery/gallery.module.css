@@ -41,3 +41,46 @@
   vertical-align: middle;
   color: inherit;
 }
+
+.emptyState {
+  margin: 2.5rem auto;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  background: var(--card-background);
+  color: var(--text-color);
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(30, 40, 60, 0.1);
+  max-width: 420px;
+}
+
+.resetButton {
+  margin-top: 1.5rem;
+  padding: 0.7rem 2.5rem;
+  font-size: 1.08rem;
+  font-weight: 500;
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(40, 40, 40, 0.08);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.resetButton:hover,
+.resetButton:focus {
+  background: var(--button-primary-hover);
+  color: var(--color-white);
+}
+
+@media (min-width: 480px) {
+  .filtersInfo {
+    margin: 1rem 32px;
+  }
+  .filtersButton {
+    gap: 4px;
+    padding: 6px 11px;
+    font-size: 0.8rem;
+    font-weight: 400;
+  }
+}
