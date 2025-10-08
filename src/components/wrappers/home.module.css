@@ -29,3 +29,10 @@
   height: 100%;
   width: 100%;
 }
+
+.obscuredContent {
+  filter: blur(1px) grayscale(0.2) brightness(0.85);
+  pointer-events: none;
+  user-select: none;
+  transition: filter 0.3s;
+}
