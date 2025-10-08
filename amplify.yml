@@ -10,6 +10,8 @@ frontend:
         - yarn install
     build:
       commands:
+        - echo "----- Listing critical CSS file -----"
+        - ls -l src/critical-above-the-fold.css
         - yarn build
   artifacts:
     baseDirectory: .next
