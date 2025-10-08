@@ -19,6 +19,7 @@ body {
   --foreground: #fff;
   --foreground-muted: #aaa;
   --card-background: #2d2d2d;
+  --card-details-background: "transparent";
   --background: #1d1d1d;
   --background-secondary: #333;
   --border-color: #444;
@@ -46,6 +47,7 @@ body {
   --foreground: var(--secondary-color);
   --foreground-muted: #666;
   --card-background: #ffffff;
+  --card-details-background: "transparent";
   --background: #fff;
   --background-secondary: #f8f9fa;
   --border-color: #e0e0e0;

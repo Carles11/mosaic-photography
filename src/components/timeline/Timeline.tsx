@@ -25,16 +25,19 @@ const Timeline: React.FC<TimelineProps> = ({
         }}
         itemWidth={isMobile ? 85 : 150}
         theme={{
-          primary: "var(--accent-color)",
-          secondary: "var(--foreground)",
+          primary: getCssVar("--accent-color", "#000"),
+          secondary: getCssVar("--foreground", "#fff"),
           cardBgColor: getCssVar("--card-background", "#2d2d2d"),
-          cardDetailsBackGround: "transparent",
-          cardDetailsColor: "var(--text-color)",
-          cardSubtitleColor: "var(--text-color)",
-          cardTitleColor: "var(--text-color)",
-          detailsColor: "var(--text-color)",
-          textColor: "var(--text-color)",
-          titleColor: "var(--text-color)",
+          cardDetailsBackGround: getCssVar(
+            "--card-details-background",
+            "transparent"
+          ),
+          cardDetailsColor: getCssVar("--text-color", "#fff"),
+          cardSubtitleColor: getCssVar("--text-color", "#fff"),
+          cardTitleColor: getCssVar("--text-color", "#fff"),
+          detailsColor: getCssVar("--text-color", "#fff"),
+          textColor: getCssVar("--text-color", "#fff"),
+          titleColor: getCssVar("--text-color", "#fff"),
         }}
         slideShow
         slideItemDuration={3000}
