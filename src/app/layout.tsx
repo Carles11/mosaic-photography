@@ -20,7 +20,7 @@ let criticalCSS = "";
 try {
   criticalCSS = fs.readFileSync(criticalCSSPath, "utf8");
   console.log("Critical CSS length:", criticalCSS.length);
-  console.log("Critical CSS preview:", criticalCSS.slice(0, 100));
+  console.log("CRITICAL CSS FULL CONTENT>", criticalCSS);
 } catch (err) {
   console.error("Failed to read critical-above-the-fold.css:", err);
 }
