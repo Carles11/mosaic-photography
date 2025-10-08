@@ -3,6 +3,14 @@ frontend:
   phases:
     preBuild:
       commands:
+        - echo "----- Working directory -----"
+        - pwd
+        - echo "----- List all files in repo -----"
+        - ls -lR
+        - echo "----- List src folder -----"
+        - ls -l src
+        - echo "----- List critical CSS file -----"
+        - ls -l src/critical-above-the-fold.css
         - nvm install 22
         - nvm use 22
         - node -v
