@@ -236,6 +236,12 @@ async function RootLayout({ children }: RootLayoutProps) {
         <meta charSet="utf-8" />
         {/* Inline font-face declarations to ensure fonts are requested early */}
         <style
+          id="debug-test"
+          dangerouslySetInnerHTML={{
+            __html: "body { border: 10px solid red !important; }",
+          }}
+        />
+        <style
           id="inline-fonts"
           dangerouslySetInnerHTML={{ __html: inlineFontsCSS }}
         />
