@@ -8,6 +8,11 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+type Collection = {
+  id: string;
+  updated_at?: string | null;
+};
+
 async function generateCollectionSitemap() {
   // Fetch all collections (all are public)
   const { data: collections, error } = await supabase
@@ -21,12 +26,16 @@ async function generateCollectionSitemap() {
 
   // Create XML sitemap
   let sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-  sitemap += `<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n`;
+  sitemap += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
-  collections.forEach((collection) => {
+  (collections as Collection[]).forEach((collection) => {
     sitemap += `  <url>\n`;
     sitemap += `    <loc>https://www.mosaic.photography/profile/collections/${collection.id}</loc>\n`;
-    sitemap += `    <lastmod>${new Date(collection.updated_at || Date.now()).toISOString()}</lastmod>\n`;
+    sitemap += `    <lastmod>${
+      collection.updated_at
+        ? new Date(collection.updated_at).toISOString()
+        : new Date().toISOString()
+    }</lastmod>\n`;
     sitemap += `    <changefreq>weekly</changefreq>\n`;
     sitemap += `    <priority>0.6</priority>\n`;
     sitemap += `  </url>\n`;
