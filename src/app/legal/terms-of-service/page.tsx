@@ -10,7 +10,7 @@ export const metadata = {
     title: "Terms of Service - Mosaic Photography",
     description:
       "Read the terms of service for using Mosaic Photography's website and services.",
-    images: ["https://example.com/og-image.jpg"],
+    images: ["/images/og-image.jpg"],
   },
   twitter: {
     cardType: "summary_large_image",

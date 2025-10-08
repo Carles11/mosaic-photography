@@ -69,7 +69,7 @@ async function generateImageSitemap() {
 `;
 
       photographerImages.forEach((image) => {
-        sitemap += makeImageXml(image, photographer.origin);
+        sitemap += makeImageXml(image);
       });
 
       sitemap += `  </url>
@@ -106,10 +106,9 @@ function makeImageXml(
   },
   geo_location?: string
 ) {
-  // Construct w1600 CDN URL
-  // base_url example: "jane-de-la-vaudere-1857-1908"
-  // filename example: "some-image.webp"
-  const loc = `${CDN_BASE}/${image.base_url}/w1600/${image.filename}`;
+  // Ensure .webp extension for w1600 images
+  const filenameWebp = image.filename.replace(/\.[^/.]+$/, ".webp");
+  const loc = `${CDN_BASE}/${image.base_url}/w1600/${filenameWebp}`;
   return `    <image:image>
       <image:loc>${loc}</image:loc>
       <image:title>${escapeXml(

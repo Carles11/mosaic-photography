@@ -11,7 +11,7 @@ export const metadata = {
     title: "Privacy Policy - Mosaic Photography",
     description:
       "Learn about Mosaic Photography's privacy practices and how we handle your data.",
-    images: ["https://example.com/og-image.jpg"],
+    images: ["/images/og-image.jpg"],
   },
   twitter: {
     cardType: "summary_large_image",
