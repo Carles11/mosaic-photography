@@ -121,16 +121,8 @@ const Credits: React.FC = () => {
         <h2 className={styles.subtitle}>About me</h2>
 
         <p className={styles.text}>
-          Hi! My name is Carles, I created MOSAIC{" "}
-          {/* <PrimaryButton
-            id="copyButton"
-            className={styles.copyButton}
-            btnText="MOSAIC"
-            handleClick={() =>
-              navigator.clipboard.writeText("https://www.mosaic.photography")
-            }
-          />{" "} */}{" "}
-          to be opensource and free. This site reflects my passion for both{" "}
+          Hi! My name is Carles, I created MOSAIC.PHOTOGRAPHY. This site
+          reflects my passion for both{" "}
           <a
             href="https://www.instagram.com/analogue_carles/"
             title="Carles' instagram"

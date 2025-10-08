@@ -70,6 +70,9 @@ module.exports = {
     /^tr46/, // Exclude tr46 and mappingTable.json
     /\.json$/, // Exclude all JSON files (except manifest)
     /^workbox-.*$/, // Exclude workbox files
+    /\/_next\/server\//, // Exclude all Next.js server files
+    /middleware-build-manifest\.js$/, // Exclude middleware-build-manifest.js
+    /middleware-react-loadable-manifest\.js$/, // Exclude middleware-react-loadable-manifest.js
   ],
 
   // General settings for seamless SW updates
