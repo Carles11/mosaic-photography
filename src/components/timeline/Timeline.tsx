@@ -25,7 +25,7 @@ const Timeline: React.FC<TimelineProps> = ({
         }}
         itemWidth={isMobile ? 85 : 150}
         theme={{
-          primary: getCssVar("--accent-color", "#000"),
+          primary: getCssVar("--accent-color", "#f4d35e"),
           secondary: getCssVar("--foreground", "#fff"),
           cardBgColor: getCssVar("--card-background", "#2d2d2d"),
           cardDetailsBackGround: getCssVar(
