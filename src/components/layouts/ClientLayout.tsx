@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import HeaderWithAuth from "@/components/header/HeaderWithAuth";
 import Footer from "@/components/footer/Footer";
 import BottomNav from "@/components/navigation/BottomNav/BottomNav";

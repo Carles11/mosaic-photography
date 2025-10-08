@@ -3,6 +3,7 @@ import path from "path";
 import type { Metadata } from "next";
 import { tradeGothic } from "./fonts";
 import { headers } from "next/headers";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
 
 import Script from "next/script";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
@@ -271,6 +272,17 @@ async function RootLayout({ children }: RootLayoutProps) {
         <link
           rel="dns-prefetch"
           href="https://gdzqgrfitiixbhlhppef.supabase.co"
+        />
+        <JsonLdSchema
+          type="WebSite"
+          name="Mosaic Photography"
+          url="https://www.mosaic.photography"
+          description="Discover Mosaic's curated gallery of public domain nude photography, celebrating the timeless beauty of the human form through the lens of legendary photographers."
+          publisher={{
+            name: "Mosaic Photography",
+            url: "https://www.mosaic.photography",
+            logo: "https://www.mosaic.photography/images/logo.png",
+          }}
         />
       </head>
       <body className="font-trade-gothic">
