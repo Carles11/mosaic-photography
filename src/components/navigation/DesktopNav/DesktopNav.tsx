@@ -11,8 +11,8 @@ const DesktopNav = ({
   user,
   onLoginClick,
   onLogoutClick,
-  onGoProClick,
-}: DesktopNavProps) => {
+}: // onGoProClick,
+DesktopNavProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -77,7 +77,7 @@ const DesktopNav = ({
             user={user}
             onLoginClick={handleLogin}
             onLogoutClick={() => handleMenuAction(onLogoutClick!)}
-            onGoProClick={() => handleMenuAction(onGoProClick!)}
+            // onGoProClick={() => handleMenuAction(onGoProClick!)}
             onClose={() => setIsOpen(false)}
           />
         </>

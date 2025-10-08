@@ -10,7 +10,7 @@
 
 export type ModalKey =
   | "addToCollection"
-  | "goPro"
+  // | "goPro"
   | "comments"
   | "createCollection"
   | "editCollection"
@@ -25,9 +25,9 @@ export type ModalPropsMap = {
     onClose: () => void;
     onAddToCollection?: (collectionId: string) => void;
   };
-  goPro: {
-    onClose?: (result?: unknown) => void;
-  };
+  // goPro: {
+  //   onClose?: (result?: unknown) => void;
+  // };
   comments: {
     imageId: string;
     onClose: () => void;
@@ -66,7 +66,7 @@ export const modalRegistry: {
 } = {
   addToCollection: () =>
     import("@/components/modals/addToCollection/AddToCollectionModalBody"),
-  goPro: () => import("@/components/modals/goProModal/GoProModalBody"),
+  // goPro: () => import("@/components/modals/goProModal/GoProModalBody"),
   comments: () => import("@/components/modals/comments/CommentsModalBody"),
   createCollection: () =>
     import("@/components/modals/createCollection/CreateCollectionModalBody"),

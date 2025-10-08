@@ -5,13 +5,13 @@ import { usePathname } from "next/navigation";
 import Header from "@/components/header/Header";
 
 interface HeaderWithAuthProps {
-  onGoProClick?: () => void;
+  // onGoProClick?: () => void;
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
 }
 
 export default function HeaderWithAuth({
-  onGoProClick,
+  // onGoProClick,
   onLoginClick,
   onLogoutClick,
 }: HeaderWithAuthProps) {
@@ -24,7 +24,7 @@ export default function HeaderWithAuth({
       user={user}
       onLogoutClick={onLogoutClick || logout}
       onLoginClick={onLoginClick}
-      onGoProClick={onGoProClick}
+      // onGoProClick={onGoProClick}
     />
   );
 }

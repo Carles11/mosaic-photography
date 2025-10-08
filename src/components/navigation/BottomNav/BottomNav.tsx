@@ -9,11 +9,11 @@ import BottomNavMenu from "./BottomNavMenu";
 import styles from "./BottomNav.module.css";
 
 interface BottomNavProps {
-  onGoProClick?: () => void;
+  // onGoProClick?: () => void;
   onLogoutClick?: () => void;
 }
 
-const BottomNav = ({ onGoProClick, onLogoutClick }: BottomNavProps) => {
+const BottomNav = ({ onLogoutClick }: BottomNavProps) => {
   const { user } = useAuthSession();
   const router = useRouter();
   const onLoginClick = () => router.push("/auth/login");
@@ -98,9 +98,9 @@ const BottomNav = ({ onGoProClick, onLogoutClick }: BottomNavProps) => {
           user={user}
           onLoginClick={() => handleMenuAction(onLoginClick)}
           onLogoutClick={() => handleMenuAction(onLogoutClick || defaultLogout)}
-          onGoProClick={
-            onGoProClick ? () => handleMenuAction(onGoProClick) : undefined
-          }
+          // onGoProClick={
+          //   onGoProClick ? () => handleMenuAction(onGoProClick) : undefined
+          // }
           onClose={() => setShowMenu(false)}
         />
       )}

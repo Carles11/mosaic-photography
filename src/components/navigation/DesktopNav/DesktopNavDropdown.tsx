@@ -9,7 +9,7 @@ const DesktopNavDropdown = ({
   user,
   onLoginClick,
   onLogoutClick,
-  onGoProClick,
+  // onGoProClick,
   onClose,
 }: DesktopNavDropdownProps) => {
   const handleActionAndClose = (action: () => void) => {
@@ -51,12 +51,12 @@ const DesktopNavDropdown = ({
             <span className={styles.menuLabel}>FAQ</span>
           </Link>
 
-          <button
+          {/* <button
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={() => handleActionAndClose(onGoProClick!)}
           >
             <span className={styles.menuLabel}>Go Pro</span>
-          </button>
+          </button> */}
 
           <div className={styles.themeToggleWrapper}>
             <span className={styles.themeLabel}>
@@ -91,12 +91,12 @@ const DesktopNavDropdown = ({
             <span className={styles.menuLabel}>FAQ</span>
           </Link>
 
-          <button
+          {/* <button
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={() => handleActionAndClose(onGoProClick!)}
           >
             <span className={styles.menuLabel}>Go Pro</span>
-          </button>
+          </button> */}
           <div className={styles.themeToggleWrapper}>
             <span className={styles.themeLabel}>
               Change theme <span style={{ marginLeft: 4 }}>→</span>

@@ -49,7 +49,7 @@ export interface DesktopNavDropdownProps {
   user?: import("@/lib/supabaseClient").SupabaseUser | null;
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
-  onGoProClick?: () => void;
+  // onGoProClick?: () => void;
   onClose: () => void;
 }
 
@@ -63,7 +63,7 @@ export interface DesktopNavProps {
   user?: import("@/lib/supabaseClient").SupabaseUser | null;
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
-  onGoProClick?: () => void;
+  // onGoProClick?: () => void;
 }
 
 export interface DesktopNavButtonProps {

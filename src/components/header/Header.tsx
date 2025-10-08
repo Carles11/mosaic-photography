@@ -9,7 +9,7 @@ export interface HeaderProps {
   onLoginClick?: () => void;
   user?: SupabaseUser | null;
   onLogoutClick?: () => void;
-  onGoProClick?: () => void;
+  // onGoProClick?: () => void;
   isHome?: boolean; // Pass this from parent
 }
 
@@ -17,7 +17,7 @@ export default function Header({
   onLoginClick,
   user,
   onLogoutClick,
-  onGoProClick,
+  // onGoProClick,
   isHome = false,
 }: HeaderProps) {
   return (
@@ -51,7 +51,7 @@ export default function Header({
                 user={user}
                 onLoginClick={onLoginClick}
                 onLogoutClick={onLogoutClick}
-                onGoProClick={onGoProClick}
+                // onGoProClick={onGoProClick}
               />
             </div>
           </li>

@@ -128,7 +128,7 @@
   }
 }
 
-/* Legacy styles - keeping for backward compatibility but may be unused now */
+/* Legacy styles - keeping for backward compatibility but may be unused now
 .goProText {
   font-size: 1.2rem;
   font-weight: 700;
@@ -142,7 +142,7 @@
 .goProText:hover {
   text-decoration: underline;
   color: var(--text-color);
-}
+} */
 
 .loginButton {
   background: var(--accent-color, #f4d35e);
@@ -154,9 +154,7 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition:
-    background-color 0.2s,
-    transform 0.1s;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
 .loginButton:hover {

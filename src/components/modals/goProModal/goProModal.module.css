@@ -1,3 +1,4 @@
+/* 
 .goProContainer {
   display: grid;
   grid-template-columns: 1fr;
@@ -6,9 +7,9 @@
   justify-items: center;
   text-align: center;
   height: auto;
-  overflow-y: auto; /* Enable vertical scrolling if needed */
-  padding: 1rem; /* Add some padding for better spacing */
-  box-sizing: border-box; /* Ensure padding is included in the height */
+  overflow-y: auto;
+  padding: 1rem; 
+  box-sizing: border-box; 
 }
 .goProContainer p {
   margin: 0.5rem;
@@ -53,4 +54,4 @@
   .goProText {
     font-size: 1rem;
   }
-}
+} */

@@ -14,31 +14,30 @@ export default function ClientLayout({
 }) {
   const { logout } = useAuth();
   const router = useRouter();
-  const { open } = useModal();
+  // const { open } = useModal();
 
-  const handleGoProClick = () => {
-    open("goPro");
-    sendGTMEvent({
-      event: "goProText",
-      value: "Go Pro clicked from user menu",
-    });
-  };
+  // const handleGoProClick = () => {
+  //   open("goPro");
+  //   sendGTMEvent({
+  //     event: "goProText",
+  //     value: "Go Pro clicked from user menu",
+  //   });
+  // };
   const handleLoginClick = () => router.push("/auth/login");
   const handleLogoutClick = () => logout();
 
   return (
     <>
       <HeaderWithAuth
-        onGoProClick={handleGoProClick}
+        // onGoProClick={handleGoProClick}
         onLoginClick={handleLoginClick}
         onLogoutClick={handleLogoutClick}
       />
       <main style={{ flex: 1 }}>{children}</main>
       <Footer />
 
-      {/* Global mobile BottomNav (avoid duplicating per-page) */}
       <BottomNav
-        onGoProClick={handleGoProClick}
+        // onGoProClick={handleGoProClick}
         onLogoutClick={handleLogoutClick}
       />
 

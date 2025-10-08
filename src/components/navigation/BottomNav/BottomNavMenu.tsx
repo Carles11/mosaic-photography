@@ -10,7 +10,7 @@ interface BottomNavMenuProps {
   user?: SupabaseUser | null;
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
-  onGoProClick?: () => void;
+  // onGoProClick?: () => void;
   onClose: () => void;
 }
 
@@ -18,7 +18,7 @@ const BottomNavMenu = ({
   user,
   onLoginClick,
   onLogoutClick,
-  onGoProClick,
+  // onGoProClick,
   onClose,
 }: BottomNavMenuProps) => {
   // Close menu on Escape key
@@ -62,13 +62,13 @@ const BottomNavMenu = ({
                 <span className={styles.menuLabel}>FAQ</span>
               </Link>
 
-              <button
+              {/* <button
                 className={styles.menuItem}
                 onClick={() => handleActionAndClose(onGoProClick!)}
               >
-                {/* <span className={styles.menuIcon}>⭐</span> */}
+                 <span className={styles.menuIcon}>⭐</span> 
                 <span className={styles.menuLabel}>Go Pro</span>
-              </button>
+              </button> */}
 
               {/* Theme toggle button */}
               <div className={styles.themeToggleWrapper}>
@@ -106,13 +106,13 @@ const BottomNavMenu = ({
                 <span className={styles.menuLabel}>FAQ</span>
               </Link>
 
-              <button
+              {/* <button
                 className={styles.menuItem}
                 onClick={() => handleActionAndClose(onGoProClick!)}
               >
-                {/* <span className={styles.menuIcon}>⭐</span> */}
+                <span className={styles.menuIcon}>⭐</span>
                 <span className={styles.menuLabel}>Go Pro</span>
-              </button>
+              </button> */}
 
               {/* Theme toggle button */}
               <div className={styles.themeToggleWrapper}>
