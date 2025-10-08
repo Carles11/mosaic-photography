@@ -45,3 +45,6 @@ aws/dist/
 .venv/
 aws/dist/
 awscliv2.zip
+
+# backup files
+*.bak

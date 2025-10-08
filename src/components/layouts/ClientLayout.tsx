@@ -2,10 +2,8 @@
 import HeaderWithAuth from "@/components/header/HeaderWithAuth";
 import Footer from "@/components/footer/Footer";
 import BottomNav from "@/components/navigation/BottomNav/BottomNav";
-import { useModal } from "@/context/modalContext/useModal";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
-import { sendGTMEvent } from "@next/third-parties/google";
 
 export default function ClientLayout({
   children,

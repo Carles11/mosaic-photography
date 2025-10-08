@@ -32,39 +32,11 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizeCss: true,
   },
-  webpack: (config, { isServer }) => {
-    config.optimization.splitChunks = {
-      chunks: "all",
-      minSize: 20000,
-      maxSize: 100000,
-    };
-
-    if (!isServer) {
-      config.resolve.alias["moment"] = "moment/min/moment-with-locales";
-      // Prevent Node.js polyfills from being injected into the client bundle
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        path: false,
-        os: false,
-        crypto: false,
-        stream: false,
-        buffer: false,
-        util: false,
-        assert: false,
-        http: false,
-        https: false,
-        url: false,
-        zlib: false,
-        tty: false,
-        net: false,
-        tls: false,
-        child_process: false,
-        dns: false,
-        module: false,
-      };
-    }
-
+  webpack: (config) => {
+    config.module.rules.push({
+      resourceQuery: /raw/,
+      type: "asset/source",
+    });
     return config;
   },
 

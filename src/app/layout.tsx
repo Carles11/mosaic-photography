@@ -1,36 +1,13 @@
-import fs from "fs";
-import path from "path";
 import type { Metadata } from "next";
 import { tradeGothic } from "./fonts";
 import { headers } from "next/headers";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
-
 import Script from "next/script";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
 import ClientLayout from "@/components/layouts/ClientLayout";
 import ClientProviders from "@/context/main/ClientProviders";
-
-// Read critical CSS at build time
-const criticalCSSPath = path.resolve(
-  process.cwd(),
-  "src/critical-above-the-fold.css"
-);
-
-let criticalCSS = "";
-try {
-  criticalCSS = fs.readFileSync(criticalCSSPath, "utf8");
-} catch (err) {
-  console.error("Failed to read critical-above-the-fold.css:", err);
-}
-
-// Read minimal base/global variables (do not import as module to avoid Next CSS extraction)
-const baseCSSPath = path.resolve(process.cwd(), "src/app/globals.css");
-let baseCSS = "";
-try {
-  baseCSS = fs.readFileSync(baseCSSPath, "utf8");
-} catch (err) {
-  console.error("Failed to read src/app/globals.css:", err);
-}
+import criticalCSS from "../critical-above-the-fold.css?raw";
+import baseCSS from "./globals.css?raw";
 
 // Inline minimal @font-face declarations for early font loading from AWS CDN
 const inlineFontsCSS = `@font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap;}
@@ -57,8 +34,7 @@ export const metadata: Metadata = {
   description:
     "Discover Mosaic's curated gallery of public domain nude photography, celebrating the timeless beauty of the human form through the lens of legendary photographers.",
   keywords: [
-    // ... (your keyword list remains unchanged)
-    // [You can keep your full keyword list here]
+    // ... (your full keyword list here, unchanged)
   ],
   icons: {
     icon: [
