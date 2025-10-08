@@ -250,7 +250,12 @@ async function RootLayout({ children }: RootLayoutProps) {
         {/* Critical above-the-fold styles (inlined) */}
         <style
           id="critical-above-the-fold"
-          dangerouslySetInnerHTML={{ __html: criticalCSS }}
+          dangerouslySetInnerHTML={{
+            __html:
+              criticalCSS && criticalCSS.trim().length > 0
+                ? criticalCSS
+                : "body { background: yellow !important; } /* fallback: criticalCSS was empty at build */",
+          }}
         />
         <link
           rel="preload"
