@@ -15,9 +15,12 @@ const criticalCSSPath = path.resolve(
   process.cwd(),
   "src/critical-above-the-fold.css"
 );
+
 let criticalCSS = "";
 try {
   criticalCSS = fs.readFileSync(criticalCSSPath, "utf8");
+  console.log("Critical CSS length:", criticalCSS.length);
+  console.log("Critical CSS preview:", criticalCSS.slice(0, 100));
 } catch (err) {
   console.error("Failed to read critical-above-the-fold.css:", err);
 }
