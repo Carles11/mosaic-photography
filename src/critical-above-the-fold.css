@@ -118,10 +118,10 @@ a:hover::before {
   height: 100%;
 }
 .fancy-link {
+  position: relative;
   text-decoration: none;
   color: var(--text-color);
   font-weight: 700;
-  position: relative;
 }
 .fancy-link::before {
   content: "";
@@ -363,4 +363,9 @@ a:hover::before {
     flex: 0 0 33.33vw;
     max-width: 33.33vw;
   }
+}
+
+.footer_footerItem__CpyUf {
+  position: relative;
+  overflow: visible;
 }

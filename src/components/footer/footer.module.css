@@ -2,7 +2,6 @@
   height: auto;
   min-height: 10rem; /* Reserve space for the footer */
   background-color: var(--background-color);
-  color: var(--text-color);
   z-index: 1; /* Ensure footer is not overlapped */
   border-top: 1px solid lightgrey; /* Thin light-grey line on top */
   display: flex; /* Use flexbox for alignment */
@@ -22,38 +21,13 @@
 }
 
 .footerItem {
+  position: relative;
   padding-left: 10px;
   text-align: center; /* Center text for each item */
 }
 
 .footerItem p:last-child {
   margin: 0.2rem;
-}
-
-/* Footer link styling - inherit from global fancy link styles */
-.footerItem a {
-  font-size: calc(0.9rem + 0.5vw);
-  text-decoration: none;
-  color: var(--text-color);
-  font-weight: 700;
-  position: relative;
-}
-
-.footerItem a::before {
-  content: "";
-  background-color: var(--link-color);
-  position: absolute;
-  left: 0;
-  bottom: 3px;
-  width: 100%;
-  height: 8px;
-  z-index: -1;
-  transition: all 0.3s ease-in-out;
-}
-
-.footerItem a:hover::before {
-  bottom: 0;
-  height: 100%;
 }
 
 /* Responsive styles */

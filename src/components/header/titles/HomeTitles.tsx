@@ -17,7 +17,6 @@ export const HomeTitles = () => {
         <div className={styles.homeTitleGridItemRight}>
           <h2>
             <a
-              className="fancy-link"
               href="#gallery-section"
               title="View the full collection of vintage nude photos"
               onClick={() =>
