@@ -5,6 +5,54 @@
 /* Minimal element-level fallbacks to ensure typography and link decorations
   apply immediately on first paint. These are intentionally lightweight and
   duplicate a small subset of rules from the longer critical fragment. */
+:root,
+[data-theme="dark"] {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  --background-color: #1d1d1d;
+  --text-color: #fff;
+  --headfoot-background-gradient: linear-gradient(135deg, #555555, #999999);
+  --secondary-color: #2c106a;
+  --foreground: #fff;
+  --foreground-muted: #aaa;
+  --card-background: #2d2d2d;
+  --background: #1d1d1d;
+  --background-secondary: #333;
+  --border-color: #444;
+  --button-primary-bg: var(--background-color);
+  --button-primary-text: #fff;
+  --button-primary-hover: #5a9bc4;
+  --tertiary-color: #fd6c6c;
+  --accent-color: #f4d35e;
+  --text-gradient: linear-gradient(135deg, #4cf6c3 30%, #1faef0 70%);
+  --color-white: #fff;
+  --color-black: #1d1d1d;
+  --link-color: rgb(107, 154, 192);
+}
+
+[data-theme="light"] {
+  --background-color: #fff;
+  --text-color: #1d1d1d;
+  --secondary-color: #cccaca;
+  --tertiary-color: #fd6c6c;
+  --accent-color: #f4d35e;
+  --text-gradient: linear-gradient(135deg, #4cf6c3 30%, #1faef0 70%);
+  --color-white: #fff;
+  --color-black: #1d1d1d;
+  --link-color: rgb(107, 154, 192);
+  --foreground: var(--secondary-color);
+  --foreground-muted: #666;
+  --card-background: #ffffff;
+  --background: #fff;
+  --background-secondary: #f8f9fa;
+  --border-color: #e0e0e0;
+  --button-primary-bg: var(--link-color);
+  --button-primary-text: #fff;
+  --button-primary-hover: #5a9bc4;
+}
+
 html {
   font-size: 16px;
 }
@@ -248,6 +296,37 @@ a:hover::before {
   .BottomNav_bottomNav__T6XHG {
     display: none !important;
   }
+}
+
+/* Age Consent Modal Styles */
+
+.ageModalOverlayContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Performance optimizations */
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+.ageConfirmationContent {
+  background: var(--background-color);
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+  /* Performance optimizations */
+  will-change: transform;
+  transform: translateZ(0);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Embla Carousel container and slide width fixes */
