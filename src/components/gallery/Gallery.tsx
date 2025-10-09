@@ -3,17 +3,30 @@
 import VirtualizedMosaicGallery from "./GalleryVirtualizer";
 import { useFilters } from "@/context/settingsContext/filters";
 import { useModal } from "@/context/modalContext/useModal";
-import type { GalleryProps } from "@/types/gallery";
+import type { GalleryProps, GalleryFilter } from "@/types/gallery";
 import styles from "./gallery.module.css";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
+
+// Type guard for year filter
+function isYearFilter(value: unknown): value is { from: number; to: number } {
+  return (
+    value !== null &&
+    typeof value === "object" &&
+    "from" in value &&
+    "to" in value &&
+    typeof (value as { from: unknown }).from === "number" &&
+    typeof (value as { to: unknown }).to === "number"
+  );
+}
 
 const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
   const { filters, setFilters } = useFilters();
   const { open } = useModal();
+
   function handleOpenFiltersModal() {
     open("galleryFilters", {
       filters,
-      onApply: (newFilters) => setFilters(newFilters),
+      onApply: (newFilters: GalleryFilter) => setFilters(newFilters),
       onClose: () => {},
     });
   }
@@ -25,7 +38,7 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
     if (filters.color && img.color !== filters.color) return false;
     if (filters.nudity && img.nudity !== filters.nudity) return false;
 
-    if (filters.year?.from && filters.year?.to) {
+    if (filters.year && isYearFilter(filters.year)) {
       if (typeof img.year === "undefined" || img.year === null) return false;
       const imgYear =
         typeof img.year === "string" ? parseInt(img.year) : img.year;
@@ -43,7 +56,10 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
     !!filters.color ||
     !!filters.nudity ||
     !!filters.print_quality ||
-    (filters.year?.from && filters.year?.to);
+    (filters.year &&
+      isYearFilter(filters.year) &&
+      filters.year.from &&
+      filters.year.to);
 
   return (
     <div id={id} className={styles.galleryContainer}>
@@ -78,6 +94,48 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
           </svg>
           <span>Filters</span>
         </button>
+        {filtersActive && (
+          <div className={styles.activeFilters}>
+            {Object.entries(filters)
+              .filter(([key, value]) => {
+                if (!value) return false;
+                if (
+                  key === "year" &&
+                  isYearFilter(value) &&
+                  value.from &&
+                  value.to
+                ) {
+                  return true;
+                }
+                if (
+                  [
+                    "gender",
+                    "orientation",
+                    "color",
+                    "nudity",
+                    "print_quality",
+                  ].includes(key)
+                ) {
+                  return true;
+                }
+                return false;
+              })
+              .map(([key, value]) => {
+                if (key === "year" && isYearFilter(value)) {
+                  return (
+                    <span key={key} className={styles.filterTag}>
+                      Year: {value.from}–{value.to}
+                    </span>
+                  );
+                }
+                return (
+                  <span key={key} className={styles.filterTag}>
+                    {key.replace("_", " ")}: {String(value)}
+                  </span>
+                );
+              })}
+          </div>
+        )}
       </div>
 
       {/* Show an empty state if no images */}
