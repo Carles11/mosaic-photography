@@ -18,7 +18,6 @@ import Download from "yet-another-react-lightbox/plugins/download";
 import { useModal } from "@/context/modalContext/useModal";
 import { getMosaicImageProps } from "@/utils/mosaicLayout";
 import styles from "./galleryVirtualizer.module.css";
-import type { DownloadCallbackProps } from "yet-another-react-lightbox";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
