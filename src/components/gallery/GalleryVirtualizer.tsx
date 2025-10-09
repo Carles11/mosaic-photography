@@ -138,7 +138,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                 : undefined,
           }))}
           index={lightboxIndex}
-          plugins={[Zoom, Download]} // <-- Add Download plugin
+          plugins={[Zoom, Download]}
           zoom={{
             maxZoomPixelRatio: 3,
             minZoom: 1,
@@ -176,6 +176,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                   }}
                 >
                   <div
+                    className={styles.lightboxAuthor}
                     style={{
                       position: "absolute",
                       left: 0,
@@ -184,15 +185,17 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       textAlign: "center",
                       color: "#fff",
                       fontSize: "1.2rem",
-                      padding: "16px 24px 24px 24px",
+                      padding: "16px 14px 14px 14px",
                       background: "rgba(0,0,0,0.2)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
                       zIndex: 1,
                     }}
                   >
-                    {img.author || "Untitled"}
+                    <p>{img.author || "Unknown Author"},</p>{" "}
+                    <p>{img.year || "Unknown Year"}</p>
                   </div>
+
                   <ImageWrapper
                     image={img}
                     imgStyleOverride={{
@@ -204,6 +207,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                     showOverlayButtons={false}
                   />
                   <div
+                    className={styles.lightboxDescription}
                     style={{
                       position: "absolute",
                       left: 0,
@@ -211,22 +215,28 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       width: "100%",
                       textAlign: "center",
                       color: "#fff",
-                      fontSize: "1.2rem",
-                      padding: "16px 24px 24px 24px",
-                      background: "rgba(0,0,0,0.2)",
+                      fontSize: "1.04rem",
+                      padding: "16px 24px 64px 24px", // extra bottom padding!
+                      background: "rgba(0,0,0,0.4)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
                       zIndex: 1001,
+                      maxHeight: "28vh", // or "30vh"
+                      overflowY: "auto",
+                      boxSizing: "border-box",
+                      pointerEvents: "auto",
+                      marginBottom: "0",
                     }}
                   >
                     {img.description || ""}
                   </div>
                   <div
+                    className={styles.lightboxButtonRow}
                     style={{
                       position: "fixed",
                       bottom: 20,
                       right: 20,
-                      zIndex: 9999,
+                      zIndex: 2000, // make sure it's above description
                       display: "flex",
                       gap: "10px",
                       pointerEvents: "auto",
