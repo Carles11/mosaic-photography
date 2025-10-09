@@ -152,7 +152,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                     </strong>
                   </p>
 
-                  {photographer.biography && (
+                  {photographer.intro && (
                     <p
                       className={
                         styles.biography +
@@ -167,7 +167,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                     >
                       <strong>Biography: </strong>
                       <br />
-                      {photographer.biography}
+                      {photographer.intro}
                     </p>
                   )}
                   {photographer.origin && (

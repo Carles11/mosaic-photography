@@ -21,6 +21,7 @@ export async function fetchPhotographersBasic(): Promise<
         surname,
         author,
         biography,
+        intro,
         birthdate,
         deceasedate,
         origin,
