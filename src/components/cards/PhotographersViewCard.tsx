@@ -146,6 +146,12 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                     )}
                   </div>
 
+                  <p>
+                    <strong>
+                      {photographer.author ? photographer.author : ""}
+                    </strong>
+                  </p>
+
                   {photographer.biography && (
                     <p
                       className={

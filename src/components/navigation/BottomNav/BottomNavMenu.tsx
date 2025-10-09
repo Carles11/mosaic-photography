@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./BottomNav.module.css";
 import { SupabaseUser } from "@/lib/supabaseClient";
 import ThemeToggle from "@/components/theme/ThemeToggle"; // Add import
@@ -21,6 +21,22 @@ const BottomNavMenu = ({
   // onGoProClick,
   onClose,
 }: BottomNavMenuProps) => {
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close menu on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [onClose]);
   // Close menu on Escape key
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -39,7 +55,7 @@ const BottomNavMenu = ({
   };
 
   return (
-    <div className={styles.menuContainer}>
+    <div className={styles.menuContainer} ref={menuRef}>
       <div className={styles.backdrop} onClick={onClose} />
       <div className={styles.menu}>
         <div className={styles.menuContent}>

@@ -37,7 +37,7 @@
 .authorName {
   cursor: pointer;
   z-index: 1;
-  margin: 1rem;
+  margin: 0.1rem 0.3rem;
 }
 
 .biography {
@@ -48,7 +48,6 @@
   text-overflow: ellipsis;
   white-space: normal;
   line-height: 1.5;
-  margin-top: 10px;
   cursor: pointer;
   padding-top: 2rem;
 }
@@ -73,14 +72,6 @@
 .imageContainer {
   width: 100%;
   height: 100%;
-  aspect-ratio: auto;
-  position: relative;
-  overflow: hidden;
-}
-
-.imageContainer {
-  width: 100%;
-  height: auto;
   aspect-ratio: auto;
   position: relative;
   overflow: hidden;
@@ -177,5 +168,12 @@
     margin: 1rem 0 0 0;
 
     gap: calc(0.1rem + 1vw);
+  }
+}
+
+@media (max-width: 480px) {
+  .embla__navigation__arrows button {
+    width: 40px !important;
+    height: 40px !important;
   }
 }
