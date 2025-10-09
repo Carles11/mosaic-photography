@@ -123,6 +123,7 @@ export interface UserCommentWithImage extends Comment {
   image_title?: string;
   image_url?: string;
   image_author?: string;
+  imageData?: ImageData; // For ImageWrapper
 }
 
 // Collections Types

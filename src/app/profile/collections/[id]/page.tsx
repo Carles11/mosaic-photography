@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
 import JSZip from "jszip";
 import { toast } from "react-hot-toast";
 import styles from "./CollectionView.module.css";
@@ -10,6 +9,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { CollectionWithImages } from "@/types";
 import { useModal } from "@/context/modalContext/useModal";
+import ImageWrapper from "@/components/wrappers/ImageWrapper";
 
 interface CollectionImageData {
   id: string;
@@ -22,6 +22,29 @@ interface CollectionImageData {
   image_title: string;
   image_author: string;
   added_at: string;
+  base_url?: string;
+  filename?: string;
+  width?: number;
+  height?: number;
+  orientation?: string;
+  created_at?: string;
+}
+
+// Define a more complete type for collection images
+interface CollectionImage {
+  favorite_id: number;
+  image_id: string;
+  image_url: string;
+  image_title: string;
+  image_author: string;
+  added_at: string;
+  base_url?: string;
+  filename?: string;
+  width?: number;
+  height?: number;
+  orientation?: string;
+  description?: string;
+  created_at?: string;
 }
 
 export default function CollectionView() {
@@ -29,9 +52,10 @@ export default function CollectionView() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuthSession();
-  const [collection, setCollection] = useState<CollectionWithImages | null>(
-    null
-  );
+  const [collection, setCollection] = useState<
+    | (Omit<CollectionWithImages, "images"> & { images: CollectionImage[] })
+    | null
+  >(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedImages, setSelectedImages] = useState<Set<number>>(new Set());
@@ -122,7 +146,9 @@ export default function CollectionView() {
           const imageIds = favoritesData.map((fav) => fav.image_id);
           const { data: imagesTableData, error: imagesError } = await supabase
             .from("images_resize")
-            .select("id, base_url, filename, title, author")
+            .select(
+              "id, base_url, filename, title, author, width, height, orientation, description, created_at"
+            )
             .in("id", imageIds);
 
           if (imagesError) {
@@ -149,17 +175,22 @@ export default function CollectionView() {
                   : "/favicons/android-chrome-512x512.png";
 
               return {
-                id: favorite?.image_id || "", // Use image_id as id
-                url: imageUrl, // Constructed URL
+                id: favorite?.image_id || "",
+                url: imageUrl,
                 title: image?.title || "Image not found",
-                description: undefined, // No description available
-                // Additional properties for later use
+                description: image?.description || "",
                 favorite_id: cfItem.favorite_id,
                 image_id: favorite?.image_id || "",
                 image_url: imageUrl,
                 image_title: image?.title || "Image not found",
                 image_author: image?.author || "Unknown",
                 added_at: cfItem.added_at,
+                base_url: image?.base_url,
+                filename: image?.filename,
+                width: image?.width,
+                height: image?.height,
+                orientation: image?.orientation,
+                created_at: image?.created_at || new Date().toISOString(),
               };
             })
             .filter(
@@ -179,14 +210,23 @@ export default function CollectionView() {
       }
 
       // Transform the data
-      const images = imagesData.map((item: CollectionImageData) => ({
-        favorite_id: item.favorite_id,
-        image_id: item.image_id,
-        image_url: item.image_url,
-        image_title: item.image_title,
-        image_author: item.image_author,
-        added_at: item.added_at,
-      }));
+      const images: CollectionImage[] = imagesData.map(
+        (item: CollectionImageData) => ({
+          favorite_id: item.favorite_id,
+          image_id: item.image_id,
+          image_url: item.image_url,
+          image_title: item.image_title,
+          image_author: item.image_author,
+          added_at: item.added_at,
+          base_url: item.base_url,
+          filename: item.filename,
+          width: item.width,
+          height: item.height,
+          orientation: item.orientation,
+          description: item.description,
+          created_at: item.created_at,
+        })
+      );
 
       setCollection({
         ...collectionData,
@@ -826,14 +866,35 @@ export default function CollectionView() {
                 )}
 
                 <div className={styles.imageWrapper}>
-                  <Image
-                    src={image.image_url}
-                    alt={image.image_title}
-                    width={279} // largest desktop width (matches your CSS/grid)
-                    height={200} // fixed height for all images
-                    className={styles.image}
+                  <ImageWrapper
+                    image={{
+                      id: image.image_id,
+                      base_url: image.base_url || "",
+                      filename: image.filename || "",
+                      title: image.image_title,
+                      author: image.image_author,
+                      description: image.description || "",
+                      created_at: image.created_at || new Date().toISOString(),
+                      width: image.width,
+                      height: image.height,
+                      orientation: (
+                        ["vertical", "horizontal", "square"] as const
+                      ).includes(
+                        image.orientation as
+                          | "vertical"
+                          | "horizontal"
+                          | "square"
+                      )
+                        ? (image.orientation as
+                            | "vertical"
+                            | "horizontal"
+                            | "square")
+                        : undefined,
+                      url: image.image_url,
+                    }}
+                    showOverlayButtons={false}
                     sizes="(max-width: 480px) 169px, (max-width: 768px) 168px, (max-width: 965px) 275px, (max-width: 1200px) 270px, (max-width: 1600px) 279px, 279px"
-                    style={{ width: "100%", height: "auto" }}
+                    imgStyleOverride={{ width: "100%", height: "auto" }}
                   />
                 </div>
 

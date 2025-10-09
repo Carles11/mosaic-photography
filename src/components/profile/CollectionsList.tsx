@@ -15,8 +15,8 @@ import styles from "./CollectionsList.module.css";
 import buttonStyles from "../shared/ButtonStyles.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
-import { Collection } from "@/types";
-import Image from "next/image";
+import { Collection, ImageData } from "@/types";
+import ImageWrapper from "@/components/wrappers/ImageWrapper";
 
 export interface CollectionsListRef {
   refreshCollections: () => void;
@@ -35,6 +35,11 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   );
   const [isMobile, setIsMobile] = useState(false);
 
+  // Preview images by collectionId
+  const [collectionPreviews, setCollectionPreviews] = useState<
+    Record<string, ImageData[]>
+  >({});
+
   // Mobile detection
   useEffect(() => {
     const checkMobile = () => {
@@ -45,6 +50,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Load collections and batch fetch preview images
   const loadCollections = useCallback(async () => {
     if (!user) {
       setLoading(false);
@@ -53,13 +59,106 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
     setLoading(true);
     try {
       await supabase.auth.getSession();
+      // Fetch all collections for user
       const { data: collectionsData } = await supabase
         .from("collections")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
+
       let collectionsWithCounts: Collection[] = [];
+      const previewsMap: Record<string, ImageData[]> = {};
+
       if (collectionsData && collectionsData.length > 0) {
+        const allCollectionIds = collectionsData.map((c) => c.id);
+
+        // Get all favorite_ids for all collections (up to 4 per collection)
+        const { data: allFavorites } = await supabase
+          .from("collection_favorites")
+          .select("collection_id, favorite_id, display_order")
+          .in("collection_id", allCollectionIds)
+          .order("display_order", { ascending: true });
+
+        // Map: collection_id -> [favorite_id...]
+        const previewFavoriteIdsByCollection: Record<string, number[]> = {};
+        const allPreviewFavoriteIds: number[] = [];
+
+        allCollectionIds.forEach((cid) => {
+          // Get up to 4 favorite_ids for this collection
+          const favsForCollection = (allFavorites || [])
+            .filter((f) => f.collection_id === cid)
+            .slice(0, 4);
+          const favIds = favsForCollection.map((f) => f.favorite_id);
+          previewFavoriteIdsByCollection[cid] = favIds;
+          allPreviewFavoriteIds.push(...favIds);
+        });
+
+        // Fetch all favorites info for those IDs
+        const { data: previewFavoritesInfo } = await supabase
+          .from("favorites")
+          .select("id, image_id")
+          .in("id", allPreviewFavoriteIds);
+
+        // Map favorite_id -> image_id
+        const favoriteIdToImageId: Record<number, string> = {};
+        (previewFavoritesInfo || []).forEach((fav) => {
+          favoriteIdToImageId[fav.id] = fav.image_id;
+        });
+
+        // Get all unique image IDs
+        const allPreviewImageIds = [
+          ...new Set(Object.values(favoriteIdToImageId).filter(Boolean)),
+        ];
+
+        // Fetch all image info for image IDs
+        const { data: previewImagesData } = await supabase
+          .from("images_resize")
+          .select(
+            "id, author, title, description, created_at, base_url, filename, width, height, orientation"
+          )
+          .in("id", allPreviewImageIds);
+
+        // Map image_id -> ImageData
+        const imageIdToData: Record<string, ImageData> = {};
+        (previewImagesData || []).forEach((img) => {
+          imageIdToData[String(img.id)] = {
+            id: String(img.id),
+            url:
+              img.base_url && img.filename
+                ? `${img.base_url}/w400/${img.filename}`
+                : "/favicons/android-chrome-512x512.png",
+            base_url: img.base_url,
+            filename: img.filename,
+            author: img.author || "Unknown",
+            title: img.title || "",
+            description: img.description || "",
+            created_at: img.created_at || "",
+            width: img.width,
+            height: img.height,
+            orientation: img.orientation,
+          };
+        });
+
+        // Build previews for each collection
+        allCollectionIds.forEach((cid) => {
+          const favIds = previewFavoriteIdsByCollection[cid] || [];
+          const imgsForCollection: ImageData[] = favIds.map((favId) => {
+            const imgId = favoriteIdToImageId[favId];
+            return (
+              imageIdToData[imgId] || {
+                id: `preview-${cid}-${favId}`,
+                url: "/favicons/android-chrome-512x512.png",
+                author: "Unknown",
+                title: "",
+                description: "",
+                created_at: "",
+              }
+            );
+          });
+          previewsMap[cid] = imgsForCollection;
+        });
+
+        // For each collection, count images (from image_count query)
         collectionsWithCounts = await Promise.all(
           collectionsData.map(async (collection) => {
             // Get image count
@@ -67,46 +166,14 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
               .from("collection_favorites")
               .select("*", { count: "exact", head: true })
               .eq("collection_id", collection.id);
-
-            // Get up to 4 favorite_ids for preview
-            const { data: collectionFavorites } = await supabase
-              .from("collection_favorites")
-              .select("favorite_id")
-              .eq("collection_id", collection.id)
-              .order("display_order", { ascending: true })
-              .limit(4);
-
-            const favoriteIds =
-              collectionFavorites?.map((fav) => fav.favorite_id) || [];
-            let preview_images: string[] = [];
-            if (favoriteIds.length > 0) {
-              // Get favorites to get image_ids
-              const { data: favorites } = await supabase
-                .from("favorites")
-                .select("id, image_id")
-                .in("id", favoriteIds);
-              const imageIds = favorites?.map((fav) => fav.image_id) || [];
-              if (imageIds.length > 0) {
-                const { data: images } = await supabase
-                  .from("images_resize")
-                  .select("id, base_url, filename")
-                  .in("id", imageIds);
-                preview_images =
-                  images?.map((img) =>
-                    img.base_url && img.filename
-                      ? `${img.base_url}/w400/${img.filename}`
-                      : "/favicons/android-chrome-512x512.png"
-                  ) || [];
-              }
-            }
             return {
               ...collection,
               image_count: imageCount || 0,
-              preview_images,
             };
           })
         );
       }
+
       // Merge pendingCollections (optimistic) with backend, remove dups by id
       const backendIds = new Set(collectionsWithCounts.map((c) => c.id));
       const merged = [
@@ -114,7 +181,9 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
         ...collectionsWithCounts,
       ];
       setCollections(merged);
-    } catch {
+      setCollectionPreviews(previewsMap);
+    } catch (err) {
+      console.error("Error loading collections:", err);
     } finally {
       setLoading(false);
     }
@@ -135,7 +204,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
   const handleCreateCollection = (newCollection: Collection) => {
     // Optimistically add to UI
     setPendingCollections((prev) => [
-      { ...newCollection, image_count: 0, preview_images: [] },
+      { ...newCollection, image_count: 0 },
       ...prev,
     ]);
     loadCollections();
@@ -274,19 +343,14 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                     className={`${buttonStyles.buttonBase} ${buttonStyles.viewButton}`}
                     title="Share collection"
                   >
-                    {/* Options for share icon similar in style to ⌂: */}
-                    {/* 1. ⎋ (Escape) */}
-                    {/* 2. ⎙ (Print) */}
-                    {/* 3. ⎘ (Insert) */}
-                    {/* 4. ⎗ (Copy) */}
-                    {/* 5. ⎌ (Return) */}Share
+                    Edit
                   </button>
                   <button
                     onClick={() => setEditingCollection(collection)}
                     className={`${buttonStyles.buttonBase} ${buttonStyles.editButton}`}
                     title="Edit collection"
                   >
-                    Edit
+                    Rename
                   </button>
                   <button
                     onClick={() => handleDeleteCollection(collection.id)}
@@ -298,43 +362,30 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                 </div>
               </div>
 
-              <div className={styles.previewContainer}>
-                {collection.preview_images &&
-                collection.preview_images.length > 0 ? (
-                  <div className={styles.imageGrid}>
-                    {collection.preview_images
-                      .slice(0, 4)
-                      .map((imageUrl, index) => (
-                        <div key={index} className={styles.previewImage}>
-                          <Image
-                            src={imageUrl}
-                            alt={`Preview ${index + 1}`}
-                            width={80}
-                            height={80}
-                            loading="lazy"
-                          />
-                        </div>
-                      ))}
-                  </div>
-                ) : (
-                  <div className={styles.emptyPreview}>
-                    <span className={styles.emptyPreviewIcon}>📷</span>
-                    <p>No images yet</p>
-                    <p>
-                      To add images to this collection, go to{" "}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          window.location.href =
-                            "/photo-curations?tab=favorites";
+              <div
+                className={styles.previewContainer}
+                onClick={() =>
+                  router.push(`/profile/collections/${collection.id}`)
+                }
+              >
+                <div className={styles.imageGrid}>
+                  {(collectionPreviews[collection.id] || []).map((imgData) => (
+                    <div key={imgData.id} className={styles.previewThumb}>
+                      <ImageWrapper
+                        image={imgData}
+                        width={120}
+                        height={120}
+                        showOverlayButtons={false}
+                        imgStyleOverride={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
                         }}
-                      >
-                        your favorites tab
-                      </button>{" "}
-                      and click the &apos;+&apos; folders icon over the image.
-                    </p>
-                  </div>
-                )}
+                        sizes="120px"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className={styles.cardFooter}>
@@ -361,7 +412,6 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
           collection={editingCollection}
           onUpdateCollection={handleEditCollection}
         >
-          {/* This can be a hidden span, since the launcher just needs to trigger the modal */}
           <span style={{ display: "none" }} />
         </EditCollectionLauncher>
       )}

@@ -215,16 +215,11 @@
   }
 
   .collectionItem {
-    flex-direction: column;
     align-items: stretch;
     gap: 0.75rem;
   }
 
   .collectionInfo {
     margin-right: 0;
-  }
-
-  .actionButton {
-    width: 100%;
   }
 }

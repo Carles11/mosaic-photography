@@ -14,28 +14,34 @@ export default function ShareCollectionModal({
 }: ModalPropsMap["shareCollection"]) {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<"link" | "qr" | "email" | "embed">(
-    "link",
+    "link"
   );
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
   const nonCriticalCssLoaded = useNonCriticalCssLoaded();
 
   // Email subject and body state
   const [emailSubject, setEmailSubject] = useState(
-    `Check out this collection: ${collection.name}`,
+    `Check out this collection: ${collection.name}`
   );
   const [emailBody, setEmailBody] = useState(
     `I wanted to share this amazing image collection with you!\n\n` +
       `Collection: ${collection.name}\n` +
-      `${collection.description ? `Description: ${collection.description}\n` : ""}` +
+      `${
+        collection.description ? `Description: ${collection.description}\n` : ""
+      }` +
       `Images: ${collection.image_count || 0}\n\n` +
-      `View it here: ${typeof window !== "undefined" ? window.location.origin : ""}/profile/collections/${collection.id}\n\n` +
-      `Shared from Mosaic Photography`,
+      `View it here: ${
+        typeof window !== "undefined" ? window.location.origin : ""
+      }/profile/collections/${collection.id}\n\n` +
+      `Shared from Mosaic Photography`
   );
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_emailSending, _setEmailSending] = useState(false);
   const [embedCopied, setEmbedCopied] = useState(false);
 
-  const shareUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/profile/collections/${collection.id}`;
+  const shareUrl = `${
+    typeof window !== "undefined" ? window.location.origin : ""
+  }/profile/collections/${collection.id}`;
 
   // Generate QR Code when needed
   useEffect(() => {
@@ -98,7 +104,10 @@ export default function ShareCollectionModal({
   const handleDownloadQR = () => {
     if (qrCodeDataUrl) {
       const link = document.createElement("a");
-      link.download = `${collection.name.replace(/[^a-z0-9]/gi, "_")}_qr_code.png`;
+      link.download = `${collection.name.replace(
+        /[^a-z0-9]/gi,
+        "_"
+      )}_qr_code.png`;
       link.href = qrCodeDataUrl;
       link.click();
     }
@@ -258,13 +267,13 @@ export default function ShareCollectionModal({
                   {embedCopied ? "Copied!" : "Copy"}
                 </button>
               </div>
-              <div className="embedPreview">
+              {/* <div className="embedPreview">
                 <h5>Preview:</h5>
                 <div className="embedFrame">
                   <span>📷 {collection.name}</span>
                   <small>{collection.image_count || 0} images</small>
                 </div>
-              </div>
+              </div> */}
               <p className="hint">
                 Paste this code into any website to embed your collection.
               </p>

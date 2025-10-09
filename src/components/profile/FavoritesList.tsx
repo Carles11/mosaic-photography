@@ -125,8 +125,10 @@ export default function FavoritesList({
 
   useEffect(() => {
     // Modal just closed: was open, now null/undefined
+    console.log({ prevModal: prevModal.current, currentModal });
     if (
       prevModal.current &&
+      prevModal.current !== "addToCollection" &&
       !currentModal &&
       lastLightboxIndex.current !== null
     ) {

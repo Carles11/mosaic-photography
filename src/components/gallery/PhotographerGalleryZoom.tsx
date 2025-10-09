@@ -172,7 +172,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                 : undefined,
           }))}
           index={lightboxIndex}
-          plugins={[Zoom, Download]} // <-- Add Download plugin
+          plugins={[Zoom, Download]}
           zoom={{
             maxZoomPixelRatio: 3,
             minZoom: 1,

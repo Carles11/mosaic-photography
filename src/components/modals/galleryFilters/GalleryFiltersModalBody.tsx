@@ -23,7 +23,7 @@ const nudityOptions = [
 const genderOptions = [
   { value: "female", label: "Female" },
   { value: "male", label: "Male" },
-  { value: "mixed", label: "Mixed" },
+  { value: "mixed", label: "Only mixed couples" },
 ];
 const printQualityOptions = [
   { value: "standard", label: "Standard" },
@@ -74,7 +74,7 @@ export default function GalleryFiltersModalBody({
             })
           }
         >
-          <option value="">Any</option>
+          <option value="">Include all orientations</option>
           {orientationOptions.map((o) => (
             <option key={o.value} value={o.value}>
               {o.label}
@@ -95,7 +95,7 @@ export default function GalleryFiltersModalBody({
             })
           }
         >
-          <option value="">Any</option>
+          <option value="">Include all</option>
           {colorOptions.map((c) => (
             <option key={c.value} value={c.value}>
               {c.label}
@@ -118,7 +118,7 @@ export default function GalleryFiltersModalBody({
             })
           }
         >
-          <option value="">Any</option>
+          <option value="">Show all types</option>
           {nudityOptions.map((n) => (
             <option key={n.value} value={n.value}>
               {n.label}
@@ -141,7 +141,7 @@ export default function GalleryFiltersModalBody({
             })
           }
         >
-          <option value="">Any</option>
+          <option value="">Include all genders</option>
           {genderOptions.map((g) => (
             <option key={g.value} value={g.value}>
               {g.label}

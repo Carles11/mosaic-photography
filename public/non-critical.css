@@ -557,7 +557,8 @@ body {
 .urlContainer {
   flex-direction: column;
 }
-/* Fix for react-chrono timeline background issues */
+
+/* Fixesfor react-chrono timeline background issues */
 .gqkRuK::after {
   background: none !important;
 }
@@ -607,7 +608,7 @@ body {
 
 @media (max-width: 480px) {
   .cBdiWt {
-    font-size: 0.8rem !important;
+    font-size: 1rem !important;
   }
   .cuOcjp {
     margin: 0 !important;

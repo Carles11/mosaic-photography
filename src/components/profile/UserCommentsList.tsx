@@ -2,11 +2,27 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-hot-toast";
-import Image from "next/image";
 import styles from "./UserCommentsList.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
-import { UserCommentWithImage } from "@/types";
+import { ImageData } from "@/types";
+import ImageWrapper from "@/components/wrappers/ImageWrapper";
+
+// Comment type reflecting your schema
+type Comment = {
+  id: string;
+  user_id?: string;
+  content: string;
+  created_at: string;
+  image_id?: string | number;
+};
+
+type UserCommentWithImage = Comment & {
+  image_title?: string;
+  image_url?: string;
+  image_author?: string;
+  imageData?: ImageData;
+};
 
 const COMMENTS_PER_PAGE = 10;
 
@@ -20,94 +36,92 @@ export default function UserCommentsList() {
   const [editContent, setEditContent] = useState("");
   const [updating, setUpdating] = useState(false);
 
+  // Fetch user comments + images
   const loadUserComments = useCallback(
     async (pageNum: number = 1, reset: boolean = false) => {
       if (!user) {
         setLoading(false);
         return;
       }
-
       setLoading(true);
       try {
         const offset = (pageNum - 1) * COMMENTS_PER_PAGE;
 
-        // First, get the user's comments
+        // 1. Get the user's comments
         const { data: commentsData, error: commentsError } = await supabase
           .from("comments")
-          .select(
-            `
-            id,
-            user_id,
-            image_id,
-            content,
-            created_at
-          `
-          )
+          .select("id, user_id, image_id, content, created_at")
           .eq("user_id", user.id)
           .order("created_at", { ascending: false })
           .range(offset, offset + COMMENTS_PER_PAGE - 1);
 
         if (commentsError) {
           console.error("Error loading user comments:", commentsError);
-          if (commentsError.code === "42P01") {
-            console.warn("comments table doesn't exist yet");
-          }
           return;
         }
 
         if (!commentsData || commentsData.length === 0) {
-          if (reset) {
-            setComments([]);
-          }
+          if (reset) setComments([]);
           setHasMore(false);
+          setLoading(false);
           return;
         }
 
-        // Get unique image IDs to fetch image details
+        // 2. Get image details for referenced images
         const imageIds = [
-          ...new Set(commentsData.map((comment) => comment.image_id)),
+          ...new Set(
+            commentsData
+              .map((c) => c.image_id)
+              .filter(Boolean)
+              .map((id) => String(id))
+          ),
         ];
 
-        // Fetch image details for these IDs
-        const { data: imagesData, error: imagesError } = await supabase
-          .from("images_resize")
-          .select("id, title, base_url, filename, author")
-          .in("id", imageIds);
+        const imageMap = new Map<string, ImageData>();
+        if (imageIds.length > 0) {
+          const { data: imagesData, error: imagesError } = await supabase
+            .from("images_resize")
+            .select(
+              "id, title, base_url, filename, author, description, created_at, width, height, orientation"
+            )
+            .in("id", imageIds);
 
-        if (imagesError) {
-          console.error("Error loading image details:", imagesError);
+          if (imagesError) {
+            console.error("Error loading image details:", imagesError);
+          } else if (imagesData) {
+            imagesData.forEach((image) => {
+              imageMap.set(String(image.id), {
+                id: String(image.id),
+                url:
+                  image.base_url && image.filename
+                    ? `${image.base_url}/w800/${image.filename}`
+                    : "/favicons/android-chrome-512x512.png",
+                base_url: image.base_url,
+                filename: image.filename,
+                author: image.author || "Unknown",
+                title: image.title || "",
+                description: image.description || "",
+                created_at: image.created_at || "",
+                width: image.width,
+                height: image.height,
+                orientation: image.orientation,
+              });
+            });
+          }
         }
 
-        // Create a map of image_id -> image details for quick lookup
-        const imageMap = new Map();
-        if (imagesData) {
-          imagesData.forEach((image) => {
-            const imageWithUrl = {
-              ...image,
-              url:
-                image.base_url && image.filename
-                  ? `${image.base_url}/w800/${image.filename}`
-                  : "/favicons/android-chrome-512x512.png",
-            };
-            imageMap.set(image.id, imageWithUrl);
-          });
-        }
-
-        // Transform the data to match our interface
+        // 3. Attach image info to comments
         const transformedComments: UserCommentWithImage[] = commentsData.map(
-          (comment: UserCommentWithImage) => {
-            const imageDetails = imageMap.get(comment.image_id);
+          (comment) => {
+            const imageDetails = comment.image_id
+              ? imageMap.get(String(comment.image_id))
+              : undefined;
             return {
-              id: comment.id,
-              user_id: comment.user_id,
-              image_id: comment.image_id,
-              content: comment.content,
-              created_at: comment.created_at,
-              updated_at: comment.updated_at, // This might be undefined, which is fine
-              user_email: undefined, // Not available in current schema
+              ...comment,
               image_title: imageDetails?.title,
               image_url: imageDetails?.url,
               image_author: imageDetails?.author,
+              imageData: imageDetails,
             };
           }
         );
@@ -163,14 +177,10 @@ export default function UserCommentsList() {
       if (error) {
         console.error("Error updating comment:", error);
       } else {
-        // Update local state
         setComments((prev) =>
           prev.map((comment) =>
             comment.id === commentId
-              ? {
-                  ...comment,
-                  content: editContent.trim(),
-                }
+              ? { ...comment, content: editContent.trim() }
               : comment
           )
         );
@@ -289,14 +299,19 @@ export default function UserCommentsList() {
         {comments.map((comment) => (
           <div key={comment.id} className={styles.commentItem}>
             <div className={styles.imageInfo}>
-              {comment.image_url ? (
+              {comment.imageData ? (
                 <div className={styles.imageThumbnail}>
-                  <Image
-                    src={comment.image_url}
-                    alt={comment.image_title || "Mosaic Gallery image"}
-                    width={80}
-                    height={80}
-                    loading="lazy"
+                  <ImageWrapper
+                    image={comment.imageData}
+                    width={200}
+                    height={200}
+                    showOverlayButtons={false}
+                    imgStyleOverride={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                    sizes="200px"
                   />
                 </div>
               ) : (
@@ -311,7 +326,7 @@ export default function UserCommentsList() {
                 <p className={styles.imageAuthor}>
                   by {comment.image_author || "Unknown"}
                 </p>
-                {!comment.image_url && (
+                {!comment.imageData && (
                   <p className={styles.imageNotFound}>
                     Image ID: {comment.image_id}
                   </p>
@@ -352,13 +367,6 @@ export default function UserCommentsList() {
                   <div className={styles.commentMeta}>
                     <span className={styles.commentDate}>
                       {formatDate(comment.created_at)}
-                      {comment.updated_at &&
-                        comment.updated_at !== comment.created_at && (
-                          <span className={styles.editedIndicator}>
-                            {" "}
-                            (edited)
-                          </span>
-                        )}
                     </span>
                     <div className={styles.commentActions}>
                       <button
