@@ -72,7 +72,7 @@ export default function FavoritesList({
       const { data: images, error } = await supabase
         .from("images_resize")
         .select(
-          "id, base_url, filename, author, title, description, created_at, width, height"
+          "id, base_url, filename, author, title, description, created_at, width, height, year"
         )
         .in("id", imageIds);
 
@@ -334,13 +334,8 @@ export default function FavoritesList({
           plugins={[Zoom, Download]} // <-- Add Download plugin
           zoom={{
             maxZoomPixelRatio: 3,
+            minZoom: 1,
             zoomInMultiplier: 2,
-            doubleTapDelay: 300,
-            doubleClickDelay: 300,
-            doubleClickMaxStops: 2,
-            keyboardMoveDistance: 50,
-            wheelZoomDistanceFactor: 100,
-            pinchZoomDistanceFactor: 100,
             scrollToZoom: true,
           }}
           render={{
@@ -348,6 +343,7 @@ export default function FavoritesList({
               const typedSlide = slide as {
                 src: string;
                 alt?: string;
+                year: number;
                 width?: number;
                 height?: number;
                 id?: string;
@@ -384,6 +380,7 @@ export default function FavoritesList({
                   }}
                 >
                   <div
+                    className={styles.lightboxAuthor}
                     style={{
                       position: "absolute",
                       left: 0,
@@ -392,14 +389,15 @@ export default function FavoritesList({
                       textAlign: "center",
                       color: "#fff",
                       fontSize: "1.2rem",
-                      padding: "16px 24px 24px 24px",
+                      padding: "16px 14px 14px 14px",
                       background: "rgba(0,0,0,0.2)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
                       zIndex: 1,
                     }}
                   >
-                    {typedSlide.author || "Untitled"}
+                    <p>{typedSlide.author || "Unknown Author"},</p>{" "}
+                    <p>{typedSlide.year || "Unknown Year"}</p>
                   </div>
                   <ImageWrapper
                     image={{
@@ -424,6 +422,7 @@ export default function FavoritesList({
                     showOverlayButtons={false}
                   />
                   <div
+                    className={styles.lightboxDescription}
                     style={{
                       position: "absolute",
                       left: 0,
@@ -431,22 +430,28 @@ export default function FavoritesList({
                       width: "100%",
                       textAlign: "center",
                       color: "#fff",
-                      fontSize: "1.2rem",
-                      padding: "16px 24px 24px 24px",
-                      background: "rgba(0,0,0,0.2)",
+                      fontSize: "1.04rem",
+                      padding: "16px 24px 64px 24px", // extra bottom padding!
+                      background: "rgba(0,0,0,0.4)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
                       zIndex: 1001,
+                      maxHeight: "28vh", // or "30vh"
+                      overflowY: "auto",
+                      boxSizing: "border-box",
+                      pointerEvents: "auto",
+                      marginBottom: "0",
                     }}
                   >
                     {typedSlide.description || ""}
                   </div>
                   <div
+                    className={styles.lightboxButtonRow}
                     style={{
                       position: "fixed",
                       bottom: 20,
                       right: 20,
-                      zIndex: 9999,
+                      zIndex: 2000, // make sure it's above description
                       display: "flex",
                       gap: "10px",
                       pointerEvents: "auto",

@@ -18,6 +18,7 @@ import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Download from "yet-another-react-lightbox/plugins/download";
 import type { GalleryProps } from "@/types/gallery";
+import styles from "./photographerGalleryZoom.module.css";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
@@ -186,6 +187,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                 id?: number | string;
                 author?: string;
                 description?: string;
+                year: number;
                 width?: number;
                 height?: number;
                 s3Progressive?: Array<{ url: string; width: number }>;
@@ -209,6 +211,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                   }}
                 >
                   <div
+                    className={styles.lightboxAuthor}
                     style={{
                       position: "absolute",
                       left: 0,
@@ -217,14 +220,15 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                       textAlign: "center",
                       color: "#fff",
                       fontSize: "1.2rem",
-                      padding: "16px 24px 24px 24px",
+                      padding: "16px 14px 14px 14px",
                       background: "rgba(0,0,0,0.2)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
-                      zIndex: 1001,
+                      zIndex: 1,
                     }}
                   >
-                    {typedSlide.author || "Untitled"}
+                    <p>{typedSlide.author || "Unknown Author"},</p>{" "}
+                    <p>{typedSlide.year || "Unknown Year"}</p>
                   </div>
                   <ImageWrapper
                     image={{
@@ -249,6 +253,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                     showOverlayButtons={false}
                   />
                   <div
+                    className={styles.lightboxDescription}
                     style={{
                       position: "absolute",
                       left: 0,
@@ -256,22 +261,29 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                       width: "100%",
                       textAlign: "center",
                       color: "#fff",
-                      fontSize: "1.2rem",
-                      padding: "16px 24px 24px 24px",
-                      background: "rgba(0,0,0,0.2)",
+                      fontSize: "1.04rem",
+                      padding: "16px 24px 64px 24px", // extra bottom padding!
+                      background: "rgba(0,0,0,0.4)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
                       zIndex: 1001,
+                      maxHeight: "28vh", // or "30vh"
+                      overflowY: "auto",
+                      boxSizing: "border-box",
+                      pointerEvents: "auto",
+                      marginBottom: "0",
                     }}
                   >
                     {typedSlide.description || ""}
                   </div>
+
                   <div
+                    className={styles.lightboxButtonRow}
                     style={{
                       position: "fixed",
                       bottom: 20,
                       right: 20,
-                      zIndex: 9999,
+                      zIndex: 2000, // make sure it's above description
                       display: "flex",
                       gap: "10px",
                       pointerEvents: "auto",

@@ -1,0 +1,26 @@
+.lightboxAuthor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.9rem;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  z-index: 1;
+}
+
+@media (max-width: 480px) {
+  .lightboxDescription {
+    font-size: 0.98rem;
+    max-height: 32vh;
+    padding-bottom: 80px;
+  }
+  .lightboxAuthor {
+    font-size: 0.9rem !important;
+    padding-top: 22px !important;
+  }
+  .lightboxButtonRow {
+    bottom: 16px;
+    right: 12px;
+  }
+}
