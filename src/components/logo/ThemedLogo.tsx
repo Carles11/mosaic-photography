@@ -19,9 +19,12 @@ const LOGO_URLS = {
       "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent-DESKTOP-light_766x541px_ooxukv.webp",
   },
   mobile: {
-    dark: "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent-mobile-DARK_500x353px_szzmkn.webp",
+    dark: "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp",
     light:
-      "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent-mobile-light_500x353px_v6gwqg.webp",
+      "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent-DESKTOP-light_766x541px_ooxukv.webp",
+    // dark: "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent-mobile-DARK_500x353px_szzmkn.webp",
+    // light:
+    //   "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-grayscale-transparent-mobile-light_500x353px_v6gwqg.webp",
   },
 };
 
