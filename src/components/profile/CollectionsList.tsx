@@ -340,21 +340,21 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
                     onClick={() =>
                       router.push(`/profile/collections/${collection.id}`)
                     }
-                    className={`${styles.buttonBase} ${styles.viewButton}`}
+                    className={`${buttonStyles.buttonBase} ${buttonStyles.viewButton}`}
                     title="Share collection"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => setEditingCollection(collection)}
-                    className={`${styles.buttonBase} ${styles.editButton}`}
+                    className={`${buttonStyles.buttonBase} ${buttonStyles.editButton}`}
                     title="Edit collection"
                   >
                     Rename
                   </button>
                   <button
                     onClick={() => handleDeleteCollection(collection.id)}
-                    className={`${styles.buttonBase} ${styles.deleteButton}`}
+                    className={`${buttonStyles.buttonBase} ${buttonStyles.deleteButton}`}
                     title="Delete collection"
                   >
                     🗑️

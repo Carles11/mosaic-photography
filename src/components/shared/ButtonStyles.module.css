@@ -1,7 +1,7 @@
 /* Shared button styles for edit, delete, view, and action buttons */
 
 .buttonBase {
-  width: 44px;
+  width: fit-content;
   height: 44px;
   border: none;
   border-radius: 6px;
