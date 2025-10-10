@@ -248,7 +248,7 @@ const CollectionsList = forwardRef<CollectionsListRef>((props, ref) => {
             }}
             style={{
               marginRight: 8,
-              background: "#e53e3e",
+              background: "var(--tertiary-color)",
               color: "#fff",
               border: "none",
               padding: "4px 10px",
