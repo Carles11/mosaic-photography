@@ -282,7 +282,7 @@ export const photographerTimelines: Record<string, TimelineItemModelProps[]> = {
       eventType: "personal",
     },
     {
-      title: "Early 1870s",
+      title: "1870s",
       cardTitle: "A New Life in Italy",
       cardDetailedText:
         "Plüschow moved to Rome and changed his first name to its Italian equivalent, 'Guglielmo.' He initially worked as a wine merchant before turning to photography, setting the stage for his future career.",
