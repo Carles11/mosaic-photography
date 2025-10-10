@@ -41,6 +41,7 @@ export default async function PhotographerDetailPage(
         )}
       </p>
       <main className={styles.photographerDetailPage}>
+        <hr />
         <h2 className={styles.timelineTitle}>A Life in Focus</h2>
         <p className={styles.sectionContent}>
           Personal & Historical Milestones in {photographer.name}{" "}

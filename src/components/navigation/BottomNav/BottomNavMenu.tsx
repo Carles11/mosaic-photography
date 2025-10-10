@@ -61,7 +61,13 @@ const BottomNavMenu = ({
         <div className={styles.menuContent}>
           {user ? (
             <>
-              <button className={styles.closeButton} onClick={onClose}>
+              <button
+                className={styles.closeButton}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClose();
+                }}
+              >
                 ×
               </button>
               <Link
@@ -106,7 +112,13 @@ const BottomNavMenu = ({
             </>
           ) : (
             <>
-              <button className={styles.closeButton} onClick={onClose}>
+              <button
+                className={styles.closeButton}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClose();
+                }}
+              >
                 ×
               </button>
               <button
