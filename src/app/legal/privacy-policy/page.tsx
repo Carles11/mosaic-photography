@@ -32,7 +32,23 @@ const PrivacyPolicy: React.FC = () => {
         We do not collect any personal information from visitors to our website.
         However, we use Google Analytics (via Google Tag Manager) to collect
         non-personal information such as your IP address, browser type, and
-        operating system.
+        operating system. Google Analytics may use cookies to analyze usage and
+        may transfer data outside the EU. For more details, see{" "}
+        <a
+          href="https://policies.google.com/privacy"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fancy-link"
+        >
+          Google’s Privacy Policy
+        </a>
+        .
+      </p>
+      <h2 className={styles.subtitle}>Cookies</h2>
+      <p className={styles.text}>
+        We use cookies to remember your preferences (such as theme and age
+        consent) and, with your consent, for analytics purposes. You can accept
+        or decline analytics cookies via our cookie consent banner.
       </p>
       <h2 className={styles.subtitle}>Information Use</h2>
       <p className={styles.text}>
@@ -41,7 +57,7 @@ const PrivacyPolicy: React.FC = () => {
       </p>
       <h2 className={styles.subtitle}>Information Sharing</h2>
       <p className={styles.text}>
-        We don&apos;t share your information with third parties
+        We don&apos;t share your information with third parties.
       </p>
       <h2 className={styles.subtitle}>Google Tag Manager</h2>
       <p className={styles.text}>
@@ -51,11 +67,24 @@ const PrivacyPolicy: React.FC = () => {
         purposes and help us improve the user experience. For more information,
         please review Google&apos;s privacy policy.
       </p>
+      <h2 className={styles.subtitle}>Account and Login Information</h2>
+      <p className={styles.text}>
+        If you create an account or log in, we collect personal information such
+        as your email address and any profile details you provide. This data is
+        used to manage your account, provide access to personalized features,
+        and ensure site security. Your account data is stored securely and is
+        not shared with third parties except as required to operate the website
+        (for example, with our authentication provider, Supabase).
+      </p>
+
       <h2 className={styles.subtitle}>Contact</h2>
       <p className={styles.text}>
         If you have any questions or concerns about our privacy policy, please
         contact us at{" "}
-        <a href="mailto:carles@rio-frances.com">carles@rio-frances.com</a>.
+        <a href="mailto:carles@rio-frances.com" className="fancy-link">
+          carles@rio-frances.com
+        </a>
+        .
       </p>
     </section>
   );

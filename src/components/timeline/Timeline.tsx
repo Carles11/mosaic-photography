@@ -4,6 +4,7 @@ import { Chrono } from "react-chrono";
 import type { TimelineProps } from "@/types/components";
 import useIsMobile from "@/hooks/useIsMobile";
 import { getCssVar } from "@/helpers/colors";
+import "./Timeline.module.css";
 
 const Timeline: React.FC<TimelineProps> = ({
   events,
@@ -47,8 +48,9 @@ const Timeline: React.FC<TimelineProps> = ({
         highlightCardsOnHover={true}
         fontSizes={{
           title: "1.5rem",
-          cardTitle: "1.25rem",
-          cardSubtitle: "1rem",
+          cardTitle: "1.4rem",
+          cardSubtitle: "1.2rem",
+          cardDetailedText: "1.25rem",
         }}
         scrollable={true}
         timelinePointShape="square"

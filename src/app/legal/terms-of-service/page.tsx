@@ -43,11 +43,30 @@ const TermsOfService: React.FC = () => {
         promptly.
       </p>
 
+      <h2 className={styles.subtitle}>User Conduct</h2>
+      <p className={styles.text}>
+        You agree not to use this website for any unlawful purpose or to violate
+        any applicable laws or regulations.
+      </p>
+
       <h2 className={styles.subtitle}>Disclaimer</h2>
       <p className={styles.text}>
         We do not claim ownership of the images displayed on this website. All
         images are the property of their respective owners or, in most cases,
-        public domain.
+        public domain. We are not liable for any damages resulting from the use
+        of this website.
+      </p>
+      <h2 className={styles.subtitle}>Affiliate links</h2>
+      <p className={styles.text}>
+        Some of the links provided under &quot;Prints & books&quot; section may
+        be affiliate links, meaning I may earn a small commission from the store
+        if you make a purchase through them. This helps support my work at no
+        additional cost to you.
+      </p>
+      <h2 className={styles.subtitle}>Changes to Terms</h2>
+      <p className={styles.text}>
+        We reserve the right to update these terms at any time. Continued use of
+        the website constitutes acceptance of any changes.
       </p>
       <h2 className={styles.subtitle}>Contact</h2>
       <p className={styles.text}>
@@ -57,13 +76,6 @@ const TermsOfService: React.FC = () => {
           carles@rio-frances.com
         </a>
         .
-      </p>
-      <h2 className={styles.subtitle}>Affiliate links</h2>
-      <p className={styles.text}>
-        Some of the links provided under &quot;Prints & books&quot; section may
-        be affiliate links, meaning I may earn a small commission from the store
-        if you make a purchase through them. This helps support my work at no
-        additional cost to you.
       </p>
       <p className={styles.text}>
         By accessing this website, you agree to our &quot;Terms of Service&quot;

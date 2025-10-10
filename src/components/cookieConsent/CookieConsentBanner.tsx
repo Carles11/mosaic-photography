@@ -30,7 +30,7 @@ export default function CookieConsentBanner() {
     <div className={styles.banner} role="dialog" aria-live="polite">
       <span className={styles.text}>
         This site uses cookies for analytics and to improve your experience.{" "}
-        <a href="/legal/terms-of-service" className="fancy-link">
+        <a href="/legal/privacy-policy" className="fancy-link">
           Learn more
         </a>
         .
