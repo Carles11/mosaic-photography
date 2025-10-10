@@ -27,12 +27,12 @@ export const metadata = {
 const Credits: React.FC = () => {
   return (
     <section className={styles.container}>
-      <h1 className={styles.title}>Thanks</h1>
+      <h1 className={styles.title}>Thanks for:</h1>
 
       <h2 className={styles.subtitle}>Logo credits</h2>
       <p className={styles.text}>
         The mosaic logo was created for free using{" "}
-        <a href="https://logo.com" title="Logo.com">
+        <a href="https://logo.com" title="Logo.com" className="fancy-link">
           Logo.com
         </a>
         .
@@ -41,7 +41,7 @@ const Credits: React.FC = () => {
       <p className={styles.text}>
         All images in the mosaic gallery were optimized into webp format for
         free using{" "}
-        <a href="https://towebp.io/" title="towebp.io">
+        <a href="https://towebp.io/" title="towebp.io" className="fancy-link">
           towebp.io
         </a>
         .
@@ -53,6 +53,7 @@ const Credits: React.FC = () => {
         <a
           href="https://sharp.pixelplumbing.com/"
           title="Sharp - High performance Node.js image processing"
+          className="fancy-link"
         >
           Sharp
         </a>
@@ -67,6 +68,7 @@ const Credits: React.FC = () => {
         <a
           href="https://www.dafontfree.io/download/trade-gothic/"
           title="Trade Gothic font on dafontfree.io"
+          className="fancy-link"
         >
           dafontfree.io
         </a>
@@ -94,6 +96,7 @@ const Credits: React.FC = () => {
           <a
             href="https://www.flaticon.com/free-icons/mosaic"
             title="mosaic icons"
+            className="fancy-link"
           >
             Mosaic icons created by Freepik - Flaticon
           </a>
@@ -102,12 +105,17 @@ const Credits: React.FC = () => {
           <a
             href="https://www.flaticon.com/free-icons/close"
             title="close icons"
+            className="fancy-link"
           >
             Close icons created by Uniconlabs - Flaticon
           </a>
         </li>
         <li>
-          <a href="https://favicon.io/" title="mosaic favicons">
+          <a
+            href="https://favicon.io/"
+            title="mosaic favicons"
+            className="fancy-link"
+          >
             Mosaic favicons created by favicon.io
           </a>
         </li>
@@ -126,11 +134,16 @@ const Credits: React.FC = () => {
           <a
             href="https://www.instagram.com/analogue_carles/"
             title="Carles' instagram"
+            className="fancy-link"
           >
             photography
           </a>{" "}
           and{" "}
-          <a href="https://www.rio-frances.com" title="Carles' Portfolio">
+          <a
+            href="https://www.rio-frances.com"
+            title="Carles' Portfolio"
+            className="fancy-link"
+          >
             web development
           </a>
           . If you enjoy my work, your support helps keep it running—consider

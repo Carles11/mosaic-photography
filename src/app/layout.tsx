@@ -8,6 +8,7 @@ import ClientLayout from "@/components/layouts/ClientLayout";
 import ClientProviders from "@/context/main/ClientProviders";
 import criticalCSS from "../critical-above-the-fold.css?raw";
 import baseCSS from "./globals.css?raw";
+import CookieConsentBanner from "@/components/cookieConsent/CookieConsentBanner";
 
 // Inline minimal @font-face declarations for early font loading from AWS CDN
 const inlineFontsCSS = `@font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap;}
@@ -160,11 +161,29 @@ async function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body className="font-trade-gothic">
         <NonCriticalCSSLoader />
+        {/* Only load GTM if cookie_consent is true */}
         <Script
           id="gtm"
           strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtm.js?id=GTM-N74Q9JC5`}
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function loadGTM() {
+                  var consent = document.cookie.match(/(^|;)\\s*cookie_consent=([^;]*)/);
+                  if (consent && consent[2] === "true") {
+                    var s = document.createElement('script');
+                    s.src = "https://www.googletagmanager.com/gtm.js?id=GTM-N74Q9JC5";
+                    s.async = true;
+                    document.head.appendChild(s);
+                  }
+                }
+                loadGTM();
+                window.addEventListener("cookie-consent-granted", loadGTM);
+              })();
+            `,
+          }}
         />
+        <CookieConsentBanner />
         <ClientProviders>
           <main style={{ flex: 1 }}>
             <ClientLayout>{children}</ClientLayout>

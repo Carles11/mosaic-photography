@@ -40,7 +40,9 @@ const PrivacyPolicy: React.FC = () => {
         improve our website and provide a better user experience.
       </p>
       <h2 className={styles.subtitle}>Information Sharing</h2>
-      <p>We don&apos;t share your information with third parties</p>
+      <p className={styles.text}>
+        We don&apos;t share your information with third parties
+      </p>
       <h2 className={styles.subtitle}>Google Tag Manager</h2>
       <p className={styles.text}>
         We use Google Tag Manager to help manage analytics and tracking on our

@@ -33,6 +33,7 @@ const TermsOfService: React.FC = () => {
           href="https://commons.wikimedia.org/wiki/Main_Page"
           target="_blank"
           rel="noopener noreferrer"
+          className="fancy-link"
         >
           Wikimedia Commons
         </a>
@@ -52,7 +53,10 @@ const TermsOfService: React.FC = () => {
       <p className={styles.text}>
         If you have any questions or concerns about our terms of service, please
         contact me at{" "}
-        <a href="mailto:carles@rio-frances.com">carles@rio-frances.com</a>.
+        <a href="mailto:carles@rio-frances.com" className="fancy-link">
+          carles@rio-frances.com
+        </a>
+        .
       </p>
       <h2 className={styles.subtitle}>Affiliate links</h2>
       <p className={styles.text}>
@@ -61,7 +65,7 @@ const TermsOfService: React.FC = () => {
         if you make a purchase through them. This helps support my work at no
         additional cost to you.
       </p>
-      <p>
+      <p className={styles.text}>
         By accessing this website, you agree to our &quot;Terms of Service&quot;
       </p>
     </section>

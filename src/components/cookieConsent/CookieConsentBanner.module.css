@@ -1,0 +1,44 @@
+.banner {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(30, 30, 30, 0.97);
+  color: #fff;
+  padding: 1em 1.5em;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  font-size: 1em;
+  max-width: 95vw;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.text {
+  font-size: 1em;
+}
+
+.link {
+  color: #aad;
+  text-decoration: underline;
+}
+
+.accept {
+  background: #0070f3;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
+
+.decline {
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
