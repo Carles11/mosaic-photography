@@ -263,7 +263,10 @@ export default function FavoritesList({
                         </span>
                       </button>
                       <button
-                        onClick={() => handleUnlikeClick(image.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleUnlikeClick(image.id);
+                        }}
                         className={styles.unlikeButton}
                         id="unlike-icon"
                         title="Remove from favorites"

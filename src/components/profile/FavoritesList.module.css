@@ -322,7 +322,7 @@
 }
 
 .confirmButton {
-  background: #dc3545;
+  background: var(--tertiary-color, #fd6c6c);
   color: white;
 }
 
