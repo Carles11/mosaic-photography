@@ -34,13 +34,22 @@
   background: var(--background-color);
   padding: 20px;
   border-radius: 8px;
-  width: 90%;
+  width: 100%;
   max-width: 500px;
+  min-width: 280px;
+  min-height: 320px;
   text-align: center;
-  /* Performance optimizations */
-  will-change: transform;
-  transform: translateZ(0);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: none;
+}
+
+@media (max-width: 600px) {
+  .ageConfirmationContent {
+    max-width: 95vw;
+    min-width: 0;
+    padding: 16px;
+    min-height: 260px;
+  }
 }
 
 .consentTitle {

@@ -7,13 +7,17 @@ export const AgeConsent = ({
   setIsMinimumAgeConfirmed: (value: boolean) => void;
 }) => {
   const [isMounted, setIsMounted] = useState(false);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
+    // Delay rendering for 50ms to allow CSS/fonts to load
+    const timer = setTimeout(() => setShow(true), 50);
+    return () => clearTimeout(timer);
   }, []);
 
   // Don't render until mounted to prevent hydration mismatch
-  if (!isMounted) {
+  if (!isMounted || !show) {
     return null;
   }
   return (
