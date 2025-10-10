@@ -7,14 +7,14 @@
 }
 
 .title {
+  margin: 0 0 0.5rem 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--text-color);
-  margin-bottom: 0.5rem;
+  color: var(--foreground);
 }
 
 .subtitle {
-  color: var(--text-secondary);
+  color: var(--text-color, #333);
   font-size: 0.9rem;
 }
 

@@ -25,10 +25,8 @@
 }
 
 .subtitle {
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--foreground-muted);
-  line-height: 1.4;
+  color: var(--text-color, #333);
+  font-size: 0.9rem;
 }
 
 .createButton {

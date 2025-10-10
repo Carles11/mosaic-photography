@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import styles from "./AddToCollectionModal.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
+import { useModal } from "@/context/modalContext/useModal";
 
 import { Collection as CollectionType } from "@/types";
 
@@ -22,11 +23,12 @@ export default function AddToCollectionModalBody({
   onAddToCollection,
 }: AddToCollectionModalBodyProps) {
   const { user } = useAuthSession();
+  const { open: openModal } = useModal();
   const [collections, setCollections] = useState<CollectionType[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState<string | null>(null);
   const [alreadyInCollections, setAlreadyInCollections] = useState<Set<string>>(
-    new Set(),
+    new Set()
   );
 
   const loadCollections = useCallback(async () => {
@@ -80,8 +82,7 @@ export default function AddToCollectionModalBody({
       }
 
       const existingCollections = new Set(
-        data?.map((item: { collection_id: string }) => item.collection_id) ||
-          [],
+        data?.map((item: { collection_id: string }) => item.collection_id) || []
       );
       setAlreadyInCollections(existingCollections);
     } catch (error) {
@@ -110,7 +111,7 @@ export default function AddToCollectionModalBody({
       if (favoriteError || !favoriteData) {
         console.error("Error finding favorite:", favoriteError);
         toast.error(
-          "You must favorite this image first before adding it to a collection!",
+          "You must favorite this image first before adding it to a collection!"
         );
         return;
       }
@@ -178,7 +179,7 @@ export default function AddToCollectionModalBody({
       if (error) {
         console.error("Error removing from collection:", error);
         toast.error(
-          "Failed to remove image from collection. Please try again.",
+          "Failed to remove image from collection. Please try again."
         );
         return;
       }
@@ -199,6 +200,19 @@ export default function AddToCollectionModalBody({
     }
   };
 
+  // Handler for creating a new collection and adding the image to it
+  const handleCreateCollection = () => {
+    openModal("createCollection", {
+      onClose: () => {},
+      onCreateCollection: async (newCollection: CollectionType) => {
+        setCollections((prev) => [...prev, newCollection]);
+        await handleAddToCollection(newCollection.id);
+        // Optionally reload collections if needed:
+        // await loadCollections();
+      },
+    });
+  };
+
   return (
     <div>
       <div className={styles.header}>
@@ -216,6 +230,17 @@ export default function AddToCollectionModalBody({
         <p className={styles.imageTitle}>
           <strong>&quot;{imageTitle}&quot;</strong>
         </p>
+
+        {/* Always show the create collection button */}
+        <div className={styles.createCollectionRow}>
+          <button
+            type="button"
+            className={styles.createCollectionButton}
+            onClick={handleCreateCollection}
+          >
+            Add image to a new Collection
+          </button>
+        </div>
 
         {loading ? (
           <div className={styles.loading}>
@@ -258,7 +283,9 @@ export default function AddToCollectionModalBody({
                         : handleAddToCollection(collection.id)
                     }
                     disabled={isProcessing}
-                    className={`${styles.actionButton} ${isInCollection ? styles.removeButton : styles.addButton}`}
+                    className={`${styles.actionButton} ${
+                      isInCollection ? styles.removeButton : styles.addButton
+                    }`}
                   >
                     {isProcessing ? (
                       <span className={styles.loadingText}>

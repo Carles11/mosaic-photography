@@ -194,7 +194,7 @@ export default function FavoritesList({
           Your Favorites ({mappedFavoriteImages.length})
         </h3>
         <p className={styles.subtitle}>
-          Images you&apos;ve saved to your collection
+          Images you&apos;ve saved to your favorites list.
         </p>
       </div>
 
@@ -238,8 +238,8 @@ export default function FavoritesList({
                   />
                   <div className={styles.imageOverlay}>
                     <div className={styles.imageInfo}>
-                      <h4 className={styles.imageTitle}>{image.title}</h4>
                       <p className={styles.imageAuthor}>by {image.author}</p>
+                      <h4 className={styles.imageTitle}>{image.title}</h4>
                     </div>
                     <div className={styles.imageActions}>
                       <button

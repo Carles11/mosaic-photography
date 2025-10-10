@@ -187,6 +187,31 @@
   animation: spin 1s linear infinite;
 }
 
+.createCollectionRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.createCollectionButton {
+  background: #0078d4;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.createCollectionButton:hover,
+.createCollectionButton:focus {
+  background: #005fa3;
+  outline: none;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
