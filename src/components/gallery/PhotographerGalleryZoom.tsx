@@ -52,10 +52,17 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
         author: img.author ?? "",
         description: img.description ?? "",
         created_at: img.created_at ?? "",
+        orientation:
+          img.orientation === "vertical" ||
+          img.orientation === "horizontal" ||
+          img.orientation === "square"
+            ? img.orientation
+            : undefined,
       })),
     [images]
   );
 
+  console.log("PhotographerGalleryZoom imagesWithUrl:", imagesWithUrl);
   // Save last lightbox index before closing for modal
   useEffect(() => {
     if (currentModal && isLightboxOpen) {
@@ -128,6 +135,19 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
               "
               width={186}
               height={186}
+              imgStyleOverride={
+                img.orientation === "horizontal"
+                  ? {
+                      objectFit: "contain",
+                      width: "auto",
+                      height: "100%",
+                    }
+                  : {
+                      width: "100%",
+                      height: "auto",
+                      objectFit: "contain",
+                    }
+              }
             />
           </div>
         ))}

@@ -34,9 +34,10 @@ export const PhotographerLinks: React.FC<PhotographerLinksProps> = ({
   return (
     <div>
       <span className={styles.sectionHeader}>
-        <h3 className={styles.sectionTitle}>Stores:</h3>
-        <p>
-          Find books and prints from this photographer in the following stores:
+        <h3 className={styles.sectionTitle}>Where to Buy</h3>
+        <p className={styles.sectionStoresContent}>
+          Shop stunning prints and books at these trusted retailers, carefully
+          curated by the team of mosaic.photography:
         </p>
       </span>
       {parsedStores.length > 0 && (
@@ -72,21 +73,23 @@ export const PhotographerLinks: React.FC<PhotographerLinksProps> = ({
       <span className={styles.sectionHeader}>
         <h3 className={styles.sectionTitle}>Learn more:</h3>
         {website && (
-          <a
-            href={website}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() =>
-              sendGTMEvent({
-                event: "websiteClicked-in-page",
-                value: website,
-              })
-            }
-          >
-            {website.toLowerCase().includes("wikipedia")
-              ? "Wikipedia"
-              : "Website"}
-          </a>
+          <p className={styles.sectionStoresContent}>
+            <a
+              href={website}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() =>
+                sendGTMEvent({
+                  event: "websiteClicked-in-page",
+                  value: website,
+                })
+              }
+            >
+              {website.toLowerCase().includes("wikipedia")
+                ? "Wikipedia"
+                : "Website"}
+            </a>
+          </p>
         )}
       </span>
     </div>

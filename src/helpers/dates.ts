@@ -6,9 +6,9 @@ export function formatLifespan(birthIso: string, deathIso: string): string {
     day: "numeric",
   };
 
-  // Helper to format or fallback to empty
+  // Always format dates in English (US)
   const format = (iso?: string) =>
-    iso ? new Date(iso).toLocaleDateString(undefined, options) : "";
+    iso ? new Date(iso).toLocaleDateString("en-US", options) : "";
 
   if (birthIso && deathIso) {
     return `${format(birthIso)} – ${format(deathIso)}`;

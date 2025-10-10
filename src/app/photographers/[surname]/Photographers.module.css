@@ -1,6 +1,6 @@
 .photographerDetailPageTitle {
   margin: 0;
-  padding: 22px;
+  padding: 22px 0 0 22px;
 }
 
 .photographerDetailPage {
@@ -20,8 +20,12 @@
   margin: 22px 0 11px 0;
 }
 
-.sectionContent p {
-  padding: 0 !important;
+.sectionContent {
+  padding: 0 0 0 11px;
+}
+
+.sectionBioContent {
+  padding: 0 0 0 22px;
 }
 
 .subsectionHeader {
@@ -31,7 +35,7 @@
 
 .sectionTitle {
   margin: 0;
-  padding-left: 22px;
+  padding: 0 0 0 22px;
 }
 
 .timelineContainer {
@@ -42,10 +46,7 @@
 }
 
 .timelineTitle {
-  margin-bottom: 22px;
-}
-.timelineSubtitle {
-  margin-bottom: 22px;
+  margin: 44px 0 22px 0;
 }
 
 .galleryCount {
@@ -58,6 +59,10 @@
 /* Helps centering of timeline at first load - added in non-critical.css too*/
 .TimelineMain-sc-cif21b-2 {
   justify-self: anchor-center;
+}
+
+#timeline-main-wrapper {
+  width: 100vw !important;
 }
 
 /* Helps keeping the text off cardDetailedText inside its content - added in non-critical.css too*/

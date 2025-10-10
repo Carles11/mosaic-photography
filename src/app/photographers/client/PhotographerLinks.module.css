@@ -10,6 +10,10 @@
   padding-left: 11px;
 }
 
+.sectionStoresContent {
+  padding: 0 0 0 22px;
+}
+
 @media (max-width: 768px) {
   .sectionTitle {
     padding-left: 0;

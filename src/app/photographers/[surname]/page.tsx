@@ -5,6 +5,8 @@ import { PhotographerLinks } from "../client/PhotographerLinks";
 import Timeline from "@/components/timeline/Timeline";
 import { getTimelineBySlug } from "@/lib/timeline/photographersTimelines";
 import { TimelineItemModelProps } from "@/types/components";
+import { formatLifespan } from "@/helpers/dates";
+
 import styles from "./Photographers.module.css";
 
 export default async function PhotographerDetailPage(
@@ -32,15 +34,30 @@ export default async function PhotographerDetailPage(
       <h1 className={styles.photographerDetailPageTitle}>
         {photographer.name} {photographer.surname}
       </h1>
+      <p>
+        {formatLifespan(
+          photographer.birthdate ?? "",
+          photographer.deceasedate ?? ""
+        )}
+      </p>
       <main className={styles.photographerDetailPage}>
+        <h2 className={styles.timelineTitle}>A Life in Focus</h2>
+        <p className={styles.sectionContent}>
+          Personal & Historical Milestones in {photographer.name}{" "}
+          {photographer.surname}&apos;s life time.
+        </p>
+        <div className={styles.timelineContainer}>
+          <Timeline events={photographerTimeline as TimelineItemModelProps[]} />
+        </div>
+        <h2 className={styles.timelineTitle}>About the Photographer</h2>
         <span className={styles.sectionHeader}>
-          <h3 className={styles.sectionTitle}>Origin:</h3>
+          <h3 className={styles.sectionTitle}>Born in: </h3>
           <p className={styles.sectionContent}>{photographer.origin}</p>
         </span>
 
         <span className={styles.subsectionHeader}>
           <h3 className={styles.sectionTitle}>Biography:</h3>
-          <p className={styles.sectionContent}>{photographer.biography}</p>
+          <p className={styles.sectionBioContent}>{photographer.biography}</p>
         </span>
 
         <PhotographerLinks
@@ -48,14 +65,8 @@ export default async function PhotographerDetailPage(
           website={photographer.website}
         />
       </main>
-      <h2 className={styles.timelineTitle}>Timeline</h2>
-      <p className={styles.timelineTitle}>
-        Events in {photographer.name} {photographer.surname}&apos;s life time
-      </p>
-      <div className={styles.timelineContainer}>
-        <Timeline events={photographerTimeline as TimelineItemModelProps[]} />
-      </div>
-      <h2>
+
+      <h2 className={styles.timelineTitle}>
         Gallery{" "}
         <span
           className={styles.galleryCount}
