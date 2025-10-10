@@ -72,7 +72,7 @@ export default function FavoritesList({
       const { data: images, error } = await supabase
         .from("images_resize")
         .select(
-          "id, base_url, filename, author, title, description, created_at, width, height, year"
+          "id, base_url, filename, author, title, description, orientation,created_at, width, height, year"
         )
         .in("id", imageIds);
 
@@ -186,6 +186,7 @@ export default function FavoritesList({
     );
   }
 
+  console.log({ mappedFavoriteImages });
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -220,11 +221,19 @@ export default function FavoritesList({
                     sizes={image.sizes}
                     width={image.width}
                     height={image.height}
-                    imgStyleOverride={{
-                      width: "100%",
-                      height: "auto",
-                      objectFit: "cover",
-                    }}
+                    imgStyleOverride={
+                      image.orientation === "horizontal"
+                        ? {
+                            width: "100%",
+                            height: "auto",
+                            objectFit: "contain",
+                          }
+                        : {
+                            width: "100%",
+                            height: "auto",
+                            objectFit: "contain",
+                          }
+                    }
                     showOverlayButtons={false}
                   />
                   <div className={styles.imageOverlay}>
@@ -322,6 +331,7 @@ export default function FavoritesList({
               author: image.author,
               description: image.description,
               s3Progressive,
+              year: image.year ?? "", // <-- ensure year is passed
               download:
                 image.filename && image.base_url
                   ? {
@@ -343,7 +353,7 @@ export default function FavoritesList({
               const typedSlide = slide as {
                 src: string;
                 alt?: string;
-                year: number;
+                year?: string | number; // <-- make year optional and string|number
                 width?: number;
                 height?: number;
                 id?: string;
@@ -397,7 +407,11 @@ export default function FavoritesList({
                     }}
                   >
                     <p>{typedSlide.author || "Unknown Author"},</p>{" "}
-                    <p>{typedSlide.year || "Unknown Year"}</p>
+                    <p>
+                      {typedSlide.year
+                        ? String(typedSlide.year)
+                        : "Unknown Year"}
+                    </p>
                   </div>
                   <ImageWrapper
                     image={{
@@ -410,6 +424,12 @@ export default function FavoritesList({
                       author: typedSlide.author ?? "",
                       created_at: "",
                       description: typedSlide.description ?? "",
+                      year:
+                        typeof typedSlide.year === "number"
+                          ? typedSlide.year
+                          : typeof typedSlide.year === "string"
+                          ? Number(typedSlide.year) || undefined
+                          : undefined,
                     }}
                     imgStyleOverride={{
                       width: "100%",

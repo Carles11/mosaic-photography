@@ -66,9 +66,10 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
       <hr />
       <h2>THE MOSAIC COLLECTION </h2>
       <p className={styles.sectionIntro}>
-        Browse the complete collection of vintage nude photography—featuring
-        public domain, copyright-free, and open access images. All available for
-        download and personal or commercial use.
+        Explore the Mosaic Collection—a curated archive of vintage nude and
+        not-nude photography, celebrating history, beauty, and artistic freedom.
+        Every image is public domain, copyright-free, and open access, ready for
+        you to download and use for personal or commercial projects.
       </p>
       <div className={styles.filtersInfo}>
         <button

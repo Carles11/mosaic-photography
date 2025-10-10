@@ -50,6 +50,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
         title: img.title ?? "Untitled",
         id: img.id,
         author: img.author ?? "",
+        year: img.year ?? "",
         description: img.description ?? "",
         created_at: img.created_at ?? "",
         orientation:
@@ -62,7 +63,6 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
     [images]
   );
 
-  console.log("PhotographerGalleryZoom imagesWithUrl:", imagesWithUrl);
   // Save last lightbox index before closing for modal
   useEffect(() => {
     if (currentModal && isLightboxOpen) {
@@ -126,7 +126,10 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
             onClick={() => openLightbox(idx)}
           >
             <ImageWrapper
-              image={img}
+              image={{
+                ...img,
+                year: typeof img.year === "number" ? img.year : undefined,
+              }}
               onLoginRequired={onLoginRequired}
               sizes="
                 (max-width: 480px) 160px,
@@ -184,6 +187,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
             height: img.height,
             s3Progressive: img.s3Progressive,
             created_at: img.created_at,
+            year: img.year ?? "", // <-- ensure year is passed
             download:
               img.filename && img.base_url
                 ? {
@@ -207,7 +211,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                 id?: number | string;
                 author?: string;
                 description?: string;
-                year: number;
+                year?: string | number; // <-- make year optional and string|number
                 width?: number;
                 height?: number;
                 s3Progressive?: Array<{ url: string; width: number }>;
@@ -222,6 +226,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                 safeWidth,
                 typedSlide.src
               );
+
               return (
                 <div
                   style={{
@@ -248,7 +253,11 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                     }}
                   >
                     <p>{typedSlide.author || "Unknown Author"},</p>{" "}
-                    <p>{typedSlide.year || "Unknown Year"}</p>
+                    <p>
+                      {typedSlide.year
+                        ? String(typedSlide.year)
+                        : "Unknown Year"}
+                    </p>
                   </div>
                   <ImageWrapper
                     image={{
@@ -261,6 +270,10 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                       author: typedSlide.author ?? "",
                       created_at: typedSlide.created_at ?? "",
                       description: typedSlide.description ?? "",
+                      year:
+                        typeof typedSlide.year === "number"
+                          ? typedSlide.year
+                          : undefined,
                     }}
                     imgStyleOverride={{
                       width: "100%",
