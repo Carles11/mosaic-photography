@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import { ImageData } from "@/types";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
+import Link from "next/link";
 
 // Comment type reflecting your schema
 type Comment = {
@@ -278,7 +279,12 @@ export default function UserCommentsList() {
       <div className={styles.emptyState}>
         <div className={styles.emptyIcon}>💬</div>
         <h3>No comments yet</h3>
-        <p>Start commenting on images in the gallery!</p>
+        <p>
+          Start commenting on images{" "}
+          <Link href="/#gallery-section" className="fancy-link">
+            in the gallery!
+          </Link>
+        </p>
       </div>
     );
   }

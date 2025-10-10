@@ -240,24 +240,27 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                     style={{
                       position: "absolute",
                       left: 0,
-                      top: 20,
+                      top: 0,
                       width: "100%",
+                      height: "22px",
                       textAlign: "center",
                       color: "#fff",
                       fontSize: "1.2rem",
-                      padding: "16px 14px 14px 14px",
+                      padding: "11px",
                       background: "rgba(0,0,0,0.2)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
                       zIndex: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
                   >
-                    <p>{typedSlide.author || "Unknown Author"},</p>{" "}
-                    <p>
-                      {typedSlide.year
-                        ? String(typedSlide.year)
-                        : "Unknown Year"}
-                    </p>
+                    <span>
+                      {(typedSlide.author || "Unknown Author") +
+                        ", " +
+                        (typedSlide.year || "Unknown Year")}
+                    </span>
                   </div>
                   <ImageWrapper
                     image={{

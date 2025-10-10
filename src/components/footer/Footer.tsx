@@ -21,7 +21,11 @@ const Footer: React.FC = () => {
             <a href="/legal/credits" className="fancy-link">
               Thank you
             </a>{" "}
-            | <a href="/faq">FAQ</a>
+            |{" "}
+            <a href="/faq" className="fancy-link">
+              {" "}
+              FAQs
+            </a>
           </p>
         </div>
         <div className={styles.footerItem}>

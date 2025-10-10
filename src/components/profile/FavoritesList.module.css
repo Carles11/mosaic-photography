@@ -410,6 +410,7 @@
   .lightboxAuthor {
     font-size: 0.9rem !important;
     padding-top: 22px !important;
+    top: 33px !important;
   }
   .lightboxButtonRow {
     bottom: 16px;

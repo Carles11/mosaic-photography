@@ -119,6 +119,8 @@ a:hover::before {
   bottom: 0;
   height: 100%;
 }
+
+
 .fancy-link {
   position: relative;
   text-decoration: none;
@@ -132,8 +134,9 @@ a:hover::before {
   left: 0;
   bottom: 3px;
   width: 100%;
-  height: 8px;
-  z-index: -1;
+  height: 6px;
+  z-index: 0;
+  opacity: 0.7;
   transition: all 0.3s ease-in-out;
 }
 .fancy-link:hover::before {
