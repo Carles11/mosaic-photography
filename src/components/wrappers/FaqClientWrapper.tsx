@@ -2,6 +2,7 @@
 import React from "react";
 import styles from "../../app/faq/faq.module.css";
 import Link from "next/link";
+import GoToTopButton from "@/components/buttons/GoToTopButton";
 
 interface FAQItemProps {
   question: string;
@@ -109,10 +110,7 @@ const FaqClientWrapper: React.FC<FaqClientWrapperProps> = ({
         </section>
       </div>
 
-      {/* Simple Go to Top Button - CSS only, no JavaScript needed */}
-      <a href="#top" className={styles.goToTopButton} aria-label="Go to top">
-        ↑
-      </a>
+      <GoToTopButton />
     </>
   );
 };
