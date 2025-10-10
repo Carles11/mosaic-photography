@@ -40,14 +40,6 @@ export default function GalleryFiltersModalBody({
 }: Props) {
   const minYear = 1800;
   const maxYear = 2000;
-  const defaultFilters: GalleryFilter = {
-    orientation: null,
-    color: null,
-    nudity: null,
-    gender: null,
-    print_quality: null,
-    year: { from: minYear, to: maxYear },
-  };
 
   const [localFilters, setLocalFilters] = useState<GalleryFilter>(filters);
 
