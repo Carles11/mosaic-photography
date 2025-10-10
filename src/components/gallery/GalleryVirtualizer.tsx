@@ -180,20 +180,27 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                     style={{
                       position: "absolute",
                       left: 0,
-                      top: 20,
+                      top: 0,
                       width: "100%",
+                      height: "22px",
                       textAlign: "center",
                       color: "#fff",
                       fontSize: "1.2rem",
-                      padding: "16px 14px 14px 14px",
+                      padding: "11px",
                       background: "rgba(0,0,0,0.2)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
                       zIndex: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
                   >
-                    <p>{img.author || "Unknown Author"},</p>{" "}
-                    <p>{img.year || "Unknown Year"}</p>
+                    <span>
+                      {(img.author || "Unknown Author") +
+                        ", " +
+                        (img.year || "Unknown Year")}
+                    </span>
                   </div>
 
                   <ImageWrapper
@@ -215,8 +222,8 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       width: "100%",
                       textAlign: "center",
                       color: "#fff",
-                      fontSize: "1.04rem",
-                      padding: "16px 24px 64px 24px", // extra bottom padding!
+                      fontSize: "1.2rem",
+                      padding: "11px",
                       background: "rgba(0,0,0,0.4)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",

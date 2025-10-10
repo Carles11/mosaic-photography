@@ -65,6 +65,10 @@ body {
   }
 }
 
+.yarl__slide {
+  padding: 0 !important;
+}
+
 /* ShareCollectionModal styles moved from module CSS */
 /* 
 .overlay {

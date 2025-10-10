@@ -75,6 +75,12 @@ body {
   font-family: var(--font-trade-gothic), sans-serif;
 }
 
+/* remove padding from image in full modus */
+
+.yarl__slide {
+  padding: 0 !important;
+}
+
 /* .fancy-link {
   text-decoration: none;
   color: var(--text-color);

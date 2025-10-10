@@ -11,9 +11,7 @@
 
 @media (max-width: 480px) {
   .lightboxDescription {
-    font-size: 0.98rem;
-    max-height: 32vh;
-    padding-bottom: 80px;
+    padding-bottom: 80px !important;
   }
   .lightboxAuthor {
     font-size: 0.9rem !important;
