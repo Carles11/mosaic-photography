@@ -44,7 +44,6 @@
 
 .activeFilters {
   display: flex;
-  flex-direction: column;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
@@ -115,5 +114,8 @@
     padding: 6px 11px;
     font-size: 0.8rem;
     font-weight: 400;
+  }
+  .activeFilters {
+    flex-direction: column;
   }
 }

@@ -38,10 +38,18 @@ export default function GalleryFiltersModalBody({
   onApply,
   onClose,
 }: Props) {
-  const [localFilters, setLocalFilters] = useState<GalleryFilter>(filters);
-
   const minYear = 1800;
   const maxYear = 2000;
+  const defaultFilters: GalleryFilter = {
+    orientation: null,
+    color: null,
+    nudity: null,
+    gender: null,
+    print_quality: null,
+    year: { from: minYear, to: maxYear },
+  };
+
+  const [localFilters, setLocalFilters] = useState<GalleryFilter>(filters);
 
   function handleYearSelect(year: number, bound: "from" | "to") {
     setLocalFilters({
@@ -52,6 +60,22 @@ export default function GalleryFiltersModalBody({
       },
     });
   }
+
+  function handleResetFilters() {
+    setLocalFilters({
+      orientation: null,
+      color: null,
+      nudity: null,
+      gender: null,
+      print_quality: null,
+      year: null, // <-- set year to null
+    });
+  }
+
+  // Determine if year filter is "active"
+  const isYearFilterActive =
+    localFilters.year &&
+    (localFilters.year.from !== minYear || localFilters.year.to !== maxYear);
 
   return (
     <div className={styles.modalBody}>
@@ -175,7 +199,12 @@ export default function GalleryFiltersModalBody({
       </div>
 
       <div className={styles.field}>
-        <label className={styles.label}>Year:</label>
+        <label className={styles.label}>
+          Year:
+          {isYearFilterActive && (
+            <span className={styles.activeIndicator}> (active)</span>
+          )}
+        </label>
         <div className={styles.yearRow}>
           <YearPicker
             selectedYear={localFilters.year?.from}
@@ -205,6 +234,13 @@ export default function GalleryFiltersModalBody({
         </button>
         <button className={styles.cancelButton} onClick={onClose}>
           Cancel
+        </button>
+        <button
+          className={styles.resetButton}
+          type="button"
+          onClick={handleResetFilters}
+        >
+          Reset Filters
         </button>
       </div>
     </div>
