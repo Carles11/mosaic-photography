@@ -14,6 +14,7 @@ import Dropdown from "@/components/inputs/dropDown";
 import type { DropdownItem } from "@/types/dropdown";
 import ImageWrapper from "../wrappers/ImageWrapper";
 import { slugify } from "@/utils/slugify";
+import { formatLifespan } from "@/helpers/dates";
 import { Photographer } from "@/types/gallery";
 import styles from "./PhotographersViewCard.module.css";
 import Image from "next/image";
@@ -151,6 +152,18 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                       {photographer.author ? photographer.author : ""}
                     </strong>
                   </p>
+                  <p>
+                    {formatLifespan(
+                      photographer.birthdate ?? "",
+                      photographer.deceasedate ?? ""
+                    )}
+                  </p>
+
+                  {photographer.origin && (
+                    <p className={styles.origin}>
+                      Born in {photographer.origin}
+                    </p>
+                  )}
 
                   {photographer.intro && (
                     <p
@@ -170,17 +183,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                       {photographer.intro}
                     </p>
                   )}
-                  {photographer.origin && (
-                    <p className={styles.origin}>
-                      <strong>Origin:</strong> {photographer.origin}
-                    </p>
-                  )}
-                  {photographer.deceasedate && (
-                    <p>
-                      <strong>Deceasedate:</strong>{" "}
-                      {new Date(photographer.deceasedate).toLocaleDateString()}
-                    </p>
-                  )}
+
                   {parsedStores.length > 0 && (
                     <Dropdown
                       buttonText="Prints & books"
