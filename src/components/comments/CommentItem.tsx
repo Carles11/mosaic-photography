@@ -136,7 +136,6 @@ const CommentItem: React.FC<CommentItemProps> = ({
           <p className={styles.content}>{comment.content}</p>
         )}
       </div>{" "}
-      <Toaster />
     </div>
   );
 };

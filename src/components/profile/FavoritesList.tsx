@@ -186,7 +186,6 @@ export default function FavoritesList({
     );
   }
 
-  console.log({ mappedFavoriteImages });
   return (
     <div className={styles.container}>
       <div className={styles.header}>

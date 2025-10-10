@@ -196,6 +196,7 @@ export default function UserCommentsList() {
   };
 
   const handleDelete = (commentId: string) => {
+    console.log("Attempting to delete comment:", commentId);
     toast((t) => (
       <span>
         Are you sure you want to delete this comment?
