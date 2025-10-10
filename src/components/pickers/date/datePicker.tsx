@@ -23,9 +23,11 @@ export const YearPicker: React.FC<YearPickerProps> = ({
   return (
     <select
       value={selectedYear !== undefined ? selectedYear : ""}
-      onChange={(e) =>
-        onYearSelect(e.target.value ? Number(e.target.value) : undefined)
-      }
+      onChange={(e) => {
+        if (e.target.value) {
+          onYearSelect(Number(e.target.value));
+        }
+      }}
       style={{ padding: "0.5em", fontSize: "1em" }}
     >
       <option value="">Select year</option>

@@ -332,6 +332,10 @@
   .cardActions {
     gap: 1rem;
   }
+  .buttonBase {
+    width: fit-content;
+    border-radius: 22px;
+  }
 
   .viewButton,
   .editButton,
