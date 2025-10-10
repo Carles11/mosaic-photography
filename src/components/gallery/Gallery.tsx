@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import VirtualizedMosaicGallery from "./GalleryVirtualizer";
 import { useFilters } from "@/context/settingsContext/filters";
 import { useModal } from "@/context/modalContext/useModal";
@@ -22,6 +23,15 @@ function isYearFilter(value: unknown): value is { from: number; to: number } {
 const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
   const { filters, setFilters } = useFilters();
   const { open } = useModal();
+
+  // Set default filter for nudity to "nude" if not set
+  useEffect(() => {
+    if (!filters.nudity) {
+      setFilters({ ...filters, nudity: "nude" });
+    }
+    // Only run on mount or when filters.nudity changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleOpenFiltersModal() {
     open("galleryFilters", {
@@ -97,44 +107,47 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
         </button>
         {filtersActive && (
           <div className={styles.activeFilters}>
-            {Object.entries(filters)
-              .filter(([key, value]) => {
-                if (!value) return false;
-                if (
-                  key === "year" &&
-                  isYearFilter(value) &&
-                  value.from &&
-                  value.to
-                ) {
-                  return true;
-                }
-                if (
-                  [
-                    "gender",
-                    "orientation",
-                    "color",
-                    "nudity",
-                    "print_quality",
-                  ].includes(key)
-                ) {
-                  return true;
-                }
-                return false;
-              })
-              .map(([key, value]) => {
-                if (key === "year" && isYearFilter(value)) {
+            <p className={styles.activeFiltersTitle}>Active filters:</p>
+            <div className={styles.activeFiltersList}>
+              {Object.entries(filters)
+                .filter(([key, value]) => {
+                  if (!value) return false;
+                  if (
+                    key === "year" &&
+                    isYearFilter(value) &&
+                    value.from &&
+                    value.to
+                  ) {
+                    return true;
+                  }
+                  if (
+                    [
+                      "gender",
+                      "orientation",
+                      "color",
+                      "nudity",
+                      "print_quality",
+                    ].includes(key)
+                  ) {
+                    return true;
+                  }
+                  return false;
+                })
+                .map(([key, value]) => {
+                  if (key === "year" && isYearFilter(value)) {
+                    return (
+                      <span key={key} className={styles.filterTag}>
+                        Year: {value.from}–{value.to}
+                      </span>
+                    );
+                  }
                   return (
                     <span key={key} className={styles.filterTag}>
-                      Year: {value.from}–{value.to}
+                      {key.replace("_", " ")}: {String(value)}
                     </span>
                   );
-                }
-                return (
-                  <span key={key} className={styles.filterTag}>
-                    {key.replace("_", " ")}: {String(value)}
-                  </span>
-                );
-              })}
+                })}
+            </div>
           </div>
         )}
       </div>

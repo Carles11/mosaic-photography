@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { GalleryFilter } from "@/types";
 import styles from "./GalleryFiltersModalBody.module.css";
+import { YearPicker } from "@/components/pickers/date/datePicker";
 
 type Props = {
   filters: GalleryFilter;
@@ -39,19 +40,15 @@ export default function GalleryFiltersModalBody({
 }: Props) {
   const [localFilters, setLocalFilters] = useState<GalleryFilter>(filters);
 
-  const minYear = 1830;
+  const minYear = 1800;
   const maxYear = 2000;
 
-  function handleYearChange(
-    e: React.ChangeEvent<HTMLInputElement>,
-    bound: "from" | "to"
-  ) {
-    const value = parseInt(e.target.value) || minYear;
+  function handleYearSelect(year: number, bound: "from" | "to") {
     setLocalFilters({
       ...localFilters,
       year: {
-        from: bound === "from" ? value : localFilters.year?.from ?? minYear,
-        to: bound === "to" ? value : localFilters.year?.to ?? maxYear,
+        from: bound === "from" ? year : localFilters.year?.from ?? minYear,
+        to: bound === "to" ? year : localFilters.year?.to ?? maxYear,
       },
     });
   }
@@ -180,22 +177,18 @@ export default function GalleryFiltersModalBody({
       <div className={styles.field}>
         <label className={styles.label}>Year:</label>
         <div className={styles.yearRow}>
-          <input
-            className={styles.yearInput}
-            type="number"
-            min={minYear}
-            max={maxYear}
-            value={localFilters.year?.from ?? minYear}
-            onChange={(e) => handleYearChange(e, "from")}
+          <YearPicker
+            selectedYear={localFilters.year?.from}
+            onYearSelect={(year) => handleYearSelect(year, "from")}
+            fromYear={minYear}
+            toYear={maxYear}
           />
           <span className={styles.yearSeparator}>to</span>
-          <input
-            className={styles.yearInput}
-            type="number"
-            min={minYear}
-            max={maxYear}
-            value={localFilters.year?.to ?? maxYear}
-            onChange={(e) => handleYearChange(e, "to")}
+          <YearPicker
+            selectedYear={localFilters.year?.to}
+            onYearSelect={(year) => handleYearSelect(year, "to")}
+            fromYear={minYear}
+            toYear={maxYear}
           />
         </div>
       </div>

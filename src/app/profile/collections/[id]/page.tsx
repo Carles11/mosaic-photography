@@ -171,7 +171,7 @@ export default function CollectionView() {
               // Construct URL from base_url and filename
               const imageUrl =
                 image?.base_url && image?.filename
-                  ? `${image.base_url}/w800/${image.filename}`
+                  ? `${image.base_url}/originals/${image.filename}`
                   : "/favicons/android-chrome-512x512.png";
 
               return {
@@ -359,7 +359,7 @@ export default function CollectionView() {
         // Use a toast to ask for user choice instead of confirm
         toast(
           "Unable to download images directly due to CORS restrictions. Creating a ZIP with image URLs only.",
-          { icon: "⚠️", duration: 8000 }
+          { icon: "⚠️", duration: 5000 }
         );
         // Continue with URL-only ZIP below
       }
@@ -414,7 +414,7 @@ export default function CollectionView() {
       const zipFileName = `${collection.name.replace(
         /[^a-z0-9]/gi,
         "_"
-      )}_collection.zip`;
+      )}_mosaic_collection.zip`;
       const link = document.createElement("a");
       link.href = URL.createObjectURL(zipBlob);
       link.download = zipFileName;
@@ -427,22 +427,25 @@ export default function CollectionView() {
 
       if (successCount === collection.images.length) {
         toast.success(
-          `Successfully exported all ${successCount} images as ${zipFileName}!`
+          `Successfully exported all ${successCount} images as ${zipFileName}!`,
+          { duration: 5000 }
         );
       } else if (successCount > 0) {
         toast(
           `Exported ${successCount} images successfully. ${failCount} images failed due to CORS restrictions. Check the _Image_URLs_and_Info.txt file for missing images.`,
-          { icon: "⚠️", duration: 8000 }
+          { icon: "⚠️", duration: 5000 }
         );
       } else {
         toast(
           `Created ZIP with image URLs and info. No images could be downloaded directly due to CORS restrictions.`,
-          { icon: "⚠️", duration: 8000 }
+          { icon: "⚠️", duration: 5000 }
         );
       }
     } catch (error) {
       console.error("Error creating ZIP:", error);
-      toast.error("Error creating ZIP file. Please try again.");
+      toast.error("Error creating ZIP file. Please try again.", {
+        duration: 5000,
+      });
     } finally {
       setIsExporting(false);
     }

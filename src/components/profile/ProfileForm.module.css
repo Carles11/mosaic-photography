@@ -114,9 +114,7 @@
   border: 2px solid var(--border-color, #e0e0e0);
   border-radius: 6px;
   font-size: 1rem;
-  transition:
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   background: var(--background-secondary, #fff);
   color: var(--text-color, #333);
 }
@@ -154,9 +152,7 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition:
-    background-color 0.3s ease,
-    transform 0.1s ease;
+  transition: background-color 0.3s ease, transform 0.1s ease;
   width: 100%;
 }
 
@@ -394,6 +390,6 @@
   .message.error {
     background-color: #742a2a;
     color: #feb2b2;
-    border: 1px solid #e53e3e;
+    border: 1px solid var(--tertiary-color, #fd6c6c);
   }
 }

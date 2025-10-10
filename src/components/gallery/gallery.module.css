@@ -44,9 +44,22 @@
 
 .activeFilters {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
+}
+
+.activeFiltersList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.activeFiltersTitle {
+  color: var(--text-color);
+  padding-left: 0;
+  font-size: 1.1rem;
 }
 
 .filterTag {

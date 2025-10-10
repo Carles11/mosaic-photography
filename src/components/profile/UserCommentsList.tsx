@@ -201,7 +201,7 @@ export default function UserCommentsList() {
         <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
           <button
             style={{
-              background: "#e53e3e",
+              background: "var(--tertiary-color, #fd6c6c)",
               color: "white",
               border: "none",
               borderRadius: 4,
