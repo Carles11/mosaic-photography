@@ -14,9 +14,10 @@ import styles from "./Photographers.module.css";
 export async function generateMetadata({
   params,
 }: {
-  params: { surname: string };
+  params: Promise<{ surname: string }>;
 }) {
-  const photographer = await fetchPhotographerBySlugSSR(params.surname);
+  const { surname: urlSurname } = await params;
+  const photographer = await fetchPhotographerBySlugSSR(urlSurname);
   if (!photographer) return {};
 
   // Prefer the best image for og and twitter. Fallback to gallery og-image if missing.
@@ -30,7 +31,7 @@ export async function generateMetadata({
   const surname = photographer.surname ?? "";
   const origin = photographer.origin ?? "";
   const galleryCount = photographer.images?.length ?? 0;
-  const canonicalUrl = `https://www.mosaic.photography/photographers/${params.surname}`;
+  const canonicalUrl = `https://www.mosaic.photography/photographers/${urlSurname}`;
 
   return {
     title: `${name} ${surname} – Vintage Nude Photography | Mosaic Gallery`,
@@ -110,15 +111,18 @@ function PhotographerJsonLd({
   );
 }
 
-export default async function PhotographerDetailPage(
-  props: PageProps<"/photographers/[surname]">
-) {
-  const params = await props.params;
-  if (!params?.surname) return notFound();
+export default async function PhotographerDetailPage({
+  params,
+}: {
+  params: Promise<{ surname: string }>;
+}) {
+  const { surname } = await params;
 
-  const cleanSurname = params.surname.replace(/-/g, "");
+  if (!surname) return notFound();
+
+  const cleanSurname = surname.replace(/-/g, "");
   const photographerTimeline = getTimelineBySlug(cleanSurname);
-  const photographer = await fetchPhotographerBySlugSSR(params.surname);
+  const photographer = await fetchPhotographerBySlugSSR(surname);
   if (!photographer) return notFound();
 
   const imagesWithUrl = (photographer.images ?? []).map((img) => ({
@@ -132,7 +136,7 @@ export default async function PhotographerDetailPage(
       ?.url ||
     photographer.images?.[0]?.s3Progressive?.[0]?.url ||
     "https://www.mosaic.photography/images/og-image.jpg";
-  const canonicalUrl = `https://www.mosaic.photography/photographers/${params.surname}`;
+  const canonicalUrl = `https://www.mosaic.photography/photographers/${surname}`;
 
   return (
     <div>
