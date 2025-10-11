@@ -30,7 +30,6 @@
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s, color 0.2s;
   outline: none;
-  margin-bottom: 16px;
 }
 
 .filtersButton:hover,
@@ -49,7 +48,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 8px;
 }
 
 .activeFiltersList {
