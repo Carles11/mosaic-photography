@@ -22,9 +22,9 @@ export default function Header({
 }: HeaderProps) {
   return (
     <header>
-      <h2 className="sr-only">
+      <h1 className="sr-only">
         Mosaic Photography: Iconic Nude Photography Gallery
-      </h2>
+      </h1>
       <nav className={styles.navContainer}>
         <ul className={styles.navGrid}>
           {isHome ? (
