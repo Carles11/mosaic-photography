@@ -82,59 +82,59 @@
 }
 
 .applyButton {
-  padding: 0.2rem 1.2rem;
-  font-size: 1rem;
-  font-weight: 500;
-  background: var(--button-primary-bg);
-  color: var(--button-primary-text);
-  border: none;
-  border-radius: 999px;
-  box-shadow: 0 2px 8px rgba(40, 40, 40, 0.08);
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  padding: 0.2rem 1.2rem !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  background: var(--button-primary-bg) !important;
+  color: var(--button-primary-text) !important;
+  border: none !important;
+  border-radius: 999px !important;
+  box-shadow: 0 2px 8px rgba(40, 40, 40, 0.08) !important;
+  cursor: pointer !important;
+  transition: background 0.2s, color 0.2s !important;
 }
 
 .applyButton:hover,
 .applyButton:focus {
-  background: var(--button-primary-hover);
-  color: var(--color-white);
+  background: var(--button-primary-hover) !important;
+  color: var(--color-white) !important;
 }
 
 .cancelButton {
-  padding: 0.6rem 2rem;
-  font-size: 1.07rem;
-  font-weight: 500;
-  background: var(--background-secondary);
-  color: var(--foreground-muted);
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  padding: 0.6rem 2rem !important;
+  font-size: 1.07rem !important;
+  font-weight: 500 !important;
+  background: var(--background-secondary) !important;
+  color: var(--foreground-muted) !important;
+  border: none !important;
+  border-radius: 999px !important;
+  cursor: pointer !important;
+  transition: background 0.2s, color 0.2s !important;
 }
 
 .cancelButton:hover,
 .cancelButton:focus {
-  background: var(--accent-color);
-  color: var(--color-black);
+  background: var(--accent-color) !important;
+  color: var(--color-black) !important;
 }
 
 .resetButton {
-  padding: 0.2rem 1.2rem;
-  font-size: 1rem;
-  font-weight: 500;
-  background: var(--button-primary-bg);
-  color: var(--button-primary-text);
-  border: none;
-  border-radius: 999px;
-  box-shadow: 0 2px 8px rgba(40, 40, 40, 0.08);
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  padding: 0.2rem 1.2rem !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  background: var(--accent-color) !important;
+  color: var(--border-color) !important;
+  border: none !important;
+  border-radius: 999px !important;
+  box-shadow: 0 2px 8px rgba(40, 40, 40, 0.08) !important;
+  cursor: pointer !important;
+  transition: background 0.2s, color 0.2s !important;
 }
 
 .resetButton:hover,
 .resetButton:focus {
-  background: var(--button-primary-hover);
-  color: var(--color-white);
+  background: var(--background-secondary) !important;
+  color: var(--color-white) !important;
 }
 
 @media (max-width: 480px) {
