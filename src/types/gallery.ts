@@ -49,6 +49,7 @@ export interface ImageData {
   color?: string;
   nudity?: string;
   year?: number;
+  print_quality?: "good" | "standard" | "excellent" | "professional";
 }
 
 export interface GalleryProps extends JSX.IntrinsicAttributes {

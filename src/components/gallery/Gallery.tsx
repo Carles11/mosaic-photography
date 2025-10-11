@@ -45,8 +45,18 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
     if (filters.gender && img.gender !== filters.gender) return false;
     if (filters.orientation && img.orientation !== filters.orientation)
       return false;
-    if (filters.color && img.color !== filters.color) return false;
+    // Make color filter comparison case-insensitive and trim whitespace
+    if (
+      filters.color &&
+      typeof img.color === "string" &&
+      typeof filters.color === "string" &&
+      img.color.trim().toLowerCase() !== filters.color.trim().toLowerCase()
+    )
+      return false;
+    if (filters.color && typeof img.color !== "string") return false;
     if (filters.nudity && img.nudity !== filters.nudity) return false;
+    if (filters.print_quality && img.print_quality !== filters.print_quality)
+      return false;
 
     if (filters.year && isYearFilter(filters.year)) {
       if (typeof img.year === "undefined" || img.year === null) return false;
@@ -59,6 +69,7 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
     return true;
   });
 
+  console.log("Filtered images count:", filteredImages?.length);
   // Helper: are filters active?
   const filtersActive =
     !!filters.gender ||
@@ -107,7 +118,6 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
         </button>
         {filtersActive && (
           <div className={styles.activeFilters}>
-            <p className={styles.activeFiltersTitle}>Active filters:</p>
             <div className={styles.activeFiltersList}>
               {Object.entries(filters)
                 .filter(([key, value]) => {
@@ -167,10 +177,12 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
           )}
         </div>
       ) : (
-        <VirtualizedMosaicGallery
-          images={filteredImages ?? []}
-          onLoginRequired={onLoginRequired}
-        />
+        <>
+          <VirtualizedMosaicGallery
+            images={filteredImages ?? []}
+            onLoginRequired={onLoginRequired}
+          />
+        </>
       )}
 
       <GoToTopButton />

@@ -10,6 +10,9 @@
 
 .filtersInfo {
   margin: 1rem 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .filtersButton {
@@ -52,6 +55,7 @@
 .activeFiltersList {
   display: flex;
   flex-wrap: wrap;
+  justify-content: right;
   gap: 8px;
 }
 

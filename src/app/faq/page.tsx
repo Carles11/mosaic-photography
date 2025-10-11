@@ -4,10 +4,9 @@ import { faqSections } from "@/app/constants/faqSections";
 import FaqClientWrapper from "@/components/wrappers/FaqClientWrapper";
 
 export const metadata: Metadata = {
-  title:
-    "FAQ - Frequently Asked Questions | Public Domain Vintage Nude Photography",
+  title: "FAQ - All about Public Domain Photography",
   description:
-    "Find answers to common questions about public domain vintage nude photography, usage rights, commercial licensin and copyright laws.",
+    "Find answers to common questions about public domain photography, usage rights and commercial licensing.",
   keywords: [
     "public domain nude photography FAQ",
     "vintage nude photography questions",
