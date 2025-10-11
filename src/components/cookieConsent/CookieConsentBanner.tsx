@@ -6,7 +6,7 @@ import styles from "./CookieConsentBanner.module.css";
 const COOKIE_NAME = "cookie_consent";
 
 export default function CookieConsentBanner() {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const consent = Cookies.get(COOKIE_NAME);
@@ -35,7 +35,7 @@ export default function CookieConsentBanner() {
         </a>
         .
       </span>
-      <div>
+      <div className={styles.buttonsSection}>
         <button onClick={handleAccept} className={styles.accept}>
           Accept
         </button>
