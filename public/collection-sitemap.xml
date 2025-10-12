@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
- 
   <url>
     <loc>https://www.mosaic.photography/profile/collections/88f1ff8c-eac4-4b4d-829a-24f678f0f64d</loc>
     <lastmod>2025-10-10T00:23:45.649Z</lastmod>
@@ -16,6 +15,12 @@
   <url>
     <loc>https://www.mosaic.photography/profile/collections/d0e42a98-8577-425b-a122-afa5c967452e</loc>
     <lastmod>2025-10-10T22:03:02.761Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.mosaic.photography/profile/collections/5ae2d0cb-77ff-4ef1-872f-d9099252017a</loc>
+    <lastmod>2025-10-11T12:15:07.846Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>

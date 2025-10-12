@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     "Find answers to common questions about public domain photography, usage rights and commercial licensing.",
   keywords: [
-    "public domain nude photography FAQ",
+    "public domain nude photography FAQs",
     "vintage nude photography questions",
     "copyright free nude art",
     "nude photography usage rights",
