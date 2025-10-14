@@ -34,7 +34,7 @@ export const PhotographerLinks: React.FC<PhotographerLinksProps> = ({
   return (
     <div>
       <span className={styles.sectionHeader}>
-        <h3 className={styles.sectionTitle}>Where to Buy</h3>
+        <h3 className={styles.sectionTitle}>Where to find prints and books</h3>
         <p className={styles.sectionStoresContent}>
           Shop stunning prints and books at these trusted retailers, carefully
           curated by the team of mosaic.photography:

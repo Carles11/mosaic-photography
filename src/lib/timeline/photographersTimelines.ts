@@ -296,7 +296,7 @@ export const photographerTimelines: Record<string, TimelineItemModelProps[]> = {
       eventType: "historical",
     },
     {
-      title: "1880s-1890s",
+      title: "1880s",
       cardTitle: "Establishes Photographic Studio",
       cardDetailedText:
         "Operating from Rome and later Naples, Plüschow gained renown for his nude studies of local youths, often posed with classical props. His work, though sometimes considered technically inferior to his cousin's, developed a distinct style and a significant following.",

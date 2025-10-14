@@ -145,16 +145,16 @@ export default async function PhotographerDetailPage({
         canonicalUrl={canonicalUrl}
         ogImageUrl={ogImageUrl}
       />
-      <h1 className={styles.photographerDetailPageTitle}>
-        {photographer.name} {photographer.surname}
-      </h1>
-      <p>
-        {formatLifespan(
-          photographer.birthdate ?? "",
-          photographer.deceasedate ?? ""
-        )}
-      </p>
       <main className={styles.photographerDetailPage}>
+        <h1 className={styles.photographerDetailPageTitle}>
+          {photographer.name} {photographer.surname}
+        </h1>
+        <p className={styles.sectionContent}>
+          {formatLifespan(
+            photographer.birthdate ?? "",
+            photographer.deceasedate ?? ""
+          )}
+        </p>
         <hr />
         <h2 className={styles.timelineTitle}>A Life in Focus</h2>
         <p className={styles.sectionContent}>
