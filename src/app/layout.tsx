@@ -196,7 +196,6 @@ export const viewport = {
 type RootLayoutProps = { children: React.ReactNode };
 
 async function RootLayout({ children }: RootLayoutProps) {
-  // SSR theme from x-theme header (set in middleware)
   const hdrs = await headers();
   const theme = hdrs.get("x-theme") || "light";
 
@@ -210,14 +209,11 @@ async function RootLayout({ children }: RootLayoutProps) {
     >
       <head>
         <meta charSet="utf-8" />
-        {/* Inline font-face declarations to ensure fonts are requested early */}
         <style
           id="inline-fonts"
           dangerouslySetInnerHTML={{ __html: inlineFontsCSS }}
         />
-        {/* Base variables & body rules (inlined) */}
         <style id="base-styles" dangerouslySetInnerHTML={{ __html: baseCSS }} />
-        {/* Critical above-the-fold styles (inlined) */}
         <style
           id="critical-above-the-fold"
           dangerouslySetInnerHTML={{
@@ -248,7 +244,6 @@ async function RootLayout({ children }: RootLayoutProps) {
           href="https://gdzqgrfitiixbhlhppef.supabase.co"
           crossOrigin="anonymous"
         />
-
         <link rel="dns-prefetch" href="https://cdn.mosaic.photography" />
         <link
           rel="dns-prefetch"
@@ -268,6 +263,7 @@ async function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body className="font-trade-gothic">
         <NonCriticalCSSLoader />
+
         {/* Only load GTM if cookie_consent is true */}
         <Script
           id="gtm"
@@ -278,10 +274,23 @@ async function RootLayout({ children }: RootLayoutProps) {
                 function loadGTM() {
                   var consent = document.cookie.match(/(^|;)\\s*cookie_consent=([^;]*)/);
                   if (consent && consent[2] === "true") {
+                    // GTM script
                     var s = document.createElement('script');
                     s.src = "https://www.googletagmanager.com/gtm.js?id=GTM-N74Q9JC5";
                     s.async = true;
                     document.head.appendChild(s);
+                    // GTM noscript fallback for Tag Assistant and measurement
+                    if (!document.getElementById('gtm-noscript')) {
+                      var noscript = document.createElement('noscript');
+                      noscript.id = 'gtm-noscript';
+                      var iframe = document.createElement('iframe');
+                      iframe.src = "https://www.googletagmanager.com/ns.html?id=GTM-N74Q9JC5";
+                      iframe.height = "0";
+                      iframe.width = "0";
+                      iframe.style = "display:none;visibility:hidden";
+                      noscript.appendChild(iframe);
+                      document.body.insertBefore(noscript, document.body.firstChild);
+                    }
                   }
                 }
                 loadGTM();
@@ -290,7 +299,9 @@ async function RootLayout({ children }: RootLayoutProps) {
             `,
           }}
         />
+
         <CookieConsentBanner />
+
         <ClientProviders>
           <main style={{ flex: 1 }}>
             <ClientLayout>{children}</ClientLayout>
