@@ -1,3 +1,11 @@
+/**
+ * Custom Cookie Consent Banner
+ * - Shows a banner until user gives or declines consent
+ * - Sets a cookie for persistence
+ * - On "Accept", updates GTM Consent Mode and calls onConsentChange(true)
+ * - On "Decline", updates GTM Consent Mode and calls onConsentChange(false)
+ */
+
 "use client";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -5,7 +13,11 @@ import styles from "./CookieConsentBanner.module.css";
 
 const COOKIE_NAME = "cookie_consent";
 
-export default function CookieConsentBanner() {
+type Props = {
+  onConsentChange: (granted: boolean) => void;
+};
+
+export default function CookieConsentBanner({ onConsentChange }: Props) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -13,16 +25,26 @@ export default function CookieConsentBanner() {
     if (!consent) setVisible(true);
   }, []);
 
-  const handleAccept = () => {
-    Cookies.set(COOKIE_NAME, "true", { expires: 365, path: "/" }); // <-- set path here!
+  const handleConsent = (granted: boolean) => {
+    Cookies.set(COOKIE_NAME, granted ? "true" : "false", {
+      expires: 365,
+      path: "/",
+    });
     setVisible(false);
-    window.dispatchEvent(new Event("cookie-consent-granted"));
-    window.location.reload(); // force SSR reload for GTM injection
-  };
 
-  const handleDecline = () => {
-    Cookies.set(COOKIE_NAME, "false", { expires: 365, path: "/" }); // <-- set path here!
-    setVisible(false);
+    // Update Google Consent Mode if GTM is already loaded
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("consent", "update", {
+        analytics_storage: granted ? "granted" : "denied",
+      });
+    }
+
+    onConsentChange(granted);
+
+    // Optional: reload to ensure GTM is injected immediately
+    if (granted) {
+      window.location.reload();
+    }
   };
 
   if (!visible) return null;
@@ -37,10 +59,10 @@ export default function CookieConsentBanner() {
         .
       </span>
       <div className={styles.buttonsSection}>
-        <button onClick={handleAccept} className={styles.accept}>
+        <button onClick={() => handleConsent(true)} className={styles.accept}>
           Accept
         </button>
-        <button onClick={handleDecline} className={styles.decline}>
+        <button onClick={() => handleConsent(false)} className={styles.decline}>
           Decline
         </button>
       </div>

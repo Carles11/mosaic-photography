@@ -1,4 +1,9 @@
-export const runtime = "nodejs";
+/**
+ * Main App Layout
+ * - Loads GTM only if cookie_consent is true
+ * - Shows CookieConsentBanner if consent not given
+ * - FSD: place GTMManual in the same file or import from 4-shared/lib if you prefer
+ */
 
 import type { Metadata } from "next";
 import { tradeGothic } from "./fonts";
@@ -8,7 +13,10 @@ import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
 import ClientLayout from "@/components/layouts/ClientLayout";
 import ClientProviders from "@/context/main/ClientProviders";
-import Script from "next/script";
+import CookieConsentBanner from "@/components/cookieConsent/CookieConsentBanner";
+import GTMManual from "../GTMManual";
+import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mosaic.photography"),
@@ -173,29 +181,24 @@ export const viewport = {
   themeColor: "#ffffff",
 };
 
-type RootLayoutProps = { children: React.ReactNode };
-
 const inlineFontsCSS = `@font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap;}
 @font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap;}
 @font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Light.woff2') format('woff2'); font-weight: 200; font-style: normal; font-display: swap;}
 @font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-ExtraBold.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap;}
 html,body{font-family:'TradeGothic',var(--font-trade-gothic),sans-serif;} .font-trade-gothic{font-family:'TradeGothic',var(--font-trade-gothic),sans-serif;}`;
 
-function GTMManual() {
-  return (
-    <script
-      dangerouslySetInnerHTML={{
-        __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-N74Q9JC5');`,
-      }}
-    />
-  );
-}
+type RootLayoutProps = { children: React.ReactNode };
 
 export default function RootLayout({ children }: RootLayoutProps) {
+  const [consent, setConsent] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const cookie = Cookies.get("cookie_consent");
+      setConsent(cookie === "true");
+    }
+  }, []);
+
   return (
     <html
       lang="en"
@@ -228,7 +231,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             logo: "https://www.mosaic.photography/images/logo.png",
           }}
         />
-        <GTMManual />
+        {consent === true && <GTMManual consentGranted={true} />}
       </head>
       <body className="font-trade-gothic">
         <noscript>
@@ -239,6 +242,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
         </noscript>
+        {consent !== true && (
+          <CookieConsentBanner onConsentChange={setConsent} />
+        )}
         <NonCriticalCSSLoader />
         <ClientProviders>
           <main style={{ flex: 1 }}>
