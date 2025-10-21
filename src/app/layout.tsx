@@ -269,7 +269,7 @@ async function RootLayout({ children }: RootLayoutProps) {
           }}
         />
 
-        {/* SSR inject GTM script only if consent cookie is present */}
+        {/* SSR inject ONLY the standard GTM loader script if consent cookie is present */}
         {hasConsent && (
           <script
             id="gtm-script"
@@ -286,8 +286,6 @@ async function RootLayout({ children }: RootLayoutProps) {
         )}
       </head>
       <body className="font-trade-gothic">
-        <NonCriticalCSSLoader />
-
         {/* SSR inject GTM noscript iframe only if consent cookie is present */}
         {hasConsent && (
           <noscript id="gtm-noscript">
@@ -299,6 +297,9 @@ async function RootLayout({ children }: RootLayoutProps) {
             ></iframe>
           </noscript>
         )}
+
+        <NonCriticalCSSLoader />
+        <CookieConsentBanner />
 
         {/* Client-side fallback for SPA consent changes */}
         <Script
@@ -333,8 +334,6 @@ async function RootLayout({ children }: RootLayoutProps) {
             `,
           }}
         />
-
-        <CookieConsentBanner />
 
         <ClientProviders>
           <main style={{ flex: 1 }}>
