@@ -14,14 +14,14 @@ export default function CookieConsentBanner() {
   }, []);
 
   const handleAccept = () => {
-    Cookies.set(COOKIE_NAME, "true", { expires: 365 });
+    Cookies.set(COOKIE_NAME, "true", { expires: 365, path: "/" }); // <-- set path here!
     setVisible(false);
     window.dispatchEvent(new Event("cookie-consent-granted"));
     window.location.reload(); // force SSR reload for GTM injection
   };
 
   const handleDecline = () => {
-    Cookies.set(COOKIE_NAME, "false", { expires: 365 });
+    Cookies.set(COOKIE_NAME, "false", { expires: 365, path: "/" }); // <-- set path here!
     setVisible(false);
   };
 
