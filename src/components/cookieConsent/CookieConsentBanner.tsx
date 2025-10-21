@@ -17,6 +17,7 @@ export default function CookieConsentBanner() {
     Cookies.set(COOKIE_NAME, "true", { expires: 365 });
     setVisible(false);
     window.dispatchEvent(new Event("cookie-consent-granted"));
+    window.location.reload(); // force SSR reload for GTM injection
   };
 
   const handleDecline = () => {
