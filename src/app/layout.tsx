@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import { tradeGothic } from "./fonts";
 import { headers } from "next/headers";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
-import Script from "next/script";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
 import ClientLayout from "@/components/layouts/ClientLayout";
 import ClientProviders from "@/context/main/ClientProviders";
 import criticalCSS from "../critical-above-the-fold.css?raw";
 import baseCSS from "./globals.css?raw";
 import CookieConsentBanner from "@/components/cookieConsent/CookieConsentBanner";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 const inlineFontsCSS = `@font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap;}
 @font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap;}
@@ -194,7 +194,6 @@ export const viewport = {
 
 type RootLayoutProps = { children: React.ReactNode };
 
-// Helper to parse cookies from a cookie header string
 function getCookieValue(cookies: string | null, name: string) {
   if (!cookies) return null;
   const match = cookies.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
@@ -224,9 +223,7 @@ async function RootLayout({ children }: RootLayoutProps) {
         <style id="base-styles" dangerouslySetInnerHTML={{ __html: baseCSS }} />
         <style
           id="critical-above-the-fold"
-          dangerouslySetInnerHTML={{
-            __html: criticalCSS,
-          }}
+          dangerouslySetInnerHTML={{ __html: criticalCSS }}
         />
         <link
           rel="preload"
@@ -268,73 +265,12 @@ async function RootLayout({ children }: RootLayoutProps) {
             logo: "https://www.mosaic.photography/images/logo.png",
           }}
         />
-
-        {/* SSR inject ONLY the standard GTM loader script if consent cookie is present */}
-        {hasConsent && (
-          <script
-            id="gtm-script"
-            dangerouslySetInnerHTML={{
-              __html: `
-                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-                })(window,document,'script','dataLayer','GTM-N74Q9JC5');
-              `,
-            }}
-          />
-        )}
+        {/* Inject GTM only if consent is present */}
+        {hasConsent && <GoogleTagManager gtmId="GTM-N74Q9JC5" />}
       </head>
       <body className="font-trade-gothic">
-        {/* SSR inject GTM noscript iframe only if consent cookie is present */}
-        {hasConsent && (
-          <noscript id="gtm-noscript">
-            <iframe
-              src="https://www.googletagmanager.com/ns.html?id=GTM-N74Q9JC5"
-              height="0"
-              width="0"
-              style={{ display: "none", visibility: "hidden" }}
-            ></iframe>
-          </noscript>
-        )}
-
         <NonCriticalCSSLoader />
         <CookieConsentBanner />
-
-        {/* Client-side fallback for SPA consent changes */}
-        <Script
-          id="gtm-dynamic"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                function loadGTM() {
-                  var consent = document.cookie.match(/(^|;)\\s*cookie_consent=([^;]*)/);
-                  if (consent && consent[2] === "true" && !document.getElementById('gtm-script')) {
-                    var s = document.createElement('script');
-                    s.id = 'gtm-script';
-                    s.innerHTML = "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N74Q9JC5');";
-                    document.head.appendChild(s);
-                    if (!document.getElementById('gtm-noscript')) {
-                      var noscript = document.createElement('noscript');
-                      noscript.id = 'gtm-noscript';
-                      var iframe = document.createElement('iframe');
-                      iframe.src = "https://www.googletagmanager.com/ns.html?id=GTM-N74Q9JC5";
-                      iframe.height = "0";
-                      iframe.width = "0";
-                      iframe.style = "display:none;visibility:hidden";
-                      noscript.appendChild(iframe);
-                      document.body.insertBefore(noscript, document.body.firstChild);
-                    }
-                  }
-                }
-                loadGTM();
-                window.addEventListener("cookie-consent-granted", loadGTM);
-              })();
-            `,
-          }}
-        />
-
         <ClientProviders>
           <main style={{ flex: 1 }}>
             <ClientLayout>{children}</ClientLayout>
