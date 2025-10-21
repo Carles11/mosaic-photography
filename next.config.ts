@@ -55,7 +55,7 @@ const nextConfig: NextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https:;",
               "style-src 'self' 'unsafe-inline' https:;",
               "font-src 'self' data: https:;",
-              "connect-src 'self' https://cdn.mosaic.photography https://*.supabase.co wss://*.supabase.co https://storage.ko-fi.com https://www.googletagmanager.com https://www.google-analytics.com;",
+              "connect-src 'self' https://cdn.mosaic.photography https://*.supabase.co wss://*.supabase.co https://storage.ko-fi.com https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com;",
             ].join(" "),
           },
           { key: "X-Frame-Options", value: "DENY" },
