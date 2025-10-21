@@ -22,12 +22,11 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
-
-    minimumCacheTTL: 31536000, // 1 year
+    minimumCacheTTL: 31536000,
     qualities: [25, 40, 60, 75],
     formats: ["image/webp"],
     deviceSizes: [231, 358, 471, 600, 750, 900, 1200],
-    imageSizes: [200, 250, 400], // Only generate these for 'sizes' prop values
+    imageSizes: [200, 250, 400],
   },
   experimental: {
     optimizeCss: true,
@@ -39,8 +38,6 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
-
-  // ✅ Headers for static asset access and SEO crawling
   async headers() {
     return [
       {
@@ -54,12 +51,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self';",
-              "img-src 'self' data: https://cdn.mosaic.photography https://storage.ko-fi.com;",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:;",
+              "img-src 'self' data: https://cdn.mosaic.photography https://storage.ko-fi.com https://www.googletagmanager.com https://www.google-analytics.com;",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https:;",
               "style-src 'self' 'unsafe-inline' https:;",
               "font-src 'self' data: https:;",
-              "connect-src 'self' https://cdn.mosaic.photography https://*.supabase.co wss://*.supabase.co https://storage.ko-fi.com;",
-              // add additional services as needed
+              "connect-src 'self' https://cdn.mosaic.photography https://*.supabase.co wss://*.supabase.co https://storage.ko-fi.com https://www.googletagmanager.com https://www.google-analytics.com;",
             ].join(" "),
           },
           { key: "X-Frame-Options", value: "DENY" },
@@ -69,7 +65,6 @@ const nextConfig: NextConfig = {
           { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
         ],
       },
-      // Allow bots and tools to access _next static files
       {
         source: "/_next/:path*",
         headers: [
@@ -83,7 +78,6 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      // Optional: Improve preloadability of your manifest file
       {
         source: "/site.webmanifest",
         headers: [
@@ -105,7 +99,7 @@ export default withBundleAnalyzer({
   withPWA({
     dest: "public",
     register: !isDev,
-    disable: isDev, // Keep disabled unless going full PWA
+    disable: isDev,
     ...pwaConfig,
   })(nextConfig)
 );
