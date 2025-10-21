@@ -194,17 +194,17 @@ export const viewport = {
 
 type RootLayoutProps = { children: React.ReactNode };
 
-function getCookieValue(cookies: string | null, name: string) {
-  if (!cookies) return null;
-  const match = cookies.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : null;
-}
+// function getCookieValue(cookies: string | null, name: string) {
+//   if (!cookies) return null;
+//   const match = cookies.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+//   return match ? decodeURIComponent(match[1]) : null;
+// }
 
 async function RootLayout({ children }: RootLayoutProps) {
   const hdrs = await headers();
   const theme = hdrs.get("x-theme") || "light";
   const cookieHeader = hdrs.get("cookie");
-  const hasConsent = getCookieValue(cookieHeader, "cookie_consent") === "true";
+  // const hasConsent = getCookieValue(cookieHeader, "cookie_consent") === "true";
 
   return (
     <html
@@ -266,7 +266,7 @@ async function RootLayout({ children }: RootLayoutProps) {
           }}
         />
         {/* Inject GTM only if consent is present */}
-        {hasConsent && <GoogleTagManager gtmId="GTM-N74Q9JC5" />}
+        <GoogleTagManager gtmId="GTM-N74Q9JC5" />
       </head>
       <body className="font-trade-gothic">
         <NonCriticalCSSLoader />
