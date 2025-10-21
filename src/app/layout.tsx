@@ -1,20 +1,14 @@
+export const runtime = "nodejs";
+
 import type { Metadata } from "next";
 import { tradeGothic } from "./fonts";
-import { headers } from "next/headers";
+import criticalCSS from "../critical-above-the-fold.css?raw";
+import baseCSS from "./globals.css?raw";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
 import ClientLayout from "@/components/layouts/ClientLayout";
 import ClientProviders from "@/context/main/ClientProviders";
-import criticalCSS from "../critical-above-the-fold.css?raw";
-import baseCSS from "./globals.css?raw";
-import CookieConsentBanner from "@/components/cookieConsent/CookieConsentBanner";
-import { GoogleTagManager } from "@next/third-parties/google";
-
-const inlineFontsCSS = `@font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap;}
-@font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap;}
-@font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Light.woff2') format('woff2'); font-weight: 200; font-style: normal; font-display: swap;}
-@font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-ExtraBold.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap;}
-html,body{font-family:'TradeGothic',var(--font-trade-gothic),sans-serif;} .font-trade-gothic{font-family:'TradeGothic',var(--font-trade-gothic),sans-serif;}`;
+import Script from "next/script";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.mosaic.photography"),
@@ -34,7 +28,6 @@ export const metadata: Metadata = {
   description:
     "Discover Mosaic's curated gallery of public domain nude photography, celebrating the timeless beauty of the human form through the lens of legendary photographers.",
   keywords: [
-    // High-Priority Core Niche (Low KD, Solid Volume)
     "public domain nude photography",
     "public domain Vintage nude photography",
     "public domain art",
@@ -79,8 +72,6 @@ export const metadata: Metadata = {
     "free cultural works",
     "commons images",
     "public domain art",
-
-    // Photographer/Artist-Specific
     "Edward Weston ",
     "Baron Wilhelm von Gloeden ",
     "Fred Holland Day",
@@ -92,16 +83,12 @@ export const metadata: Metadata = {
     "Felix Jacques Moulin",
     "Wilhelm von Plüschow",
     "Clarence Hudson White",
-
-    // Audience/Interest-Based
     "collectors of vintage nude art",
     "fine art nude enthusiasts",
     "photography history lovers",
     "academic nude photo resources",
     "iconic nude photographer archive",
     "inspiration for artists nude poses",
-
-    // Commercial/Intent
     "free vintage nude photo downloads",
     "order vintage nude prints online",
     "purchase classic nude art",
@@ -109,16 +96,12 @@ export const metadata: Metadata = {
     "license free nude images",
     "royalty-free vintage nude photos",
     "high-resolution nude art download",
-
-    // Technique/Style
     "film nude photography",
     "soft focus nude portraits",
     "hand-tinted nude photographs",
     "glass plate nude negatives",
     "pictorialist nude photography",
     "natural light nude photography",
-
-    // German Keywords (Localized SEO)
     "Akt foto",
     "Aktfotografie",
     "klassische Aktfotografie ",
@@ -130,8 +113,6 @@ export const metadata: Metadata = {
     "zeitlose Aktfotografie gemeinfrei",
     "Galerie-Aktfotografie gemeinfrei",
     "Körperstudie Fotografie gemeinfrei",
-
-    // Spanish Keywords (Localized SEO)
     "fotografía artística de desnudos dominio público",
     "fotografía de desnudos clásico dominio público",
     "fotografía vintage de desnudos dominio público",
@@ -194,28 +175,39 @@ export const viewport = {
 
 type RootLayoutProps = { children: React.ReactNode };
 
-// function getCookieValue(cookies: string | null, name: string) {
-//   if (!cookies) return null;
-//   const match = cookies.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-//   return match ? decodeURIComponent(match[1]) : null;
-// }
+const inlineFontsCSS = `@font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Regular.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap;}
+@font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Bold.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap;}
+@font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-Light.woff2') format('woff2'); font-weight: 200; font-style: normal; font-display: swap;}
+@font-face {font-family: 'TradeGothic'; src: url('https://cdn.mosaic.photography/fonts/TradeGothic-ExtraBold.woff2') format('woff2'); font-weight: 800; font-style: normal; font-display: swap;}
+html,body{font-family:'TradeGothic',var(--font-trade-gothic),sans-serif;} .font-trade-gothic{font-family:'TradeGothic',var(--font-trade-gothic),sans-serif;}`;
 
-async function RootLayout({ children }: RootLayoutProps) {
-  const hdrs = await headers();
-  const theme = hdrs.get("x-theme") || "light";
-  const cookieHeader = hdrs.get("cookie");
-  // const hasConsent = getCookieValue(cookieHeader, "cookie_consent") === "true";
+function GTMManual() {
+  return (
+    <Script id="gtm-loader" strategy="afterInteractive">
+      {`
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-N74Q9JC5');
+      `}
+    </Script>
+  );
+}
 
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       lang="en"
-      className={`${tradeGothic.variable} ${theme}`}
-      data-theme={theme}
+      className={tradeGothic.variable + " light"}
+      data-theme="light"
       data-scroll-behavior="smooth"
       suppressHydrationWarning={true}
     >
       <head>
         <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#ffffff" />
         <style
           id="inline-fonts"
           dangerouslySetInnerHTML={{ __html: inlineFontsCSS }}
@@ -224,35 +216,6 @@ async function RootLayout({ children }: RootLayoutProps) {
         <style
           id="critical-above-the-fold"
           dangerouslySetInnerHTML={{ __html: criticalCSS }}
-        />
-        <link
-          rel="preload"
-          href="https://cdn.mosaic.photography/fonts/TradeGothic-Regular.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="https://cdn.mosaic.photography/fonts/TradeGothic-Bold.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://cdn.mosaic.photography"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preconnect"
-          href="https://gdzqgrfitiixbhlhppef.supabase.co"
-          crossOrigin="anonymous"
-        />
-        <link rel="dns-prefetch" href="https://cdn.mosaic.photography" />
-        <link
-          rel="dns-prefetch"
-          href="https://gdzqgrfitiixbhlhppef.supabase.co"
         />
         <JsonLdSchema
           type="WebSite"
@@ -265,12 +228,18 @@ async function RootLayout({ children }: RootLayoutProps) {
             logo: "https://www.mosaic.photography/images/logo.png",
           }}
         />
-        {/* Inject GTM only if consent is present */}
-        <GoogleTagManager gtmId="GTM-N74Q9JC5" />
+        <GTMManual />
       </head>
       <body className="font-trade-gothic">
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-N74Q9JC5"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          ></iframe>
+        </noscript>
         <NonCriticalCSSLoader />
-        <CookieConsentBanner />
         <ClientProviders>
           <main style={{ flex: 1 }}>
             <ClientLayout>{children}</ClientLayout>
@@ -280,5 +249,3 @@ async function RootLayout({ children }: RootLayoutProps) {
     </html>
   );
 }
-
-export default RootLayout;
