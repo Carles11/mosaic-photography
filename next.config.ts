@@ -51,8 +51,8 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self';",
-              "img-src 'self' data: https://cdn.mosaic.photography https://storage.ko-fi.com https://www.googletagmanager.com https://www.google-analytics.com;",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https:;",
+              "img-src 'self' data: https://cdn.mosaic.photography https://storage.ko-fi.com https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms;",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https:;",
               "style-src 'self' 'unsafe-inline' https:;",
               "font-src 'self' data: https:;",
               [
@@ -72,7 +72,8 @@ const nextConfig: NextConfig = {
                 "https://region7.google-analytics.com",
                 "https://region8.google-analytics.com",
                 "https://region9.google-analytics.com",
-                "https://region10.google-analytics.com;",
+                "https://region10.google-analytics.com",
+                "https://www.clarity.ms;",
               ].join(" "),
             ].join(" "),
           },

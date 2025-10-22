@@ -29,7 +29,8 @@ export default function CookieConsentBanner() {
   return (
     <div className={styles.banner} role="dialog" aria-live="polite">
       <span className={styles.text}>
-        This site uses cookies for analytics and to improve your experience.{" "}
+        This site uses cookies and tracking technologies (Google Analytics and
+        Microsoft Clarity) for analytics and to improve your experience.{" "}
         <a href="/legal/privacy-policy" className="fancy-link">
           Learn more
         </a>

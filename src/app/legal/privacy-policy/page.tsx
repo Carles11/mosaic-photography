@@ -6,18 +6,18 @@ import styles from "./privacy-policy.module.css";
 export const metadata = {
   title: "Privacy Policy - Mosaic Photography",
   description:
-    "Learn about Mosaic Photography's privacy practices and how we handle your data.",
+    "Learn about Mosaic Photography's privacy practices, including our use of Google Analytics, Microsoft Clarity, and how we handle your data.",
   openGraph: {
     title: "Privacy Policy - Mosaic Photography",
     description:
-      "Learn about Mosaic Photography's privacy practices and how we handle your data.",
+      "Learn about Mosaic Photography's privacy practices, including our use of Google Analytics, Microsoft Clarity, and how we handle your data.",
     images: ["/images/og-image.jpg"],
   },
   twitter: {
     cardType: "summary_large_image",
     title: "Privacy policy - Mosaic Photography",
     description:
-      "Privacy policy page of Mosaic Photography. Learn about Mosaic Photography's privacy practices and how we handle your data.",
+      "Privacy policy page of Mosaic Photography. Learn about Mosaic Photography's privacy practices, including our use of Google Analytics, Microsoft Clarity, and how we handle your data.",
     image: "/favicons/favicon.ico",
   },
 };
@@ -66,6 +66,27 @@ const PrivacyPolicy: React.FC = () => {
         information, but it may deploy tags that collect data for analytics
         purposes and help us improve the user experience. For more information,
         please review Google&apos;s privacy policy.
+      </p>
+      <h2 className={styles.subtitle}>Microsoft Clarity</h2>
+      <p className={styles.text}>
+        We use Microsoft Clarity to capture how you use and interact with our
+        website through behavioral metrics, heatmaps, and session replay to
+        improve and market our products/services. By using our site, you agree
+        that we and Microsoft can collect this data. Website usage data is
+        captured using first and third-party cookies and other tracking
+        technologies to determine the popularity of products/services and online
+        activity. Additionally, we use this information for site optimization,
+        fraud/security purposes. For more information about how Microsoft
+        collects and uses your data, visit the{" "}
+        <a
+          href="https://privacy.microsoft.com/privacystatement"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fancy-link"
+        >
+          Microsoft Privacy Statement
+        </a>
+        .
       </p>
       <h2 className={styles.subtitle}>Account and Login Information</h2>
       <p className={styles.text}>
