@@ -3,17 +3,17 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import styles from "../auth.module.css";
-import PasswordResetForm from "@/components/auth/resetPasswordForm";
+import MagicLinkForm from "@/components/auth/magicLinkForm";
 
-function PasswordResetContent() {
+function MagicLinkContent() {
   return (
     <div>
-      <h2 className={styles.formTitle}>Reset Password</h2>
-      <PasswordResetForm />
+      <h2 className={styles.formTitle}>Magic Link Login</h2>
+      <MagicLinkForm />
       <div className={styles.authLinks}>
         <p>
           <Link href="/auth/login" className={styles.authLink}>
-            Back to login
+            Use password instead
           </Link>
         </p>
       </div>
@@ -21,10 +21,10 @@ function PasswordResetContent() {
   );
 }
 
-export default function PasswordResetPage() {
+export default function MagicLinkPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <PasswordResetContent />
+      <MagicLinkContent />
     </Suspense>
   );
 }

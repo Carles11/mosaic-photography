@@ -51,8 +51,8 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
         setShowAuthModal(true);
         if (type === "password-reset") {
           setAuthView("password-reset");
-        } else if (type === "confirm-email") {
-          setAuthView("confirm-email");
+        } else if (type === "verify-email") {
+          setAuthView("verify-email");
         } else {
           setAuthView("login");
         }

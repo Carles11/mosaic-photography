@@ -7,11 +7,13 @@ import { useState } from "react";
 import { AuthModalProps, AuthView } from "@/types/auth";
 
 // Component imports alphabetically
-import ConfirmEmailForm from "@/components/auth/confirmEmailForm";
-import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm_temp";
+import ConfirmEmailChangeForm from "@/components/auth/confirmEmailChangeForm";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
 import LoginForm from "@/components/auth/logInForm";
-import ResetPasswordForm from "@/components/auth/resetPasswordForm";
+import MagicLinkForm from "@/components/auth/magicLinkForm";
+import PasswordResetForm from "@/components/auth/resetPasswordForm";
 import SignupForm from "@/components/auth/signUpForm";
+import VerifyEmailForm from "@/components/auth/verifyEmailForm";
 
 export default function AuthModal({
   isOpen,
@@ -44,14 +46,31 @@ export default function AuthModal({
         );
       case "password-reset":
         return (
-          <ResetPasswordForm
+          <PasswordResetForm
             onSwitchToLogin={() => setAuthView("login")}
             onSuccess={onClose}
           />
         );
-      case "confirm-email":
+      case "verify-email":
         return (
-          <ConfirmEmailForm onSwitchToLogin={() => setAuthView("login")} />
+          <VerifyEmailForm
+            onSwitchToLogin={() => setAuthView("login")}
+            onSuccess={onClose}
+          />
+        );
+      case "magic-link":
+        return (
+          <MagicLinkForm
+            onSwitchToLogin={() => setAuthView("login")}
+            onSuccess={onClose}
+          />
+        );
+      case "confirm-email-change":
+        return (
+          <ConfirmEmailChangeForm
+            onSwitchToLogin={() => setAuthView("login")}
+            onSuccess={onClose}
+          />
         );
       case "login":
       default:
@@ -68,48 +87,9 @@ export default function AuthModal({
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: "rgba(0, 0, 0, 0.8)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        zIndex: 1000,
-      }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          onClose();
-        }
-      }}
-    >
-      <div style={{ position: "relative" }}>
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          style={{
-            position: "absolute",
-            top: "76px",
-            right: "11px",
-            color: "#000",
-            background: "#fff",
-            border: "none",
-            borderRadius: "50%",
-            width: "30px",
-            height: "30px",
-            cursor: "pointer",
-            fontSize: "18px",
-            zIndex: 1001,
-          }}
-        >
-          ×
-        </button>
-        {renderAuthForm()}
-      </div>
+    <div>
+      {/* Modal content here */}
+      {renderAuthForm()}
     </div>
   );
 }

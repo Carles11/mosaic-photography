@@ -41,6 +41,35 @@ export async function signInWithPassword(
 }
 
 /**
+ * Send magic link email for passwordless login
+ */
+export async function loginWithMagicLink(email: string): Promise<AuthResult> {
+  try {
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: "https://www.mosaic.photography/auth/magic-link",
+      },
+    });
+
+    if (error) {
+      return { error: { message: error.message } };
+    }
+
+    return { data: { message: "Magic link sent to your email" } };
+  } catch (error) {
+    return {
+      error: {
+        message:
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred",
+      },
+    };
+  }
+}
+
+/**
  * Sign up with email and password
  */
 export async function signUpWithPassword(

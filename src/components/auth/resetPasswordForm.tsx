@@ -1,29 +1,60 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./ResetPasswordForm.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 
-interface ResetPasswordFormProps {
+interface PasswordResetFormProps {
   onSwitchToLogin?: () => void;
   onSuccess?: () => void;
   redirectTo?: string;
 }
 
-export default function ResetPasswordForm({
+export default function PasswordResetForm({
   onSwitchToLogin,
   onSuccess,
-  redirectTo = "/auth/login?message=password-updated",
-}: ResetPasswordFormProps) {
+  redirectTo = "/auth/login?message=password-reset-complete",
+}: PasswordResetFormProps) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [initializing, setInitializing] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const handleResetPassword = async (e: React.FormEvent) => {
+  useEffect(() => {
+    const token = searchParams?.get("token");
+    const type = searchParams?.get("type");
+
+    if (token && type) {
+      // Verify the token first
+      handleTokenVerification(token, type);
+    } else {
+      setError("Invalid or missing password reset token.");
+      setInitializing(false);
+    }
+  }, [searchParams]);
+
+  const handleTokenVerification = async (token: string, type: string) => {
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        token_hash: token,
+        type: type as "recovery" | "email",
+      });
+
+      if (error) {
+        setError("Invalid or expired reset token.");
+      }
+    } catch (err) {
+      setError("Token verification failed.");
+    }
+    setInitializing(false);
+  };
+
+  const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
@@ -35,8 +66,8 @@ export default function ResetPasswordForm({
       return;
     }
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters long");
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long");
       setLoading(false);
       return;
     }
@@ -60,11 +91,18 @@ export default function ResetPasswordForm({
     setLoading(false);
   };
 
+  if (initializing) {
+    return (
+      <div className={styles.resetPasswordFormContainer}>
+        Verifying reset token...
+      </div>
+    );
+  }
+
   return (
     <div className={styles.resetPasswordFormContainer}>
-      <h2 className={styles.resetPasswordFormTitle}>Reset Password</h2>
       <form
-        onSubmit={handleResetPassword}
+        onSubmit={handlePasswordReset}
         className={styles.form}
         autoComplete="on"
       >
@@ -77,7 +115,7 @@ export default function ResetPasswordForm({
           autoComplete="new-password"
           onChange={(e) => setPassword(e.target.value)}
           required
-          minLength={6}
+          minLength={8}
         />
         <input
           className={styles.input}
@@ -88,7 +126,7 @@ export default function ResetPasswordForm({
           autoComplete="new-password"
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
-          minLength={6}
+          minLength={8}
         />
         {error && <div className={styles.error}>{error}</div>}
         {success && <div className={styles.success}>{success}</div>}
@@ -96,12 +134,11 @@ export default function ResetPasswordForm({
           <PrimaryButton
             id="reset-password-button"
             btnText={loading ? "Updating..." : "Update Password"}
-            handleClick={() => {}} // The form handles submit
+            handleClick={() => {}}
             className=""
           />
         </div>
       </form>
-      {/* Only show internal links when used in modal (when callback is provided) */}
       {onSwitchToLogin && (
         <div className={styles.linksRow}>
           <a

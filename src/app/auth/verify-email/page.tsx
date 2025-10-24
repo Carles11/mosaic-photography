@@ -3,13 +3,13 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import styles from "../auth.module.css";
-import ConfirmEmailForm from "@/components/auth/confirmEmailForm";
+import VerifyEmailForm from "@/components/auth/verifyEmailForm";
 
-function ConfirmEmailContent() {
+function VerifyEmailContent() {
   return (
     <div>
-      <h2 className={styles.formTitle}>Email Confirmed</h2>
-      <ConfirmEmailForm />
+      <h2 className={styles.formTitle}>Verify Email</h2>
+      <VerifyEmailForm />
       <div className={styles.authLinks}>
         <p>
           <Link href="/auth/login" className={styles.authLink}>
@@ -21,10 +21,10 @@ function ConfirmEmailContent() {
   );
 }
 
-export default function ConfirmEmailPage() {
+export default function VerifyEmailPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ConfirmEmailContent />
+      <VerifyEmailContent />
     </Suspense>
   );
 }

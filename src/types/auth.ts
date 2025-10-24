@@ -4,7 +4,9 @@ export type AuthView =
   | "signup"
   | "forgot-password"
   | "password-reset"
-  | "confirm-email";
+  | "magic-link"
+  | "confirm-email-change"
+  | "verify-email";
 
 export type AuthModalState = {
   isOpen: boolean;
