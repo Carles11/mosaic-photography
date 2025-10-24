@@ -15,7 +15,7 @@ export type AuthResult<T = unknown> = {
  */
 export async function signInWithPassword(
   email: string,
-  password: string,
+  password: string
 ): Promise<AuthResult<{ user: SupabaseUser | null }>> {
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -45,7 +45,7 @@ export async function signInWithPassword(
  */
 export async function signUpWithPassword(
   email: string,
-  password: string,
+  password: string
 ): Promise<AuthResult<{ user: SupabaseUser | null }>> {
   try {
     const { data, error } = await supabase.auth.signUp({
@@ -74,11 +74,11 @@ export async function signUpWithPassword(
  * Send password reset email
  */
 export async function sendPasswordResetEmail(
-  email: string,
+  email: string
 ): Promise<AuthResult> {
   try {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/reset-password`,
+      redirectTo: `${window.location.origin}/auth/password-reset`,
     });
 
     if (error) {

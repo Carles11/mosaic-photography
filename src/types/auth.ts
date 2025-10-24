@@ -3,7 +3,7 @@ export type AuthView =
   | "login"
   | "signup"
   | "forgot-password"
-  | "reset-password"
+  | "password-reset"
   | "confirm-email";
 
 export type AuthModalState = {

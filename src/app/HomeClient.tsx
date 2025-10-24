@@ -49,8 +49,8 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
       if (modal === "auth") {
         // For backward compatibility, show modal for email redirects
         setShowAuthModal(true);
-        if (type === "reset-password") {
-          setAuthView("reset-password");
+        if (type === "password-reset") {
+          setAuthView("password-reset");
         } else if (type === "confirm-email") {
           setAuthView("confirm-email");
         } else {

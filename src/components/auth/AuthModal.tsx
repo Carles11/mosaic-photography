@@ -42,7 +42,7 @@ export default function AuthModal({
             initialEmail={userEmail}
           />
         );
-      case "reset-password":
+      case "password-reset":
         return (
           <ResetPasswordForm
             onSwitchToLogin={() => setAuthView("login")}
