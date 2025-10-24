@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "TEAMID.com.XXXXXX.mosaicapp"
+        ],
+        "components": [
+          {
+            "/": "/auth/*",
+            "comment": "Matches any URL with path that starts with /auth/"
+          }
+        ]
+      }
+    ]
+  }
+}
