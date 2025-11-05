@@ -4,9 +4,7 @@
     "target": {
       "namespace": "android_app",
       "package_name": "com.carlos_delrio.mosaicphotographyapp",
-      "sha256_cert_fingerprints": [
-        "6845e5f9458db5897acc8660c3722961578c77e93d5993579225cc9530b8e0e3"
-      ]
+      "sha256_cert_fingerprints": ["6513461b861498e35208f666c70215b4dc4476f5"]
     }
   }
 ]
