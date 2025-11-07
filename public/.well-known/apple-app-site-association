@@ -7,8 +7,8 @@
         ],
         "components": [
           {
-            "/": "/auth/*",
-            "comment": "Matches any URL with path that starts with /"
+            "/": "/*",
+            "comment": "Matches any URL with any path"
           }
         ]
       }
