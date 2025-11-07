@@ -3,12 +3,12 @@
     "details": [
       {
         "appIDs": [
-          "TEAMID.com.carlos_delrio.mosaicphotographyapp"
+          "B357DRSHMY.com.carlos_delrio.mosaicphotographyapp"
         ],
         "components": [
           {
             "/": "/auth/*",
-            "comment": "Matches any URL with path that starts with /auth/"
+            "comment": "Matches any URL with path that starts with /"
           }
         ]
       }
