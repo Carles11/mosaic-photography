@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useComments } from "@/context/CommentsContext";
 
 import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
-import AuthModal from "@/components/auth/AuthModal";
+// import AuthModal from "@/components/auth/AuthModal";
 import { AuthView } from "@/types/auth";
 
 // Import session debug for development
@@ -104,12 +104,12 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
       />
 
       {/* Keep modal for backward compatibility with email redirects */}
-      <AuthModal
+      {/* <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         initialView={authView}
         initialEmail=""
-      />
+      /> */}
     </>
   );
 }
