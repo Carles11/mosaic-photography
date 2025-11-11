@@ -26,7 +26,6 @@ const PrivacyPolicy: React.FC = () => {
   return (
     <section className={styles.container}>
       <h1 className={styles.title}>Privacy Policy</h1>
-
       <h2 className={styles.subtitle}>Information Collection</h2>
       <p className={styles.text}>
         We do not collect any personal information from visitors to our website.
@@ -97,7 +96,25 @@ const PrivacyPolicy: React.FC = () => {
         not shared with third parties except as required to operate the website
         (for example, with our authentication provider, Supabase).
       </p>
-
+      <h2 id="account-deletion" className={styles.subtitle}>
+        Account Deletion
+      </h2>{" "}
+      <p className={styles.text}>
+        You can permanently delete your account directly from the app:
+        <ol>
+          <li>Log in to the Mosaic Photography App</li>
+          <li>Go to your Profile</li>
+          <li>Tap the &quot;Delete Account&quot; button</li>
+          <li>Confirm deletion</li>
+        </ol>
+        All your account data will be deleted completely and instantly from our
+        servers. No data remains after your account is deleted. For questions or
+        assistance, contact us at{" "}
+        <a href="mailto:carles@rio-frances.com" className="fancy-link">
+          carles@rio-frances.com
+        </a>
+        .
+      </p>
       <h2 className={styles.subtitle}>Contact</h2>
       <p className={styles.text}>
         If you have any questions or concerns about our privacy policy, please
