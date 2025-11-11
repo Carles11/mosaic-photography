@@ -130,6 +130,11 @@ export default function LoginForm({
         </div>
       </form>
 
+      {/* 
+        TEMPORARILY HIDE MAGIC LINK TOGGLE:
+        To restore magic-link login, uncomment the block below.
+      */}
+      {/*
       <div className={styles.linksRow}>
         <a
           className={styles.link}
@@ -140,6 +145,7 @@ export default function LoginForm({
           {useMagicLink ? "Use password instead" : "Use magic link instead"}
         </a>
       </div>
+      */}
 
       {/* Only show internal links when used in modal (when callbacks are provided) */}
       {(onSwitchToSignup || onForgotPassword) && (
