@@ -8,5 +8,15 @@
         "68:45:E5:F9:45:8D:B5:89:7A:CC:86:C3:72:29:61:57:8C:77:E9:3D:59:93:57:92:25:CC:95:30:B8:E0:E3"
       ]
     }
+  },
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.carlos_delrio.mosaicphotographyapp",
+      "sha256_cert_fingerprints": [
+        "6C:0D:9B:D4:06:41:E0:27:37:96:76:C3:AC:64:5D:9C:7B:80:14:50:49:19:53:C1:D6:FA:FA:78:46:2E:82:1B"
+      ]
+    }
   }
 ]
