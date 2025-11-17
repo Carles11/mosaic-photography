@@ -31,7 +31,7 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authView, setAuthView] = useState<AuthView>("login");
   const [isInitialized, setIsInitialized] = useState(false);
-
+  console.log("hello from HomeClientScreen");
   const { loadCommentCountsBatch } = useComments();
 
   useEffect(() => {
