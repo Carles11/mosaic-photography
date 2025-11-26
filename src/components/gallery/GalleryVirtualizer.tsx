@@ -131,6 +131,25 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     </svg>
   );
 
+  const onDownloadClick = (slide: {
+    download?: { url: string; filename?: string };
+  }) => {
+    if (!user) {
+      handleLoginRequired();
+      return;
+    }
+    if (slide.download?.url) {
+      const a = document.createElement("a");
+      a.href = slide.download.url;
+      a.download = slide.download.filename || "download.jpg";
+      a.target = "_blank";
+      a.rel = "noopener";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  };
+
   return (
     <>
       <VirtuosoMasonry
@@ -298,18 +317,17 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                 title="Download"
                 className={styles.lightboxDownloadButton}
                 onClick={() => {
-                  if (!user) {
-                    handleLoginRequired();
-                    return;
-                  }
                   const currentSlide = images[lightboxIndex];
-                  if (currentSlide?.filename && currentSlide?.base_url) {
-                    const a = document.createElement("a");
-                    a.href = `${currentSlide.base_url}/originals/${currentSlide.filename}`;
-                    a.download = currentSlide.filename || "download.jpg";
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
+                  if (currentSlide) {
+                    onDownloadClick({
+                      download:
+                        currentSlide.filename && currentSlide.base_url
+                          ? {
+                              url: `${currentSlide.base_url}/originals/${currentSlide.filename}`,
+                              filename: currentSlide.filename,
+                            }
+                          : undefined,
+                    });
                   }
                 }}
                 aria-label="Download"
