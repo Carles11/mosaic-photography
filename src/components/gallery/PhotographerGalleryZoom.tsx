@@ -16,9 +16,10 @@ import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import { getProgressiveZoomSrc } from "@/utils/imageResizingS3";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
-import Download from "yet-another-react-lightbox/plugins/download";
 import type { GalleryProps } from "@/types/gallery";
 import styles from "./photographerGalleryZoom.module.css";
+import { useAuthSession } from "@/context/AuthSessionContext";
+import toast from "react-hot-toast";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
@@ -29,9 +30,8 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const router = useRouter();
+  const { user } = useAuthSession();
   const { currentModal } = useModal();
-
-  // Track previous modal and last lightbox index for restore logic
   const lastLightboxIndex = useRef<number | null>(null);
   const prevModal = useRef<string>(null);
 
@@ -63,7 +63,6 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
     [images]
   );
 
-  // Save last lightbox index before closing for modal
   useEffect(() => {
     if (currentModal && isLightboxOpen) {
       lastLightboxIndex.current = lightboxIndex;
@@ -71,7 +70,6 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
     }
   }, [currentModal, isLightboxOpen, lightboxIndex]);
 
-  // Restore lightbox when modal closes
   useEffect(() => {
     if (
       prevModal.current &&
@@ -92,6 +90,43 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
     setIsLightboxOpen(true);
     lastLightboxIndex.current = null;
   }, []);
+
+  // SVG Download icon (Material style)
+  const DownloadIcon = () => (
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <rect width="22" height="22" rx="11" fill="rgba(244,211,94,0.10)" />
+      <path
+        d="M11 6.5v5m0 0-2.5-2.5m2.5 2.5 2.5-2.5M5.833 15.5h10.334"
+        stroke="#F4D35E"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+
+  // Auth-aware download handler (copied verbatim from your working code)
+  const onDownloadClick = (slide: {
+    download?: { url: string; filename?: string };
+  }) => {
+    if (!user) {
+      toast.error("Please log in to download images.");
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 1200);
+      return;
+    }
+    if (slide.download?.url) {
+      const a = document.createElement("a");
+      a.href = slide.download.url;
+      a.download = slide.download.filename || "download.jpg";
+      a.target = "_blank";
+      a.rel = "noopener";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  };
 
   if (!imagesWithUrl || imagesWithUrl.length === 0)
     return <p>No images found for this photographer.</p>;
@@ -187,7 +222,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
             height: img.height,
             s3Progressive: img.s3Progressive,
             created_at: img.created_at,
-            year: img.year ?? "", // <-- ensure year is passed
+            year: img.year ?? "",
             download:
               img.filename && img.base_url
                 ? {
@@ -197,7 +232,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                 : undefined,
           }))}
           index={lightboxIndex}
-          plugins={[Zoom, Download]}
+          plugins={[Zoom]} // No Download plugin, we use toolbar!
           zoom={{
             maxZoomPixelRatio: 3,
             minZoom: 1,
@@ -211,7 +246,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                 id?: number | string;
                 author?: string;
                 description?: string;
-                year?: string | number; // <-- make year optional and string|number
+                year?: string | number;
                 width?: number;
                 height?: number;
                 s3Progressive?: Array<{ url: string; width: number }>;
@@ -303,7 +338,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
                       zIndex: 1001,
-                      maxHeight: "28vh", // or "30vh"
+                      maxHeight: "28vh",
                       overflowY: "auto",
                       boxSizing: "border-box",
                       pointerEvents: "auto",
@@ -319,7 +354,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                       position: "fixed",
                       bottom: 20,
                       right: 20,
-                      zIndex: 2000, // make sure it's above description
+                      zIndex: 2000,
                       display: "flex",
                       gap: "10px",
                       pointerEvents: "auto",
@@ -344,6 +379,42 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
           }}
           on={{
             view: ({ index }) => setLightboxIndex(index),
+          }}
+          toolbar={{
+            buttons: [
+              <button
+                key="download"
+                title="Download"
+                className={styles.lightboxDownloadButton}
+                onClick={() => {
+                  const currentSlide = imagesWithUrl[lightboxIndex];
+                  if (currentSlide) {
+                    onDownloadClick({
+                      download:
+                        currentSlide.filename && currentSlide.base_url
+                          ? {
+                              url: `${currentSlide.base_url}/originals/${currentSlide.filename}`,
+                              filename: currentSlide.filename,
+                            }
+                          : undefined,
+                    });
+                  }
+                }}
+                aria-label="Download"
+                tabIndex={0}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#fff",
+                  marginRight: 8,
+                  fontSize: 14,
+                  cursor: "pointer",
+                }}
+              >
+                <DownloadIcon />
+              </button>,
+              "close",
+            ],
           }}
         />
       </Suspense>
