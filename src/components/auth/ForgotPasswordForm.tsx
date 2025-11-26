@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import styles from "./ForgotPasswordForm.module.css";
-import { supabase } from "@/lib/supabaseClient";
+// Import your helper:
+import { sendPasswordResetEmail } from "@/lib/auth/auth-helpers";
 
 interface ForgotPasswordFormProps {
   onSwitchToLogin?: () => void;
@@ -23,12 +24,10 @@ export default function ForgotPasswordForm({
     setError(null);
     setSuccess(null);
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/password-reset`,
-    });
+    const result = await sendPasswordResetEmail(email);
 
-    if (error) {
-      setError(error.message);
+    if (result.error) {
+      setError(result.error.message);
     } else {
       setSuccess("Check your email for a password reset link!");
     }
@@ -56,7 +55,6 @@ export default function ForgotPasswordForm({
           </button>
         </div>
       </form>
-      {/* Only show internal links when used in modal (when callback is provided) */}
       {onSwitchToLogin && (
         <div className={styles.linksRow}>
           <a

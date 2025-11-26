@@ -69,7 +69,6 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
     return true;
   });
 
-  console.log("Filtered images count:", filteredImages?.length);
   // Helper: are filters active?
   const filtersActive =
     !!filters.gender ||

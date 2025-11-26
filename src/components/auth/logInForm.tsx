@@ -31,6 +31,10 @@ export default function LoginForm({
 
     if (useMagicLink) {
       // Handle magic link
+
+      // Store email for magic link verification later
+      localStorage.setItem("magic_link_email", email);
+
       const result = await loginWithMagicLink(email);
       if (result.error) {
         setError(result.error.message);
@@ -134,7 +138,7 @@ export default function LoginForm({
         TEMPORARILY HIDE MAGIC LINK TOGGLE:
         To restore magic-link login, uncomment the block below.
       */}
-      {/*
+
       <div className={styles.linksRow}>
         <a
           className={styles.link}
@@ -145,7 +149,6 @@ export default function LoginForm({
           {useMagicLink ? "Use password instead" : "Use magic link instead"}
         </a>
       </div>
-      */}
 
       {/* Only show internal links when used in modal (when callbacks are provided) */}
       {(onSwitchToSignup || onForgotPassword) && (
