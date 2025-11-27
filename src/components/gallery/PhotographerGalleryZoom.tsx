@@ -20,6 +20,7 @@ import type { GalleryProps } from "@/types/gallery";
 import styles from "./photographerGalleryZoom.module.css";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import toast from "react-hot-toast";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
@@ -109,6 +110,10 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
   const onDownloadClick = (slide: {
     download?: { url: string; filename?: string };
   }) => {
+    sendGTMEvent({
+      event: "downloadInPhotographerClicked",
+      value: slide.download?.url,
+    });
     if (!user) {
       toast.error("Please log in to download images.");
       setTimeout(() => {

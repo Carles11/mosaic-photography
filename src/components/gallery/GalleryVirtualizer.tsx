@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { getMosaicImageProps } from "@/utils/mosaicLayout";
 import styles from "./galleryVirtualizer.module.css";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
@@ -134,6 +135,10 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
   const onDownloadClick = (slide: {
     download?: { url: string; filename?: string };
   }) => {
+    sendGTMEvent({
+      event: "downloadInGalleryClicked",
+      value: slide.download?.url,
+    });
     if (!user) {
       handleLoginRequired();
       return;

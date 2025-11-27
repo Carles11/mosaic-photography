@@ -25,6 +25,7 @@ import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
@@ -70,6 +71,10 @@ export default function FavoritesList({
   const onDownloadClick = (slide: {
     download?: { url: string; filename?: string };
   }) => {
+    sendGTMEvent({
+      event: "downloadInFavoritesClicked",
+      value: slide.download?.url,
+    });
     if (!user) {
       toast.error("Please log in to download images.");
       setTimeout(() => {
