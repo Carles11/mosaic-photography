@@ -4,7 +4,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./ResetPasswordForm.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
-import { parseHashParams } from "@/helpers/parseHashParams";
 
 interface PasswordResetFormProps {
   onSwitchToLogin?: () => void;
@@ -23,36 +22,18 @@ export default function PasswordResetForm({
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [initializing, setInitializing] = useState(true);
-
-  const [tokenChecked, setTokenChecked] = useState(false);
-
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    function extractTokenType() {
-      let token = searchParams?.get("token");
-      let type = searchParams?.get("type");
-
-      if (typeof window !== "undefined") {
-        const hashParams = parseHashParams(window.location.hash);
-        if (hashParams.access_token) token = hashParams.access_token;
-        if (hashParams.token) token = hashParams.token; // sometimes used
-        if (hashParams.type) type = hashParams.type;
-      }
-
-      return { token, type };
-    }
-
-    // Wait for searchParams and hash to be non-empty before attempting verification
-    const { token, type } = extractTokenType();
+    const token = searchParams?.get("token");
+    const type = searchParams?.get("type");
 
     if (token && type) {
+      // Verify the token first
       handleTokenVerification(token, type);
-      setTokenChecked(true);
     } else {
-      // Instead of showing an error immediately, just mark as checked.
-      setTokenChecked(true);
+      setError("Invalid or missing password reset token.");
       setInitializing(false);
     }
   }, [searchParams]);
@@ -66,8 +47,6 @@ export default function PasswordResetForm({
 
       if (error) {
         setError("Invalid or expired reset token.");
-      } else {
-        setError(null); // clear error if valid
       }
     } catch (err) {
       setError("Token verification failed.");
@@ -122,10 +101,6 @@ export default function PasswordResetForm({
 
   return (
     <div className={styles.resetPasswordFormContainer}>
-      {/* Only show error if we've actually checked for token presence */}
-      {tokenChecked && error && !success && (
-        <div className={styles.error}>{error}</div>
-      )}
       <form
         onSubmit={handlePasswordReset}
         className={styles.form}
@@ -153,6 +128,7 @@ export default function PasswordResetForm({
           required
           minLength={8}
         />
+        {error && <div className={styles.error}>{error}</div>}
         {success && <div className={styles.success}>{success}</div>}
         <div className={styles.buttonRow}>
           <PrimaryButton

@@ -44,22 +44,18 @@ export async function signInWithPassword(
  * Send magic link email for passwordless login
  */
 export async function loginWithMagicLink(email: string): Promise<AuthResult> {
-  // Detect dev mode (you can use Vercel/Netlify env vars or location)
-  const isLocal =
-    typeof window !== "undefined" && window.location.hostname === "localhost";
-
-  const redirectTo = isLocal
-    ? "http://localhost:3000/auth/magic-link"
-    : "https://www.mosaic.photography/auth/magic-link";
-
   try {
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: redirectTo },
+      options: {
+        emailRedirectTo: "https://www.mosaic.photography/auth/magic-link",
+      },
     });
+
     if (error) {
       return { error: { message: error.message } };
     }
+
     return { data: { message: "Magic link sent to your email" } };
   } catch (error) {
     return {
@@ -109,20 +105,15 @@ export async function signUpWithPassword(
 export async function sendPasswordResetEmail(
   email: string
 ): Promise<AuthResult> {
-  // Ensure correct redirect for dev or prod
-  const isLocal =
-    typeof window !== "undefined" && window.location.hostname === "localhost";
-  const redirectTo = isLocal
-    ? "http://localhost:3000/auth/password-reset"
-    : "https://www.mosaic.photography/auth/password-reset";
-
   try {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo,
+      redirectTo: `${window.location.origin}/auth/password-reset`,
     });
+
     if (error) {
       return { error: { message: error.message } };
     }
+
     return { data: { message: "Password reset email sent" } };
   } catch (error) {
     return {

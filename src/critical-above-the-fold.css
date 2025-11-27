@@ -250,6 +250,7 @@ a:hover::before {
   z-index: 102;
   display: none;
   background: var(--background-color, #232323);
+  border-top: 1px solid var(--tertiary-color, rgba(255, 255, 255, 0.1));
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   will-change: transform, opacity;

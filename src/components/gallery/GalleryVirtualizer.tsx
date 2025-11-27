@@ -1,4 +1,3 @@
-"use client";
 import { VirtuosoMasonry } from "@virtuoso.dev/masonry";
 import {
   useCallback,
@@ -15,10 +14,8 @@ import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Download from "yet-another-react-lightbox/plugins/download";
 import { useModal } from "@/context/modalContext/useModal";
-import { useAuthSession } from "@/context/AuthSessionContext";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import { getMosaicImageProps } from "@/utils/mosaicLayout";
 import styles from "./galleryVirtualizer.module.css";
 
@@ -38,21 +35,12 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
   const { currentModal } = useModal();
   const lastLightboxIndex = useRef<number | null>(null);
   const prevModal = useRef<unknown>(null);
-  const { user } = useAuthSession();
-  const router = useRouter();
 
   const columnCount = useMemo(() => {
     if (typeof window !== "undefined" && window.innerWidth < 500) return 2;
     if (typeof window !== "undefined" && window.innerWidth < 800) return 3;
     return 4;
   }, []);
-
-  const handleLoginRequired = useCallback(() => {
-    toast.error("Please log in to download images.");
-    setTimeout(() => {
-      router.push("/auth/login");
-    }, 1200);
-  }, [router]);
 
   const ItemContent = useCallback(
     ({ data, index }: { data: ImageWithOrientation; index: number }) => {
@@ -117,39 +105,6 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     prevModal.current = currentModal;
   }, [currentModal]);
 
-  // SVG Download icon for toolbar button (Material Rounded)
-  const DownloadIcon = () => (
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-      <rect width="22" height="22" rx="11" fill="rgba(244,211,94,0.10)" />
-      <path
-        d="M11 6.5v5m0 0-2.5-2.5m2.5 2.5 2.5-2.5M5.833 15.5h10.334"
-        stroke="#F4D35E"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-
-  const onDownloadClick = (slide: {
-    download?: { url: string; filename?: string };
-  }) => {
-    if (!user) {
-      handleLoginRequired();
-      return;
-    }
-    if (slide.download?.url) {
-      const a = document.createElement("a");
-      a.href = slide.download.url;
-      a.download = slide.download.filename || "download.jpg";
-      a.target = "_blank";
-      a.rel = "noopener";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-  };
-
   return (
     <>
       <VirtuosoMasonry
@@ -183,7 +138,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                 : undefined,
           }))}
           index={lightboxIndex}
-          plugins={[Zoom]} // Don't use Download plugin!
+          plugins={[Zoom, Download]}
           zoom={{
             maxZoomPixelRatio: 3,
             minZoom: 1,
@@ -309,42 +264,6 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
           }}
           on={{
             view: ({ index }) => setLightboxIndex(index),
-          }}
-          toolbar={{
-            buttons: [
-              <button
-                key="download"
-                title="Download"
-                className={styles.lightboxDownloadButton}
-                onClick={() => {
-                  const currentSlide = images[lightboxIndex];
-                  if (currentSlide) {
-                    onDownloadClick({
-                      download:
-                        currentSlide.filename && currentSlide.base_url
-                          ? {
-                              url: `${currentSlide.base_url}/originals/${currentSlide.filename}`,
-                              filename: currentSlide.filename,
-                            }
-                          : undefined,
-                    });
-                  }
-                }}
-                aria-label="Download"
-                tabIndex={0}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#fff",
-                  marginRight: 8,
-                  fontSize: 14,
-                  cursor: "pointer",
-                }}
-              >
-                <DownloadIcon />
-              </button>,
-              "close",
-            ],
           }}
         />
       </Suspense>

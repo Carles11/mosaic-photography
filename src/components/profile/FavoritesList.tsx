@@ -15,8 +15,6 @@ import { useModal } from "@/context/modalContext/useModal";
 import styles from "./FavoritesList.module.css";
 import { supabase } from "@/lib/supabaseClient";
 import { useFavorites } from "@/context/FavoritesContext";
-import { useAuthSession } from "@/context/AuthSessionContext";
-import toast from "react-hot-toast";
 import { ImageData } from "@/types";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import { getAllS3Urls, getProgressiveZoomSrc } from "@/utils/imageResizingS3";
@@ -25,6 +23,7 @@ import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import Download from "yet-another-react-lightbox/plugins/download";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
@@ -51,43 +50,6 @@ export default function FavoritesList({
   const router = useRouter();
   const lastLightboxIndex = useRef<number | null>(null);
   const prevModal = useRef<string | null>(null);
-  const { user } = useAuthSession();
-
-  // SVG Download icon (Material style)
-  const DownloadIcon = () => (
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-      <rect width="22" height="22" rx="11" fill="rgba(244,211,94,0.10)" />
-      <path
-        d="M11 6.5v5m0 0-2.5-2.5m2.5 2.5 2.5-2.5M5.833 15.5h10.334"
-        stroke="#F4D35E"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-
-  const onDownloadClick = (slide: {
-    download?: { url: string; filename?: string };
-  }) => {
-    if (!user) {
-      toast.error("Please log in to download images.");
-      setTimeout(() => {
-        router.push("/auth/login");
-      }, 1200);
-      return;
-    }
-    if (slide.download?.url) {
-      const a = document.createElement("a");
-      a.href = slide.download.url;
-      a.download = slide.download.filename || "download.jpg";
-      a.target = "_blank";
-      a.rel = "noopener";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-  };
 
   // Memoize mapped favorite images for performance
   const mappedFavoriteImages = useMemo(() => {
@@ -102,6 +64,7 @@ export default function FavoritesList({
       setFavoriteImages([]);
       return;
     }
+
     setImagesLoading(true);
     try {
       const imageIds = Array.from(favorites);
@@ -115,6 +78,7 @@ export default function FavoritesList({
 
       if (error) {
         console.error("Error loading favorite images:", error);
+        // Optional: set error state and show UI feedback
         setImagesLoading(false);
         return;
       }
@@ -131,6 +95,7 @@ export default function FavoritesList({
       }
     } catch (error) {
       console.error("Error loading favorite images:", error);
+      // Optional: set error state and show UI feedback
     } finally {
       setImagesLoading(false);
     }
@@ -146,6 +111,7 @@ export default function FavoritesList({
     lastLightboxIndex.current = null;
   }, []);
 
+  // Close lightbox automatically if a modal opens
   useEffect(() => {
     if (currentModal && isLightboxOpen) {
       lastLightboxIndex.current = lightboxIndex;
@@ -158,6 +124,8 @@ export default function FavoritesList({
   }, [loadFavoriteImages]);
 
   useEffect(() => {
+    // Modal just closed: was open, now null/undefined
+    console.log({ prevModal: prevModal.current, currentModal });
     if (
       prevModal.current &&
       prevModal.current !== "addToCollection" &&
@@ -365,7 +333,7 @@ export default function FavoritesList({
               author: image.author,
               description: image.description,
               s3Progressive,
-              year: image.year ?? "",
+              year: image.year ?? "", // <-- ensure year is passed
               download:
                 image.filename && image.base_url
                   ? {
@@ -375,7 +343,7 @@ export default function FavoritesList({
                   : undefined,
             };
           })}
-          plugins={[Zoom]} // No Download plugin, use toolbar!
+          plugins={[Zoom, Download]}
           zoom={{
             maxZoomPixelRatio: 3,
             minZoom: 1,
@@ -387,7 +355,7 @@ export default function FavoritesList({
               const typedSlide = slide as {
                 src: string;
                 alt?: string;
-                year?: string | number;
+                year?: string | number; // <-- make year optional and string|number
                 width?: number;
                 height?: number;
                 id?: string;
@@ -488,12 +456,12 @@ export default function FavoritesList({
                       textAlign: "center",
                       color: "#fff",
                       fontSize: "1.04rem",
-                      padding: "16px 24px 64px 24px",
+                      padding: "16px 24px 64px 24px", // extra bottom padding!
                       background: "rgba(0,0,0,0.4)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
                       zIndex: 1001,
-                      maxHeight: "28vh",
+                      maxHeight: "28vh", // or "30vh"
                       overflowY: "auto",
                       boxSizing: "border-box",
                       pointerEvents: "auto",
@@ -508,7 +476,7 @@ export default function FavoritesList({
                       position: "fixed",
                       bottom: 20,
                       right: 20,
-                      zIndex: 2000,
+                      zIndex: 2000, // make sure it's above description
                       display: "flex",
                       gap: "10px",
                       pointerEvents: "auto",
@@ -533,42 +501,6 @@ export default function FavoritesList({
           }}
           on={{
             view: ({ index }) => setLightboxIndex(index),
-          }}
-          toolbar={{
-            buttons: [
-              <button
-                key="download"
-                title="Download"
-                className={styles.lightboxDownloadButton}
-                onClick={() => {
-                  const currentSlide = mappedFavoriteImages[lightboxIndex];
-                  if (currentSlide) {
-                    onDownloadClick({
-                      download:
-                        currentSlide.filename && currentSlide.base_url
-                          ? {
-                              url: `${currentSlide.base_url}/originals/${currentSlide.filename}`,
-                              filename: currentSlide.filename,
-                            }
-                          : undefined,
-                    });
-                  }
-                }}
-                aria-label="Download"
-                tabIndex={0}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#fff",
-                  marginRight: 8,
-                  fontSize: 14,
-                  cursor: "pointer",
-                }}
-              >
-                <DownloadIcon />
-              </button>,
-              "close",
-            ],
           }}
         />
       </Suspense>

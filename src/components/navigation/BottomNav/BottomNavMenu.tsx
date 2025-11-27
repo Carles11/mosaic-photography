@@ -72,18 +72,14 @@ const BottomNavMenu = ({
               </button>
               <Link
                 href="/profile"
-                className={`no-fancy-link ${styles.menuItem}`}
+                className={styles.menuItem}
                 onClick={onClose}
               >
                 {/* <span className={styles.menuIcon}>⦿</span> */}
                 <span className={styles.menuLabel}>Profile</span>
               </Link>
 
-              <Link
-                href="/faq"
-                className={`no-fancy-link ${styles.menuItem}`}
-                onClick={onClose}
-              >
+              <Link href="/faq" className={styles.menuItem} onClick={onClose}>
                 {/* <span className={styles.menuIcon}>❓</span> */}
                 <span className={styles.menuLabel}>FAQ</span>
               </Link>
@@ -133,11 +129,7 @@ const BottomNavMenu = ({
                 <span className={styles.menuLabel}>Login</span>
               </button>
 
-              <Link
-                href="/faq"
-                className={`no-fancy-link ${styles.menuItem}`}
-                onClick={onClose}
-              >
+              <Link href="/faq" className={styles.menuItem} onClick={onClose}>
                 {/* <span className={styles.menuIcon}>❓</span> */}
                 <span className={styles.menuLabel}>FAQ</span>
               </Link>
