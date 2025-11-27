@@ -142,7 +142,7 @@ export default function LoginForm({
           tabIndex={0}
           role="button"
         >
-          {useMagicLink ? "Use password instead" : "Use magic link instead"}
+          {useMagicLink ? "Use password instead" : "Use only email instead"}
         </a>
       </div>
 
