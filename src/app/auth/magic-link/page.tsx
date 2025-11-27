@@ -9,7 +9,7 @@ function MagicLinkContent() {
   return (
     <div>
       <h2 className={styles.formTitle}>Magic Link Login</h2>
-      <MagicLinkForm />
+      <MagicLinkForm redirectTo="/profile" />
       <div className={styles.authLinks}>
         <p>
           <Link href="/auth/login" className={styles.authLink}>
