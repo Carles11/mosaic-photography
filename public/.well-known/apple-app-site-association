@@ -7,8 +7,20 @@
         ],
         "components": [
           {
-            "/": "/*",
-            "comment": "Matches any URL with any path"
+            "/": "/",
+            "comment": "Home"
+          },
+          {
+            "/": "/profile/collections",
+            "comment": "User collections"
+          },
+          {
+            "/": "/auth",
+            "comment": "Auth main"
+          },
+          {
+            "/": "/auth/*",
+            "comment": "All subroutes under /auth"
           }
         ]
       }
