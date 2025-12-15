@@ -1,3 +1,4 @@
+/* Existing project styles (kept and extended) */
 .sectionHeader {
   display: flex;
   flex-direction: column;
@@ -17,5 +18,299 @@
 @media (max-width: 768px) {
   .sectionTitle {
     padding-left: 0;
+  }
+}
+
+/* New styles for PhotographerLinks component */
+
+/* Layout + typography */
+.container {
+  margin: 1.25rem 0;
+}
+
+.header {
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  margin: 0;
+  padding: 22px 0 0 0.4rem;
+}
+
+.subtitle {
+  margin: 0.25rem 0 0.75rem 0;
+  color: #4b5563;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+/* Grid for non-Amazon stores */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+/* Card styles */
+.card {
+  background: #ffffff;
+  border: 1px solid #e6e9ee;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: box-shadow 160ms ease, transform 160ms ease,
+    border-color 160ms ease;
+  display: block;
+}
+.card:hover,
+.card:focus-within {
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+  transform: translateY(-3px);
+  border-color: #dbe4ef;
+}
+
+/* Make the card focusable and visible for keyboard users */
+.cardLink:focus {
+  outline: none;
+}
+.cardLink:focus-visible {
+  box-shadow: 0 3px 10px rgba(59, 130, 246, 0.16);
+  border-radius: 6px;
+}
+
+/* Link wrapper inside card */
+.cardLink {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  align-items: flex-start;
+}
+
+/* Thumbnail area */
+.cardMedia {
+  flex: 0 0 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardImage {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #f7fafc;
+  display: block;
+}
+
+.cardPlaceholder {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  background: #fbfbfd;
+}
+
+/* Body of the card */
+.cardBody {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Heading: store name at left, badge at right */
+.cardHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.375rem;
+}
+
+/* Allow storeName to shrink and ellipsize instead of pushing the badge */
+.storeName {
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: #0f172a;
+  display: inline-block;
+  line-height: 1;
+  min-width: 0; /* allows flex child to shrink */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* keep store name to single line when space constrained */
+}
+
+/* Badge: no wrap, fixed internal padding, won't shrink */
+.itemBadge {
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 0.72rem;
+  padding: 0.12rem 0.5rem; /* increased horizontal padding so "print" fits */
+  border-radius: 999px;
+  text-transform: lowercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap; /* prevent label from wrapping into two lines */
+  flex-shrink: 0; /* do not allow badge to shrink */
+  line-height: 1;
+}
+
+/* Description limited to reasonable length in cards */
+.description {
+  margin: 0;
+  color: #4b5563;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  margin-bottom: 0.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Actions inside card (visual only; the whole card is a link) */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.visit {
+  background: transparent;
+  color: #1f2937;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border: none;
+  padding: 0;
+}
+
+.linkExternal {
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+/* Amazon previously had a separate UI; now we use a subtle modifier so layout stays unified */
+.amazon {
+  border-color: #f1f5f9;
+  background: #fbfbfd;
+}
+.amazon .storeName {
+  color: #374151;
+}
+.amazon .cardImage {
+  opacity: 0.95;
+  filter: saturate(0.92);
+}
+
+/* Small visual indicator for affiliate stores (subtle) */
+.amazon .itemBadge {
+  background: #fff7ed;
+  color: #b45309;
+}
+
+/* Keep the deprecated amazonSection rules (won't be used with the unified layout)
+   but leave them in place in case some pages still rely on previous markup */
+.amazonSection {
+  margin-top: 0.5rem;
+  border-top: 1px dashed #e6e9ee;
+  padding-top: 0.75rem;
+}
+
+.amazonToggle {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  background: transparent;
+  border: none;
+  color: #374151;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.95rem;
+}
+
+.amazonCount {
+  color: #6b7280;
+  font-weight: 500;
+  margin-left: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.amazonList {
+  list-style: none;
+  padding: 0.5rem 0 0 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.amazonItem {
+  background: #fafafa;
+  border: 1px solid #f1f5f9;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+.amazonItem a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* footer / learn more area */
+.more {
+  margin-top: 0.75rem;
+}
+
+.learnMoreTitle {
+  margin: 0;
+}
+
+.learnMore {
+  margin: 0.25rem 0 0 0;
+}
+
+/* Accessibility helper: make storeName wrap gracefully on small cards */
+.storeName,
+.itemBadge {
+  word-break: break-word;
+}
+
+/* Small screens adjustments */
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .cardLink {
+    gap: 0.5rem;
+  }
+  .cardMedia {
+    flex: 0 0 56px;
+  }
+  .cardImage {
+    width: 56px;
+    height: 56px;
+  }
+  .cardPlaceholder {
+    width: 56px;
+    height: 56px;
+  }
+
+  /* Slightly smaller badge on narrow screens */
+  .itemBadge {
+    padding: 0.08rem 0.38rem;
+    font-size: 0.68rem;
+  }
+
+  .storeName {
+    font-size: 0.95rem;
   }
 }
