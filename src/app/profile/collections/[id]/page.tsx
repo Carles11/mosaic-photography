@@ -353,7 +353,6 @@ export default function CollectionView() {
 
           collectionFolder?.file(fileName, blob);
           successCount++;
-          // update progress after each successful download
         } catch (error) {
           failCount++;
           const fileName = `${String(index + 1).padStart(3, "0")}_${(
@@ -365,10 +364,11 @@ export default function CollectionView() {
           );
         } finally {
           // Update progress state for UI
-          setExportProgress({
+          const progress = {
             current: index + 1,
             total: collection.images.length,
-          });
+          };
+          setExportProgress(progress);
         }
       }
 
@@ -427,7 +427,6 @@ export default function CollectionView() {
         (metadata) => {
           // metadata.percent is JSZip internal percent for generation step
           // Map this into exportProgress as a finalization step if you want; we keep it simple.
-          // setExportProgress(prev => prev ? ({...prev}) : prev)
         }
       );
 
@@ -441,13 +440,14 @@ export default function CollectionView() {
 
       // Trigger GTM event RIGHT BEFORE the actual download link click,
       // as requested: event name ends with "Clicked".
-      sendGTMEvent({
+      const eventPayload = {
         event: "exportCollectionZipClicked",
         value: collectionId,
         totalImages: collection.images.length,
         successfullyDownloaded: successCount,
         failedDownloads: failCount,
-      });
+      };
+      sendGTMEvent(eventPayload);
 
       document.body.appendChild(link);
       link.click();
@@ -477,10 +477,11 @@ export default function CollectionView() {
         duration: 5000,
       });
       // Optionally send a GTM event for failure as well
-      sendGTMEvent({
+      const failPayload = {
         event: "exportCollectionZipFailedClicked",
         value: collectionId,
-      });
+      };
+      sendGTMEvent(failPayload);
     } finally {
       setIsExporting(false);
       setExportProgress(null);
