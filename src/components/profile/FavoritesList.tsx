@@ -26,6 +26,7 @@ import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import { sendGTMEvent } from "@next/third-parties/google";
+import DownloadImageButton from "@/components/buttons/DownloadImageButton";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
@@ -67,32 +68,6 @@ export default function FavoritesList({
       />
     </svg>
   );
-
-  const onDownloadClick = (slide: {
-    download?: { url: string; filename?: string };
-  }) => {
-    sendGTMEvent({
-      event: "downloadInFavoritesClicked",
-      value: slide.download?.url,
-    });
-    if (!user) {
-      toast.error("Please log in to download images.");
-      setTimeout(() => {
-        router.push("/auth/login");
-      }, 1200);
-      return;
-    }
-    if (slide.download?.url) {
-      const a = document.createElement("a");
-      a.href = slide.download.url;
-      a.download = slide.download.filename || "download.jpg";
-      a.target = "_blank";
-      a.rel = "noopener";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-  };
 
   // Memoize mapped favorite images for performance
   const mappedFavoriteImages = useMemo(() => {
@@ -252,7 +227,11 @@ export default function FavoritesList({
                   style={{ cursor: "pointer", aspectRatio: image.aspectRatio }}
                 >
                   <ImageWrapper
-                    image={image}
+                    image={{
+                      ...image,
+                      year:
+                        typeof image.year === "number" ? image.year : undefined,
+                    }}
                     onLoginRequired={() => {}}
                     sizes={image.sizes}
                     width={image.width}
@@ -541,37 +520,98 @@ export default function FavoritesList({
           }}
           toolbar={{
             buttons: [
-              <button
-                key="download"
-                title="Download"
-                className={styles.lightboxDownloadButton}
-                onClick={() => {
-                  const currentSlide = mappedFavoriteImages[lightboxIndex];
-                  if (currentSlide) {
-                    onDownloadClick({
-                      download:
-                        currentSlide.filename && currentSlide.base_url
-                          ? {
-                              url: `${currentSlide.base_url}/originals/${currentSlide.filename}`,
-                              filename: currentSlide.filename,
-                            }
-                          : undefined,
-                    });
-                  }
-                }}
-                aria-label="Download"
-                tabIndex={0}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#fff",
-                  marginRight: 8,
-                  fontSize: 14,
-                  cursor: "pointer",
-                }}
-              >
-                <DownloadIcon />
-              </button>,
+              // Use DownloadImageButton in the toolbar for consistent behavior.
+              (() => {
+                const currentSlide = mappedFavoriteImages[lightboxIndex];
+                const downloadUrl =
+                  currentSlide?.filename && currentSlide?.base_url
+                    ? `${currentSlide.base_url}/originals/${currentSlide.filename}`
+                    : null;
+
+                // No download available -> disabled icon
+                if (!downloadUrl) {
+                  return (
+                    <button
+                      key="download"
+                      title="Download"
+                      aria-label="Download"
+                      className={styles.lightboxDownloadButton}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#fff",
+                        marginRight: 8,
+                        fontSize: 14,
+                        cursor: "not-allowed",
+                        opacity: 0.5,
+                      }}
+                      disabled
+                    >
+                      <DownloadIcon />
+                    </button>
+                  );
+                }
+
+                // Not logged in -> prompt login and record attempted download
+                if (!user) {
+                  return (
+                    <button
+                      key="download"
+                      title="Download"
+                      className={styles.lightboxDownloadButton}
+                      onClick={() => {
+                        toast.error("Please log in to download images.");
+                        setTimeout(() => {
+                          router.push("/auth/login");
+                        }, 1200);
+                        sendGTMEvent({
+                          event: "downloadInFavoritesClicked",
+                          value: downloadUrl,
+                        });
+                      }}
+                      aria-label="Download"
+                      tabIndex={0}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#fff",
+                        marginRight: 8,
+                        fontSize: 14,
+                        cursor: "pointer",
+                      }}
+                    >
+                      <DownloadIcon />
+                    </button>
+                  );
+                }
+
+                // Logged in -> use fetch-based downloader component
+                return (
+                  <DownloadImageButton
+                    key="download"
+                    url={downloadUrl}
+                    filename={currentSlide?.filename}
+                    className={styles.lightboxDownloadButton}
+                    onStart={() => {
+                      sendGTMEvent({
+                        event: "downloadInFavoritesClicked",
+                        value: downloadUrl,
+                      });
+                    }}
+                    onError={(err: Error) => {
+                      console.error(
+                        "Download failed, fallback will open in new tab",
+                        err
+                      );
+                      toast.error(
+                        "Could not download file directly — opening in a new tab."
+                      );
+                    }}
+                  >
+                    <DownloadIcon />
+                  </DownloadImageButton>
+                );
+              })(),
               "close",
             ],
           }}
