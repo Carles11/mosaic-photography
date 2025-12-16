@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { getMosaicImageProps } from "@/utils/mosaicLayout";
 import styles from "./galleryVirtualizer.module.css";
 import { sendGTMEvent } from "@next/third-parties/google";
+import DownloadImageButton from "@/components/buttons/DownloadImageButton";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
@@ -132,6 +133,10 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     </svg>
   );
 
+  /**
+   * Keep a backwards-compatible handler in case other parts of the app call it.
+   * Prefer using the DownloadImageButton component for robust downloads (fetch -> blob -> save).
+   */
   const onDownloadClick = (slide: {
     download?: { url: string; filename?: string };
   }) => {
@@ -143,12 +148,12 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
       handleLoginRequired();
       return;
     }
+    // Fallback: create an anchor to trigger browser download/open
     if (slide.download?.url) {
       const a = document.createElement("a");
       a.href = slide.download.url;
       a.download = slide.download.filename || "download.jpg";
-      a.target = "_blank";
-      a.rel = "noopener";
+      // do not set target when we want real download; target=_blank was previously used but not necessary
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -317,49 +322,99 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
           }}
           toolbar={{
             buttons: [
-              <button
-                key="download"
-                title="Download"
-                className={styles.lightboxDownloadButton}
-                onClick={() => {
-                  if (!user) {
-                    handleLoginRequired();
-                    return;
-                  }
-                  const currentSlide = images[lightboxIndex];
-                  if (currentSlide?.filename && currentSlide?.base_url) {
-                    const a = document.createElement("a");
-                    a.href = `${currentSlide.base_url}/originals/${currentSlide.filename}`;
-                    a.download = currentSlide.filename || "download.jpg";
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    if (currentSlide) {
-                      onDownloadClick({
-                        download:
-                          currentSlide.filename && currentSlide.base_url
-                            ? {
-                                url: `${currentSlide.base_url}/originals/${currentSlide.filename}`,
-                                filename: currentSlide.filename,
-                              }
-                            : undefined,
+              // Replace inline anchor logic with the reusable DownloadImageButton.
+              // Render a simple login prompt button when user is not authenticated.
+              (() => {
+                const currentSlide = images[lightboxIndex];
+                const downloadUrl =
+                  currentSlide?.filename && currentSlide?.base_url
+                    ? `${currentSlide.base_url}/originals/${currentSlide.filename}`
+                    : null;
+
+                // If there is no downloadable URL, render the icon but disabled.
+                if (!downloadUrl) {
+                  return (
+                    <button
+                      key="download"
+                      title="Download"
+                      aria-label="Download"
+                      className={styles.lightboxDownloadButton}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#fff",
+                        marginRight: 8,
+                        fontSize: 14,
+                        cursor: "not-allowed",
+                        opacity: 0.5,
+                      }}
+                      disabled
+                    >
+                      <DownloadIcon />
+                    </button>
+                  );
+                }
+
+                // If user is not logged in, render a button that triggers login flow.
+                if (!user) {
+                  return (
+                    <button
+                      key="download"
+                      title="Download"
+                      className={styles.lightboxDownloadButton}
+                      onClick={() => {
+                        handleLoginRequired();
+                        // Track attempt if you want:
+                        sendGTMEvent({
+                          event: "downloadInGalleryClicked",
+                          value: downloadUrl,
+                        });
+                      }}
+                      aria-label="Download"
+                      tabIndex={0}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        color: "#fff",
+                        marginRight: 8,
+                        fontSize: 14,
+                        cursor: "pointer",
+                      }}
+                    >
+                      <DownloadIcon />
+                    </button>
+                  );
+                }
+
+                // User is logged in and download URL exists -> show the fetch-based downloader.
+                return (
+                  <DownloadImageButton
+                    key="download"
+                    url={downloadUrl}
+                    filename={currentSlide?.filename}
+                    className={styles.lightboxDownloadButton}
+                    onStart={() => {
+                      // Push GTM event before starting the download
+                      sendGTMEvent({
+                        event: "downloadInGalleryClicked",
+                        value: downloadUrl,
                       });
-                    }
-                  }
-                }}
-                aria-label="Download"
-                tabIndex={0}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "#fff",
-                  marginRight: 8,
-                  fontSize: 14,
-                  cursor: "pointer",
-                }}
-              >
-                <DownloadIcon />
-              </button>,
+                    }}
+                    onError={(err: Error) => {
+                      // Optional: surface toasts or logs
+                      console.error(
+                        "Download failed, fallback will open in new tab",
+                        err
+                      );
+                      toast.error(
+                        "Could not download file directly — opening in a new tab."
+                      );
+                    }}
+                  >
+                    <DownloadIcon />
+                  </DownloadImageButton>
+                );
+              })(),
               "close",
             ],
           }}
