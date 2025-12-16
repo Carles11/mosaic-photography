@@ -10,6 +10,7 @@ import { useAuthSession } from "@/context/AuthSessionContext";
 import { CollectionWithImages } from "@/types";
 import { useModal } from "@/context/modalContext/useModal";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 interface CollectionImageData {
   id: string;
@@ -30,7 +31,6 @@ interface CollectionImageData {
   created_at?: string;
 }
 
-// Define a more complete type for collection images
 interface CollectionImage {
   favorite_id: number;
   image_id: string;
@@ -71,6 +71,12 @@ export default function CollectionView() {
   );
   const { open } = useModal();
 
+  // New state to track export progress
+  const [exportProgress, setExportProgress] = useState<{
+    current: number;
+    total: number;
+  } | null>(null);
+
   const collectionId = params?.id as string;
   const isEmbedded = searchParams?.get("embed") === "true";
 
@@ -85,7 +91,6 @@ export default function CollectionView() {
     setError(null);
 
     try {
-      // Get collection details
       const { data: collectionData, error: collectionError } = await supabase
         .from("collections")
         .select("*")
@@ -99,9 +104,6 @@ export default function CollectionView() {
         return;
       }
 
-      // Get collection images with details
-      // We need to handle this differently because favorites.image_id is TEXT (like "4960")
-      // and we need to match it with images.id
       const { data: collectionFavoritesData, error: collectionFavoritesError } =
         await supabase
           .from("collection_favorites")
@@ -121,7 +123,6 @@ export default function CollectionView() {
 
       let imagesData: CollectionImageData[] = [];
       if (collectionFavoritesData && collectionFavoritesData.length > 0) {
-        // Get favorites to get image_ids
         const favoriteIds = collectionFavoritesData.map(
           (item) => item.favorite_id
         );
@@ -132,7 +133,6 @@ export default function CollectionView() {
 
         if (favoritesError) {
           console.error("Error loading favorites:", favoritesError);
-          // If we can't access favorites (anonymous user), still show empty collection
           setCollection({
             ...collectionData,
             images: [],
@@ -142,7 +142,6 @@ export default function CollectionView() {
         }
 
         if (favoritesData && favoritesData.length > 0) {
-          // Get image details from images_resize table
           const imageIds = favoritesData.map((fav) => fav.image_id);
           const { data: imagesTableData, error: imagesError } = await supabase
             .from("images_resize")
@@ -158,7 +157,6 @@ export default function CollectionView() {
             return;
           }
 
-          // Combine the data
           imagesData = collectionFavoritesData
             .map((cfItem) => {
               const favorite = favoritesData.find(
@@ -168,7 +166,6 @@ export default function CollectionView() {
                 ? imagesTableData?.find((img) => img.id === favorite.image_id)
                 : null;
 
-              // Construct URL from base_url and filename
               const imageUrl =
                 image?.base_url && image?.filename
                   ? `${image.base_url}/originals/${image.filename}`
@@ -195,12 +192,11 @@ export default function CollectionView() {
             })
             .filter(
               (item) => item.url !== "/favicons/android-chrome-512x512.png"
-            ); // Filter out items where image wasn't found
+            );
         }
       }
 
       if (imagesData.length === 0) {
-        // Collection with no images or access issues
         setCollection({
           ...collectionData,
           images: [],
@@ -209,7 +205,6 @@ export default function CollectionView() {
         return;
       }
 
-      // Transform the data
       const images: CollectionImage[] = imagesData.map(
         (item: CollectionImageData) => ({
           favorite_id: item.favorite_id,
@@ -245,7 +240,6 @@ export default function CollectionView() {
   }, [collectionId, loadCollection]);
 
   useEffect(() => {
-    // Detect mobile device
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768 || "ontouchstart" in window);
     };
@@ -273,7 +267,6 @@ export default function CollectionView() {
         return;
       }
 
-      // Reload collection
       setSelectedImages(new Set());
       await loadCollection();
     } catch (error) {
@@ -296,8 +289,15 @@ export default function CollectionView() {
 
     try {
       setIsExporting(true);
+      setExportProgress({ current: 0, total: collection.images.length });
 
-      // First, let's try to create a proper ZIP with image downloads
+      // Send GTM event that user initiated an export action (optional)
+      sendGTMEvent({
+        event: "exportCollectionZipInitiatedClicked",
+        value: collectionId,
+        totalImages: collection.images.length,
+      });
+
       const zip = new JSZip();
       const collectionFolder = zip.folder(
         collection.name.replace(/[^a-z0-9]/gi, "_")
@@ -306,11 +306,9 @@ export default function CollectionView() {
       let successCount = 0;
       let failCount = 0;
 
-      // Download all images and add them to the ZIP
       for (let index = 0; index < collection.images.length; index++) {
         const image = collection.images[index];
         try {
-          // Try to fetch the image
           const response = await fetch(image.image_url, {
             mode: "cors",
             credentials: "omit",
@@ -326,45 +324,61 @@ export default function CollectionView() {
             throw new Error("Empty response");
           }
 
-          const fileExtension =
-            image.image_url.split(".").pop()?.toLowerCase() || "jpg";
+          // Try to get a sensible extension from URL or from content-type
+          const maybeExtFromUrl = image.image_url
+            .split("?")[0]
+            .split(".")
+            .pop()
+            ?.toLowerCase();
+          const contentType = response.headers.get("content-type") || "";
+          const extFromType =
+            contentType === "image/jpeg"
+              ? "jpg"
+              : contentType === "image/png"
+              ? "png"
+              : contentType === "image/tiff"
+              ? "tiff"
+              : contentType === "image/webp"
+              ? "webp"
+              : maybeExtFromUrl || "jpg";
+
+          const safeTitle = (image.image_title || "image").replace(
+            /[^a-z0-9]/gi,
+            "_"
+          );
           const fileName = `${String(index + 1).padStart(
             3,
             "0"
-          )}_${image.image_title.replace(/[^a-z0-9]/gi, "_")}.${fileExtension}`;
+          )}_${safeTitle}.${extFromType}`;
 
           collectionFolder?.file(fileName, blob);
           successCount++;
-          console.log(
-            `✓ Downloaded: ${image.image_title} (${blob.size} bytes)`
-          );
+          // update progress after each successful download
         } catch (error) {
           failCount++;
-          console.log({ error });
-          // Add a text file with the image URL as fallback
-          const fileName = `${String(index + 1).padStart(
-            3,
-            "0"
-          )}_${image.image_title.replace(/[^a-z0-9]/gi, "_")}_URL.txt`;
+          const fileName = `${String(index + 1).padStart(3, "0")}_${(
+            image.image_title || "image"
+          ).replace(/[^a-z0-9]/gi, "_")}_URL.txt`;
           collectionFolder?.file(
             fileName,
             `Image URL: ${image.image_url}\nTitle: ${image.image_title}\nAuthor: ${image.image_author}`
           );
+        } finally {
+          // Update progress state for UI
+          setExportProgress({
+            current: index + 1,
+            total: collection.images.length,
+          });
         }
       }
 
-      // If no images were successfully downloaded, show alternative options
       if (successCount === 0) {
-        setIsExporting(false);
-        // Use a toast to ask for user choice instead of confirm
         toast(
           "Unable to download images directly due to CORS restrictions. Creating a ZIP with image URLs only.",
           { icon: "⚠️", duration: 5000 }
         );
-        // Continue with URL-only ZIP below
       }
 
-      // Create a branded Mosaic.photography text file with all image information
       const now = new Date();
       const exportDate = now.toLocaleDateString("en-US", {
         year: "numeric",
@@ -401,16 +415,22 @@ export default function CollectionView() {
 
       collectionFolder?.file("_Mosaic_Collection_Info.txt", infoText);
 
-      // Generate the ZIP file
-      const zipBlob = await zip.generateAsync({
-        type: "blob",
-        compression: "DEFLATE",
-        compressionOptions: {
-          level: 6,
+      const zipBlob = await zip.generateAsync(
+        {
+          type: "blob",
+          compression: "DEFLATE",
+          compressionOptions: {
+            level: 6,
+          },
         },
-      });
+        // optional update callback to show internal JSZip progress (if desired)
+        (metadata) => {
+          // metadata.percent is JSZip internal percent for generation step
+          // Map this into exportProgress as a finalization step if you want; we keep it simple.
+          // setExportProgress(prev => prev ? ({...prev}) : prev)
+        }
+      );
 
-      // Create download link
       const zipFileName = `${collection.name.replace(
         /[^a-z0-9]/gi,
         "_"
@@ -418,11 +438,21 @@ export default function CollectionView() {
       const link = document.createElement("a");
       link.href = URL.createObjectURL(zipBlob);
       link.download = zipFileName;
+
+      // Trigger GTM event RIGHT BEFORE the actual download link click,
+      // as requested: event name ends with "Clicked".
+      sendGTMEvent({
+        event: "exportCollectionZipClicked",
+        value: collectionId,
+        totalImages: collection.images.length,
+        successfullyDownloaded: successCount,
+        failedDownloads: failCount,
+      });
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
-      // Clean up
       URL.revokeObjectURL(link.href);
 
       if (successCount === collection.images.length) {
@@ -432,7 +462,7 @@ export default function CollectionView() {
         );
       } else if (successCount > 0) {
         toast(
-          `Exported ${successCount} images successfully. ${failCount} images failed due to CORS restrictions. Check the _Image_URLs_and_Info.txt file for missing images.`,
+          `Exported ${successCount} images successfully. ${failCount} images failed due to CORS restrictions. Check the _Mosaic_Collection_Info.txt file for details.`,
           { icon: "⚠️", duration: 5000 }
         );
       } else {
@@ -446,8 +476,14 @@ export default function CollectionView() {
       toast.error("Error creating ZIP file. Please try again.", {
         duration: 5000,
       });
+      // Optionally send a GTM event for failure as well
+      sendGTMEvent({
+        event: "exportCollectionZipFailedClicked",
+        value: collectionId,
+      });
     } finally {
       setIsExporting(false);
+      setExportProgress(null);
     }
   };
 
@@ -456,13 +492,11 @@ export default function CollectionView() {
     setDraggedItem(favoriteId);
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/plain", favoriteId.toString());
-    // Add some visual feedback
     const target = e.currentTarget as HTMLElement;
     target.classList.add(styles.dragging);
   };
 
   const handleDragEnd = (e: React.DragEvent) => {
-    // Always reset visual state
     const target = e.currentTarget as HTMLElement;
     target.classList.remove(styles.dragging);
     setDraggedItem(null);
@@ -475,7 +509,6 @@ export default function CollectionView() {
     e.dataTransfer.dropEffect = "move";
     if (favoriteId !== draggedItem) {
       setDragOverItem(favoriteId);
-      // Determine before/after
       const targetElement = e.currentTarget as HTMLElement;
       const rect = targetElement.getBoundingClientRect();
       let isAfter = false;
@@ -488,7 +521,6 @@ export default function CollectionView() {
     }
   };
 
-  // Touch event handlers for mobile drag and drop
   const handleTouchStart = (e: React.TouchEvent, favoriteId: number) => {
     if (!isReordering || !isMobile) return;
 
@@ -496,11 +528,9 @@ export default function CollectionView() {
     setTouchStartTime(Date.now());
     setTouchStartPos({ x: touch.clientX, y: touch.clientY });
 
-    // Start drag after a small delay to differentiate from scrolling
     setTimeout(() => {
       if (Date.now() - touchStartTime >= 200) {
         setDraggedItem(favoriteId);
-        // Add visual feedback
         const target = e.currentTarget as HTMLElement;
         target.style.opacity = "0.5";
         target.style.transform = "scale(1.05)";
@@ -512,7 +542,7 @@ export default function CollectionView() {
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isReordering || !isMobile || !draggedItem) return;
 
-    e.preventDefault(); // Prevent scrolling while dragging
+    e.preventDefault();
 
     const touch = e.touches[0];
     const elementBelow = document.elementFromPoint(
@@ -520,7 +550,6 @@ export default function CollectionView() {
       touch.clientY
     );
 
-    // Find the closest image card
     const imageCard = elementBelow?.closest(
       "[data-favorite-id]"
     ) as HTMLElement;
@@ -541,7 +570,6 @@ export default function CollectionView() {
     target.style.zIndex = "auto";
 
     if (draggedItem && dragOverItem && draggedItem !== dragOverItem) {
-      // Perform the drop operation
       handleDrop(e as unknown as React.DragEvent<HTMLDivElement>, dragOverItem);
     }
 
@@ -550,7 +578,6 @@ export default function CollectionView() {
     setTouchStartTime(0);
   };
 
-  // Swipe gesture for quick selection on mobile
   const handleSwipeGesture = (e: React.TouchEvent, favoriteId: number) => {
     if (isReordering || !isMobile) return;
 
@@ -559,12 +586,10 @@ export default function CollectionView() {
     const deltaY = Math.abs(touch.clientY - touchStartPos.y);
     const swipeTime = Date.now() - touchStartTime;
 
-    // Detect horizontal swipe (at least 50px horizontal, less than 30px vertical, under 300ms)
     if (Math.abs(deltaX) > 50 && deltaY < 30 && swipeTime < 300) {
       e.preventDefault();
       handleImageSelect(favoriteId);
 
-      // Add haptic feedback if available
       if ("vibrate" in navigator) {
         navigator.vibrate(50);
       }
@@ -573,7 +598,6 @@ export default function CollectionView() {
 
   const handleDragLeave = (e: React.DragEvent) => {
     if (!isReordering) return;
-    // Only clear dragOverItem if we're leaving the container entirely
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     const x = e.clientX;
     const y = e.clientY;
@@ -588,7 +612,6 @@ export default function CollectionView() {
     e.preventDefault();
     setDragOverItem(null);
     setDropPosition(null);
-    // Remove dragging class from all image cards
     document.querySelectorAll(`.${styles.dragging}`).forEach((el) => {
       el.classList.remove(styles.dragging);
     });
@@ -597,7 +620,6 @@ export default function CollectionView() {
       return;
     }
     try {
-      // Find current positions
       const draggedIndex = collection.images.findIndex(
         (img) => img.favorite_id === draggedItem
       );
@@ -605,23 +627,18 @@ export default function CollectionView() {
         (img) => img.favorite_id === targetFavoriteId
       );
       if (draggedIndex === -1 || targetIndex === -1) return;
-      // Determine before/after
       let insertIndex = targetIndex;
       if (dropPosition === "after") insertIndex = targetIndex + 1;
-      // Adjust for removing the dragged item if it comes before the insert point
       let adjustedIndex = insertIndex;
       if (draggedIndex < insertIndex) adjustedIndex--;
-      // Create new order
       const newImages = [...collection.images];
       const [draggedImage] = newImages.splice(draggedIndex, 1);
       newImages.splice(adjustedIndex, 0, draggedImage);
-      // Update display_order in database
       const updates = newImages.map((image, index) => ({
         collection_id: collection.id,
         favorite_id: image.favorite_id,
         display_order: index,
       }));
-      // Batch update display orders
       for (const update of updates) {
         await supabase
           .from("collection_favorites")
@@ -629,7 +646,6 @@ export default function CollectionView() {
           .eq("collection_id", update.collection_id)
           .eq("favorite_id", update.favorite_id);
       }
-      // Reload collection to reflect new order
       await loadCollection();
     } catch (error) {
       console.error("Error reordering images:", error);
@@ -735,7 +751,6 @@ export default function CollectionView() {
             </div>
           </div>
 
-          {/* Action buttons */}
           {collection.user_id === user?.id && (
             <div className={styles.actions}>
               {selectedImages.size > 0 && (
@@ -765,19 +780,74 @@ export default function CollectionView() {
               >
                 Share Collection
               </button>
-              <button
-                onClick={handleExportZip}
-                className={styles.exportButton}
-                disabled={isExporting}
+
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 8,
+                  alignItems: "flex-end",
+                }}
               >
-                {isExporting ? "Creating ZIP..." : "Export as ZIP"}
-              </button>
+                <button
+                  onClick={handleExportZip}
+                  className={styles.exportButton}
+                  disabled={isExporting}
+                >
+                  {isExporting
+                    ? exportProgress
+                      ? `Creating ZIP... (${exportProgress.current}/${exportProgress.total})`
+                      : "Creating ZIP..."
+                    : "Export as ZIP"}
+                </button>
+
+                {/* Progress indicator */}
+                {isExporting && exportProgress && (
+                  <div
+                    style={{
+                      width: 220,
+                      background: "rgba(255,255,255,0.08)",
+                      borderRadius: 6,
+                      padding: 4,
+                      boxSizing: "border-box",
+                    }}
+                    aria-hidden
+                  >
+                    <div
+                      style={{
+                        height: 8,
+                        width: "100%",
+                        background: "rgba(0,0,0,0.12)",
+                        borderRadius: 4,
+                        overflow: "hidden",
+                      }}
+                    >
+                      <div
+                        style={{
+                          height: "100%",
+                          width: `${Math.round(
+                            (exportProgress.current / exportProgress.total) *
+                              100
+                          )}%`,
+                          background: "#F4D35E",
+                          transition: "width 200ms linear",
+                        }}
+                      />
+                    </div>
+                    <div style={{ fontSize: 12, color: "#fff", marginTop: 6 }}>
+                      {Math.round(
+                        (exportProgress.current / exportProgress.total) * 100
+                      )}{" "}
+                      % — {exportProgress.current}/{exportProgress.total}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
       )}
 
-      {/* Collection Info for Embedded View */}
       {isEmbedded && (
         <div className={styles.collectionInfo}>
           <h1 className={styles.title}>{collection.name}</h1>
@@ -787,7 +857,6 @@ export default function CollectionView() {
         </div>
       )}
 
-      {/* Images Grid */}
       {collection.images.length === 0 ? (
         <div className={styles.emptyState}>
           <div className={styles.emptyIcon}>📷</div>
@@ -796,7 +865,6 @@ export default function CollectionView() {
         </div>
       ) : (
         <>
-          {/* Mobile reordering instructions */}
           {isReordering && isMobile && (
             <div className={styles.mobileInstructions}>
               <p>
