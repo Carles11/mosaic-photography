@@ -1,11 +1,12 @@
+﻿import React from "react";
 import type { Metadata } from "next";
 import { tradeGothic } from "./fonts";
 import { headers } from "next/headers";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
-import Script from "next/script";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
 import ClientLayout from "@/components/layouts/ClientLayout";
 import ClientProviders from "@/context/main/ClientProviders";
+import AnalyticsLoader from "@/components/cookieConsent/analytics/AnalyticsLoader";
 import criticalCSS from "../critical-above-the-fold.css?raw";
 import baseCSS from "./globals.css?raw";
 
@@ -33,103 +34,6 @@ export const metadata: Metadata = {
   ],
   description:
     "Discover Mosaic's curated gallery of public domain nude photography, celebrating the timeless beauty of the human form through the lens of legendary photographers.",
-  keywords: [
-    "public domain nude photography",
-    "public domain Vintage nude photography",
-    "public domain art",
-    "public domain nudes",
-    "nude photography",
-    "vintage nudes",
-    "nude art",
-    "free images art",
-    "free art",
-    "vintage nude photography ",
-    "vintage nude photography public domain",
-    "vintage art photography",
-    "classic nude art",
-    "retro nude photography",
-    "historical nude photos",
-    "old photography gallery",
-    "antique nude images",
-    "artistic nude photo archive",
-    "museum quality nude prints",
-    "curated nude art gallery",
-    "rare nude photography",
-    "public domain nude art",
-    "timeless nude art gallery",
-    "public domain",
-    "copyright-free",
-    "royalty-free",
-    "free use images",
-    "commercial use",
-    "free to use photography",
-    "open access photography",
-    "no copyright photography",
-    "unrestricted use images",
-    "free stock photos",
-    "non-copyrighted",
-    "creative commons zero",
-    "CC0 images",
-    "open license",
-    "free distribution images",
-    "free for personal and commercial use",
-    "free art images",
-    "out of copyright images",
-    "free cultural works",
-    "commons images",
-    "public domain art",
-    "Edward Weston ",
-    "Baron Wilhelm von Gloeden ",
-    "Fred Holland Day",
-    "Eadweard Muybridge ",
-    "Alfred Stieglitz",
-    "Robert Demachy",
-    "Gaudenzio Marconi",
-    "Eugene Durieu",
-    "Felix Jacques Moulin",
-    "Wilhelm von Plüschow",
-    "Clarence Hudson White",
-    "collectors of vintage nude art",
-    "fine art nude enthusiasts",
-    "photography history lovers",
-    "academic nude photo resources",
-    "iconic nude photographer archive",
-    "inspiration for artists nude poses",
-    "free vintage nude photo downloads",
-    "order vintage nude prints online",
-    "purchase classic nude art",
-    "printable vintage nudes",
-    "license free nude images",
-    "royalty-free vintage nude photos",
-    "high-resolution nude art download",
-    "film nude photography",
-    "soft focus nude portraits",
-    "hand-tinted nude photographs",
-    "glass plate nude negatives",
-    "pictorialist nude photography",
-    "natural light nude photography",
-    "Akt foto",
-    "Aktfotografie",
-    "klassische Aktfotografie ",
-    "Vintage Aktfotografie ",
-    "ästhetische Aktfotos gemeinfrei",
-    "Aktfotografie Schwarzweiß gemeinfrei",
-    "historische Aktfotografie ",
-    "Platinprint Aktfotografie gemeinfrei",
-    "zeitlose Aktfotografie gemeinfrei",
-    "Galerie-Aktfotografie gemeinfrei",
-    "Körperstudie Fotografie gemeinfrei",
-    "fotografía artística de desnudos dominio público",
-    "fotografía de desnudos clásico dominio público",
-    "fotografía vintage de desnudos dominio público",
-    "retratos de desnudos en dominio público",
-    "galería de desnudos vintage dominio público",
-    "daguerrotipos desnudos dominio público",
-    "colección de desnudos históricos dominio público",
-    "descargar fotos de desnudos vintage dominio público",
-    "impresiones artísticas de desnudos dominio público",
-    "escaneo de fotos desnudas vintage en alta calidad",
-  ],
   icons: {
     icon: [
       { rel: "icon", url: "/favicons/favicon.ico" },
@@ -181,7 +85,7 @@ export const viewport = {
 
 type RootLayoutProps = { children: React.ReactNode };
 
-async function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
   // SSR theme from x-theme header (set in middleware)
   const hdrs = await headers();
   const theme = hdrs.get("x-theme") || "light";
@@ -247,33 +151,12 @@ async function RootLayout({ children }: RootLayoutProps) {
             logo: "https://www.mosaic.photography/images/logo.png",
           }}
         />
-        {/* GTM loaded unconditionally, no consent logic */}
-        <Script
-          id="gtm"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-N74Q9JC5');`,
-          }}
-        />
-        <Script
-          id="clarity"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `(function(c,l,a,r,i,t,y){
-              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";
-              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-            })(window, document, "clarity", "script", "ttu5c2if1l");`,
-          }}
-        />
+        {/* GTM and Clarity are now loaded client-side only via AnalyticsLoader when consent is granted */}
       </head>
       <body className="font-trade-gothic">
         <NonCriticalCSSLoader />
         <ClientProviders>
+          <AnalyticsLoader />
           <main style={{ flex: 1 }}>
             <ClientLayout>{children}</ClientLayout>
           </main>
@@ -282,5 +165,3 @@ async function RootLayout({ children }: RootLayoutProps) {
     </html>
   );
 }
-
-export default RootLayout;

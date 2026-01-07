@@ -56,7 +56,8 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self';",
-              "img-src 'self' data: https://cdn.mosaic.photography https://storage.ko-fi.com https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms;",
+              // allow clarity pixel (c.clarity.ms) and the Bing proxy (c.bing.com)
+              "img-src 'self' data: https://cdn.mosaic.photography https://storage.ko-fi.com https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://c.clarity.ms https://c.bing.com;",
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https:;",
               "style-src 'self' 'unsafe-inline' https:;",
               "font-src 'self' data: https:;",
@@ -78,7 +79,9 @@ const nextConfig: NextConfig = {
                 "https://region8.google-analytics.com",
                 "https://region9.google-analytics.com",
                 "https://region10.google-analytics.com",
-                "https://www.clarity.ms;",
+                // allow clarity collection endpoint
+                "https://www.clarity.ms",
+                "https://z.clarity.ms;",
               ].join(" "),
             ].join(" "),
           },

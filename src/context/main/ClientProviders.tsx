@@ -8,6 +8,7 @@ import { FavoritesProvider } from "@/context/FavoritesContext";
 import { CommentsProvider } from "@/context/CommentsContext";
 import { FiltersProvider } from "@/context/settingsContext/filters";
 import ModalProviderLoader from "@/components/modals/ModalProviderLoader";
+import CookieConsentBanner from "@/components/cookieConsent/CookieConsentBanner";
 
 export default function ClientProviders({
   children,
@@ -23,7 +24,6 @@ export default function ClientProviders({
             <AgeConsentProvider>
               <FavoritesProvider>
                 <CommentsProvider>
-                  {" "}
                   <FiltersProvider>
                     {/* Portal root for modals must exist before the ModalProvider mounts */}
                     <div id="modal-root" />
@@ -31,6 +31,7 @@ export default function ClientProviders({
                       {/* ModalProviderLoader mounts the client ModalProvider lazily */}
                     </div>
                     <ModalProviderLoader>{children}</ModalProviderLoader>
+                    <CookieConsentBanner />
                   </FiltersProvider>
                 </CommentsProvider>
               </FavoritesProvider>
