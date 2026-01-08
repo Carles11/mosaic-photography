@@ -133,33 +133,6 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     </svg>
   );
 
-  /**
-   * Keep a backwards-compatible handler in case other parts of the app call it.
-   * Prefer using the DownloadImageButton component for robust downloads (fetch -> blob -> save).
-   */
-  const onDownloadClick = (slide: {
-    download?: { url: string; filename?: string };
-  }) => {
-    sendGTMEvent({
-      event: "downloadInGalleryClicked",
-      value: slide.download?.url,
-    });
-    if (!user) {
-      handleLoginRequired();
-      return;
-    }
-    // Fallback: create an anchor to trigger browser download/open
-    if (slide.download?.url) {
-      const a = document.createElement("a");
-      a.href = slide.download.url;
-      a.download = slide.download.filename || "download.jpg";
-      // do not set target when we want real download; target=_blank was previously used but not necessary
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
-  };
-
   return (
     <>
       <VirtuosoMasonry

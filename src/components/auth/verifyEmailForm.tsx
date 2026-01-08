@@ -62,6 +62,7 @@ export default function VerifyEmailForm({
       }
     } catch (err) {
       setError("Verification failed. Please try again.");
+      console.log("Error verifying email:", err);
     }
     setLoading(false);
   };

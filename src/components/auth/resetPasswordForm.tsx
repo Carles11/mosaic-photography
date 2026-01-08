@@ -50,6 +50,7 @@ export default function PasswordResetForm({
       }
     } catch (err) {
       setError("Token verification failed.");
+      console.log("Error verifying token:", err);
     }
     setInitializing(false);
   };

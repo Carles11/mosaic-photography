@@ -62,6 +62,7 @@ export default function ConfirmEmailChangeForm({
       }
     } catch (err) {
       setError("Email change confirmation failed. Please try again.");
+      console.log("Error confirming email change:", err);
     }
     setLoading(false);
   };

@@ -362,6 +362,7 @@ export default function CollectionView() {
             fileName,
             `Image URL: ${image.image_url}\nTitle: ${image.image_title}\nAuthor: ${image.image_author}`
           );
+          console.error(`Failed to fetch image ${image.image_id}:`, error);
         } finally {
           // Update progress state for UI
           const progress = {
@@ -427,6 +428,9 @@ export default function CollectionView() {
         (metadata) => {
           // metadata.percent is JSZip internal percent for generation step
           // Map this into exportProgress as a finalization step if you want; we keep it simple.
+          console.log(
+            `ZIP generation progress: ${metadata.percent.toFixed(2)}%`
+          );
         }
       );
 
