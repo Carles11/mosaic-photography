@@ -45,6 +45,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
 }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [overlaysVisible, setOverlaysVisible] = useState(true);
   const { currentModal } = useModal();
   const lastLightboxIndex = useRef<number | null>(null);
   const prevModal = useRef<unknown>(null);
@@ -86,7 +87,9 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
           className={cssClass}
           style={{ aspectRatio }}
           onClick={() => {
+            // open lightbox and ensure overlays are visible when opening
             setLightboxIndex(index);
+            setOverlaysVisible(true);
             setIsLightboxOpen(true);
           }}
         >
@@ -128,6 +131,13 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     prevModal.current = currentModal;
   }, [currentModal]);
 
+  // Keep overlays visible when changing slides
+  useEffect(() => {
+    if (isLightboxOpen) {
+      setOverlaysVisible(true);
+    }
+  }, [lightboxIndex, isLightboxOpen]);
+
   const DownloadIcon = () => (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
       <rect width="22" height="22" rx="11" fill="rgba(244,211,94,0.10)" />
@@ -140,6 +150,26 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
       />
     </svg>
   );
+
+  /**
+   * Click handler for the slide container.
+   * Toggle overlays only when the click wasn't inside an interactive element.
+   */
+  const onSlideContainerClick = (e: React.MouseEvent) => {
+    // if click is inside an interactive element, ignore
+    const target = e.target as HTMLElement | null;
+    if (!target) return;
+
+    // If the click is on or inside a link/button/control, do not toggle overlays.
+    // This covers <a>, <button>, [role="button"], inputs, selects, textareas, and elements having onclick handlers.
+    const interactive = target.closest(
+      "a, button, [role='button'], input, textarea, select, label, svg, path"
+    );
+    if (interactive) return;
+
+    // Otherwise toggle overlays visibility
+    setOverlaysVisible((v) => !v);
+  };
 
   return (
     <>
@@ -209,6 +239,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
               const isSamePage = targetPath ? pathname === targetPath : false;
 
               const onAuthorClick = (e: React.MouseEvent) => {
+                // prevent toggling overlays since this is an interactive element
                 e.stopPropagation();
                 if (targetPath && !isSamePage) {
                   router.push(targetPath);
@@ -229,53 +260,59 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                     width: "100%",
                     height: "100%",
                   }}
+                  // Toggle overlays only when clicking on non-interactive parts of the slide
+                  onClick={onSlideContainerClick}
                 >
-                  <div
-                    className={styles.lightboxAuthor}
-                    style={{
-                      position: "absolute",
-                      left: 0,
-                      top: 0,
-                      width: "100%",
-                      height: "22px",
-                      textAlign: "center",
-                      color: "#fff",
-                      fontSize: "1.2rem",
-                      padding: "11px",
-                      background: "rgba(0,0,0,0.2)",
-                      borderTopLeftRadius: "12px",
-                      borderTopRightRadius: "12px",
-                      zIndex: 1,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {targetPath && !isSamePage ? (
-                      <a
-                        role="link"
-                        tabIndex={0}
-                        onClick={onAuthorClick}
-                        onKeyDown={onAuthorKeyDown}
-                        style={{
-                          color: "#fff",
-                          textDecoration: "underline",
-                          cursor: "pointer",
-                        }}
-                        onMouseDown={(e) => e.stopPropagation()}
-                      >
-                        {(img.author || "Unknown Author") +
-                          ", " +
-                          (img.year || "Unknown Year")}
-                      </a>
-                    ) : (
-                      <span>
-                        {(img.author || "Unknown Author") +
-                          ", " +
-                          (img.year || "Unknown Year")}
-                      </span>
-                    )}
-                  </div>
+                  {/* Author overlay (hidden when overlaysVisible is false) */}
+                  {overlaysVisible ? (
+                    <div
+                      className={styles.lightboxAuthor}
+                      aria-hidden={!overlaysVisible}
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        top: 0,
+                        width: "100%",
+                        height: "22px",
+                        textAlign: "center",
+                        color: "#fff",
+                        fontSize: "1.2rem",
+                        padding: "11px",
+                        background: "rgba(0,0,0,0.2)",
+                        borderTopLeftRadius: "12px",
+                        borderTopRightRadius: "12px",
+                        zIndex: 1,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {targetPath && !isSamePage ? (
+                        <a
+                          role="link"
+                          tabIndex={0}
+                          onClick={onAuthorClick}
+                          onKeyDown={onAuthorKeyDown}
+                          style={{
+                            color: "#fff",
+                            textDecoration: "underline",
+                            cursor: "pointer",
+                          }}
+                          onMouseDown={(e) => e.stopPropagation()}
+                        >
+                          {(img.author || "Unknown Author") +
+                            ", " +
+                            (img.year || "Unknown Year")}
+                        </a>
+                      ) : (
+                        <span>
+                          {(img.author || "Unknown Author") +
+                            ", " +
+                            (img.year || "Unknown Year")}
+                        </span>
+                      )}
+                    </div>
+                  ) : null}
 
                   <ImageWrapper
                     image={img}
@@ -287,51 +324,61 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                     sizes="100vw"
                     showOverlayButtons={false}
                   />
-                  <div
-                    className={styles.lightboxDescription}
-                    style={{
-                      position: "absolute",
-                      left: 0,
-                      bottom: 0,
-                      width: "100%",
-                      textAlign: "center",
-                      color: "#fff",
-                      fontSize: "1.2rem",
-                      padding: "11px",
-                      background: "rgba(0,0,0,0.4)",
-                      borderTopLeftRadius: "12px",
-                      borderTopRightRadius: "12px",
-                      zIndex: 1001,
-                      maxHeight: "28vh",
-                      overflowY: "auto",
-                      boxSizing: "border-box",
-                      pointerEvents: "auto",
-                      marginBottom: "0",
-                    }}
-                  >
-                    {img.description || ""}
-                  </div>
-                  <div
-                    className={styles.lightboxButtonRow}
-                    style={{
-                      position: "fixed",
-                      bottom: 20,
-                      right: 20,
-                      zIndex: 2000,
-                      display: "flex",
-                      gap: "10px",
-                      pointerEvents: "auto",
-                    }}
-                  >
-                    <HeartButton
-                      imageId={img.id}
-                      onLoginRequired={onLoginRequired}
-                    />
-                    <CommentsLauncher
-                      imageId={String(img.id ?? "")}
-                      onLoginRequired={onLoginRequired}
-                    />
-                  </div>
+
+                  {/* Description overlay (hidden when overlaysVisible is false) */}
+                  {overlaysVisible ? (
+                    <div
+                      className={styles.lightboxDescription}
+                      aria-hidden={!overlaysVisible}
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        bottom: 0,
+                        width: "100%",
+                        textAlign: "center",
+                        color: "#fff",
+                        fontSize: "1.2rem",
+                        padding: "11px",
+                        background: "rgba(0,0,0,0.4)",
+                        borderTopLeftRadius: "12px",
+                        borderTopRightRadius: "12px",
+                        zIndex: 1001,
+                        maxHeight: "28vh",
+                        overflowY: "auto",
+                        boxSizing: "border-box",
+                        pointerEvents: "auto",
+                        marginBottom: "0",
+                      }}
+                    >
+                      {img.description || ""}
+                    </div>
+                  ) : null}
+
+                  {/* Action buttons (hidden when overlaysVisible is false) */}
+                  {overlaysVisible ? (
+                    <div
+                      className={styles.lightboxButtonRow}
+                      aria-hidden={!overlaysVisible}
+                      style={{
+                        position: "fixed",
+                        bottom: 20,
+                        right: 20,
+                        zIndex: 2000,
+                        display: "flex",
+                        gap: "10px",
+                        pointerEvents: "auto",
+                      }}
+                    >
+                      <HeartButton
+                        imageId={img.id}
+                        onLoginRequired={onLoginRequired}
+                      />
+                      <CommentsLauncher
+                        imageId={String(img.id ?? "")}
+                        onLoginRequired={onLoginRequired}
+                      />
+                    </div>
+                  ) : null}
                 </div>
               );
             },
@@ -365,6 +412,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                         opacity: 0.5,
                       }}
                       disabled
+                      onMouseDown={(e) => e.stopPropagation()}
                     >
                       <DownloadIcon />
                     </button>
@@ -394,6 +442,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                         fontSize: 14,
                         cursor: "pointer",
                       }}
+                      onMouseDown={(e) => e.stopPropagation()}
                     >
                       <DownloadIcon />
                     </button>
