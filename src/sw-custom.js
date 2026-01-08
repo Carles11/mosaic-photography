@@ -1,56 +1,28 @@
-// Import Workbox library
-importScripts(
-  "https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js"
-);
+/* Custom Service Worker wrapper used by next-pwa.
+   Filters out Next.js server-only manifest entries (next-font-manifest,
+   dynamic-css-manifest and any /_next/server/* paths) before precaching.
+*/
 
-// Ensure Workbox is loaded
-if (workbox) {
-  console.log("Workbox is loaded");
+import { clientsClaim } from "workbox-core";
+import { precacheAndRoute } from "workbox-precaching";
 
-  // Add runtime caching for Next.js static files
-  workbox.routing.registerRoute(
-    /^https:\/\/www\.mosaic\.photography\/_next\/.*/,
-    new workbox.strategies.NetworkFirst({
-      cacheName: "next-static",
-      plugins: [
-        new workbox.expiration.ExpirationPlugin({
-          maxEntries: 100,
-          maxAgeSeconds: 60 * 60 * 24 * 7, // Cache for 7 days
-        }),
-      ],
-    })
-  );
+clientsClaim();
 
-  // Add runtime caching for other assets if needed
-} else {
-  console.error("Workbox failed to load");
-}
-
-// Existing listeners (unchanged)
-self.addEventListener("install", () => {
-  console.log("Service Worker installing...");
+self.addEventListener("message", (event) => {
+  if (event?.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
 });
 
-self.addEventListener("activate", (event) => {
-  console.log("Service Worker activating...");
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== "your-new-cache-name") {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
+const manifest = self.__WB_MANIFEST || [];
+
+const filteredManifest = (manifest || []).filter((entry) => {
+  const url = entry && entry.url ? String(entry.url) : "";
+  if (!url) return false;
+  if (url.includes("/_next/server/")) return false;
+  if (url.includes("next-font-manifest")) return false;
+  if (url.includes("dynamic-css-manifest")) return false;
+  return true;
 });
 
-self.addEventListener("fetch", (event) => {
-  console.log("Fetch event for:", event.request.url);
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
-  );
-});
+precacheAndRoute(filteredManifest);
