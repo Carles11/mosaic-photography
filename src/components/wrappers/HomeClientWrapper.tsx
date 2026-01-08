@@ -35,6 +35,10 @@ function HomeClientWrapper({
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
+  // Debug: show a sample to ensure data is passed
+  // console.log("HomeClientWrapper rendered with photographers:", photographers?.[0]);
+  // console.log("HomeClientWrapper rendered with images:", images?.[0]);
+
   useEffect(() => {
     // Bot detection: check userAgent for major bots
     const botRegex =
@@ -91,9 +95,11 @@ function HomeClientWrapper({
             photographers={photographers}
             onLoginRequired={onLoginClick}
           />
+          {/* Pass the photographers array into Gallery so it can attach slugs to images */}
           <Gallery
             id="gallery-section"
             images={images}
+            photographers={photographers}
             onLoginRequired={onLoginClick}
           />
         </div>

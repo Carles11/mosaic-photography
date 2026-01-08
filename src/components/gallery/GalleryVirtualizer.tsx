@@ -1,4 +1,5 @@
 "use client";
+
 import { VirtuosoMasonry } from "@virtuoso.dev/masonry";
 import {
   useCallback,
@@ -18,7 +19,7 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import { useModal } from "@/context/modalContext/useModal";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { getMosaicImageProps } from "@/utils/mosaicLayout";
 import styles from "./galleryVirtualizer.module.css";
 import { sendGTMEvent } from "@next/third-parties/google";
@@ -26,8 +27,15 @@ import DownloadImageButton from "@/components/buttons/DownloadImageButton";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
+/**
+ * Accept images that may optionally include photographer_slug.
+ */
+type ImageWithPhotographerSlug = ImageWithOrientation & {
+  photographer_slug?: string;
+};
+
 interface VirtualizedMosaicGalleryProps {
-  images: ImageWithOrientation[];
+  images: ImageWithPhotographerSlug[];
   onLoginRequired?: () => void;
 }
 
@@ -42,6 +50,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
   const prevModal = useRef<unknown>(null);
   const { user } = useAuthSession();
   const router = useRouter();
+  const pathname = usePathname();
 
   const columnCount = useMemo(() => {
     if (typeof window !== "undefined" && window.innerWidth < 500) return 2;
@@ -57,7 +66,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
   }, [router]);
 
   const ItemContent = useCallback(
-    ({ data, index }: { data: ImageWithOrientation; index: number }) => {
+    ({ data, index }: { data: ImageWithPhotographerSlug; index: number }) => {
       if (!data) return null;
       const {
         cssClass: mosaicClass,
@@ -119,7 +128,6 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     prevModal.current = currentModal;
   }, [currentModal]);
 
-  // SVG Download icon for toolbar button (Material Rounded)
   const DownloadIcon = () => (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
       <rect width="22" height="22" rx="11" fill="rgba(244,211,94,0.10)" />
@@ -157,6 +165,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
             src:
               img.url || img.base_url || "/favicons/android-chrome-512x512.png",
             ...img,
+            photographer_slug: img.photographer_slug,
             download:
               img.filename && img.base_url
                 ? {
@@ -166,7 +175,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                 : undefined,
           }))}
           index={lightboxIndex}
-          plugins={[Zoom]} // Don't use Download plugin!
+          plugins={[Zoom]}
           zoom={{
             maxZoomPixelRatio: 3,
             minZoom: 1,
@@ -176,9 +185,8 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
           render={{
             slide: (props) => {
               const { slide } = props;
-              // TypeScript-safe mapping
-              const slideObj = slide as Partial<ImageWithOrientation>;
-              const img: ImageWithOrientation = {
+              const slideObj = slide as Partial<ImageWithPhotographerSlug>;
+              const img: ImageWithPhotographerSlug = {
                 ...slideObj,
                 id: slideObj.id ?? "",
                 author: slideObj.author ?? "",
@@ -193,6 +201,25 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                 base_url: slideObj.base_url ?? "",
                 filename: slideObj.filename ?? "",
                 url: slideObj.url ?? "/favicons/android-chrome-512x512.png",
+                photographer_slug: slideObj.photographer_slug,
+              };
+
+              const slug = img.photographer_slug ?? null;
+              const targetPath = slug ? `/photographers/${slug}` : null;
+              const isSamePage = targetPath ? pathname === targetPath : false;
+
+              const onAuthorClick = (e: React.MouseEvent) => {
+                e.stopPropagation();
+                if (targetPath && !isSamePage) {
+                  router.push(targetPath);
+                }
+              };
+
+              const onAuthorKeyDown = (e: React.KeyboardEvent) => {
+                if (e.key === "Enter" && targetPath && !isSamePage) {
+                  e.stopPropagation();
+                  router.push(targetPath);
+                }
               };
 
               return (
@@ -224,11 +251,30 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       justifyContent: "center",
                     }}
                   >
-                    <span>
-                      {(img.author || "Unknown Author") +
-                        ", " +
-                        (img.year || "Unknown Year")}
-                    </span>
+                    {targetPath && !isSamePage ? (
+                      <a
+                        role="link"
+                        tabIndex={0}
+                        onClick={onAuthorClick}
+                        onKeyDown={onAuthorKeyDown}
+                        style={{
+                          color: "#fff",
+                          textDecoration: "underline",
+                          cursor: "pointer",
+                        }}
+                        onMouseDown={(e) => e.stopPropagation()}
+                      >
+                        {(img.author || "Unknown Author") +
+                          ", " +
+                          (img.year || "Unknown Year")}
+                      </a>
+                    ) : (
+                      <span>
+                        {(img.author || "Unknown Author") +
+                          ", " +
+                          (img.year || "Unknown Year")}
+                      </span>
+                    )}
                   </div>
 
                   <ImageWrapper
@@ -236,7 +282,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                     imgStyleOverride={{
                       width: "100%",
                       height: "100%",
-                      objectFit: "contain", // For lightbox!
+                      objectFit: "contain",
                     }}
                     sizes="100vw"
                     showOverlayButtons={false}
@@ -256,7 +302,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
                       zIndex: 1001,
-                      maxHeight: "28vh", // or "30vh"
+                      maxHeight: "28vh",
                       overflowY: "auto",
                       boxSizing: "border-box",
                       pointerEvents: "auto",
@@ -271,7 +317,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       position: "fixed",
                       bottom: 20,
                       right: 20,
-                      zIndex: 2000, // make sure it's above description
+                      zIndex: 2000,
                       display: "flex",
                       gap: "10px",
                       pointerEvents: "auto",
@@ -282,7 +328,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       onLoginRequired={onLoginRequired}
                     />
                     <CommentsLauncher
-                      imageId={img.id.toString()}
+                      imageId={String(img.id ?? "")}
                       onLoginRequired={onLoginRequired}
                     />
                   </div>
@@ -295,8 +341,6 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
           }}
           toolbar={{
             buttons: [
-              // Replace inline anchor logic with the reusable DownloadImageButton.
-              // Render a simple login prompt button when user is not authenticated.
               (() => {
                 const currentSlide = images[lightboxIndex];
                 const downloadUrl =
@@ -304,7 +348,6 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                     ? `${currentSlide.base_url}/originals/${currentSlide.filename}`
                     : null;
 
-                // If there is no downloadable URL, render the icon but disabled.
                 if (!downloadUrl) {
                   return (
                     <button
@@ -328,7 +371,6 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                   );
                 }
 
-                // If user is not logged in, render a button that triggers login flow.
                 if (!user) {
                   return (
                     <button
@@ -337,7 +379,6 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                       className={styles.lightboxDownloadButton}
                       onClick={() => {
                         handleLoginRequired();
-                        // Track attempt if you want:
                         sendGTMEvent({
                           event: "downloadInGalleryClicked",
                           value: downloadUrl,
@@ -359,7 +400,6 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                   );
                 }
 
-                // User is logged in and download URL exists -> show the fetch-based downloader.
                 return (
                   <DownloadImageButton
                     key="download"
@@ -367,18 +407,13 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                     filename={currentSlide?.filename}
                     className={styles.lightboxDownloadButton}
                     onStart={() => {
-                      // Push GTM event before starting the download
                       sendGTMEvent({
                         event: "downloadInGalleryClicked",
                         value: downloadUrl,
                       });
                     }}
                     onError={(err: Error) => {
-                      // Optional: surface toasts or logs
-                      console.error(
-                        "Download failed, fallback will open in new tab",
-                        err
-                      );
+                      console.error("Download failed", err);
                       toast.error(
                         "Could not download file directly — opening in a new tab."
                       );

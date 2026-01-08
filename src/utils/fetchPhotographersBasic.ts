@@ -28,6 +28,7 @@ export async function fetchPhotographersBasic(): Promise<
         website,
         store,
         instagram,
+        slug,
         random_order
       `
       )

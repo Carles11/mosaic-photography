@@ -1,10 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import VirtualizedMosaicGallery from "./GalleryVirtualizer";
 import { useFilters } from "@/context/settingsContext/filters";
 import { useModal } from "@/context/modalContext/useModal";
-import type { GalleryProps, GalleryFilter } from "@/types/gallery";
+import type {
+  GalleryFilter,
+  ImageWithOrientation,
+  Photographer,
+} from "@/types/gallery";
 import styles from "./gallery.module.css";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
 
@@ -20,7 +24,37 @@ function isYearFilter(value: unknown): value is { from: number; to: number } {
   );
 }
 
-const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
+type GalleryExtendedProps = {
+  id?: string;
+  images?: ImageWithOrientation[];
+  onLoginRequired?: () => void;
+  photographers?: Photographer[]; // optional array passed from HomeClientWrapper
+};
+
+// Local type: image extended with optional slug
+type ImageWithPhotographerSlug = ImageWithOrientation & {
+  photographer_slug?: string;
+};
+
+// Type guard to check if an object has photographer_slug property
+function hasPhotographerSlug(
+  obj: unknown
+): obj is { photographer_slug: string } {
+  return (
+    obj !== null &&
+    typeof obj === "object" &&
+    "photographer_slug" in obj &&
+    typeof (obj as { photographer_slug: unknown }).photographer_slug ===
+      "string"
+  );
+}
+
+const Gallery: React.FC<GalleryExtendedProps> = ({
+  id,
+  images,
+  onLoginRequired,
+  photographers,
+}) => {
   const { filters, setFilters } = useFilters();
   const { open } = useModal();
 
@@ -80,6 +114,60 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
       isYearFilter(filters.year) &&
       filters.year.from &&
       filters.year.to);
+
+  /**
+   * Attach photographer slug to each image when possible by matching the image's author field
+   * against the passed photographers array. The key added is `photographer_slug` so the
+   * virtualizer can pick it up.
+   */
+  const imagesWithPhotographerSlug: ImageWithPhotographerSlug[] =
+    useMemo(() => {
+      if (!filteredImages || filteredImages.length === 0)
+        return filteredImages ?? [];
+
+      // Fast path if no photographers provided
+      if (!photographers || photographers.length === 0) {
+        // return original images as-is, typed to include optional slug
+        return filteredImages as ImageWithPhotographerSlug[];
+      }
+
+      const normalize = (s?: string) =>
+        (s || "").toString().trim().toLowerCase();
+
+      return filteredImages.map((img) => {
+        // If the image already carries a slug-like field, return unchanged
+        if (hasPhotographerSlug(img)) {
+          return img as ImageWithPhotographerSlug;
+        }
+
+        const imgAuthorNorm = normalize(img.author);
+
+        const match = photographers.find((p) => {
+          const pAuthor = normalize(p.author ?? `${p.name} ${p.surname}`);
+          const pFullName = normalize(`${p.name} ${p.surname}`);
+          const pSurname = normalize(p.surname);
+          if (!imgAuthorNorm) return false;
+          return (
+            imgAuthorNorm === pAuthor ||
+            imgAuthorNorm === pFullName ||
+            imgAuthorNorm === pSurname
+          );
+        });
+
+        if (
+          match &&
+          typeof match.slug === "string" &&
+          match.slug.trim().length > 0
+        ) {
+          return {
+            ...img,
+            photographer_slug: match.slug.trim(),
+          } as ImageWithPhotographerSlug;
+        }
+
+        return img as ImageWithPhotographerSlug;
+      });
+    }, [filteredImages, photographers]);
 
   return (
     <div id={id} className={styles.galleryContainer}>
@@ -162,7 +250,7 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
       </div>
 
       {/* Show an empty state if no images */}
-      {filteredImages?.length === 0 ? (
+      {imagesWithPhotographerSlug?.length === 0 ? (
         <div className={styles.emptyState}>
           <h3>No images match your filters</h3>
           <p>Try adjusting your filter settings to see more images!</p>
@@ -178,7 +266,7 @@ const Gallery: React.FC<GalleryProps> = ({ id, images, onLoginRequired }) => {
       ) : (
         <>
           <VirtualizedMosaicGallery
-            images={filteredImages ?? []}
+            images={imagesWithPhotographerSlug}
             onLoginRequired={onLoginRequired}
           />
         </>

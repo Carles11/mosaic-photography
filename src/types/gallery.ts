@@ -21,6 +21,8 @@ export interface Photographer {
   birthdate: string;
   deceasedate?: string | null;
   origin?: string;
+  slug?: string;
+  photographerSurname?: string;
   website?: string;
   instagram?: string;
   images?: ImageData[];
