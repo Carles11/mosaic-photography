@@ -55,6 +55,7 @@ export default function MagicLinkForm({
       }
     } catch (err) {
       setError("Magic link verification failed. Please try again.");
+      console.log("Error verifying magic link:", err);
     }
     setLoading(false);
   };
