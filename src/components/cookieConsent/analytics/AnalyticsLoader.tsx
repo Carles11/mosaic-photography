@@ -9,8 +9,10 @@ declare global {
   interface Window {
     __mosaic_gtm_loaded?: boolean;
     __mosaic_clarity_loaded?: boolean;
-    // removed dataLayer to avoid conflict with existing google.d.ts
+    // minimal clarity type used in loader
     clarity?: ((...args: unknown[]) => void) & { q?: unknown[] };
+    // debug helper to revoke analytics manually
+    __mosaic_revoke_analytics?: () => void;
   }
 }
 
@@ -24,7 +26,6 @@ export default function AnalyticsLoader(): React.ReactElement | null {
     function injectGtm(): void {
       if (hasGtm()) return;
 
-      // Narrow the window type locally to avoid redeclaring dataLayer globally.
       const win = window as Window & { dataLayer?: unknown[] };
       win.dataLayer = win.dataLayer || [];
       win.dataLayer.push({
@@ -45,7 +46,6 @@ export default function AnalyticsLoader(): React.ReactElement | null {
     function injectClarity(): void {
       if (window.__mosaic_clarity_loaded) return;
 
-      // Minimal clarity setup similar to official snippet
       if (!window.clarity) {
         const clarityFunc = (...args: unknown[]): void => {
           const qHolder = (window.clarity as { q?: unknown[] })?.q || [];
@@ -72,6 +72,134 @@ export default function AnalyticsLoader(): React.ReactElement | null {
       injectClarity();
     };
 
+    // ----- revoke / teardown helpers -----
+    function removeGtm(): void {
+      try {
+        const gtmScript = document.getElementById("mosaic-gtm-script");
+        if (gtmScript?.parentNode) gtmScript.parentNode.removeChild(gtmScript);
+
+        // remove iframes referencing googletagmanager (safe-guard)
+        const iframes = Array.from(document.getElementsByTagName("iframe"));
+        iframes.forEach((f) => {
+          try {
+            if (
+              f.src &&
+              f.src.includes("googletagmanager.com") &&
+              f.parentNode
+            ) {
+              f.parentNode.removeChild(f);
+            }
+          } catch {
+            // ignore cross-origin read errors or removal errors
+          }
+        });
+
+        // clear and remove dataLayer
+        const win = window as Window & { dataLayer?: unknown[] };
+        if (win.dataLayer) {
+          try {
+            win.dataLayer.length = 0;
+          } catch {
+            // ignore
+          }
+          try {
+            Reflect.deleteProperty(win, "dataLayer");
+          } catch {
+            // ignore
+          }
+        }
+
+        // clear flag
+        try {
+          Reflect.deleteProperty(window, "__mosaic_gtm_loaded");
+        } catch {
+          // ignore
+        }
+
+        console.debug("[AnalyticsLoader] GTM removed");
+      } catch (e) {
+        console.warn("[AnalyticsLoader] removeGtm failed", e);
+      }
+    }
+
+    function removeClarity(): void {
+      try {
+        const clarityScript = document.getElementById("mosaic-clarity-script");
+        if (clarityScript?.parentNode)
+          clarityScript.parentNode.removeChild(clarityScript);
+
+        // remove any clarity pixel images (best-effort)
+        const imgs = Array.from(document.getElementsByTagName("img"));
+        imgs.forEach((i) => {
+          try {
+            if (
+              i.src &&
+              (i.src.includes("clarity.ms") || i.src.includes("c.bing.com"))
+            ) {
+              i.parentNode?.removeChild(i);
+            }
+          } catch {
+            // ignore
+          }
+        });
+
+        // remove clarity function and flag
+        try {
+          Reflect.deleteProperty(window, "clarity");
+        } catch {
+          // ignore
+        }
+        try {
+          Reflect.deleteProperty(window, "__mosaic_clarity_loaded");
+        } catch {
+          // ignore
+        }
+
+        console.debug("[AnalyticsLoader] Clarity removed");
+      } catch (e) {
+        console.warn("[AnalyticsLoader] removeClarity failed", e);
+      }
+    }
+
+    const revokeAll = (): void => {
+      removeGtm();
+      removeClarity();
+
+      try {
+        Reflect.deleteProperty(window, "__mosaic_revoke_analytics");
+      } catch {
+        /* ignore */
+      }
+
+      console.debug("[AnalyticsLoader] analytics revoked");
+    };
+
+    // expose a debug function to manually revoke (useful for testing)
+    window.__mosaic_revoke_analytics = () => {
+      revokeAll();
+    };
+
+    // ----- event handlers -----
+    const onConsentGranted = (): void => {
+      loadAll();
+    };
+
+    const onConsentRevoked = (): void => {
+      revokeAll();
+    };
+
+    const onConsentChanged = (): void => {
+      try {
+        if (Cookies.get(COOKIE_NAME) === "true") {
+          loadAll();
+        } else {
+          revokeAll();
+        }
+      } catch (e) {
+        console.warn("[AnalyticsLoader] reading cookie failed on change", e);
+      }
+    };
+
     try {
       if (Cookies.get(COOKIE_NAME) === "true") {
         loadAll();
@@ -80,14 +208,19 @@ export default function AnalyticsLoader(): React.ReactElement | null {
       console.warn("[AnalyticsLoader] Cookies read failed", e);
     }
 
-    const onConsentGranted = (): void => {
-      loadAll();
-    };
-
     window.addEventListener("cookie-consent-granted", onConsentGranted);
+    window.addEventListener("cookie-consent-revoked", onConsentRevoked);
+    window.addEventListener("cookie-consent-changed", onConsentChanged);
 
     return () => {
       window.removeEventListener("cookie-consent-granted", onConsentGranted);
+      window.removeEventListener("cookie-consent-revoked", onConsentRevoked);
+      window.removeEventListener("cookie-consent-changed", onConsentChanged);
+      try {
+        Reflect.deleteProperty(window, "__mosaic_revoke_analytics");
+      } catch {
+        /* ignore */
+      }
     };
   }, []);
 
