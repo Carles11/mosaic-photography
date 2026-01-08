@@ -28,7 +28,7 @@ module.exports = {
     {
       // Runtime cache for Next.js static files
       urlPattern: /^https:\/\/www\.mosaic\.photography\/_next\/.*/i,
-      handler: "NetworkFirst", // Prioritize fresh resources
+      handler: "NetworkFirst",
       options: {
         cacheName: "next-static",
         expiration: {
@@ -61,21 +61,33 @@ module.exports = {
       },
     },
   ],
-  customWorkerDir: "src/sw-custom.js", // Path to your custom Service Worker file
+  customWorkerDir: "src/sw-custom.js",
 
-  // Exclude node/server-only and other unwanted files from the SW bundle
+  // Exclude node/server-only and other unwanted files from the SW bundle.
+  // Added explicit patterns for Next.js server-only manifests that caused 404 precache attempts.
   exclude: [
     /\.map$/, // Exclude source maps
     /^node_modules/, // Exclude all node_modules
     /^tr46/, // Exclude tr46 and mappingTable.json
     /\.json$/, // Exclude all JSON files (except manifest)
     /^workbox-.*$/, // Exclude workbox files
-    /\/_next\/server\//, // Exclude all Next.js server files
-    /middleware-build-manifest\.js$/, // Exclude middleware-build-manifest.js
-    /middleware-react-loadable-manifest\.js$/, // Exclude middleware-react-loadable-manifest.js
+
+    // Broadly exclude Next.js server-side files (both relative and absolute paths)
+    /\/?_next\/server\/.*/,
+    /^_next\/server\/.*/,
+    /_next\/server\/.*/,
+
+    // Explicitly exclude known server-only manifests that Next may reference at runtime
+    /next-font-manifest\.js$/,
+    /dynamic-css-manifest\.js$/,
+    /next-font-manifest\.js$/,
+    /dynamic-css-manifest\.js$/,
+
+    // Misc middleware artifacts
+    /middleware-build-manifest\.js$/,
+    /middleware-react-loadable-manifest\.js$/,
   ],
 
-  // General settings for seamless SW updates
   skipWaiting: true,
   clientsClaim: true,
 };
