@@ -5,7 +5,16 @@ import styles from "./CookieConsentBanner.module.css";
 
 const COOKIE_NAME = "cookie_consent";
 
-export default function CookieConsentBanner() {
+type CookieConsentEvent = {
+  event: "cookie_consent";
+  consent: boolean;
+  timestamp: number;
+  [key: string]: unknown;
+};
+
+type DataLayerItem = CookieConsentEvent | Record<string, unknown>;
+
+export default function CookieConsentBanner(): React.ReactElement | null {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -13,15 +22,61 @@ export default function CookieConsentBanner() {
     if (!consent) setVisible(true);
   }, []);
 
-  const handleAccept = () => {
-    Cookies.set(COOKIE_NAME, "true", { expires: 365 });
-    setVisible(false);
-    window.dispatchEvent(new Event("cookie-consent-granted"));
+  const pushDataLayer = (consent: boolean): void => {
+    try {
+      // Use a local typed view of window.dataLayer to avoid conflicting with ambient types.
+      const win = window as unknown as { dataLayer?: DataLayerItem[] };
+
+      const payload: CookieConsentEvent = {
+        event: "cookie_consent",
+        consent,
+        timestamp: Date.now(),
+      };
+
+      const existing = win.dataLayer ?? [];
+      existing.push(payload);
+      win.dataLayer = existing;
+
+      console.debug("[CookieConsentBanner] dataLayer push:", payload);
+    } catch (err) {
+      // do not break on errors
+      console.warn("[CookieConsentBanner] dataLayer push failed", err);
+    }
   };
 
-  const handleDecline = () => {
+  const notifyChange = (granted: boolean): void => {
+    try {
+      if (granted) window.dispatchEvent(new Event("cookie-consent-granted"));
+      else window.dispatchEvent(new Event("cookie-consent-declined"));
+
+      // generic change event that AnalyticsLoader listens for
+      window.dispatchEvent(new Event("cookie-consent-changed"));
+
+      console.debug(
+        "[CookieConsentBanner] dispatched consent events:",
+        granted
+      );
+    } catch (err) {
+      console.warn("[CookieConsentBanner] dispatch failed", err);
+    }
+  };
+
+  const handleAccept = (): void => {
+    Cookies.set(COOKIE_NAME, "true", { expires: 365 });
+    setVisible(false);
+
+    // push to dataLayer (so GTM/Preview can capture it) and notify other code
+    pushDataLayer(true);
+    notifyChange(true);
+  };
+
+  const handleDecline = (): void => {
     Cookies.set(COOKIE_NAME, "false", { expires: 365 });
     setVisible(false);
+
+    // push to dataLayer and notify so AnalyticsLoader revokes analytics
+    pushDataLayer(false);
+    notifyChange(false);
   };
 
   if (!visible) return null;
