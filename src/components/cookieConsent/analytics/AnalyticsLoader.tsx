@@ -23,15 +23,43 @@ export default function AnalyticsLoader(): React.ReactElement | null {
       window.__mosaic_gtm_loaded = true;
     };
 
+    // Typed local view for window.dataLayer to avoid global declaration conflicts
+    const getDataLayerHost = (): { dataLayer?: unknown[] } =>
+      window as unknown as { dataLayer?: unknown[] };
+
     function injectGtm(): void {
       if (hasGtm()) return;
 
-      const win = window as Window & { dataLayer?: unknown[] };
-      win.dataLayer = win.dataLayer || [];
-      win.dataLayer.push({
-        "gtm.start": Date.now(),
-        event: "gtm.js",
-      });
+      const win = getDataLayerHost();
+      // Ensure dataLayer exists and push the gtm.start event
+      win.dataLayer = win.dataLayer ?? [];
+      try {
+        (win.dataLayer as unknown[]).push({
+          "gtm.start": Date.now(),
+          event: "gtm.js",
+        });
+      } catch {
+        // ignore
+      }
+
+      // If a consent cookie already exists, push its value to the dataLayer
+      try {
+        const cookieVal = Cookies.get(COOKIE_NAME);
+        if (cookieVal !== undefined) {
+          const consentBool = cookieVal === "true";
+          (win.dataLayer as unknown[]).push({
+            event: "cookie_consent",
+            consent: consentBool,
+            timestamp: Date.now(),
+          });
+          console.debug(
+            "[AnalyticsLoader] initial dataLayer push (cookie_consent):",
+            consentBool
+          );
+        }
+      } catch (e) {
+        console.warn("[AnalyticsLoader] reading cookie failed on init", e);
+      }
 
       const s: HTMLScriptElement = document.createElement("script");
       s.async = true;
@@ -40,7 +68,9 @@ export default function AnalyticsLoader(): React.ReactElement | null {
       document.head?.appendChild(s);
 
       setGtmFlag();
-      console.debug("[AnalyticsLoader] GTM injected");
+      console.debug(
+        "[AnalyticsLoader] GTM injected (container loaded on every page)"
+      );
     }
 
     function injectClarity(): void {
@@ -67,60 +97,9 @@ export default function AnalyticsLoader(): React.ReactElement | null {
       console.debug("[AnalyticsLoader] Clarity injected");
     }
 
-    const loadAll = (): void => {
-      injectGtm();
-      injectClarity();
-    };
-
-    // ----- revoke / teardown helpers -----
-    function removeGtm(): void {
-      try {
-        const gtmScript = document.getElementById("mosaic-gtm-script");
-        if (gtmScript?.parentNode) gtmScript.parentNode.removeChild(gtmScript);
-
-        // remove iframes referencing googletagmanager (safe-guard)
-        const iframes = Array.from(document.getElementsByTagName("iframe"));
-        iframes.forEach((f) => {
-          try {
-            if (
-              f.src &&
-              f.src.includes("googletagmanager.com") &&
-              f.parentNode
-            ) {
-              f.parentNode.removeChild(f);
-            }
-          } catch {
-            // ignore cross-origin read errors or removal errors
-          }
-        });
-
-        // clear and remove dataLayer
-        const win = window as Window & { dataLayer?: unknown[] };
-        if (win.dataLayer) {
-          try {
-            win.dataLayer.length = 0;
-          } catch {
-            // ignore
-          }
-          try {
-            Reflect.deleteProperty(win, "dataLayer");
-          } catch {
-            // ignore
-          }
-        }
-
-        // clear flag
-        try {
-          Reflect.deleteProperty(window, "__mosaic_gtm_loaded");
-        } catch {
-          // ignore
-        }
-
-        console.debug("[AnalyticsLoader] GTM removed");
-      } catch (e) {
-        console.warn("[AnalyticsLoader] removeGtm failed", e);
-      }
-    }
+    // Note: GTM now intentionally remains loaded on the page so it can capture both
+    // Accept and Decline dataLayer pushes. We will not remove the GTM script on revoke.
+    // We will remove/restore Clarity only, since Clarity collects user-level data.
 
     function removeClarity(): void {
       try {
@@ -162,7 +141,8 @@ export default function AnalyticsLoader(): React.ReactElement | null {
     }
 
     const revokeAll = (): void => {
-      removeGtm();
+      // Keep GTM present so it can capture future consent events.
+      // Remove third-party trackers that should not run without consent.
       removeClarity();
 
       try {
@@ -171,7 +151,9 @@ export default function AnalyticsLoader(): React.ReactElement | null {
         /* ignore */
       }
 
-      console.debug("[AnalyticsLoader] analytics revoked");
+      console.debug(
+        "[AnalyticsLoader] analytics revoked (clarity removed; GTM preserved)"
+      );
     };
 
     // expose a debug function to manually revoke (useful for testing)
@@ -181,18 +163,54 @@ export default function AnalyticsLoader(): React.ReactElement | null {
 
     // ----- event handlers -----
     const onConsentGranted = (): void => {
-      loadAll();
+      // GTM is already loaded; just ensure clarity is injected and push the consent change
+      const win = getDataLayerHost();
+      try {
+        (win.dataLayer = win.dataLayer ?? []).push({
+          event: "cookie_consent",
+          consent: true,
+          timestamp: Date.now(),
+        });
+        console.debug("[AnalyticsLoader] pushed consent=true to dataLayer");
+      } catch {
+        // ignore
+      }
+      injectClarity();
     };
 
     const onConsentRevoked = (): void => {
+      // push the consent=false event, and remove trackers like Clarity
+      const win = getDataLayerHost();
+      try {
+        (win.dataLayer = win.dataLayer ?? []).push({
+          event: "cookie_consent",
+          consent: false,
+          timestamp: Date.now(),
+        });
+        console.debug("[AnalyticsLoader] pushed consent=false to dataLayer");
+      } catch {
+        // ignore
+      }
       revokeAll();
     };
 
     const onConsentChanged = (): void => {
       try {
-        if (Cookies.get(COOKIE_NAME) === "true") {
-          loadAll();
-        } else {
+        const cookieVal = Cookies.get(COOKIE_NAME);
+        const win = getDataLayerHost();
+        if (cookieVal === "true") {
+          (win.dataLayer = win.dataLayer ?? []).push({
+            event: "cookie_consent",
+            consent: true,
+            timestamp: Date.now(),
+          });
+          injectClarity();
+        } else if (cookieVal === "false") {
+          (win.dataLayer = win.dataLayer ?? []).push({
+            event: "cookie_consent",
+            consent: false,
+            timestamp: Date.now(),
+          });
           revokeAll();
         }
       } catch (e) {
@@ -200,21 +218,27 @@ export default function AnalyticsLoader(): React.ReactElement | null {
       }
     };
 
+    // Load GTM on every page so GTM can capture both accept and decline pushes.
     try {
-      if (Cookies.get(COOKIE_NAME) === "true") {
-        loadAll();
+      injectGtm();
+      // If cookie was already true we already injected clarity in injectGtm via initial push,
+      // but ensure clarity runs if cookie === "true"
+      try {
+        if (Cookies.get(COOKIE_NAME) === "true") injectClarity();
+      } catch {
+        // ignore
       }
     } catch (e) {
-      console.warn("[AnalyticsLoader] Cookies read failed", e);
+      console.warn("[AnalyticsLoader] GTM injection failed", e);
     }
 
     window.addEventListener("cookie-consent-granted", onConsentGranted);
-    window.addEventListener("cookie-consent-revoked", onConsentRevoked);
+    window.addEventListener("cookie-consent-declined", onConsentRevoked);
     window.addEventListener("cookie-consent-changed", onConsentChanged);
 
     return () => {
       window.removeEventListener("cookie-consent-granted", onConsentGranted);
-      window.removeEventListener("cookie-consent-revoked", onConsentRevoked);
+      window.removeEventListener("cookie-consent-declined", onConsentRevoked);
       window.removeEventListener("cookie-consent-changed", onConsentChanged);
       try {
         Reflect.deleteProperty(window, "__mosaic_revoke_analytics");
