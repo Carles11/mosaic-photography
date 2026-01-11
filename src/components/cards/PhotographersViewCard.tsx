@@ -84,14 +84,14 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                   tabIndex={0}
                   aria-label={`Photographer card: ${photographer.name} ${photographer.surname}`}
                 >
-                  <h3 className={`fancy-link ${styles.authorName}`}>
-                    <Link
-                      href={`/photographers/${slugify(photographer.surname)}`}
-                      tabIndex={0}
-                    >
+                  <Link
+                    href={`/photographers/${slugify(photographer.surname)}`}
+                    tabIndex={0}
+                  >
+                    <h3 className={`fancy-link ${styles.authorName}`}>
                       {`${photographer.name} ${photographer.surname}`.toUpperCase()}
-                    </Link>
-                  </h3>
+                    </h3>
+                  </Link>
                   <div className={styles.imageContainer}>
                     {portrait ? (
                       <Link
