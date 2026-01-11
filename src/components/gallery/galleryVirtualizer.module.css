@@ -39,6 +39,16 @@
   height: 100% !important;
 }
 
+.lightboxDownloadButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.lightboxDownloadButton:hover svg path {
+  stroke: #ffffff;
+}
+
 /* MosaicType variations for portrait images */
 .mosaicLarge {
   aspect-ratio: 3 / 4;

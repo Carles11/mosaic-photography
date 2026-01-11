@@ -103,6 +103,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
               width: "100%",
               height: "100%",
               objectFit: "cover",
+              cursor: "zoom-in",
             }}
           />
         </div>
@@ -138,13 +139,20 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     }
   }, [lightboxIndex, isLightboxOpen]);
 
-  const DownloadIcon = () => (
-    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+  const DownloadIcon = ({ size = 33 }: { size?: number }) => (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 22 22"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+    >
       <rect width="22" height="22" rx="11" fill="rgba(244,211,94,0.10)" />
       <path
         d="M11 6.5v5m0 0-2.5-2.5m2.5 2.5 2.5-2.5M5.833 15.5h10.334"
         stroke="#F4D35E"
-        strokeWidth="1.7"
+        strokeWidth="1.9"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
