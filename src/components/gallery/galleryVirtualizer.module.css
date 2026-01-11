@@ -49,6 +49,24 @@
   stroke: #ffffff;
 }
 
+/* Hide built-in lightbox controls when overlays are hidden */
+.hideLightboxUi :global(.yarl__toolbar),
+.hideLightboxUi :global(.yarl__toolbar-button),
+.hideLightboxUi :global(.yarl__toolbarButtons),
+.hideLightboxUi :global(.yarl__zoom),
+.hideLightboxUi :global(.yarl__zoom-button),
+.hideLightboxUi :global(.yarl__button--zoom),
+.hideLightboxUi :global(.yarl__button--prev),
+.hideLightboxUi :global(.yarl__button--next),
+.hideLightboxUi :global(.yarl__slide__nav),
+.hideLightboxUi :global(.yarl__nav),
+.hideLightboxUi :global(.yarl__icon),
+.hideLightboxUi :global(.yarl__controls) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 /* MosaicType variations for portrait images */
 .mosaicLarge {
   aspect-ratio: 3 / 4;

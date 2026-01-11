@@ -170,6 +170,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
 
     // If the click is on or inside a link/button/control, do not toggle overlays.
     // This covers <a>, <button>, [role="button"], inputs, selects, textareas, and elements having onclick handlers.
+    // We also include svg and path so clicking icons don't toggle inadvertently.
     const interactive = target.closest(
       "a, button, [role='button'], input, textarea, select, label, svg, path"
     );
@@ -178,6 +179,108 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     // Otherwise toggle overlays visibility
     setOverlaysVisible((v) => !v);
   };
+
+  // Build the toolbar buttons conditionally so toolbar is hidden when overlaysVisible === false
+  const toolbarButtons = useMemo(() => {
+    if (!overlaysVisible) return [];
+
+    const currentSlide = images[lightboxIndex];
+    const downloadUrl =
+      currentSlide?.filename && currentSlide?.base_url
+        ? `${currentSlide.base_url}/originals/${currentSlide.filename}`
+        : null;
+
+    if (!downloadUrl) {
+      return [
+        <button
+          key="download"
+          title="Download"
+          aria-label="Download"
+          className={styles.lightboxDownloadButton}
+          style={{
+            background: "none",
+            border: "none",
+            color: "#fff",
+            marginRight: 8,
+            fontSize: 14,
+            cursor: "not-allowed",
+            opacity: 0.5,
+          }}
+          disabled
+          onMouseDown={(e) => e.stopPropagation()}
+        >
+          <DownloadIcon />
+        </button>,
+        "close",
+      ];
+    }
+
+    if (!user) {
+      return [
+        <button
+          key="download"
+          title="Download"
+          className={styles.lightboxDownloadButton}
+          onClick={() => {
+            handleLoginRequired();
+            sendGTMEvent({
+              event: "downloadInGalleryClicked",
+              value: downloadUrl,
+            });
+          }}
+          aria-label="Download"
+          tabIndex={0}
+          style={{
+            background: "none",
+            border: "none",
+            color: "#fff",
+            marginRight: 8,
+            fontSize: 14,
+            cursor: "pointer",
+          }}
+          onMouseDown={(e) => e.stopPropagation()}
+        >
+          <DownloadIcon />
+        </button>,
+        "close",
+      ];
+    }
+
+    // user exists -> use DownloadImageButton but stop propagation on mouseDown to avoid toggling overlays
+    return [
+      <DownloadImageButton
+        key="download"
+        url={downloadUrl}
+        filename={currentSlide?.filename}
+        className={styles.lightboxDownloadButton}
+        onStart={() => {
+          sendGTMEvent({
+            event: "downloadInGalleryClicked",
+            value: downloadUrl,
+          });
+        }}
+        onError={(err: Error) => {
+          console.error("Download failed", err);
+          toast.error(
+            "Could not download file directly — opening in a new tab."
+          );
+        }}
+        // ensure clicks on the download button don't bubble to the slide container
+        onMouseDown={(e: React.MouseEvent) => e.stopPropagation()}
+      >
+        <DownloadIcon />
+      </DownloadImageButton>,
+      "close",
+    ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    overlaysVisible,
+    images,
+    lightboxIndex,
+    user,
+    handleLoginRequired,
+    sendGTMEvent,
+  ]);
 
   return (
     <>
@@ -199,6 +302,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
         <Lightbox
           open={isLightboxOpen}
           close={() => setIsLightboxOpen(false)}
+          className={!overlaysVisible ? styles.hideLightboxUi : undefined}
           slides={images.map((img) => ({
             src:
               img.url || img.base_url || "/favicons/android-chrome-512x512.png",
@@ -395,93 +499,8 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
             view: ({ index }) => setLightboxIndex(index),
           }}
           toolbar={{
-            buttons: [
-              (() => {
-                const currentSlide = images[lightboxIndex];
-                const downloadUrl =
-                  currentSlide?.filename && currentSlide?.base_url
-                    ? `${currentSlide.base_url}/originals/${currentSlide.filename}`
-                    : null;
-
-                if (!downloadUrl) {
-                  return (
-                    <button
-                      key="download"
-                      title="Download"
-                      aria-label="Download"
-                      className={styles.lightboxDownloadButton}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        color: "#fff",
-                        marginRight: 8,
-                        fontSize: 14,
-                        cursor: "not-allowed",
-                        opacity: 0.5,
-                      }}
-                      disabled
-                      onMouseDown={(e) => e.stopPropagation()}
-                    >
-                      <DownloadIcon />
-                    </button>
-                  );
-                }
-
-                if (!user) {
-                  return (
-                    <button
-                      key="download"
-                      title="Download"
-                      className={styles.lightboxDownloadButton}
-                      onClick={() => {
-                        handleLoginRequired();
-                        sendGTMEvent({
-                          event: "downloadInGalleryClicked",
-                          value: downloadUrl,
-                        });
-                      }}
-                      aria-label="Download"
-                      tabIndex={0}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        color: "#fff",
-                        marginRight: 8,
-                        fontSize: 14,
-                        cursor: "pointer",
-                      }}
-                      onMouseDown={(e) => e.stopPropagation()}
-                    >
-                      <DownloadIcon />
-                    </button>
-                  );
-                }
-
-                return (
-                  <DownloadImageButton
-                    key="download"
-                    url={downloadUrl}
-                    filename={currentSlide?.filename}
-                    className={styles.lightboxDownloadButton}
-                    onStart={() => {
-                      sendGTMEvent({
-                        event: "downloadInGalleryClicked",
-                        value: downloadUrl,
-                      });
-                    }}
-                    onError={(err: Error) => {
-                      console.error("Download failed", err);
-                      toast.error(
-                        "Could not download file directly — opening in a new tab."
-                      );
-                    }}
-                  >
-                    <DownloadIcon />
-                  </DownloadImageButton>
-                );
-              })(),
-              "close",
-            ],
+            // buttons are computed in toolbarButtons; when overlaysVisible is false this will be []
+            buttons: toolbarButtons,
           }}
         />
       </Suspense>

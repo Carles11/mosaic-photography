@@ -1,95 +1,94 @@
-"use client";
+import React, { forwardRef } from "react";
 
-import React, { useState } from "react";
+/**
+ * Omit the native 'onError' so we can declare our own onError signature:
+ * onError: (err: Error) => void
+ */
+type NativeButtonProps = Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  "onError"
+>;
 
-type Props = {
+interface Props extends NativeButtonProps {
   url: string;
   filename?: string;
-  className?: string;
-  children?: React.ReactNode;
   onStart?: () => void;
-  onComplete?: () => void;
+  /**
+   * Called when the download logic fails. Not the native DOM onError.
+   */
   onError?: (err: Error) => void;
-};
+  children?: React.ReactNode;
+}
 
 /**
  * DownloadImageButton
- * - Fetches the image URL as a blob, creates an object URL and triggers a download.
- * - Falls back to opening the URL in a new tab if fetch fails (CORS or network errors).
+ * - Accepts native button props (className, disabled, onMouseDown, etc.)
+ * - Internally stops propagation on mouseDown to avoid toggling overlays
+ * - Calls onStart/onError lifecycle callbacks
  */
-export default function DownloadImageButton({
-  url,
-  filename,
-  className,
-  children = "Download",
-  onStart,
-  onComplete,
-  onError,
-}: Props) {
-  const [loading, setLoading] = useState(false);
+const DownloadImageButton = forwardRef<HTMLButtonElement, Props>(
+  (props, ref) => {
+    const {
+      url,
+      filename,
+      onStart,
+      onError,
+      children,
+      onMouseDown: onMouseDownProp,
+      onClick: onClickProp,
+      ...rest
+    } = props;
 
-  const getFilenameFromUrl = (u: string) => {
-    try {
-      const p = new URL(u).pathname;
-      const name = p.substring(p.lastIndexOf("/") + 1);
-      return name || null;
-    } catch {
-      return null;
-    }
-  };
+    const handleMouseDown = (e: React.MouseEvent<HTMLButtonElement>) => {
+      // Prevent parent slide click from toggling overlays
+      e.stopPropagation();
+      onMouseDownProp?.(e);
+    };
 
-  const handleClick = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (loading) return;
-    setLoading(true);
-    onStart?.();
+    const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+      // Prevent parent slide click from toggling overlays
+      e.stopPropagation();
+      onClickProp?.(e);
 
-    try {
-      // Try to fetch the resource as a blob
-      const res = await fetch(url, { mode: "cors" });
-      if (!res.ok) throw new Error(`Failed to fetch resource: ${res.status}`);
+      try {
+        onStart?.();
 
-      const blob = await res.blob();
-      const inferredExt = blob.type?.split("/")?.[1] ?? "";
-      const inferredName =
-        filename ??
-        getFilenameFromUrl(url) ??
-        `download${inferredExt ? "." + inferredExt : ""}`;
+        if (!url) throw new Error("No download URL provided");
 
-      const blobUrl = URL.createObjectURL(blob);
+        // Simple download behavior: create an anchor to trigger download
+        const link = document.createElement("a");
+        link.href = url;
 
-      const a = document.createElement("a");
-      a.href = blobUrl;
-      a.download = inferredName;
-      // ensure anchor isn't visible
-      a.style.display = "none";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+        if (filename) {
+          link.download = filename;
+        } else {
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+        }
 
-      // release memory
-      URL.revokeObjectURL(blobUrl);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      } catch (err) {
+        const error = err instanceof Error ? err : new Error(String(err));
+        onError?.(error);
+      }
+    };
 
-      onComplete?.();
-    } catch (err) {
-      // fallback: open in new tab if fetch fails (CORS or other issues)
-      const error = err instanceof Error ? err : new Error(String(err));
-      console.error("DownloadImageButton error:", error);
-      onError?.(error);
-      window.open(url, "_blank", "noopener,noreferrer");
-    } finally {
-      setLoading(false);
-    }
-  };
+    return (
+      <button
+        ref={ref}
+        type="button"
+        {...rest}
+        onMouseDown={handleMouseDown}
+        onClick={handleClick}
+      >
+        {children}
+      </button>
+    );
+  }
+);
 
-  return (
-    <button
-      onClick={handleClick}
-      className={className}
-      disabled={loading}
-      type="button"
-    >
-      {loading ? "Downloading…" : children}
-    </button>
-  );
-}
+DownloadImageButton.displayName = "DownloadImageButton";
+
+export default DownloadImageButton;
