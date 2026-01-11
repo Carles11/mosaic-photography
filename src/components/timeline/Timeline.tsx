@@ -25,6 +25,23 @@ const Timeline: React.FC<TimelineProps> = ({
           cardDetailedText: "p",
         }}
         itemWidth={isMobile ? 85 : 150}
+        display={{
+          scrollable: true,
+        }}
+        interaction={{
+          keyboardNavigation: true,
+          autoScroll: false,
+        }}
+        animation={{
+          slideshow: {
+            enabled: true,
+            duration: 3000,
+            type: "fade",
+          },
+        }}
+        // slideShow={true}
+        // slideItemDuration={3000}
+        // showProgressOnSlideshow={true}
         theme={{
           primary: getCssVar("--accent-color", "#f4d35e"),
           secondary: getCssVar("--foreground", "#fff"),
@@ -40,9 +57,6 @@ const Timeline: React.FC<TimelineProps> = ({
           textColor: getCssVar("--text-color", "#fff"),
           titleColor: getCssVar("--text-color", "#fff"),
         }}
-        slideShow
-        slideItemDuration={3000}
-        showProgressOnSlideshow={true}
         showOverallSlideshowProgress={true}
         contentDetailsHeight={100}
         highlightCardsOnHover={true}
@@ -53,7 +67,7 @@ const Timeline: React.FC<TimelineProps> = ({
           cardDetailedText: "1.25rem",
         }}
         scrollable={true}
-        timelinePointShape="square"
+        timelinePointShape="circle"
       />
     </div>
   );
