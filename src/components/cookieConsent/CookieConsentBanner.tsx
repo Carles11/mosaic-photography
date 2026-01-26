@@ -54,7 +54,7 @@ export default function CookieConsentBanner(): React.ReactElement | null {
 
       console.debug(
         "[CookieConsentBanner] dispatched consent events:",
-        granted
+        granted,
       );
     } catch (err) {
       console.warn("[CookieConsentBanner] dispatch failed", err);
@@ -85,7 +85,8 @@ export default function CookieConsentBanner(): React.ReactElement | null {
     <div className={styles.banner} role="dialog" aria-live="polite">
       <span className={styles.text}>
         This site uses cookies and tracking technologies (Google Analytics and
-        Microsoft Clarity) for analytics and to improve your experience.{" "}
+        Microsoft Clarity) to understand website usage and improve your
+        experience. No personal data is collected or shared with third parties.{" "}
         <a href="/legal/privacy-policy" className="fancy-link">
           Learn more
         </a>

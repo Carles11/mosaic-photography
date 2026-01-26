@@ -56,8 +56,9 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self';",
-              // allow clarity pixel (c.clarity.ms) and the Bing proxy (c.bing.com)
+              // allow images from self, CDN, analytics, clarity
               "img-src 'self' data: https://cdn.mosaic.photography https://storage.ko-fi.com https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://c.clarity.ms https://c.bing.com;",
+              // allow scripts from self, GA, clarity
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https:;",
               "style-src 'self' 'unsafe-inline' https:;",
               "font-src 'self' data: https:;",
@@ -79,9 +80,10 @@ const nextConfig: NextConfig = {
                 "https://region8.google-analytics.com",
                 "https://region9.google-analytics.com",
                 "https://region10.google-analytics.com",
-                // allow clarity collection endpoint
+                // allow clarity collection endpoints
                 "https://www.clarity.ms",
-                "https://z.clarity.ms;",
+                "https://z.clarity.ms",
+                "https://l.clarity.ms", // <-- newly added
               ].join(" "),
             ].join(" "),
           },
@@ -128,5 +130,5 @@ export default withBundleAnalyzer({
     register: !isDev,
     disable: isDev,
     ...pwaConfig,
-  })(nextConfig)
+  })(nextConfig),
 );
