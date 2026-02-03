@@ -193,7 +193,7 @@ const Credits: React.FC = () => {
         </p>
         <p>
           <strong>Email:</strong>{" "}
-          <a href="mailto:carles@rio-frances.com">carles@rio-frances.com</a>
+          <a href="mailto:legal@mosaic.photography">legal@mosaic.photography</a>
         </p>
         <p>
           <strong>Official Website:</strong>{" "}

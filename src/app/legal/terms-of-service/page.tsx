@@ -72,8 +72,8 @@ const TermsOfService: React.FC = () => {
       <p className={styles.text}>
         If you have any questions or concerns about our terms of service, please
         contact me at{" "}
-        <a href="mailto:carles@rio-frances.com" className="fancy-link">
-          carles@rio-frances.com
+        <a href="mailto:privacy@mosaic.photography" className="fancy-link">
+          privacy@mosaic.photography
         </a>
         .
       </p>

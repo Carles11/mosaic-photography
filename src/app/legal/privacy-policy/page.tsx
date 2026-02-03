@@ -123,8 +123,8 @@ const PrivacyPolicy: React.FC = () => {
       <p className={styles.text}>
         All your account data will be deleted completely and promptly from our
         servers. No data remains after deletion. For assistance, contact us at{" "}
-        <a href="mailto:carles@rio-frances.com" className="fancy-link">
-          carles@rio-frances.com
+        <a href="mailto:privacy@mosaic.photography" className="fancy-link">
+          privacy@mosaic.photography
         </a>
         .
       </p>
@@ -164,8 +164,8 @@ const PrivacyPolicy: React.FC = () => {
       <p className={styles.text}>
         If you have any questions or concerns about this privacy policy, please
         contact us at{" "}
-        <a href="mailto:carles@rio-frances.com" className="fancy-link">
-          carles@rio-frances.com
+        <a href="mailto:privacy@mosaic.photography" className="fancy-link">
+          privacy@mosaic.photography
         </a>
         .
       </p>
