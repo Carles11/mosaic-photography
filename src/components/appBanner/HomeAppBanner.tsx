@@ -5,6 +5,7 @@ import Image from "next/image";
 import styles from "./HomeAppBanner.module.css";
 import { sendGTMEvent } from "@next/third-parties/google";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/appLinks";
+import Link from "next/link";
 
 const COOKIE_NAME = "app_banner_dismissed";
 
@@ -119,6 +120,8 @@ export default function HomeAppBanner() {
             />
           </a>
         </div>
+
+        <Link href="/app">Learn more...</Link>
 
         <button
           className={styles.dismissButton}

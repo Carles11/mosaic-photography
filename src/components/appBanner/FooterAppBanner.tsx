@@ -5,6 +5,7 @@ import Image from "next/image";
 import styles from "./HomeAppBanner.module.css";
 import { sendGTMEvent } from "@next/third-parties/google";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/appLinks";
+import Link from "next/link";
 
 export default function FooterAppBanner() {
   const handleClick = (platform: "ios" | "android") => {
@@ -65,6 +66,7 @@ export default function FooterAppBanner() {
             />
           </a>
         </div>
+        <Link href="/app">Learn more...</Link>
       </div>
     </div>
   );
