@@ -28,13 +28,18 @@ module.exports = {
     {
       // Runtime cache for Next.js static files
       urlPattern: /^https:\/\/www\.mosaic\.photography\/_next\/.*/i,
-      handler: "NetworkFirst",
+      // Use StaleWhileRevalidate for _next assets to avoid long network
+      // blocking when the service worker attempts a network-first fetch.
+      handler: "StaleWhileRevalidate",
       options: {
         cacheName: "next-static",
         expiration: {
           maxEntries: 100,
           maxAgeSeconds: 60 * 60 * 24 * 7, // Cache for 7 days
         },
+        // If a network fetch is attempted, only wait a short time before
+        // falling back to the cached response (in case network is slow).
+        networkTimeoutSeconds: 1,
       },
     },
     {
