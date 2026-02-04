@@ -6,6 +6,7 @@
 import { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
 import { HomeTitles } from "../header/titles/HomeTitles";
+import HomeAppBanner from "@/components/appBanner/HomeAppBanner";
 import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
 import styles from "./home.module.css";
 import { useAgeConsent } from "@/context/AgeConsentContext";
@@ -55,7 +56,7 @@ function HomeClientWrapper({
   const handleModalKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Tab" && modalRef.current) {
       const focusable = modalRef.current.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
       );
       const first = focusable[0] as HTMLElement;
       const last = focusable[focusable.length - 1] as HTMLElement;
@@ -89,6 +90,7 @@ function HomeClientWrapper({
       >
         <div className={styles.content}>
           <div className="v-margin">
+            <HomeAppBanner />
             <HomeTitles />
           </div>
           <PhotographersCardsSlide

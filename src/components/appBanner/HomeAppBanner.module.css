@@ -1,0 +1,75 @@
+.bannerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  box-shadow: none;
+  width: 100%;
+  max-width: 980px;
+  background: transparent;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  gap: 10px;
+}
+
+.badgeLink {
+  display: inline-block;
+  line-height: 0;
+}
+
+.dismissButton {
+  background: transparent;
+  border: none;
+  color: var(--muted-text-color, #bbb);
+  cursor: pointer;
+  font-size: 13px;
+  margin-top: 6px;
+  text-decoration: underline;
+}
+
+.visuallyHidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .bannerContainer {
+    padding: 6px 8px;
+    margin-bottom: 12px;
+  }
+  .badges {
+    gap: 8px;
+  }
+}
+
+/* Desktop: left-align the banner and show badges + dismiss inline */
+@media (min-width: 521px) {
+  .bannerContainer {
+    justify-content: flex-start;
+    margin: 0 0 18px 0;
+    padding: 8px 12px;
+  }
+
+  .inner {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .dismissButton {
+    margin-top: 0;
+    margin-left: 8px;
+  }
+}

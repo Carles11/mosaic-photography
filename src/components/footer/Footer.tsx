@@ -1,6 +1,7 @@
 import RioFrancesLink from "./RioFrancesLink";
 
 import styles from "./footer.module.css";
+import FooterAppBanner from "@/components/appBanner/FooterAppBanner";
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -51,6 +52,9 @@ const Footer: React.FC = () => {
           >
             Instagram
           </a>
+          <div className={styles.footerBadgeItem}>
+            <FooterAppBanner />
+          </div>
         </div>
       </div>
     </footer>
