@@ -62,7 +62,7 @@
   }
 
   .footerContent {
-    padding: 0.5rem; /* Adjust padding in the content area */
+    padding: 0 0.5rem 4rem 0.5rem; /* Adjust padding in the content area */
   }
 
   .footerItem {
