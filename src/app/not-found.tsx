@@ -1,9 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
 import styles from "./Error.module.css";
+import { Metadata } from "next";
 
-export const metadata = {
-  title: "Oops! Page not found",
+export const metadata: Metadata = {
+  title: "404 - Page Not Found | Mosaic.photography",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function Error() {
@@ -18,7 +23,7 @@ export default function Error() {
           alt="error image"
         />
         <h1>404</h1>
-        <p>Opps! This page is lost in space.</p>
+        <p>Oops! This page is lost in space.</p>
 
         <Link href="/" className={styles.btn}>
           Return home
