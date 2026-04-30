@@ -30,7 +30,7 @@ module.exports = {
       urlPattern: /^https:\/\/www\.mosaic\.photography\/_next\/.*/i,
       // Use StaleWhileRevalidate for _next assets to avoid long network
       // blocking when the service worker attempts a network-first fetch.
-      handler: "StaleWhileRevalidate",
+      handler: "NetworkFirst",
       options: {
         cacheName: "next-static",
         expiration: {
