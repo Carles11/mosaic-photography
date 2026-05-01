@@ -193,12 +193,30 @@ const Credits: React.FC = () => {
         </p>
         <p>
           <strong>Email:</strong>{" "}
-          <a href="mailto:legal@mosaic.photography">legal@mosaic.photography</a>
+          <a href="mailto:legal@mosaic.photography" className="fancy-link">
+            legal@mosaic.photography
+          </a>
         </p>
         <p>
           <strong>Official Website:</strong>{" "}
-          <a href="https://www.rio-frances.com" title="Official Website">
+          <a
+            href="https://www.rio-frances.com"
+            title="Official Website"
+            className="fancy-link"
+          >
             www.rio-frances.com
+          </a>
+        </p>
+        <p>
+          <strong>Other projects by the creator:</strong>{" "}
+          <a
+            href="https://www.weddweb.com"
+            title="Weddweb"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fancy-link"
+          >
+            Weddweb.com
           </a>
         </p>
 
