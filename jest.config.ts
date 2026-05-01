@@ -8,7 +8,7 @@ const config = {
   },
   testPathIgnorePatterns: ["/node_modules/", "/.next/"],
   transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
+    "^.+\\.(ts|tsx)$": ["ts-jest", { tsconfig: "tsconfig.jest.json" }],
   },
 
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],

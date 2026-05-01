@@ -67,7 +67,8 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
                   For Print
                 </h3>
                 <p className={styles.sectionDescription}>
-                  Full-resolution original file — highest quality for printing.
+                  Full-resolution original file — highest quality available for
+                  printing.
                 </p>
                 <button
                   className={`${styles.optionButton} ${styles.optionButtonOriginal}`}
