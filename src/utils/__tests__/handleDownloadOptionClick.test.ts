@@ -26,6 +26,8 @@ function makeParams(
 describe("handleDownloadOptionClick", () => {
   let mockAnchor: HTMLAnchorElement;
   let createElementSpy: jest.SpyInstance;
+  let fetchSpy: jest.Mock;
+  let createObjectUrlSpy: jest.Mock;
 
   beforeEach(() => {
     mockAnchor = {
@@ -44,30 +46,48 @@ describe("handleDownloadOptionClick", () => {
     jest
       .spyOn(document.body, "appendChild")
       .mockImplementation(() => mockAnchor);
+
+    fetchSpy = jest.fn().mockResolvedValue({
+      ok: true,
+      blob: async () => new Blob(["ok"], { type: "image/webp" }),
+    } as Response);
+    (globalThis as { fetch?: typeof fetch }).fetch =
+      fetchSpy as unknown as typeof fetch;
+
+    createObjectUrlSpy = jest.fn(() => "blob:mock-download-url");
+    const urlApi = URL as unknown as {
+      createObjectURL?: (obj: Blob) => string;
+      revokeObjectURL?: (url: string) => void;
+    };
+    urlApi.createObjectURL = createObjectUrlSpy;
+    urlApi.revokeObjectURL = jest.fn();
   });
 
   afterEach(() => {
     jest.restoreAllMocks();
   });
 
-  it("calls onRequireLogin and trackEvent when user is null, does not trigger download", () => {
+  it("calls onRequireLogin and trackEvent when user is null, does not trigger download", async () => {
     const params = makeParams({ user: null });
-    handleDownloadOptionClick(params);
+    await handleDownloadOptionClick(params);
 
     expect(params.onRequireLogin).toHaveBeenCalledTimes(1);
     expect(params.trackEvent).toHaveBeenCalledWith(
       "downloadClicked",
       mockOption.url,
     );
+    expect(fetchSpy).not.toHaveBeenCalled();
     expect(createElementSpy).not.toHaveBeenCalled();
     expect(params.onErrorFallback).not.toHaveBeenCalled();
   });
 
-  it("triggers browser download and tracks event when user is authenticated", () => {
+  it("triggers browser download and tracks event when user is authenticated", async () => {
     const params = makeParams({ user: { id: "user-1" } });
-    handleDownloadOptionClick(params);
+    await handleDownloadOptionClick(params);
 
     expect(params.onRequireLogin).not.toHaveBeenCalled();
+    expect(fetchSpy).toHaveBeenCalledWith(mockOption.url);
+    expect(createObjectUrlSpy).toHaveBeenCalledTimes(1);
     expect(createElementSpy).toHaveBeenCalledWith("a");
     expect(mockAnchor.click).toHaveBeenCalledTimes(1);
     expect(params.trackEvent).toHaveBeenCalledWith(
@@ -77,26 +97,23 @@ describe("handleDownloadOptionClick", () => {
     expect(params.onErrorFallback).not.toHaveBeenCalled();
   });
 
-  it("builds a suggested filename from originalFilename and option folder/format", () => {
+  it("builds a suggested filename from originalFilename and option folder/format", async () => {
     const params = makeParams({ user: { id: "user-1" } });
-    handleDownloadOptionClick(params);
+    await handleDownloadOptionClick(params);
 
     expect(mockAnchor.download).toBe("photo_w800.webp");
   });
 
-  it("calls onErrorFallback and falls back to tab-open when download throws", () => {
-    createElementSpy
-      .mockImplementationOnce(() => {
-        throw new Error("DOM error");
-      })
-      .mockReturnValue(mockAnchor);
+  it("calls onErrorFallback and falls back to tab-open when blob download fails", async () => {
+    fetchSpy.mockRejectedValueOnce(new Error("network fail"));
 
     const params = makeParams({ user: { id: "user-1" } });
-    handleDownloadOptionClick(params);
+    await handleDownloadOptionClick(params);
 
     expect(params.onErrorFallback).toHaveBeenCalledWith(expect.any(Error));
     // Fallback path: called again without filename → target="_blank"
-    expect(createElementSpy).toHaveBeenCalledTimes(2);
+    expect(createElementSpy).toHaveBeenCalledTimes(1);
     expect(mockAnchor.target).toBe("_blank");
+    expect(mockAnchor.href).toBe(mockOption.url);
   });
 });

@@ -29,9 +29,6 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
   const printQuality = image.print_quality?.toLowerCase() ?? "";
   const isPrintQuality = ["excellent", "professional"].includes(printQuality);
 
-  console.log("Options:", options);
-  console.log("WebP Options:", webpOptions);
-
   return (
     <div className={styles.modalContent}>
       <div className={styles.modalHeader}>

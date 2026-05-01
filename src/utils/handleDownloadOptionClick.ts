@@ -28,6 +28,33 @@ export function triggerBrowserDownload(url: string, filename?: string): void {
   link.remove();
 }
 
+async function triggerBlobDownload(
+  url: string,
+  filename: string,
+): Promise<void> {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`Could not fetch download URL: ${response.status}`);
+  }
+
+  const blob = await response.blob();
+
+  if (!blob || blob.size === 0) {
+    throw new Error("Downloaded blob is empty");
+  }
+
+  const objectUrl = URL.createObjectURL(blob);
+
+  try {
+    triggerBrowserDownload(objectUrl, filename);
+  } finally {
+    setTimeout(() => {
+      URL.revokeObjectURL(objectUrl);
+    }, 1000);
+  }
+}
+
 function buildSuggestedFilename(
   originalFilename: string | null | undefined,
   option: DownloadOption,
@@ -49,20 +76,22 @@ export function handleDownloadOptionClick({
   onRequireLogin,
   trackEvent,
   onErrorFallback,
-}: HandleDownloadOptionClickParams): void {
+}: HandleDownloadOptionClickParams): Promise<void> {
   if (!user) {
     onRequireLogin();
     trackEvent(eventName, option.url);
-    return;
+    return Promise.resolve();
   }
 
   const suggestedFilename = buildSuggestedFilename(originalFilename, option);
 
-  try {
-    triggerBrowserDownload(option.url, suggestedFilename);
-    trackEvent(eventName, option.url);
-  } catch (error) {
-    onErrorFallback?.(error);
-    triggerBrowserDownload(option.url);
-  }
+  return triggerBlobDownload(option.url, suggestedFilename)
+    .then(() => {
+      trackEvent(eventName, option.url);
+    })
+    .catch((error) => {
+      onErrorFallback?.(error);
+      // Fallback always opens in a new tab, never replacing the app tab.
+      triggerBrowserDownload(option.url);
+    });
 }
