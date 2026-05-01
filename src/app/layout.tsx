@@ -151,6 +151,26 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             logo: "https://www.mosaic.photography/images/logo.png",
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Mosaic Photography",
+              url: "https://www.mosaic.photography",
+              logo: "https://www.mosaic.photography/images/logo.png",
+              description:
+                "Mosaic Photography is a curated gallery of public domain vintage nude photography, celebrating the timeless artistry of legendary photographers.",
+              sameAs: [
+                "https://www.instagram.com/analogue_carles",
+                "https://github.com/Carles11",
+                "https://apps.apple.com/us/app/iconic-photography-gallery/id6755329136",
+                "https://play.google.com/store/apps/details?id=com.carlos_delrio.mosaicphotographyapp",
+              ],
+            }),
+          }}
+        />
         {/* GTM and Clarity are now loaded client-side only via AnalyticsLoader when consent is granted */}
       </head>
       <body className="font-trade-gothic">

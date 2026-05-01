@@ -1,6 +1,9 @@
 import { notFound } from "next/navigation";
 import PhotographerGalleryZoom from "@/components/gallery/PhotographerGalleryZoom";
-import { fetchPhotographerBySlugSSR } from "@/utils/fetchPhotographerByIdSSR";
+import {
+  fetchPhotographerBySlugSSR,
+  fetchAllPhotographerSlugsSSR,
+} from "@/utils/fetchPhotographerByIdSSR";
 import { PhotographerLinks } from "../client/PhotographerLinks";
 import Timeline from "@/components/timeline/Timeline";
 import { getTimelineBySlug } from "@/lib/timeline/photographersTimelines";
@@ -9,6 +12,15 @@ import { formatLifespan } from "@/helpers/dates";
 import type { Photographer } from "@/types/gallery";
 
 import styles from "./Photographers.module.css";
+
+// Revalidate all pre-built photographer pages every 24 hours (ISR)
+export const revalidate = 86400;
+
+// Pre-generate all known photographer slugs at build time
+export async function generateStaticParams() {
+  const slugs = await fetchAllPhotographerSlugsSSR();
+  return slugs.map((surname) => ({ surname }));
+}
 
 // Helper: generate SEO metadata for each photographer page
 export async function generateMetadata({
@@ -98,12 +110,18 @@ function PhotographerJsonLd({
           url: canonicalUrl,
           description: photographer.biography,
           image: ogImageUrl,
+          jobTitle: "Photographer",
+          ...(photographer.birthdate && { birthDate: photographer.birthdate }),
+          ...(photographer.deceasedate && {
+            deathDate: photographer.deceasedate,
+          }),
+          ...(photographer.origin && { nationality: photographer.origin }),
           sameAs: [photographer.website].concat(
             Array.isArray(photographer.store)
               ? (photographer.store as { website?: string }[])
                   .map((s) => s.website)
                   .filter(Boolean)
-              : []
+              : [],
           ),
         }),
       }}
@@ -138,8 +156,37 @@ export default async function PhotographerDetailPage({
     "https://www.mosaic.photography/images/og-image.jpg";
   const canonicalUrl = `https://www.mosaic.photography/photographers/${surname}`;
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.mosaic.photography/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Photographers",
+        item: "https://www.mosaic.photography/photographers",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: `${photographer.name} ${photographer.surname}`,
+        item: canonicalUrl,
+      },
+    ],
+  };
+
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <PhotographerJsonLd
         photographer={photographer}
         canonicalUrl={canonicalUrl}
@@ -152,7 +199,7 @@ export default async function PhotographerDetailPage({
         <p className={styles.sectionContent}>
           {formatLifespan(
             photographer.birthdate ?? "",
-            photographer.deceasedate ?? ""
+            photographer.deceasedate ?? "",
           )}
         </p>
         <hr />

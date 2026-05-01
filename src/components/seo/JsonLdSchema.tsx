@@ -80,7 +80,7 @@ export default function JsonLdSchema({
   // For ImageGallery
   if (type === "ImageGallery" && images) {
     const schemaData = {
-      "@context": "https://schema.org/",
+      "@context": "https://schema.org",
       "@type": "ImageGallery",
       name,
       description,
@@ -108,7 +108,7 @@ export default function JsonLdSchema({
   // For single ImageObject
   if (type === "ImageObject" && image) {
     const schemaData = {
-      "@context": "https://schema.org/",
+      "@context": "https://schema.org",
       "@type": "ImageObject",
       contentUrl: image.contentUrl,
       name,

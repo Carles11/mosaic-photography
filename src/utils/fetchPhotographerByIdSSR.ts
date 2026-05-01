@@ -2,9 +2,24 @@ import { supabase } from "@/lib/supabaseClient";
 import { Photographer, ImageData } from "@/types/gallery";
 import { getAllS3Urls } from "@/utils/imageResizingS3";
 
+// Fetch all photographer slugs for static generation
+export async function fetchAllPhotographerSlugsSSR(): Promise<string[]> {
+  const { data, error } = await supabase
+    .from("photographers")
+    .select("slug")
+    .not("slug", "is", null);
+
+  if (error || !data) {
+    console.error("[fetchAllPhotographerSlugsSSR] Error", error);
+    return [];
+  }
+
+  return data.map((row: { slug: string }) => row.slug).filter(Boolean);
+}
+
 // Fetch by slug (recommended for URLs)
 export async function fetchPhotographerBySlugSSR(
-  slug: string
+  slug: string,
 ): Promise<Photographer | null> {
   try {
     // Fetch the photographer by surname
@@ -17,7 +32,7 @@ export async function fetchPhotographerBySlugSSR(
     if (photographerError || !photographers || photographers.length === 0) {
       console.error(
         "[fetchPhotographerBySlugSSR] Photographer not found or error",
-        photographerError
+        photographerError,
       );
       return null;
     }
@@ -42,7 +57,7 @@ export async function fetchPhotographerBySlugSSR(
     if (imagesError) {
       console.error(
         "[fetchPhotographerBySlugSSR] Images fetch error",
-        imagesError
+        imagesError,
       );
       photographer.images = [];
       return photographer as Photographer;

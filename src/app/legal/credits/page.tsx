@@ -16,7 +16,7 @@ export const metadata = {
       "Credits page of Mosaic Photography, thanking the creators of logos and icons used, and providing a Ko-fi link for donations.",
   },
   twitter: {
-    cardType: "summary_large_image",
+    card: "summary_large_image",
     title: "Credits - Mosaic Photography",
     description:
       "Credits page of Mosaic Photography, thanking the creators of logos and icons used, and providing a Ko-fi link for donations.",
