@@ -20,13 +20,13 @@ import toast from "react-hot-toast";
 import { ImageData } from "@/types";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import { getAllS3Urls, getProgressiveZoomSrc } from "@/utils/imageResizingS3";
+import { handleDownloadOptionClick } from "@/utils/handleDownloadOptionClick";
 import { getMosaicImageProps } from "@/utils/mosaicLayout";
 import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import { sendGTMEvent } from "@next/third-parties/google";
-import DownloadImageButton from "@/components/buttons/DownloadImageButton";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
@@ -89,7 +89,7 @@ export default function FavoritesList({
       const { data: images, error } = await supabase
         .from("images_resize")
         .select(
-          "id, base_url, filename, author, title, description, orientation,created_at, width, height, year"
+          "id, base_url, filename, author, title, description, orientation,created_at, width, height, year",
         )
         .in("id", imageIds);
 
@@ -120,11 +120,18 @@ export default function FavoritesList({
     setLightboxIndex(
       lastLightboxIndex.current !== null
         ? lastLightboxIndex.current
-        : index ?? 0
+        : (index ?? 0),
     );
     setIsLightboxOpen(true);
     lastLightboxIndex.current = null;
   }, []);
+
+  const handleLoginRequired = useCallback(() => {
+    toast.error("Please log in to download images.");
+    setTimeout(() => {
+      router.push("/auth/login");
+    }, 1200);
+  }, [router]);
 
   useEffect(() => {
     if (currentModal && isLightboxOpen) {
@@ -339,7 +346,7 @@ export default function FavoritesList({
                 s3Progressive,
                 1,
                 image.width,
-                image.url ?? ""
+                image.url ?? "",
               ),
               alt: image.title,
               width: image.width,
@@ -387,16 +394,16 @@ export default function FavoritesList({
                 s3Progressive,
                 safeZoom,
                 safeWidth,
-                typedSlide.src
+                typedSlide.src,
               );
               const selectedImgObj = s3Progressive.find(
-                (imgObj) => imgObj.url === imgSrc
+                (imgObj) => imgObj.url === imgSrc,
               );
               const imgWidth = selectedImgObj?.width ?? safeWidth;
               const imgHeight = typedSlide.height
                 ? Math.round(
                     typedSlide.height *
-                      (imgWidth / (typedSlide.width ?? imgWidth))
+                      (imgWidth / (typedSlide.width ?? imgWidth)),
                   )
                 : 1080;
               return (
@@ -449,8 +456,8 @@ export default function FavoritesList({
                         typeof typedSlide.year === "number"
                           ? typedSlide.year
                           : typeof typedSlide.year === "string"
-                          ? Number(typedSlide.year) || undefined
-                          : undefined,
+                            ? Number(typedSlide.year) || undefined
+                            : undefined,
                     }}
                     imgStyleOverride={{
                       width: "100%",
@@ -520,7 +527,6 @@ export default function FavoritesList({
           }}
           toolbar={{
             buttons: [
-              // Use DownloadImageButton in the toolbar for consistent behavior.
               (() => {
                 const currentSlide = mappedFavoriteImages[lightboxIndex];
                 const downloadUrl =
@@ -552,64 +558,63 @@ export default function FavoritesList({
                   );
                 }
 
-                // Not logged in -> prompt login and record attempted download
-                if (!user) {
-                  return (
-                    <button
-                      key="download"
-                      title="Download"
-                      className={styles.lightboxDownloadButton}
-                      onClick={() => {
-                        toast.error("Please log in to download images.");
-                        setTimeout(() => {
-                          router.push("/auth/login");
-                        }, 1200);
-                        sendGTMEvent({
-                          event: "downloadInFavoritesClicked",
-                          value: downloadUrl,
-                        });
-                      }}
-                      aria-label="Download"
-                      tabIndex={0}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        color: "#fff",
-                        marginRight: 8,
-                        fontSize: 14,
-                        cursor: "pointer",
-                      }}
-                    >
-                      <DownloadIcon />
-                    </button>
-                  );
-                }
-
-                // Logged in -> use fetch-based downloader component
                 return (
-                  <DownloadImageButton
+                  <button
                     key="download"
-                    url={downloadUrl}
-                    filename={currentSlide?.filename}
+                    title="Download"
+                    aria-label="Download"
                     className={styles.lightboxDownloadButton}
-                    onStart={() => {
-                      sendGTMEvent({
-                        event: "downloadInFavoritesClicked",
-                        value: downloadUrl,
-                      });
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "#fff",
+                      marginRight: 8,
+                      fontSize: 14,
+                      cursor: "pointer",
                     }}
-                    onError={(err: Error) => {
-                      console.error(
-                        "Download failed, fallback will open in new tab",
-                        err
-                      );
-                      toast.error(
-                        "Could not download file directly — opening in a new tab."
-                      );
+                    onClick={() => {
+                      if (!currentSlide?.base_url || !currentSlide?.filename) {
+                        return;
+                      }
+
+                      const slideFilename = currentSlide.filename;
+
+                      open("downloadOptions", {
+                        image: {
+                          base_url: currentSlide.base_url,
+                          filename: currentSlide.filename,
+                          width: currentSlide.width,
+                          height: currentSlide.height,
+                          print_quality: currentSlide.print_quality,
+                        },
+                        title: "Download image",
+                        onClose: () => {},
+                        onDownloadOption: async (option) => {
+                          handleDownloadOptionClick({
+                            option,
+                            user,
+                            originalFilename: slideFilename,
+                            eventName: "downloadInFavoritesClicked",
+                            onRequireLogin: handleLoginRequired,
+                            trackEvent: (eventName, value) => {
+                              sendGTMEvent({ event: eventName, value });
+                            },
+                            onErrorFallback: (err) => {
+                              console.error(
+                                "Download failed, fallback will open in new tab",
+                                err,
+                              );
+                              toast.error(
+                                "Could not download file directly — opening in a new tab.",
+                              );
+                            },
+                          });
+                        },
+                      });
                     }}
                   >
                     <DownloadIcon />
-                  </DownloadImageButton>
+                  </button>
                 );
               })(),
               "close",

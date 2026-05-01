@@ -123,6 +123,67 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+##################################################################
+###################### How to upload new images ##################
+##################################################################
+
+To add new photographers and images to the project, follow these steps:
+
+### 1. Add Photographer to Supabase
+
+- Go to your Supabase dashboard and add a new row to the `photographers` table.
+- Fill in fields such as `id`, `name`, `surname`, `author`, `biography`, `intro`, `birthdate`, `origin`, `website`, `instagram`, `slug`, etc.
+- The `author` field must match the folder and image naming conventions used below.
+
+### 2. Prepare and Upload Images to AWS S3
+
+- Each photographer has a folder in the S3 bucket, e.g. `/anne-brigman/`.
+- Inside each photographer folder, create these subfolders:
+  - `originals/` (original images)
+  - `originalsWEBP/` (originals converted to WebP)
+  - `w400/`, `w600/`, `w800/`, `w1200/`, `w1600/` (resized WebP images)
+- Place your images in the `originals/` folder. Use the scripts below to generate all required sizes and formats.
+
+### 3. Image Naming Conventions
+
+- Filenames should follow this format:
+  `author_title_year-orientation-color-nudity[_ms].jpg`
+  Example: `anne-brigman_the-shore_year-1905_vertical_bw_nude.jpg`
+- Photographer portraits start with `000_aaa_` (e.g., `000_aaa_anne-brigman.jpg`).
+- Use hyphens (`-`) and underscores (`_`) for separation. No spaces.
+- All images will be converted to `.webp` for delivery.
+
+### 4. Generate Resized Images
+
+- Use the provided scripts in the `scripts/` folder:
+  - `resize-images.mjs` — batch process all photographers
+  - `resize-images-for-one-photographer.mjs` — process a single photographer
+- These scripts will create the required WebP images in each size folder.
+
+### 5. Generate Image Metadata CSV
+
+- Run `generate_images_csv.py` to scan your image folders and generate a CSV file with all metadata extracted from filenames.
+- This script ensures author names and metadata are consistent and ready for import.
+
+### 6. Import Image Metadata to Supabase
+
+- Import the generated CSV into the `images_resize` table in Supabase.
+- Each row should include: `base_url`, `filename`, `author`, `title`, `year`, `orientation`, `color`, `nudity`, `description`, and `sizes_info`.
+- The `author` field must match the photographer’s `author` value.
+
+### 7. Verify in the App
+
+- Check the gallery and photographer pages to ensure new images and photographers appear correctly.
+- Images should be visible, properly attributed, and available in all required sizes.
+
+### References
+
+- See scripts in the `scripts/` folder for automation.
+- See `src/types/gallery.ts` for required fields.
+- See `src/utils/fetchPhotographersWithFeaturedSSR.ts`, `fetchGalleryImagesSSR.ts`, and `fetchPhotographerByIdSSR.ts` for data loading logic.
+
+If you need step-by-step help with Supabase import, S3 upload, or running scripts, see the code comments or ask for more details.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

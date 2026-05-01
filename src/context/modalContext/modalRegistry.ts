@@ -13,6 +13,7 @@ export type ModalKey =
   // | "goPro"
   | "comments"
   | "createCollection"
+  | "downloadOptions"
   | "editCollection"
   | "photographer"
   | "shareCollection"
@@ -36,6 +37,14 @@ export type ModalPropsMap = {
   createCollection: {
     onClose: () => void;
     onCreateCollection: (collection: import("@/types").Collection) => void;
+  };
+  downloadOptions: {
+    image: import("@/utils/getAvailableDownloadOptionsForImage").DownloadOptionsImageInput;
+    onClose: () => void;
+    onDownloadOption: (
+      option: import("@/utils/getAvailableDownloadOptionsForImage").DownloadOption,
+    ) => void | Promise<void>;
+    title?: string;
   };
   editCollection: {
     collection: import("@/types").Collection;
@@ -70,6 +79,8 @@ export const modalRegistry: {
   comments: () => import("@/components/modals/comments/CommentsModalBody"),
   createCollection: () =>
     import("@/components/modals/createCollection/CreateCollectionModalBody"),
+  downloadOptions: () =>
+    import("@/components/modals/downloadOptions/DownloadOptionsModalBody"),
   editCollection: () =>
     import("@/components/modals/editCollection/EditCollectionModalBody"),
   photographer: () =>

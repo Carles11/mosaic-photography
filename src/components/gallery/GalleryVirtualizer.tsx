@@ -21,9 +21,9 @@ import { useAuthSession } from "@/context/AuthSessionContext";
 import toast from "react-hot-toast";
 import { useRouter, usePathname } from "next/navigation";
 import { getMosaicImageProps } from "@/utils/mosaicLayout";
+import { handleDownloadOptionClick } from "@/utils/handleDownloadOptionClick";
 import styles from "./galleryVirtualizer.module.css";
 import { sendGTMEvent } from "@next/third-parties/google";
-import DownloadImageButton from "@/components/buttons/DownloadImageButton";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
@@ -46,7 +46,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [overlaysVisible, setOverlaysVisible] = useState(true);
-  const { currentModal } = useModal();
+  const { currentModal, open: openModal } = useModal();
   const lastLightboxIndex = useRef<number | null>(null);
   const prevModal = useRef<unknown>(null);
   const { user } = useAuthSession();
@@ -109,7 +109,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
         </div>
       );
     },
-    [onLoginRequired]
+    [onLoginRequired],
   );
 
   useEffect(() => {
@@ -172,7 +172,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     // This covers <a>, <button>, [role="button"], inputs, selects, textareas, and elements having onclick handlers.
     // We also include svg and path so clicking icons don't toggle inadvertently.
     const interactive = target.closest(
-      "a, button, [role='button'], input, textarea, select, label, svg, path"
+      "a, button, [role='button'], input, textarea, select, label, svg, path",
     );
     if (interactive) return;
 
@@ -215,61 +215,61 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
       ];
     }
 
-    if (!user) {
-      return [
-        <button
-          key="download"
-          title="Download"
-          className={styles.lightboxDownloadButton}
-          onClick={() => {
-            handleLoginRequired();
-            sendGTMEvent({
-              event: "downloadInGalleryClicked",
-              value: downloadUrl,
-            });
-          }}
-          aria-label="Download"
-          tabIndex={0}
-          style={{
-            background: "none",
-            border: "none",
-            color: "#fff",
-            marginRight: 8,
-            fontSize: 14,
-            cursor: "pointer",
-          }}
-          onMouseDown={(e) => e.stopPropagation()}
-        >
-          <DownloadIcon />
-        </button>,
-        "close",
-      ];
-    }
-
-    // user exists -> use DownloadImageButton but stop propagation on mouseDown to avoid toggling overlays
     return [
-      <DownloadImageButton
+      <button
         key="download"
-        url={downloadUrl}
-        filename={currentSlide?.filename}
+        title="Download"
+        aria-label="Download"
         className={styles.lightboxDownloadButton}
-        onStart={() => {
-          sendGTMEvent({
-            event: "downloadInGalleryClicked",
-            value: downloadUrl,
+        style={{
+          background: "none",
+          border: "none",
+          color: "#fff",
+          marginRight: 8,
+          fontSize: 14,
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          if (!currentSlide?.base_url || !currentSlide?.filename) {
+            return;
+          }
+
+          const slideFilename = currentSlide.filename;
+
+          openModal("downloadOptions", {
+            image: {
+              base_url: currentSlide.base_url,
+              filename: currentSlide.filename,
+              width: currentSlide.width,
+              height: currentSlide.height,
+              print_quality: currentSlide.print_quality,
+            },
+            title: "Download image",
+            onClose: () => {},
+            onDownloadOption: async (option) => {
+              handleDownloadOptionClick({
+                option,
+                user,
+                originalFilename: slideFilename,
+                eventName: "downloadInGalleryClicked",
+                onRequireLogin: handleLoginRequired,
+                trackEvent: (eventName, value) => {
+                  sendGTMEvent({ event: eventName, value });
+                },
+                onErrorFallback: (err) => {
+                  console.error("Download failed", err);
+                  toast.error(
+                    "Could not download file directly — opening in a new tab.",
+                  );
+                },
+              });
+            },
           });
         }}
-        onError={(err: Error) => {
-          console.error("Download failed", err);
-          toast.error(
-            "Could not download file directly — opening in a new tab."
-          );
-        }}
-        // ensure clicks on the download button don't bubble to the slide container
         onMouseDown={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <DownloadIcon />
-      </DownloadImageButton>,
+      </button>,
       "close",
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -277,6 +277,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     overlaysVisible,
     images,
     lightboxIndex,
+    openModal,
     user,
     handleLoginRequired,
     sendGTMEvent,

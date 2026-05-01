@@ -14,6 +14,7 @@ import HeartButton from "@/components/buttons/HeartButton";
 import CommentsLauncher from "@/components/modals/comments/CommentsLauncher";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import { getProgressiveZoomSrc } from "@/utils/imageResizingS3";
+import { handleDownloadOptionClick } from "@/utils/handleDownloadOptionClick";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import type { GalleryProps } from "@/types/gallery";
@@ -21,7 +22,6 @@ import styles from "./photographerGalleryZoom.module.css";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import toast from "react-hot-toast";
 import { sendGTMEvent } from "@next/third-parties/google";
-import DownloadImageButton from "@/components/buttons/DownloadImageButton";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
@@ -33,7 +33,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const router = useRouter();
   const { user } = useAuthSession();
-  const { currentModal } = useModal();
+  const { currentModal, open: openModal } = useModal();
   const lastLightboxIndex = useRef<number | null>(null);
   const prevModal = useRef<string>(null);
 
@@ -62,7 +62,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
             ? img.orientation
             : undefined,
       })),
-    [images]
+    [images],
   );
 
   useEffect(() => {
@@ -87,11 +87,18 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
 
   const openLightbox = useCallback((idx: number) => {
     setLightboxIndex(
-      lastLightboxIndex.current !== null ? lastLightboxIndex.current : idx
+      lastLightboxIndex.current !== null ? lastLightboxIndex.current : idx,
     );
     setIsLightboxOpen(true);
     lastLightboxIndex.current = null;
   }, []);
+
+  const handleLoginRequired = useCallback(() => {
+    toast.error("Please log in to download images.");
+    setTimeout(() => {
+      router.push("/auth/login");
+    }, 1200);
+  }, [router]);
 
   // SVG Download icon (Material style)
   const DownloadIcon = () => (
@@ -239,7 +246,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                 typedSlide.s3Progressive || [],
                 safeZoom,
                 safeWidth,
-                typedSlide.src
+                typedSlide.src,
               );
 
               return (
@@ -362,7 +369,6 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
           }}
           toolbar={{
             buttons: [
-              // Use the reusable DownloadImageButton when possible.
               (() => {
                 const currentSlide = imagesWithUrl[lightboxIndex];
                 const downloadUrl =
@@ -394,65 +400,63 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                   );
                 }
 
-                // Not logged in: prompt login and send GTM event for attempted download
-                if (!user) {
-                  return (
-                    <button
-                      key="download"
-                      title="Download"
-                      className={styles.lightboxDownloadButton}
-                      onClick={() => {
-                        toast.error("Please log in to download images.");
-                        setTimeout(() => {
-                          router.push("/auth/login");
-                        }, 1200);
-                        sendGTMEvent({
-                          event: "downloadInPhotographerClicked",
-                          value: downloadUrl,
-                        });
-                      }}
-                      aria-label="Download"
-                      tabIndex={0}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        color: "#fff",
-                        marginRight: 8,
-                        fontSize: 14,
-                        cursor: "pointer",
-                      }}
-                    >
-                      <DownloadIcon />
-                    </button>
-                  );
-                }
-
-                // Logged in and download URL exists -> show fetch-based downloader.
                 return (
-                  <DownloadImageButton
+                  <button
                     key="download"
-                    url={downloadUrl}
-                    filename={currentSlide?.filename}
+                    title="Download"
+                    aria-label="Download"
                     className={styles.lightboxDownloadButton}
-                    onStart={() => {
-                      // Keep GTM tracking identical to previous behavior
-                      sendGTMEvent({
-                        event: "downloadInPhotographerClicked",
-                        value: downloadUrl,
-                      });
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "#fff",
+                      marginRight: 8,
+                      fontSize: 14,
+                      cursor: "pointer",
                     }}
-                    onError={(err: Error) => {
-                      console.error(
-                        "Download failed, fallback will open in new tab",
-                        err
-                      );
-                      toast.error(
-                        "Could not download file directly — opening in a new tab."
-                      );
+                    onClick={() => {
+                      if (!currentSlide?.base_url || !currentSlide?.filename) {
+                        return;
+                      }
+
+                      const slideFilename = currentSlide.filename;
+
+                      openModal("downloadOptions", {
+                        image: {
+                          base_url: currentSlide.base_url,
+                          filename: currentSlide.filename,
+                          width: currentSlide.width,
+                          height: currentSlide.height,
+                          print_quality: currentSlide.print_quality,
+                        },
+                        title: "Download image",
+                        onClose: () => {},
+                        onDownloadOption: async (option) => {
+                          handleDownloadOptionClick({
+                            option,
+                            user,
+                            originalFilename: slideFilename,
+                            eventName: "downloadInPhotographerClicked",
+                            onRequireLogin: handleLoginRequired,
+                            trackEvent: (eventName, value) => {
+                              sendGTMEvent({ event: eventName, value });
+                            },
+                            onErrorFallback: (err) => {
+                              console.error(
+                                "Download failed, fallback will open in new tab",
+                                err,
+                              );
+                              toast.error(
+                                "Could not download file directly — opening in a new tab.",
+                              );
+                            },
+                          });
+                        },
+                      });
                     }}
                   >
                     <DownloadIcon />
-                  </DownloadImageButton>
+                  </button>
                 );
               })(),
               "close",

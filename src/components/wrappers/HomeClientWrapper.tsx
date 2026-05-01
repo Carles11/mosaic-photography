@@ -90,9 +90,12 @@ function HomeClientWrapper({
       >
         <div className={styles.content}>
           <div className="v-margin">
+            {/* APP Stores icons */}
             <HomeAppBanner />
+            {/* Vintage Nude Photography Gallery – Public Domain & Copyright-Free Art */}
             <HomeTitles />
           </div>
+          {/* VINTAGE NUDE ART PHOTOGRAPHERS */}
           <PhotographersCardsSlide
             photographers={photographers}
             onLoginRequired={onLoginClick}
