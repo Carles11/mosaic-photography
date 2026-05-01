@@ -6,6 +6,7 @@ import {
   type DownloadOption,
   type DownloadOptionsImageInput,
 } from "@/utils/getAvailableDownloadOptionsForImage";
+
 import styles from "./DownloadOptionsModalBody.module.css";
 
 interface DownloadOptionsModalBodyProps {
@@ -27,6 +28,9 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
 
   const printQuality = image.print_quality?.toLowerCase() ?? "";
   const isPrintQuality = ["excellent", "professional"].includes(printQuality);
+
+  console.log("Options:", options);
+  console.log("WebP Options:", webpOptions);
 
   return (
     <div className={styles.modalContent}>
@@ -55,9 +59,35 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
               </div>
             )}
 
+            {originalOption && (
+              <section className={styles.section}>
+                <h3
+                  className={`${styles.sectionTitle} ${styles.sectionTitlePrint}`}
+                >
+                  For Print
+                </h3>
+                <p className={styles.sectionDescription}>
+                  Full-resolution original file — highest quality for printing.
+                </p>
+                <button
+                  className={`${styles.optionButton} ${styles.optionButtonOriginal}`}
+                  onClick={() => onDownloadOption(originalOption)}
+                >
+                  {originalOption.label}
+                </button>
+              </section>
+            )}
+
+            {webpOptions.length > 0 && originalOption && (
+              <hr className={styles.sectionDivider} aria-hidden="true" />
+            )}
+
             {webpOptions.length > 0 && (
               <section className={styles.section}>
                 <h3 className={styles.sectionTitle}>Fast and Free (WebP)</h3>
+                <p className={styles.sectionDescription}>
+                  Smaller file size, perfect for sharing and web use.
+                </p>
                 <div className={styles.optionsGrid}>
                   {webpOptions.map((option) => (
                     <button
@@ -69,18 +99,6 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
                     </button>
                   ))}
                 </div>
-              </section>
-            )}
-
-            {originalOption && (
-              <section className={styles.section}>
-                <h3 className={styles.sectionTitle}>For Print</h3>
-                <button
-                  className={`${styles.optionButton} ${styles.optionButtonOriginal}`}
-                  onClick={() => onDownloadOption(originalOption)}
-                >
-                  {originalOption.label}
-                </button>
               </section>
             )}
           </>
