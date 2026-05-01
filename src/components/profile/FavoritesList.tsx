@@ -77,6 +77,10 @@ export default function FavoritesList({
     }));
   }, [favoriteImages]);
 
+  const favoriteImagesById = useMemo(() => {
+    return new Map(favoriteImages.map((image) => [image.id, image]));
+  }, [favoriteImages]);
+
   const loadFavoriteImages = useCallback(async () => {
     if (favorites.size === 0) {
       setFavoriteImages([]);
@@ -89,7 +93,7 @@ export default function FavoritesList({
       const { data: images, error } = await supabase
         .from("images_resize")
         .select(
-          "id, base_url, filename, author, title, description, orientation,created_at, width, height, year",
+          "id, base_url, filename, author, title, description, orientation,created_at, width, height, year, print_quality",
         )
         .in("id", imageIds);
 
@@ -528,7 +532,10 @@ export default function FavoritesList({
           toolbar={{
             buttons: [
               (() => {
-                const currentSlide = mappedFavoriteImages[lightboxIndex];
+                const mappedSlide = mappedFavoriteImages[lightboxIndex];
+                const currentSlide = mappedSlide?.id
+                  ? (favoriteImagesById.get(mappedSlide.id) ?? mappedSlide)
+                  : mappedSlide;
                 const downloadUrl =
                   currentSlide?.filename && currentSlide?.base_url
                     ? `${currentSlide.base_url}/originals/${currentSlide.filename}`
