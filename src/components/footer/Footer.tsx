@@ -28,6 +28,26 @@ const Footer: React.FC = () => {
               FAQs
             </a>
           </p>
+          <p>
+            Official project social:{" "}
+            <a
+              href="https://www.instagram.com/mosaic.photography.gallery"
+              className="fancy-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Instagram
+            </a>{" "}
+            |{" "}
+            <a
+              href="https://www.facebook.com/mosaic.photography.gallery"
+              className="fancy-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Facebook
+            </a>
+          </p>
         </div>
         <div className={styles.footerItem}>
           <p>Created by</p>

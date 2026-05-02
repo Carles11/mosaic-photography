@@ -163,7 +163,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               description:
                 "Mosaic Photography is a curated gallery of public domain vintage nude photography, celebrating the timeless artistry of legendary photographers.",
               sameAs: [
-                "https://www.instagram.com/analogue_carles",
+                "https://www.instagram.com/mosaic.photography.gallery",
+                "https://www.facebook.com/mosaic.photography.gallery",
                 "https://github.com/Carles11",
                 "https://apps.apple.com/us/app/iconic-photography-gallery/id6755329136",
                 "https://play.google.com/store/apps/details?id=com.carlos_delrio.mosaicphotographyapp",
