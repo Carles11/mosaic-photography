@@ -28,6 +28,12 @@ function getSafeImageWidth(width?: number | null): number {
   }
   return DEFAULT_IMAGE_WIDTH;
 }
+function getSafeImageHeight(height?: number | null): number {
+  if (typeof height === "number" && Number.isFinite(height) && height > 0) {
+    return Math.round(height);
+  }
+  return DEFAULT_IMAGE_WIDTH;
+}
 
 function normalizeBaseUrl(baseUrl: string): string {
   return baseUrl.replace(/\/+$/, "");
@@ -45,6 +51,7 @@ export function getAvailableDownloadOptionsForImage(
 
   const baseUrl = normalizeBaseUrl(rawBaseUrl);
   const width = getSafeImageWidth(image.width);
+  const height = getSafeImageHeight(image.height);
   const printQuality = image.print_quality?.toLowerCase() ?? "";
   const availableSizes = S3_SIZE_WIDTHS.filter((size) => size <= width);
 
@@ -74,13 +81,11 @@ export function getAvailableDownloadOptionsForImage(
     filename.includes(".") && filename.split(".").pop()
       ? filename.split(".").pop()!.toLowerCase()
       : "jpg";
-  let originalLabel = "Download original";
+  let originalLabel = `Best available quality is ${width}x${height} px`;
 
   if (["excellent", "professional"].includes(printQuality)) {
-    originalLabel += " - Best for print";
+    originalLabel += " - This image is optimal for print";
   }
-
-  originalLabel += ` (${width}w ${originalExt.toUpperCase()})`;
 
   options.push({
     label: originalLabel,

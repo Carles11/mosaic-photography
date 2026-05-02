@@ -244,7 +244,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
               height: currentSlide.height,
               print_quality: currentSlide.print_quality,
             },
-            title: "Download image",
+            title: "Choose your option",
             onClose: () => {},
             onDownloadOption: async (option) => {
               handleDownloadOptionClick({

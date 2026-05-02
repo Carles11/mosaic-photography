@@ -9,7 +9,7 @@
 }
 
 .modalContent {
-  background: var(--background-color);
+  background: rgba(0, 0, 0, 0.5);
   padding: 20px;
   border-radius: 8px;
   max-width: 560px;
@@ -17,6 +17,8 @@
   max-height: 90vh;
   overflow: auto;
   transform: translateY(0);
-  transition: opacity 160ms ease, transform 160ms ease;
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
   z-index: 10002;
 }

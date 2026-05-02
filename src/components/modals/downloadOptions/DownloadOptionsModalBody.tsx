@@ -20,7 +20,7 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
   image,
   onClose,
   onDownloadOption,
-  title = "Download image",
+  title = "Choose your option",
 }) => {
   const options = getAvailableDownloadOptionsForImage(image);
   const webpOptions = options.filter((o) => !o.isOriginal);
@@ -29,6 +29,7 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
   const printQuality = image.print_quality?.toLowerCase() ?? "";
   const isPrintQuality = ["excellent", "professional"].includes(printQuality);
 
+  console.log({ originalOption });
   return (
     <div className={styles.modalContent}>
       <div className={styles.modalHeader}>
@@ -64,14 +65,16 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
                   For Print
                 </h3>
                 <p className={styles.sectionDescription}>
-                  Full-resolution original file — highest quality available for
-                  printing.
+                  {isPrintQuality
+                    ? originalOption.label
+                    : "This image may not be ideal for printing, but you can still download the original version"}
+                  .
                 </p>
                 <button
                   className={`${styles.optionButton} ${styles.optionButtonOriginal}`}
                   onClick={() => onDownloadOption(originalOption)}
                 >
-                  {originalOption.label}
+                  Download original ({originalOption.format.toUpperCase()})
                 </button>
               </section>
             )}
