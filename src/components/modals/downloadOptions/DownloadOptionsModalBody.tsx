@@ -8,6 +8,8 @@ import {
 } from "@/utils/getAvailableDownloadOptionsForImage";
 
 import styles from "./DownloadOptionsModalBody.module.css";
+import { qualityConfig } from "@/lib/images/quality/qualityConfig";
+import { QualityLevel } from "@/types/gallery";
 
 interface DownloadOptionsModalBodyProps {
   image: DownloadOptionsImageInput;
@@ -27,8 +29,10 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
   const originalOption = options.find((o) => o.isOriginal) ?? null;
 
   const printQuality = image.print_quality?.toLowerCase() ?? "";
-  const isPrintQuality = ["excellent", "professional"].includes(printQuality);
+  const quality =
+    qualityConfig[printQuality as QualityLevel] ?? qualityConfig[""];
 
+  console.log({ image });
   return (
     <div className={styles.modalContent}>
       <div className={styles.modalHeader}>
@@ -49,12 +53,9 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
           </div>
         ) : (
           <>
-            {isPrintQuality && (
-              <div className={styles.qualityBadge}>
-                ★ {printQuality.charAt(0).toUpperCase() + printQuality.slice(1)}{" "}
-                quality — great for print
-              </div>
-            )}
+            <div className={`${styles.qualityBadge} ${quality.badge}`}>
+              {quality.stars} {quality.label} quality —{" "}
+            </div>
 
             {originalOption && (
               <section className={styles.section}>
@@ -64,10 +65,7 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
                   For Print
                 </h3>
                 <p className={styles.sectionDescription}>
-                  {isPrintQuality
-                    ? originalOption.label
-                    : "This image may not be ideal for printing, but you can still download the original version"}
-                  .
+                  {quality.printDescription}
                 </p>
                 <button
                   className={`${styles.optionButton} ${styles.optionButtonOriginal}`}

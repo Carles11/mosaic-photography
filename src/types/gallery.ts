@@ -51,8 +51,15 @@ export interface ImageData {
   color?: string;
   nudity?: string;
   year?: number;
-  print_quality?: "good" | "standard" | "excellent" | "professional";
+  print_quality?: QualityLevel;
 }
+
+export type QualityLevel =
+  | "professional"
+  | "excellent"
+  | "good"
+  | "standard"
+  | "";
 
 export interface GalleryProps extends JSX.IntrinsicAttributes {
   id?: string;
@@ -96,7 +103,7 @@ export type GalleryFilter = {
   color?: "bw" | "color" | null;
   nudity?: "nude" | "not-nude" | null;
   gender?: "male" | "female" | "mixed" | null;
-  print_quality?: "good" | "standard" | "excellent" | "professional" | null;
+  print_quality?: QualityLevel | null;
   year?: { from: number; to: number } | null;
   // Add other filter fields as needed
 };

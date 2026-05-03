@@ -93,13 +93,32 @@
 .qualityBadge {
   display: inline-block;
   font-size: 0.85rem;
-  background: #ffd54b;
-  color: #363200;
   border-radius: 12px;
   padding: 0.25rem 0.9rem;
   font-weight: bold;
   letter-spacing: 0.02em;
   margin-bottom: 1.3rem;
+  color: #1a1a00;
+}
+
+.qualityBadgeProfessional {
+  background: #4ade80; /* green */
+  color: #052e16;
+}
+
+.qualityBadgeExcellent {
+  background: #a3e635; /* lime */
+  color: #1a2e05;
+}
+
+.qualityBadgeGood {
+  background: #fbbf24; /* amber */
+  color: #431407;
+}
+
+.qualityBadgeStandard {
+  background: #f87171; /* red */
+  color: #3b0000;
 }
 
 .sectionDivider {
