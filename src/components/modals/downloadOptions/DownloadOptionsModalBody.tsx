@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import dynamic from "next/dynamic";
+import React, { useEffect, useState } from "react";
 import {
   getAvailableDownloadOptionsForImage,
   type DownloadOption,
@@ -18,6 +19,25 @@ interface DownloadOptionsModalBodyProps {
   title?: string;
 }
 
+const Tooltip = dynamic(
+  () => import("react-tooltip").then((mod) => mod.Tooltip),
+  { ssr: false },
+);
+
+function formatBytes(bytes: number): string {
+  if (!Number.isFinite(bytes) || bytes <= 0) return "size unavailable";
+
+  const units = ["B", "KB", "MB", "GB"];
+  const power = Math.min(
+    Math.floor(Math.log(bytes) / Math.log(1024)),
+    units.length - 1,
+  );
+  const value = bytes / Math.pow(1024, power);
+  const decimals = power === 0 ? 0 : value >= 10 ? 1 : 2;
+
+  return `${value.toFixed(decimals)} ${units[power]}`;
+}
+
 const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
   image,
   onClose,
@@ -27,12 +47,61 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
   const options = getAvailableDownloadOptionsForImage(image);
   const webpOptions = options.filter((o) => !o.isOriginal);
   const originalOption = options.find((o) => o.isOriginal) ?? null;
+  const [originalFileSize, setOriginalFileSize] =
+    useState<string>("checking size...");
 
   const printQuality = image.print_quality?.toLowerCase() ?? "";
   const quality =
     qualityConfig[printQuality as QualityLevel] ?? qualityConfig[""];
+  const resolutionLabel =
+    typeof image.width === "number" && typeof image.height === "number"
+      ? `(${image.width} x ${image.height} px)`
+      : "resolution unavailable";
+  const originalSizeTooltip =
+    originalFileSize === "size unavailable"
+      ? "File size is unavailable for this image."
+      : originalFileSize === "checking size..."
+        ? "Checking file size..."
+        : `Estimated size: ${originalFileSize}`;
 
-  console.log({ image });
+  useEffect(() => {
+    let isActive = true;
+
+    if (!originalOption?.url) {
+      setOriginalFileSize("size unavailable");
+      return;
+    }
+
+    setOriginalFileSize("checking size...");
+
+    fetch(originalOption.url, { method: "HEAD" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HEAD request failed: ${response.status}`);
+        }
+
+        const headerValue = response.headers.get("content-length");
+        const bytes = headerValue ? Number(headerValue) : NaN;
+
+        if (!Number.isFinite(bytes) || bytes <= 0) {
+          throw new Error("Missing or invalid content-length header");
+        }
+
+        if (isActive) {
+          setOriginalFileSize(formatBytes(bytes));
+        }
+      })
+      .catch(() => {
+        if (isActive) {
+          setOriginalFileSize("size unavailable");
+        }
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, [originalOption?.url]);
+
   return (
     <div className={styles.modalContent}>
       <div className={styles.modalHeader}>
@@ -54,7 +123,7 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
         ) : (
           <>
             <div className={`${styles.qualityBadge} ${quality.badge}`}>
-              {quality.stars} {quality.label} quality —{" "}
+              {quality.stars} {quality.label} quality - {resolutionLabel}
             </div>
 
             {originalOption && (
@@ -72,7 +141,19 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
                   onClick={() => onDownloadOption(originalOption)}
                 >
                   Download original ({originalOption.format.toUpperCase()})
+                  <span
+                    id="download-size-tooltip-anchor"
+                    className={styles.downloadSizeHint}
+                    aria-label="About file size"
+                  >
+                    i
+                  </span>
                 </button>
+                <Tooltip
+                  anchorSelect="#download-size-tooltip-anchor"
+                  content={originalSizeTooltip}
+                  className={styles.downloadSizeTooltip}
+                />
               </section>
             )}
 

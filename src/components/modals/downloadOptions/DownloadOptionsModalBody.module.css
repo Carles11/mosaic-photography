@@ -56,14 +56,13 @@
   padding: 1.1rem 1.25rem 1.3rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 1.1rem; /* Was 2rem */
   background: var(--card-background, #222);
   overflow-y: auto; /* <-- Make scrollable */
   max-height: 70vh; /* <-- Move max-height here for proper inner scroll */
 }
 
 .section {
-  margin-bottom: 0.85rem;
+  margin-bottom: 0;
 }
 
 .section:last-child {
@@ -74,7 +73,7 @@
   font-size: 1rem;
   color: #51db98;
   font-weight: 600;
-  margin: 0rem;
+  margin: 0.4rem 0 0 0;
   padding: 0.4rem;
   letter-spacing: 0.04em;
 }
@@ -86,7 +85,6 @@
   font-size: 0.97rem;
   color: #b3b3b3;
   margin-bottom: 1.1rem;
-  margin-top: 0.75rem;
   padding: 0;
 }
 
@@ -97,17 +95,16 @@
   padding: 0.25rem 0.9rem;
   font-weight: bold;
   letter-spacing: 0.02em;
-  margin-bottom: 1.3rem;
   color: #1a1a00;
 }
 
 .qualityBadgeProfessional {
-  background: #4ade80; /* green */
+  background: #58c981; /* green */
   color: #052e16;
 }
 
 .qualityBadgeExcellent {
-  background: #a3e635; /* lime */
+  background: #c1ec7c; /* lime */
   color: #1a2e05;
 }
 
@@ -182,6 +179,28 @@
 .optionButtonOriginal:hover {
   background: #fff4c2;
   outline: none;
+}
+
+.downloadSizeHint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+.downloadSizeTooltip {
+  max-width: 260px;
+  font-size: 0.82rem;
+  line-height: 1.25;
+  z-index: 9999;
 }
 
 .emptyState {
