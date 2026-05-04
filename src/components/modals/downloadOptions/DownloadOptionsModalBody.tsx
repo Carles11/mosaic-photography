@@ -136,19 +136,22 @@ const DownloadOptionsModalBody: React.FC<DownloadOptionsModalBodyProps> = ({
                 <p className={styles.sectionDescription}>
                   {quality.printDescription}
                 </p>
-                <button
-                  className={`${styles.optionButton} ${styles.optionButtonOriginal}`}
-                  onClick={() => onDownloadOption(originalOption)}
-                >
-                  Download original ({originalOption.format.toUpperCase()})
-                  <span
+                <div className={styles.downloadActionRow}>
+                  <button
+                    className={`${styles.optionButton} ${styles.optionButtonOriginal}`}
+                    onClick={() => onDownloadOption(originalOption)}
+                  >
+                    Download original ({originalOption.format.toUpperCase()})
+                  </button>
+                  <button
                     id="download-size-tooltip-anchor"
+                    type="button"
                     className={styles.downloadSizeHint}
                     aria-label="About file size"
                   >
                     i
-                  </span>
-                </button>
+                  </button>
+                </div>
                 <Tooltip
                   anchorSelect="#download-size-tooltip-anchor"
                   content={originalSizeTooltip}

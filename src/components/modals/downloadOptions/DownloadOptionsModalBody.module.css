@@ -181,19 +181,37 @@
   outline: none;
 }
 
+.downloadActionRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.downloadActionRow .optionButtonOriginal {
+  flex: 1;
+}
+
 .downloadSizeHint {
+  background: transparent;
+  border: 1px solid currentColor;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
-  margin-left: 8px;
-  border: 1px solid currentColor;
+  width: 24px;
+  height: 24px;
+  padding: 0;
   border-radius: 50%;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 1;
   opacity: 0.9;
+  cursor: help;
+}
+
+.downloadSizeHint:focus-visible,
+.downloadSizeHint:hover {
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
 }
 
 .downloadSizeTooltip {
