@@ -173,6 +173,10 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           }}
         />
         {/* GTM and Clarity are now loaded client-side only via AnalyticsLoader when consent is granted */}
+        <meta
+          name="impact-site-verification"
+          content="8a120ba2-3dc3-4135-ac06-990388022693"
+        />
       </head>
       <body className="font-trade-gothic">
         <NonCriticalCSSLoader />
