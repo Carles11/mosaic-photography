@@ -10,7 +10,7 @@ import { getTimelineBySlug } from "@/lib/timeline/photographersTimelines";
 import { TimelineItemModelProps } from "@/types/components";
 import { formatLifespan } from "@/helpers/dates";
 import type { Photographer } from "@/types/gallery";
-
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import styles from "./Photographers.module.css";
 
 // Revalidate all pre-built photographer pages every 24 hours (ISR)
@@ -148,6 +148,17 @@ export default async function PhotographerDetailPage({
     url: img.s3Progressive?.[0]?.url ?? "/favicons/android-chrome-512x512.png",
   }));
 
+  // 2. Map images for the schema
+  const gallerySchemaImages = imagesWithUrl.map((img) => ({
+    contentUrl: img.url,
+    name:
+      img.title || `${photographer.name} ${photographer.surname} Photograph`,
+    description: img.description || "Vintage photography from Mosaic Gallery",
+    width: img.width || "1600",
+    height: img.height || "auto",
+    encodingFormat: "image/webp",
+  }));
+
   // For JSON-LD
   const ogImageUrl =
     photographer.images?.[0]?.s3Progressive?.find((img) => img.width >= 800)
@@ -192,6 +203,14 @@ export default async function PhotographerDetailPage({
         canonicalUrl={canonicalUrl}
         ogImageUrl={ogImageUrl}
       />
+      {gallerySchemaImages.length > 0 && (
+        <JsonLdSchema
+          type="ImageGallery"
+          name={`${photographer.name} ${photographer.surname} Gallery`}
+          description={`Curated vintage photography by ${photographer.name} ${photographer.surname}`}
+          images={gallerySchemaImages}
+        />
+      )}
       <main className={styles.photographerDetailPage}>
         <h1 className={styles.photographerDetailPageTitle}>
           {photographer.name} {photographer.surname}

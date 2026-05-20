@@ -17,8 +17,9 @@ async function generateImageSitemap() {
   const { data: images, error } = await supabase
     .from("images_resize")
     .select(
-      "id, base_url, filename, title, description, author, width, height, orientation, color, nudity"
-    );
+      "id, base_url, filename, title, description, author, width, height, orientation, color, nudity",
+    )
+    .limit(5000);
 
   if (error) {
     console.error("Error fetching images_resize:", error);
@@ -60,7 +61,7 @@ async function generateImageSitemap() {
     const photographerImages = images.filter(
       (img) =>
         img.author &&
-        img.author.toLowerCase().includes(photographer.surname.toLowerCase())
+        img.author.toLowerCase().includes(photographer.surname.toLowerCase()),
     );
 
     if (photographerImages.length > 0) {
@@ -104,7 +105,7 @@ function makeImageXml(
     color?: string;
     nudity?: string;
   },
-  geo_location?: string
+  geo_location?: string,
 ) {
   // Ensure .webp extension for w1600 images
   const filenameWebp = image.filename.replace(/\.[^/.]+$/, ".webp");
@@ -112,15 +113,15 @@ function makeImageXml(
   return `    <image:image>
       <image:loc>${loc}</image:loc>
       <image:title>${escapeXml(
-        image.title || "Vintage Photography"
+        image.title || "Vintage Photography",
       )}</image:title>
       <image:caption>${escapeXml(
-        image.description || "Vintage nude photography from Mosaic Gallery"
+        image.description || "Vintage nude photography from Mosaic Gallery",
       )}</image:caption>
       ${
         geo_location
           ? `<image:geo_location>${escapeXml(
-              geo_location
+              geo_location,
             )}</image:geo_location>`
           : ""
       }
