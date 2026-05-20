@@ -147,7 +147,7 @@ To add new photographers and images to the project, follow these steps:
 ### 3. Image Naming Conventions
 
 - Filenames should follow this format:
-  `author_title_year-orientation-color-nudity[_ms].jpg`
+  `author_title_year-xxx_orientation_color[_non-nudity].jpg`
   Example: `anne-brigman_the-shore_year-1905_vertical_bw_nude.jpg`
 - Photographer portraits start with `000_aaa_` (e.g., `000_aaa_anne-brigman.jpg`).
 - Use hyphens (`-`) and underscores (`_`) for separation. No spaces.

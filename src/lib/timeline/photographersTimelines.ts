@@ -1091,13 +1091,129 @@ export const photographerTimelines: Record<string, TimelineItemModelProps[]> = {
       eventType: "personal",
     },
   ],
+  brady: [
+    {
+      title: "1822",
+      cardTitle: "Born in Warren County, New York",
+      cardDetailedText:
+        "Mathew Brady was born to Irish immigrant parents in upstate New York. Though details of his early life remain sparse, he would eventually move to New York City and become one of the most celebrated and influential photographers in American history.",
+      eventType: "personal",
+    },
+    {
+      title: "1844",
+      cardTitle: "Opens First New York Studio",
+      cardDetailedText:
+        "Brady opened his first studio, the 'Daguerrean Miniature Gallery,' in New York City. He quickly gained immense fame for his exquisite portraits of prominent Americans, establishing himself as a master of the early daguerreotype process.",
+      eventType: "personal",
+    },
+    {
+      title: "1849",
+      cardTitle: "Expands to Washington, D.C.",
+      cardDetailedText:
+        "Capitalizing on his success, Brady expanded his operations by opening a new studio in Washington, D.C. Here, he set out to comprehensively document the nation's political elite, including senators, presidents, and prominent military leaders.",
+      eventType: "personal",
+    },
+    {
+      title: "1861",
+      cardTitle: "The American Civil War Begins",
+      cardDetailedText:
+        "The devastating national conflict erupted, profoundly altering the trajectory of Brady's career. Recognizing the historical gravity of the moment, he organized a corps of field photographers to document the grim realities of the battlefield.",
+      eventType: "historical",
+    },
+    {
+      title: "1862",
+      cardTitle: "The Dead of Antietam Exhibition",
+      cardDetailedText:
+        "Brady exhibited 'The Dead of Antietam' at his New York gallery. Featuring visceral photographs taken by his staff before the dead were buried, the gallery shocked the public by bringing the graphic horrors of war directly to the American people.",
+      eventType: "personal",
+    },
+    {
+      title: "1865",
+      cardTitle: "Civil War Ends",
+      cardDetailedText:
+        "The Civil War concluded, and shortly after, President Lincoln was assassinated. Brady's extensive visual documentation of this era cemented his legacy, though the immense logistical cost of funding his photographic corps left him deeply in debt.",
+      eventType: "historical",
+    },
+    {
+      title: "1873",
+      cardTitle: "The Panic of 1873",
+      cardDetailedText:
+        "A severe economic depression swept across North America and Europe. This financial crisis destroyed what remained of Brady's struggling business, eventually forcing him into bankruptcy and compelling him to sell his negatives to the U.S. government.",
+      eventType: "historical",
+    },
+    {
+      title: "1896",
+      cardTitle: "Death in New York City",
+      cardDetailedText:
+        "Brady died penniless in a New York charity ward following complications from a streetcar accident. Despite his tragic end, his vast archive remains the definitive visual history of 19th-century America.",
+      eventType: "personal",
+    },
+  ],
+  cameron: [
+    {
+      title: "1815",
+      cardTitle: "Born in Calcutta, India",
+      cardDetailedText:
+        "Julia Margaret Pattle was born in India to a prominent British official and a French aristocrat. Growing up in a cultured, well-connected family within colonial society, she developed a romantic sensibility that would later define her art.",
+      eventType: "personal",
+    },
+    {
+      title: "1837",
+      cardTitle: "The Victorian Era Begins",
+      cardDetailedText:
+        "Queen Victoria ascended to the British throne, ushering in a period of rapid industrialization and profound cultural shifts. The era's distinct blend of scientific progress and romanticized medieval revivalism heavily influenced Cameron's creative worldview.",
+      eventType: "historical",
+    },
+    {
+      title: "1848",
+      cardTitle: "Relocates to England",
+      cardDetailedText:
+        "Cameron moved to England with her husband, Charles Hay Cameron. By 1860, the family settled in Freshwater on the Isle of Wight, embedding themselves in a vibrant, bohemian circle of prominent artists, scientists, and writers.",
+      eventType: "personal",
+    },
+    {
+      title: "1863",
+      cardTitle: "Receives Her First Camera",
+      cardDetailedText:
+        "At the age of 48, Cameron received her first camera as a gift from her daughter. This present ignited an obsessive passion; she rapidly converted a coal house into her darkroom and taught herself the complex, messy wet-collodion process.",
+      eventType: "personal",
+    },
+    {
+      title: "1864",
+      cardTitle: "Elected to Photographic Societies",
+      cardDetailedText:
+        "She achieved major professional recognition when elected to the Photographic Society of London and the Photographic Society of Scotland. During this time, she pioneered her signature style of extreme close-ups, dramatic lighting, and intentional soft focus.",
+      eventType: "personal",
+    },
+    {
+      title: "1874",
+      cardTitle: "Illustrates Idylls of the King",
+      cardDetailedText:
+        "Her friend and neighbor, the Poet Laureate Alfred Lord Tennyson, invited her to create photographic illustrations for a new edition of his epic Arthurian poem. These deeply romantic, theatrical compositions became some of her most ambitious works.",
+      eventType: "personal",
+    },
+    {
+      title: "1875",
+      cardTitle: "Returns to Ceylon",
+      cardDetailedText:
+        "The Cameron family left England to return to the tea plantations of Ceylon (modern-day Sri Lanka). The move severely restricted her access to photographic chemicals and willing subjects, which dramatically reduced her artistic output.",
+      eventType: "personal",
+    },
+    {
+      title: "1879",
+      cardTitle: "Death in Ceylon",
+      cardDetailedText:
+        "Cameron died in Glencairn, Ceylon, after a brief illness. Though fiercely criticized by contemporary technical purists for her unconventional, 'sloppy' methods, she is now celebrated as one of the greatest portraitists in the history of the medium.",
+      eventType: "personal",
+    },
+  ],
 };
 
 /**
  * Helper function to get timeline by slug
  */
 export function getTimelineBySlug(
-  slug: string
+  slug: string,
 ): TimelineItemModelProps[] | null {
   return photographerTimelines[slug] || null;
 }

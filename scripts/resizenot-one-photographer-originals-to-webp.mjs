@@ -3,7 +3,7 @@ import path from "path";
 import sharp from "sharp";
 
 // Set photographer name here
-const author = "anne-brigman"; // Change this for each photographer
+const author = "anne-brigman"; // Change this for each new photographer
 
 // Paths
 const IMG_ROOT = "C:\\Users\\elcar\\Documents\\WEBs\\Mosaic\\IMGs";
@@ -41,7 +41,7 @@ async function main() {
   const images = fs
     .readdirSync(originalsDir)
     .filter((img) =>
-      supportedExtensions.includes(path.extname(img).toLowerCase())
+      supportedExtensions.includes(path.extname(img).toLowerCase()),
     );
   for (const image of images) {
     await convertToWebp(image);
