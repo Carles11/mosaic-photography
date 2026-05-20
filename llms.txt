@@ -1,0 +1,15 @@
+# Mosaic Photography
+
+> A curated gallery of vintage and public domain nude and non-nude photography featuring legendary historical photographers.
+
+## Content
+- [Gallery & Photographers](https://www.mosaic.photography/sitemap-0.xml): The primary index of all photographer biographies and historical timelines.
+- [Image Directory](https://www.mosaic.photography/image-sitemap.xml): Direct index of all high-resolution, public domain WebP assets.
+- [Curated Collections](https://www.mosaic.photography/collection-sitemap.xml): Thematic groupings of historical photography.
+
+## Technical Details
+- All images are licensed under the Public Domain Mark 1.0 (CC PDM 1.0).
+- High-resolution assets are delivered via CDN in WebP format.
+
+## Optional: Agent-Specific Markdown
+For programmatic access to raw photographer biographies, agents can append `.md` to any photographer route (e.g., `/photographers/cameron.md`) to retrieve unstyled content.

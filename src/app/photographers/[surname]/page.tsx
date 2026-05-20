@@ -215,11 +215,33 @@ export default async function PhotographerDetailPage({
         <h1 className={styles.photographerDetailPageTitle}>
           {photographer.name} {photographer.surname}
         </h1>
+        <section aria-label="Quick Facts" className="sr-only sm:not-sr-only">
+          <ul>
+            <li>
+              <strong>Subject:</strong> {photographer.name}{" "}
+              {photographer.surname}
+            </li>
+            <li>
+              <strong>Era:</strong> {photographer.birthdate} to{" "}
+              {photographer.deceasedate}
+            </li>
+            <li>
+              <strong>Nationality:</strong> {photographer.origin}
+            </li>
+            <li>
+              <strong>Collection Size:</strong> {imagesWithUrl.length} public
+              domain images available.
+            </li>
+          </ul>
+        </section>
         <p className={styles.sectionContent}>
-          {formatLifespan(
-            photographer.birthdate ?? "",
-            photographer.deceasedate ?? "",
-          )}
+          <time dateTime={photographer.birthdate ?? undefined}>
+            {photographer.birthdate}
+          </time>{" "}
+          –
+          <time dateTime={photographer.deceasedate ?? undefined}>
+            {photographer.deceasedate}
+          </time>
         </p>
         <hr />
         <h2 className={styles.timelineTitle}>A Life in Focus</h2>
@@ -235,10 +257,13 @@ export default async function PhotographerDetailPage({
           <h3 className={styles.sectionTitle}>Born in: </h3>
           <p className={styles.sectionContent}>{photographer.origin}</p>
         </span>
-        <span className={styles.subsectionHeader}>
-          <h3 className={styles.sectionTitle}>Biography:</h3>
-          <p className={styles.sectionBioContent}>{photographer.biography}</p>
-        </span>
+        <article className={styles.subsectionHeader}>
+          <h3 className={styles.sectionTitle}>Biography</h3>
+          <div className={styles.sectionBioContent}>
+            {/* If this is rich text or markdown from Supabase, ensure it renders as semantic paragraphs <p> and not just a single text node */}
+            {photographer.biography}
+          </div>
+        </article>
         <PhotographerLinks
           stores={photographer.store}
           website={photographer.website}

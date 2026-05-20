@@ -12,5 +12,33 @@ module.exports = {
       "https://www.mosaic.photography/image-sitemap.xml",
       "https://www.mosaic.photography/collection-sitemap.xml",
     ],
+    policies: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin", "/internal"],
+      },
+      // Explicitly allow and guide major AI agents
+      {
+        userAgent: "GPTBot",
+        allow: "/",
+      },
+      {
+        userAgent: "PerplexityBot",
+        allow: "/",
+      },
+      {
+        userAgent: "ClaudeBot",
+        allow: "/",
+      },
+      {
+        userAgent: "Google-Extended",
+        allow: "/",
+      },
+      {
+        userAgent: "OAI-SearchBot",
+        allow: "/",
+      },
+    ],
   },
 };
