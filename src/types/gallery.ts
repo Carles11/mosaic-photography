@@ -17,7 +17,9 @@ export interface Photographer {
   surname: string;
   author: string;
   biography?: string;
+  biography_md?: string;
   intro?: string;
+  intro_md?: string;
   birthdate: string;
   deceasedate?: string | null;
   origin?: string;

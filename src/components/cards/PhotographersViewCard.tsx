@@ -14,16 +14,18 @@ import Dropdown from "@/components/inputs/dropDown";
 import type { DropdownItem } from "@/types/dropdown";
 import ImageWrapper from "../wrappers/ImageWrapper";
 import { slugify } from "@/utils/slugify";
-import { formatLifespan } from "@/helpers/dates";
+import { formatHumanDate } from "@/helpers/dates";
 import { Photographer } from "@/types/gallery";
 import styles from "./PhotographersViewCard.module.css";
 import Image from "next/image";
+import ReactMarkdown from "react-markdown";
 
 declare global {
   interface Window {
     __AGE_CONSENT_OPEN__?: boolean;
   }
 }
+
 export interface PhotographersViewCardProps {
   photographers?: Photographer[];
   onLoginRequired?: () => void;
@@ -52,6 +54,25 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
     onPrevButtonClick,
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi);
+
+  const getCleanIntro = (intro_md: string) => {
+    if (!intro_md) return "";
+
+    // 1. More robust Header removal
+    // This looks for a line starting with one or more '#' symbols,
+    // followed by space, then the rest of the text on that line.
+    // It handles both standard \n and Windows \r\n line endings.
+    let cleanText = intro_md.replace(/^#+.*(\r\n|\r|\n)/, "");
+
+    // 2. Safely strip the GEO/AI section if it exists
+    const footerMarker = "#### 🔍 AI-Search & GEO Context";
+    if (cleanText.includes(footerMarker)) {
+      cleanText = cleanText.split(footerMarker)[0];
+    }
+
+    // 3. Trim extra whitespace
+    return cleanText.trim();
+  };
 
   return (
     <div className={styles.photographersViewCardContainer}>
@@ -92,6 +113,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                       {`${photographer.name} ${photographer.surname}`.toUpperCase()}
                     </h3>
                   </Link>
+
                   <div className={styles.imageContainer}>
                     {portrait ? (
                       <Link
@@ -114,14 +136,8 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                             height: "auto",
                             objectFit: "cover",
                           }}
-                          sizes="
-                            (max-width: 400px) 90vw,
-                            (max-width: 600px) 95vw,
-                            (max-width: 900px) 800px,
-                            (max-width: 1200px) 1200px,
-                            1600px
-                          "
-                          width={600} // matches S3 bucket and card aspect
+                          sizes="(max-width: 400px) 90vw, (max-width: 600px) 95vw, (max-width: 900px) 800px, (max-width: 1200px) 1200px, 1600px"
+                          width={600}
                           height={750}
                         />
                       </Link>
@@ -148,15 +164,13 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                   </div>
 
                   <p>
-                    <strong>
-                      {photographer.author ? photographer.author : ""}
-                    </strong>
-                  </p>
-                  <p>
-                    {formatLifespan(
-                      photographer.birthdate ?? "",
-                      photographer.deceasedate ?? ""
-                    )}
+                    <time dateTime={photographer.birthdate ?? undefined}>
+                      {formatHumanDate(photographer.birthdate)}
+                    </time>
+                    {" – "}
+                    <time dateTime={photographer.deceasedate ?? undefined}>
+                      {formatHumanDate(photographer.deceasedate)}
+                    </time>
                   </p>
 
                   {photographer.origin && (
@@ -165,7 +179,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                     </p>
                   )}
 
-                  {photographer.intro && (
+                  {photographer.intro_md && (
                     <p
                       className={
                         styles.biography +
@@ -180,7 +194,14 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                     >
                       <strong>Biography: </strong>
                       <br />
-                      {photographer.intro}
+                      <ReactMarkdown
+                        components={{
+                          p: ({ node, ...props }) => <span {...props} />,
+                          strong: ({ node, ...props }) => <strong {...props} />,
+                        }}
+                      >
+                        {getCleanIntro(photographer.intro_md)}
+                      </ReactMarkdown>
                     </p>
                   )}
 
@@ -198,7 +219,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
           )}
         </div>
         <div className={styles.embla__navigation}>
-          {/* Arrow Navigation */}
           <div className={styles.embla__navigation__arrows}>
             <PrevButton
               onClick={onPrevButtonClick}
@@ -209,7 +229,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
               disabled={nextBtnDisabled}
             />
           </div>
-          {/* Dot Navigation */}
           <div className={styles.embla__navigation__dots}>
             {scrollSnaps.map((_, index) => (
               <DotButton

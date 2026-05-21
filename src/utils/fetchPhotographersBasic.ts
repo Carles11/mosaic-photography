@@ -21,7 +21,9 @@ export async function fetchPhotographersBasic(): Promise<
         surname,
         author,
         biography,
+        biography_md,
         intro,
+        intro_md,
         birthdate,
         deceasedate,
         origin,
@@ -30,14 +32,14 @@ export async function fetchPhotographersBasic(): Promise<
         instagram,
         slug,
         random_order
-      `
+      `,
       )
       .order("random_order", { ascending: true });
 
     if (photographersError || !photographers) {
       console.error(
         "[SSR fetchPhotographersBasic] Photographers fetch error",
-        photographersError
+        photographersError,
       );
       return null;
     }
@@ -58,7 +60,7 @@ export async function fetchPhotographersBasic(): Promise<
         title,
         description,
         created_at
-      `
+      `,
       )
       .in("author", photographerAuthors)
       .ilike("filename", "000_aaa%");
@@ -66,7 +68,7 @@ export async function fetchPhotographersBasic(): Promise<
     if (imagesError) {
       console.error(
         "[SSR fetchPhotographersBasic] Images fetch error",
-        imagesError
+        imagesError,
       );
       // Continue without portrait images rather than failing completely
     }
@@ -75,7 +77,7 @@ export async function fetchPhotographersBasic(): Promise<
     return photographers.map((photographer) => {
       // Find portrait image for this photographer
       const portraitImage = portraitImages?.find(
-        (img) => img.author === photographer.author
+        (img) => img.author === photographer.author,
       );
 
       return {
