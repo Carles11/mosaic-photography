@@ -13,6 +13,7 @@ import { formatLifespan } from "@/helpers/dates";
 import type { Photographer } from "@/types/gallery";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import styles from "./Photographers.module.css";
+import { getHumanReadableBiography } from "@/utils/clean-content";
 
 // Revalidate all pre-built photographer pages every 24 hours (ISR)
 export const revalidate = 86400;
@@ -190,9 +191,9 @@ export default async function PhotographerDetailPage({
     ],
   };
 
-  const biographyForHuman = (photographer.biography_md ?? "")
-    .split("#### 🔍 AI-Search & GEO Context")[0] // This cuts off the GEO section before rendering
-    .replace(/^##\s+.*/gm, ""); // Optional: removes the headers if you want just paragraphs
+  const biographyForHuman = getHumanReadableBiography(
+    photographer.biography_md ?? "",
+  );
 
   return (
     <div>

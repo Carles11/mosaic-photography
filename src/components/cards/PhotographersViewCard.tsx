@@ -66,6 +66,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
 
     // 2. Safely strip the GEO/AI section if it exists
     const footerMarker = "#### 🔍 AI-Search & GEO Context";
+
     if (cleanText.includes(footerMarker)) {
       cleanText = cleanText.split(footerMarker)[0];
     }
