@@ -9,7 +9,8 @@
     "build": "next build",
     "pages:build": "next build && npx @cloudflare/next-on-pages@latest",
     "vercel-build": "NEXT_IGNORE_TSC_ERRORS=1 next build",
-    "postbuild": "tsx scripts/generate-image-sitemap.ts && tsx scripts/generate-collection-sitemap.ts",
+    "postbuild": "tsx scripts/generate-sitemap-0.ts && tsx scripts/generate-image-sitemap.ts && tsx scripts/generate-collection-sitemap.ts",
+    "gen:sitemap": "tsx scripts/generate-sitemap-0.ts && tsx scripts/generate-image-sitemap.ts && tsx scripts/generate-collection-sitemap.ts",
     "start": "next start",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src/",
     "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src/ --fix",
@@ -64,7 +65,6 @@
     "raw-loader": "^4.0.2",
     "sharp": "^0.34.4",
     "ts-jest": "^29.4.1",
-    "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
     "typescript": "^5.9.3"
   },
