@@ -78,6 +78,15 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageSchema) }}
       />
+      <header>
+        <h1>
+          Vintage Nude Photography Gallery – Public Domain & Copyright-Free Art
+        </h1>
+        <h2>
+          Iconic works by legendary photographers who shaped the history of nude
+          art and nude photography.
+        </h2>
+      </header>
       <Suspense fallback={<div>Loading.....</div>}>
         <HomeClient photographers={photographers || []} images={images || []} />
       </Suspense>

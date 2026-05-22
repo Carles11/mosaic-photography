@@ -6,7 +6,6 @@
 import { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
 import { HomeTitles } from "../header/titles/HomeTitles";
-import HomeAppBanner from "@/components/appBanner/HomeAppBanner";
 import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
 import styles from "./home.module.css";
 import { useAgeConsent } from "@/context/AgeConsentContext";
@@ -85,8 +84,6 @@ function HomeClientWrapper({
       >
         <div className={styles.content}>
           <div className="v-margin">
-            {/* APP Stores icons */}
-            <HomeAppBanner />
             {/* Vintage Nude Photography Gallery – Public Domain & Copyright-Free Art */}
             <HomeTitles />
           </div>

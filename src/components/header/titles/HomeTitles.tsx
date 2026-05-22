@@ -1,19 +1,24 @@
 import { sendGTMEvent } from "@next/third-parties/google";
 
 import styles from "./Titles.module.css";
+import HomeAppBanner from "@/components/appBanner/HomeAppBanner";
 
 export const HomeTitles = () => {
   return (
     <div className={styles.mainTitleContainer}>
-      <h1 className={styles.mainTitle}>
+      {/* <h1 className={styles.mainTitle}>
         Vintage Nude Photography Gallery – Public Domain & Copyright-Free Art
-      </h1>
+      </h1> */}
 
       <div className={styles.homeTitleGrid}>
-        <h2>
+        {/* <h2>
           Iconic works by legendary photographers who shaped the history of nude
           art and nude photography.
-        </h2>
+        </h2> */}
+
+        {/* APP Stores icons */}
+        <HomeAppBanner />
+
         <div className={styles.homeTitleGridItemRight}>
           <h2>
             <a
