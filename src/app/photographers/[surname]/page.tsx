@@ -6,6 +6,7 @@ import {
   fetchAllPhotographerSlugsSSR,
 } from "@/utils/fetchPhotographerByIdSSR";
 import { PhotographerLinks } from "../client/PhotographerLinks";
+import { getAffiliateProductsByAuthor } from "@/utils/fetchAffiliateDataSSR";
 import Timeline from "@/components/timeline/Timeline";
 import { getTimelineBySlug } from "@/lib/timeline/photographersTimelines";
 import { TimelineItemModelProps } from "@/types/components";
@@ -298,7 +299,9 @@ export default async function PhotographerDetailPage({
         </article>
 
         <PhotographerLinks
-          stores={photographer.store}
+          affiliateProducts={await getAffiliateProductsByAuthor(
+            photographer.author,
+          )}
           website={photographer.website}
         />
       </main>

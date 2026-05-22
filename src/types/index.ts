@@ -3,4 +3,5 @@ export * from "./auth";
 export * from "./gallery";
 export * from "./user";
 export * from "./components";
+export type { AffiliateAdvertiser, AffiliateProduct } from "@/types/supabase";
 declare module "js-cookie";
