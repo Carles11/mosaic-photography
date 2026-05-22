@@ -10,6 +10,7 @@ import {
   useEffect,
   useRef,
 } from "react";
+import type React from "react";
 import type { ImageWithOrientation } from "@/types/gallery";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
 import HeartButton from "@/components/buttons/HeartButton";
@@ -53,10 +54,20 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
   const router = useRouter();
   const pathname = usePathname();
 
-  const columnCount = useMemo(() => {
-    if (typeof window !== "undefined" && window.innerWidth < 500) return 2;
-    if (typeof window !== "undefined" && window.innerWidth < 800) return 3;
+  const getColumnCount = () => {
+    if (typeof window === "undefined") return 4;
+    if (window.innerWidth < 500) return 2;
+    if (window.innerWidth < 800) return 3;
     return 4;
+  };
+
+  const [columnCount, setColumnCount] = useState(getColumnCount);
+
+  useEffect(() => {
+    const handleResize = () => setColumnCount(getColumnCount());
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLoginRequired = useCallback(() => {
@@ -289,7 +300,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
         columnCount={columnCount}
         data={images}
         ItemContent={ItemContent}
-        style={{ width: "100%", overflow: "visible" }}
+        useWindowScroll
         initialItemCount={50}
       />
       <Suspense
