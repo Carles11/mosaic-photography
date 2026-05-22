@@ -67,7 +67,6 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
     const handleResize = () => setColumnCount(getColumnCount());
     window.addEventListener("resize", handleResize, { passive: true });
     return () => window.removeEventListener("resize", handleResize);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLoginRequired = useCallback(() => {
