@@ -2,11 +2,12 @@ import { Metadata } from "next";
 import { faqStructuredData } from "@/utils/faqStructuredData";
 import { faqSections } from "@/app/constants/faqSections";
 import FaqClientWrapper from "@/components/wrappers/FaqClientWrapper";
+import styles from "./faq.module.css";
 
 export const metadata: Metadata = {
-  title: "FAQ - All about Public Domain Photography",
+  title: "FAQ – Public Domain Photography",
   description:
-    "Find answers to common questions about public domain photography, usage rights and commercial licensing.",
+    "Answers to common questions about public domain photography, usage rights, and licensing.",
   keywords: [
     "public domain nude photography FAQs",
     "vintage nude photography questions",
@@ -19,9 +20,9 @@ export const metadata: Metadata = {
     "public domain art questions",
   ],
   openGraph: {
-    title: "FAQ - Public Domain Vintage Nude Photography Questions",
+    title: "FAQ – Public Domain Photography",
     description:
-      "Comprehensive answers to frequently asked questions about public domain vintage nude photography, usage rights, and commercial licensing.",
+      "Answers to common questions about public domain photography, usage rights, and licensing.",
     type: "website",
     url: "https://www.mosaic.photography/faq",
   },
@@ -32,10 +33,20 @@ export const metadata: Metadata = {
 
 const FAQPage = () => {
   return (
-    <FaqClientWrapper
-      faqSections={faqSections}
-      faqStructuredData={faqStructuredData}
-    />
+    <>
+      <header className={styles.header}>
+        <h1 className={styles.mainTitle}>Frequently Asked Questions</h1>
+        <p className={styles.subtitle}>
+          Everything you need to know about public domain vintage nude
+          photography, usage rights, and optimizing your photography website for
+          search engines.
+        </p>
+      </header>
+      <FaqClientWrapper
+        faqSections={faqSections}
+        faqStructuredData={faqStructuredData}
+      />
+    </>
   );
 };
 

@@ -41,14 +41,6 @@ const FaqClientWrapper: React.FC<FaqClientWrapperProps> = ({
       />
       <div className={styles.faqContainer}>
         <div id="top"></div>
-        <header className={styles.header}>
-          <h1 className={styles.mainTitle}>Frequently Asked Questions</h1>
-          <p className={styles.subtitle}>
-            Everything you need to know about public domain vintage nude
-            photography, usage rights, and optimizing your photography website
-            for search engines.
-          </p>
-        </header>
 
         <div className={styles.tableOfContents}>
           <h2>Quick Navigation</h2>

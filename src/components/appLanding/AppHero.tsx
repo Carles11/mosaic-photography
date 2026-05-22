@@ -7,9 +7,6 @@ export default function AppHero() {
   return (
     <header className={styles.hero}>
       <div className={styles.heroInner}>
-        <h1 className={styles.headline}>
-          Mosaic — Iconic Vintage Nude Photography, Now On Your Phone
-        </h1>
         <p className={styles.lead}>
           Explore world-class, rare, high-res public domain images—free, easy,
           and always in your pocket.

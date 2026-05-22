@@ -6,18 +6,20 @@ import AppFeatures from "@/components/appLanding/AppFeatures";
 import HowItWorks from "@/components/appLanding/HowItWorks";
 import QuickWhy from "@/components/appLanding/QuickWhy";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
+import styles from "./app.module.css";
 
 export const metadata: Metadata = {
-  title: "Mosaic App — Iconic Vintage Nude Photography on iOS & Android",
+  // SEO: title <70 chars, description 50-160 chars
+  title: "Mosaic App — Vintage Nude Photography Gallery",
   description:
-    "Experience Mosaic’s curated gallery of rare, historic nude photography on your phone — fast galleries, curated collections, easy downloads, and educational context. Free on iOS & Android.",
+    "Curated vintage nude photography app. Fast galleries, curated collections, easy downloads. Free on iOS & Android.",
   alternates: {
     canonical: "https://www.mosaic.photography/app",
   },
   openGraph: {
-    title: "Mosaic App — Iconic Vintage Nude Photography",
+    title: "Mosaic App — Vintage Nude Photography Gallery",
     description:
-      "Experience Mosaic’s curated gallery of rare, historic nude photography on your phone — fast galleries, curated collections, easy downloads, and educational context.",
+      "Curated vintage nude photography app. Fast galleries, curated collections, easy downloads. Free on iOS & Android.",
     images: [
       {
         url: "/images/og-image.jpg",
@@ -71,6 +73,11 @@ export default function AppPage() {
 
   return (
     <main>
+      <header className={styles.hero}>
+        <h1 className={styles.headline}>
+          Mosaic — Iconic Vintage Nude Photography, Now On Your Phone
+        </h1>
+      </header>
       <JsonLdSchema
         type="WebPage"
         name="Mosaic App — Iconic Vintage Nude Photography"

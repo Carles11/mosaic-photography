@@ -5,17 +5,13 @@
   text-align: center;
   gap: 12px;
   padding: 28px 12px;
-  margin: 4rem 0;
+  margin: 0 0 4rem 0;
 }
 .heroInner {
   max-width: 980px;
   width: 100%;
 }
-.headline {
-  font-size: 28px;
-  font-weight: 700;
-  margin: 0 0 8px 0;
-}
+
 .lead {
   color: var(--muted-text-color, #bbb);
   margin: 0 0 16px 0;

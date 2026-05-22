@@ -46,9 +46,18 @@ export async function generateMetadata({
   const galleryCount = photographer.images?.length ?? 0;
   const canonicalUrl = `https://www.mosaic.photography/photographers/${urlSurname}`;
 
+  // Short SEO title: always <70 chars
+  const seoTitle = `${name} ${surname} – Mosaic Gallery`.slice(0, 68);
+
+  // Meta description: always 50-160 chars
+  let desc = `Discover the vintage nude photography of ${name} ${surname} (${origin}), legendary in public domain art. View biography, gallery (${galleryCount} images), and historical milestones at Mosaic Photography.`;
+  if (desc.length > 160) desc = desc.slice(0, 157) + "...";
+  if (desc.length < 50)
+    desc = `Discover vintage nude photography, biography, and gallery at Mosaic Gallery.`;
+
   return {
-    title: `${name} ${surname} – Vintage Nude Photography | Mosaic Gallery`,
-    description: `Discover the vintage nude photography of ${name} ${surname} (${origin}), legendary in public domain art. View biography, gallery (${galleryCount} images), and historical milestones at Mosaic Photography.`,
+    title: seoTitle,
+    description: desc,
     keywords: [
       "vintage nude photography",
       "public domain",
@@ -61,8 +70,8 @@ export async function generateMetadata({
       origin,
     ],
     openGraph: {
-      title: `${name} ${surname} – Vintage Nude Photography | Mosaic Gallery`,
-      description: `Explore ${name} ${surname}'s biography, public domain nude photography, and curated gallery. Discover classic art and historical milestones.`,
+      title: seoTitle,
+      description: desc,
       type: "profile",
       url: canonicalUrl,
       images: [ogImageUrl],
@@ -73,8 +82,8 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: `${name} ${surname} – Vintage Nude Photography | Mosaic Gallery`,
-      description: `Explore the vintage nude photography and biography of ${name} ${surname}, legendary public domain artist. View gallery (${galleryCount} images) at Mosaic Photography.`,
+      title: seoTitle,
+      description: desc,
       images: [ogImageUrl],
     },
     alternatives: {

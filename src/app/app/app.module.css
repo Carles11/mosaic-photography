@@ -1,0 +1,13 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 28px 12px;
+}
+.headline {
+  font-size: 28px;
+  font-weight: 700;
+  padding: 28px 12px;
+}
