@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+} from "react";
 
 const AgeConsentContext = createContext<{
   isMinimumAgeConfirmed: boolean;
@@ -36,15 +42,16 @@ export const AgeConsentProvider = ({
   };
 
   // Optionally memoize the context value to avoid unnecessary re-renders
-  // const contextValue = useMemo(() => ({ isMinimumAgeConfirmed, setIsMinimumAgeConfirmed: handleAgeConfirmation }), [isMinimumAgeConfirmed]);
+  const contextValue = useMemo(
+    () => ({
+      isMinimumAgeConfirmed,
+      setIsMinimumAgeConfirmed: handleAgeConfirmation,
+    }),
+    [isMinimumAgeConfirmed],
+  );
 
   return (
-    <AgeConsentContext.Provider
-      value={{
-        isMinimumAgeConfirmed,
-        setIsMinimumAgeConfirmed: handleAgeConfirmation,
-      }}
-    >
+    <AgeConsentContext.Provider value={contextValue}>
       {children}
     </AgeConsentContext.Provider>
   );

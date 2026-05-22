@@ -38,7 +38,7 @@ type ImageWithPhotographerSlug = ImageWithOrientation & {
 
 // Type guard to check if an object has photographer_slug property
 function hasPhotographerSlug(
-  obj: unknown
+  obj: unknown,
 ): obj is { photographer_slug: string } {
   return (
     obj !== null &&
@@ -75,33 +75,41 @@ const Gallery: React.FC<GalleryExtendedProps> = ({
     });
   }
 
-  const filteredImages = images?.filter((img) => {
-    if (filters.gender && img.gender !== filters.gender) return false;
-    if (filters.orientation && img.orientation !== filters.orientation)
-      return false;
-    // Make color filter comparison case-insensitive and trim whitespace
-    if (
-      filters.color &&
-      typeof img.color === "string" &&
-      typeof filters.color === "string" &&
-      img.color.trim().toLowerCase() !== filters.color.trim().toLowerCase()
-    )
-      return false;
-    if (filters.color && typeof img.color !== "string") return false;
-    if (filters.nudity && img.nudity !== filters.nudity) return false;
-    if (filters.print_quality && img.print_quality !== filters.print_quality)
-      return false;
+  const filteredImages = useMemo(
+    () =>
+      images?.filter((img) => {
+        if (filters.gender && img.gender !== filters.gender) return false;
+        if (filters.orientation && img.orientation !== filters.orientation)
+          return false;
+        // Make color filter comparison case-insensitive and trim whitespace
+        if (
+          filters.color &&
+          typeof img.color === "string" &&
+          typeof filters.color === "string" &&
+          img.color.trim().toLowerCase() !== filters.color.trim().toLowerCase()
+        )
+          return false;
+        if (filters.color && typeof img.color !== "string") return false;
+        if (filters.nudity && img.nudity !== filters.nudity) return false;
+        if (
+          filters.print_quality &&
+          img.print_quality !== filters.print_quality
+        )
+          return false;
 
-    if (filters.year && isYearFilter(filters.year)) {
-      if (typeof img.year === "undefined" || img.year === null) return false;
-      const imgYear =
-        typeof img.year === "string" ? parseInt(img.year) : img.year;
-      if (!imgYear || isNaN(imgYear)) return false;
-      if (imgYear < filters.year.from || imgYear > filters.year.to)
-        return false;
-    }
-    return true;
-  });
+        if (filters.year && isYearFilter(filters.year)) {
+          if (typeof img.year === "undefined" || img.year === null)
+            return false;
+          const imgYear =
+            typeof img.year === "string" ? parseInt(img.year) : img.year;
+          if (!imgYear || isNaN(imgYear)) return false;
+          if (imgYear < filters.year.from || imgYear > filters.year.to)
+            return false;
+        }
+        return true;
+      }),
+    [images, filters],
+  );
 
   // Helper: are filters active?
   const filtersActive =

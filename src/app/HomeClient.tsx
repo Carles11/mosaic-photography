@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import { useAuth } from "@/hooks/useAuth";
 import { useComments } from "@/context/CommentsContext";
@@ -34,11 +34,15 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
 
   const { loadCommentCountsBatch } = useComments();
 
+  const imageIds = useMemo(
+    () => images?.map((img) => String(img.id)) ?? [],
+    [images],
+  );
+
   useEffect(() => {
-    if (!images || images.length === 0) return;
-    const imageIds = images.map((img) => String(img.id));
+    if (imageIds.length === 0) return;
     loadCommentCountsBatch(imageIds);
-  }, [images, loadCommentCountsBatch]);
+  }, [imageIds, loadCommentCountsBatch]);
 
   // Handle URL parameters for backward compatibility (email redirects, etc.)
   useEffect(() => {

@@ -65,8 +65,10 @@ function buildHomePageSchema(images: ImageWithOrientation[]) {
 }
 
 export default async function HomePage() {
-  const photographers = await fetchPhotographersWithFeaturedSSR();
-  const images = await fetchGalleryImagesSSR();
+  const [photographers, images] = await Promise.all([
+    fetchPhotographersWithFeaturedSSR(),
+    fetchGalleryImagesSSR(),
+  ]);
 
   const homePageSchema = buildHomePageSchema(images ?? []);
 
