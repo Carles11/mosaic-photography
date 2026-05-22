@@ -1,14 +1,13 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import HomeClient from "./HomeClient";
+import { getGeneralAffiliateResources } from "@/utils/fetchAffiliateDataSSR";
 import { fetchPhotographersWithFeaturedSSR } from "@/utils/fetchPhotographersWithFeaturedSSR";
 import { fetchGalleryImagesSSR } from "@/utils/fetchGalleryImagesSSR";
 import type { ImageWithOrientation } from "@/types/gallery";
 
 export const metadata: Metadata = {
   title: {
-    // `absolute` bypasses the root layout template so the homepage title
-    // is not double-suffixed.
     absolute: "Public Domain Vintage Nude Photography | Mosaic Gallery",
   },
   description:
@@ -19,6 +18,7 @@ export const metadata: Metadata = {
       "Discover legendary photographers and their iconic public domain works. Biographies, timelines, and thousands of vintage nude photographs – all copyright-free.",
   },
   twitter: {
+    card: "summary_large_image",
     title: "Public Domain Vintage Nude Photography | Mosaic Gallery",
     description:
       "Thousands of copyright-free vintage nude photographs by legendary photographers. All public domain.",
@@ -26,26 +26,21 @@ export const metadata: Metadata = {
 };
 
 function buildHomePageSchema(images: ImageWithOrientation[]) {
-  const featured = images.slice(0, 12).map((img) => {
-    const filename = img.filename ?? "";
-    const webpFilename = filename.replace(/\.[^/.]+$/, ".webp");
-    const contentUrl = img.base_url
-      ? `${img.base_url}/w600/${webpFilename}`
-      : (img.url ?? "");
-    return {
-      "@type": "ImageObject",
-      contentUrl,
-      name: img.title || "Vintage Photography",
-      description:
-        img.description ||
-        "Public domain vintage photograph from Mosaic Gallery",
-      encodingFormat: "image/webp",
-      license: "https://creativecommons.org/publicdomain/mark/1.0/",
-      acquireLicensePage: "https://www.mosaic.photography/legal/credits",
-      ...(img.width ? { width: img.width } : {}),
-      ...(img.height ? { height: img.height } : {}),
-    };
-  });
+  const featured = images.slice(0, 12).map((img) => ({
+    "@type": "ImageObject",
+    contentUrl:
+      img.base_url && img.filename
+        ? `${img.base_url}/w600/${img.filename.replace(/\.[^/.]+$/, ".webp")}`
+        : (img.url ?? ""),
+    name: img.title || "Vintage Photography",
+    description:
+      img.description || "Public domain vintage photograph from Mosaic Gallery",
+    encodingFormat: "image/webp",
+    license: "https://creativecommons.org/publicdomain/mark/1.0/",
+    acquireLicensePage: "https://www.mosaic.photography/legal/credits",
+    ...(img.width && { width: img.width }),
+    ...(img.height && { height: img.height }),
+  }));
 
   return {
     "@context": "https://schema.org",
@@ -53,21 +48,21 @@ function buildHomePageSchema(images: ImageWithOrientation[]) {
     name: "Public Domain Vintage Nude Photography | Mosaic Gallery",
     url: "https://www.mosaic.photography",
     description:
-      "Browse Mosaic's curated gallery of public domain vintage nude photography by legendary photographers. Biographies, historical timelines, and thousands of copyright-free images.",
+      "Browse Mosaic's curated gallery of public domain vintage nude photography.",
     mainEntity: {
       "@type": "ImageGallery",
       name: "Vintage Nude Photography Gallery",
-      description:
-        "A curated gallery of classic and vintage nude photographs in the public domain (CC PDM 1.0)",
       image: featured,
     },
   };
 }
 
-export default async function HomePage() {
-  const [photographers, images] = await Promise.all([
+export default async function Page() {
+  // Fetching data in parallel for performance
+  const [photographers, images, affiliateProducts] = await Promise.all([
     fetchPhotographersWithFeaturedSSR(),
     fetchGalleryImagesSSR(),
+    getGeneralAffiliateResources(),
   ]);
 
   const homePageSchema = buildHomePageSchema(images ?? []);
@@ -87,8 +82,19 @@ export default async function HomePage() {
           art and nude photography.
         </h2>
       </header>
-      <Suspense fallback={<div>Loading.....</div>}>
-        <HomeClient photographers={photographers || []} images={images || []} />
+
+      {/* Note: If HomeClient contains the image gallery and ResourcesSlider,
+        it will be rendered immediately. Suspense here acts as a boundary 
+        for dynamic client-side interactivity.
+      */}
+      <Suspense
+        fallback={<div className="loading-state">Loading gallery...</div>}
+      >
+        <HomeClient
+          photographers={photographers || []}
+          images={images || []}
+          affiliateProducts={affiliateProducts || []}
+        />
       </Suspense>
     </>
   );

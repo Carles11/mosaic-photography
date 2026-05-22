@@ -1,0 +1,108 @@
+.resourcesSliderSection {
+  margin: 2rem 0 2.5rem 0;
+}
+.pillsRow {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.pill {
+  background: #f3f3f3;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #444;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.pillActive {
+  background: #222;
+  color: #fff;
+}
+.embla {
+  overflow: hidden;
+}
+.emblaContainer {
+  display: flex;
+  gap: 1.5rem;
+}
+.emblaSlide {
+  min-width: 260px;
+  max-width: 320px;
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+}
+.card {
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  padding: 1.25rem 1rem 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 340px;
+  width: 100%;
+}
+.cardImageWrap {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cardImage {
+  border-radius: 0.5rem;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+.cardBody {
+  width: 100%;
+  text-align: center;
+}
+.advertiserRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+.advertiserLogo {
+  border-radius: 50%;
+  background: #f3f3f3;
+}
+.advertiserName {
+  font-weight: 600;
+  font-size: 1rem;
+}
+.productTitle {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+.productDesc {
+  font-size: 0.98rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+}
+.affiliateButton {
+  display: inline-block;
+  background: #222;
+  color: #fff;
+  border-radius: 999px;
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
+}
+.affiliateButton:hover {
+  background: #444;
+}

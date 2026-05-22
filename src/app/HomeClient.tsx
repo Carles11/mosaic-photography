@@ -5,26 +5,29 @@ import { useEffect, useMemo, useState } from "react";
 import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import { useAuth } from "@/hooks/useAuth";
 import { useComments } from "@/context/CommentsContext";
-
 import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
-// import AuthModal from "@/components/auth/AuthModal";
 import { AuthView } from "@/types/auth";
+import { Photographer } from "@/types/gallery";
+import { ImageWithOrientation } from "@/types/gallery";
+import { ResourcesSlider } from "@/components/sliders/ResourcesSlider";
+import { AffiliateProductWithAdvertiser } from "@/utils/fetchAffiliateDataSSR";
 
 // Import session debug for development
 if (process.env.NODE_ENV === "development") {
   import("@/utils/sessionDebug");
 }
 
-import { Photographer } from "@/types/gallery";
-
-import { ImageWithOrientation } from "@/types/gallery";
-
 interface HomeClientProps {
   photographers?: Photographer[];
   images?: ImageWithOrientation[];
+  affiliateProducts?: AffiliateProductWithAdvertiser[];
 }
 
-export default function HomeClient({ photographers, images }: HomeClientProps) {
+export default function HomeClient({
+  photographers,
+  images,
+  affiliateProducts,
+}: HomeClientProps) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -51,7 +54,6 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
       const type = searchParams.get("type");
 
       if (modal === "auth") {
-        // For backward compatibility, show modal for email redirects
         setShowAuthModal(true);
         if (type === "password-reset") {
           setAuthView("password-reset");
@@ -98,8 +100,18 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
     );
   }
 
+  console.log("homecliente affiliateProducts", affiliateProducts);
   return (
     <>
+      {affiliateProducts && affiliateProducts.length > 0 && (
+        <section aria-label="Creative Essentials" style={{ marginBottom: 32 }}>
+          <h2 style={{ textAlign: "center", marginBottom: 8, paddingTop: 32 }}>
+            Mosaic Photography&apos;s Creative Essentials
+          </h2>
+          <ResourcesSlider products={affiliateProducts} />
+        </section>
+      )}
+
       <HomeClientWrapper
         photographers={photographers}
         images={images}
@@ -107,7 +119,9 @@ export default function HomeClient({ photographers, images }: HomeClientProps) {
         onLoginClick={() => router.push("/auth/login")}
       />
 
-      {/* Keep modal for backward compatibility with email redirects */}
+      {/* NOTE: AuthModal is commented out for backward compatibility with email redirects.
+        Uncomment and implement if required for your authentication flow.
+      */}
       {/* <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
