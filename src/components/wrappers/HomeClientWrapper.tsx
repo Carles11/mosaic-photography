@@ -14,7 +14,6 @@ import { SupabaseUser } from "@/lib/supabaseClient";
 
 import Gallery from "@/components/gallery/Gallery";
 
-import { structuredData } from "@/utils/structuredData";
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
 
 import { Photographer, ImageWithOrientation } from "@/types/gallery";
@@ -72,10 +71,6 @@ function HomeClientWrapper({
 
   return (
     <div className={styles.container}>
-      {/* Structured Data for SEO */}
-      <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
-      </script>
       {/* Main Content (obscured if age not confirmed) */}
       <section
         className={`${styles.pageContent} ${styles.visible} ${

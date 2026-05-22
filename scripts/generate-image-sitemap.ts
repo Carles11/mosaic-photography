@@ -1,4 +1,6 @@
-import "dotenv/config";
+import { config } from "dotenv";
+config();
+config({ path: ".env.local", override: true });
 import { createClient } from "@supabase/supabase-js";
 import fs from "fs";
 import path from "path";
@@ -7,10 +9,6 @@ import path from "path";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseKey);
-
-// S3/CDN base path for w1600 images
-const CDN_BASE =
-  "https://cdn.mosaic.photography/mosaic-collections/public-domain-collection";
 
 async function generateImageSitemap() {
   // Fetch all resized images
@@ -107,9 +105,9 @@ function makeImageXml(
   },
   geo_location?: string,
 ) {
-  // Ensure .webp extension for w1600 images
+  // base_url already contains the full CDN base path; just append size bucket + filename
   const filenameWebp = image.filename.replace(/\.[^/.]+$/, ".webp");
-  const loc = `${CDN_BASE}/${image.base_url}/w1600/${filenameWebp}`;
+  const loc = `${image.base_url}/w1600/${filenameWebp}`;
   return `    <image:image>
       <image:loc>${loc}</image:loc>
       <image:title>${escapeXml(

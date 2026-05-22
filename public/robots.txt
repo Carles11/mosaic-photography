@@ -1,14 +1,96 @@
-# Allow all user agents to crawl the main site
+# ============================================================
+# robots.txt – mosaic.photography
+# Public domain vintage photography gallery
+# ============================================================
+
+# Default: allow all crawlers
 User-agent: *
 Allow: /
-
-# Disallow authentication and private pages
 Disallow: /login
 Disallow: /signup
 Disallow: /auth/
 Disallow: /error
+Disallow: /api/
+Crawl-delay: 1
 
-# Sitemaps
+# ── Google ───────────────────────────────────────────────────
+User-agent: Googlebot
+Allow: /
+Disallow: /login
+Disallow: /signup
+Disallow: /auth/
+Disallow: /api/
+
+User-agent: Googlebot-Image
+Allow: /
+
+# Allow Google's AI training crawler (Gemini / AI Overviews)
+User-agent: Google-Extended
+Allow: /
+
+# ── Bing / Microsoft ─────────────────────────────────────────
+User-agent: Bingbot
+Allow: /
+Disallow: /login
+Disallow: /signup
+Disallow: /auth/
+Disallow: /api/
+
+# ── AI / LLM crawlers ────────────────────────────────────────
+# OpenAI – ChatGPT browsing & training
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic – Claude
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Meta AI
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Amazon / Alexa
+User-agent: Amazonbot
+Allow: /
+
+# Apple
+User-agent: Applebot
+Allow: /
+
+# Cohere AI
+User-agent: cohere-ai
+Allow: /
+
+# You.com
+User-agent: YouBot
+Allow: /
+
+# Diffbot (knowledge graph)
+User-agent: Diffbot
+Allow: /
+
+# Common Crawl (feeds AI training datasets)
+User-agent: CCBot
+Allow: /
+
+# ── Sitemaps ─────────────────────────────────────────────────
 Sitemap: https://www.mosaic.photography/sitemap.xml
+Sitemap: https://www.mosaic.photography/sitemap-0.xml
 Sitemap: https://www.mosaic.photography/image-sitemap.xml
 Sitemap: https://www.mosaic.photography/collection-sitemap.xml

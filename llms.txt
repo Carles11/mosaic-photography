@@ -1,15 +1,56 @@
 # Mosaic Photography
 
-> A curated gallery of vintage and public domain nude and non-nude photography featuring legendary historical photographers.
+> A curated gallery of vintage and public domain nude and non-nude photography featuring legendary historical photographers. All images are in the public domain (CC PDM 1.0) and are free to use, share, and reproduce without restriction.
+
+## What Is Mosaic Photography?
+
+Mosaic Photography (https://www.mosaic.photography) is a digital gallery dedicated to preserving and celebrating the work of pioneering photographers whose images are now in the public domain. The site focuses on 19th and early 20th century photographers — a period when photography was establishing itself as a serious fine art medium.
+
+Key facts:
+- All photographs in the collection are in the **public domain** under the **Creative Commons Public Domain Mark 1.0 (CC PDM 1.0)**.
+- Images are served in **WebP format via CDN** at multiple resolutions (w400, w600, w800, w1200, w1600, and originals).
+- The collection spans genres including nude art photography, portraiture, and documentary photography.
+- Photographers featured include iconic figures from Europe and North America active between approximately 1840 and 1940.
+- Each photographer has a biography, historical timeline, and curated gallery page.
 
 ## Content
-- [Gallery & Photographers](https://www.mosaic.photography/sitemap-0.xml): The primary index of all photographer biographies and historical timelines.
-- [Image Directory](https://www.mosaic.photography/image-sitemap.xml): Direct index of all high-resolution, public domain WebP assets.
-- [Curated Collections](https://www.mosaic.photography/collection-sitemap.xml): Thematic groupings of historical photography.
+
+- **[Gallery & Photographer Index](https://www.mosaic.photography/sitemap-0.xml)**: Complete index of all photographer biography and gallery pages.
+- **[Image Directory](https://www.mosaic.photography/image-sitemap.xml)**: Direct URL index of all high-resolution public domain WebP assets.
+- **[Curated Collections](https://www.mosaic.photography/collection-sitemap.xml)**: Thematic groupings of photographs organized by subject, era, or style.
+- **[FAQ](https://www.mosaic.photography/faq)**: Answers to common questions about public domain photography, licensing, and how to use the images.
+- **[App](https://www.mosaic.photography/app)**: Native mobile app for iOS and Android.
+
+## Photographers Featured
+
+Each photographer page includes:
+- Full name, nationality, birth and death dates
+- Markdown-formatted biography covering life, career, and artistic significance
+- A personal and historical timeline of milestones
+- A full gallery of their public domain works
+
+Representative photographers in the collection include: Wilhelm von Plüschow, Robert Demachy, Jean-Louis-Marie-Eugène Durieu, F. Holland Day, Clarence White, Alfred Stieglitz, Gertrude Käsebier, and others.
+
+## Licensing & Usage
+
+All images on Mosaic Photography are in the **public domain** and carry the **Creative Commons Public Domain Mark 1.0 (CC PDM 1.0)** license:
+- License URL: https://creativecommons.org/publicdomain/mark/1.0/
+- No copyright restrictions apply.
+- Free to use for any purpose: editorial, commercial, personal, educational, or AI training.
+- Attribution is appreciated but not legally required.
 
 ## Technical Details
-- All images are licensed under the Public Domain Mark 1.0 (CC PDM 1.0).
-- High-resolution assets are delivered via CDN in WebP format.
 
-## Optional: Agent-Specific Markdown
-For programmatic access to raw photographer biographies, agents can append `.md` to any photographer route (e.g., `/photographers/cameron.md`) to retrieve unstyled content.
+- Built with **Next.js 15 App Router** (static generation + ISR).
+- Images delivered via **CDN** (`cdn.mosaic.photography`) in **WebP format**.
+- Structured data: `WebSite`, `Organization`, `Person`, `ImageGallery`, `ImageObject`, `BreadcrumbList`, `FAQPage` JSON-LD schemas on all relevant pages.
+- Mobile PWA available via `site.webmanifest`.
+
+## Agent / Programmatic Access
+
+For programmatic access to photographer biographies without UI rendering, agents can append `.md` to any photographer route to retrieve unstyled Markdown content (e.g., `/photographers/cameron.md`).
+
+Raw image CDN base:
+`https://cdn.mosaic.photography/mosaic-collections/public-domain-collection/{photographer-slug}/{size}/{filename}.webp`
+
+Available sizes: `w400`, `w600`, `w800`, `w1200`, `w1600`, `originalsWEBP`

@@ -16,7 +16,10 @@ export async function middleware(req: NextRequest) {
   }
 
   const userAgent = req.headers.get("user-agent") || "";
-  const isBot = /bot|crawl|slurp|spider|google/i.test(userAgent);
+  const isBot =
+    /bot|crawl|slurp|spider|google|bing|yandex|duckduck|perplexitybot|anthropic|claude|gptbot|oai-searchbot|chatgpt|cohere|amazonbot|applebot|meta-external|facebot|baiduspider|sogou|exabot|ia_archiver|diffbot|ccbot/i.test(
+      userAgent,
+    );
   const { pathname, searchParams } = req.nextUrl;
 
   // Create response
@@ -86,7 +89,7 @@ export async function middleware(req: NextRequest) {
       const redirectTo = searchParams.get("redirect");
       const homeUrl = new URL(
         getAuthenticatedRedirect(redirectTo || undefined),
-        req.url
+        req.url,
       );
       return NextResponse.redirect(homeUrl);
     }

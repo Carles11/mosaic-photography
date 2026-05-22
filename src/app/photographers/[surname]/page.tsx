@@ -220,7 +220,7 @@ export default async function PhotographerDetailPage({
         </h1>
 
         {/* GEO Quick Facts Section */}
-        <section aria-label="Quick Facts" className="sr-only sm:not-sr-only">
+        <section aria-label="Quick Facts">
           <ul>
             <li>
               <strong>Subject:</strong> {photographer.name}{" "}
