@@ -10,6 +10,10 @@ import PhotographersCardsSlide from "../sliders/photographers/PhotographersCards
 import styles from "./home.module.css";
 import { useAgeConsent } from "@/context/AgeConsentContext";
 import { SupabaseUser } from "@/lib/supabaseClient";
+import {
+  AffiliateProductWithAdvertiser,
+  ResourcesSlider,
+} from "@/components/sliders/ResourcesSlider";
 
 import Gallery from "@/components/gallery/Gallery";
 
@@ -20,6 +24,8 @@ import { Photographer, ImageWithOrientation } from "@/types/gallery";
 interface HomeClientWrapperProps {
   photographers?: Photographer[];
   images?: ImageWithOrientation[];
+  affiliateProducts?: AffiliateProductWithAdvertiser[];
+
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
   user?: SupabaseUser | null;
@@ -28,6 +34,7 @@ interface HomeClientWrapperProps {
 function HomeClientWrapper({
   images,
   photographers,
+  affiliateProducts,
   onLoginClick,
 }: HomeClientWrapperProps) {
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
@@ -92,6 +99,20 @@ function HomeClientWrapper({
             photographers={photographers}
             onLoginRequired={onLoginClick}
           />
+
+          {affiliateProducts && affiliateProducts.length > 0 && (
+            <section
+              aria-label="Creative Essentials"
+              style={{ marginBottom: 32 }}
+            >
+              <h2
+                style={{ textAlign: "center", marginBottom: 8, paddingTop: 32 }}
+              >
+                Mosaic Photography&apos;s Creative Essentials
+              </h2>
+              <ResourcesSlider products={affiliateProducts} />
+            </section>
+          )}
           {/* Pass the photographers array into Gallery so it can attach slugs to images */}
           <Gallery
             id="gallery-section"

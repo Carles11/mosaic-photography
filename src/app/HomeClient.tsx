@@ -9,7 +9,6 @@ import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
 import { AuthView } from "@/types/auth";
 import { Photographer } from "@/types/gallery";
 import { ImageWithOrientation } from "@/types/gallery";
-import { ResourcesSlider } from "@/components/sliders/ResourcesSlider";
 import { AffiliateProductWithAdvertiser } from "@/utils/fetchAffiliateDataSSR";
 
 // Import session debug for development
@@ -100,21 +99,12 @@ export default function HomeClient({
     );
   }
 
-  console.log("homecliente affiliateProducts", affiliateProducts);
   return (
     <>
-      {affiliateProducts && affiliateProducts.length > 0 && (
-        <section aria-label="Creative Essentials" style={{ marginBottom: 32 }}>
-          <h2 style={{ textAlign: "center", marginBottom: 8, paddingTop: 32 }}>
-            Mosaic Photography&apos;s Creative Essentials
-          </h2>
-          <ResourcesSlider products={affiliateProducts} />
-        </section>
-      )}
-
       <HomeClientWrapper
         photographers={photographers}
         images={images}
+        affiliateProducts={affiliateProducts}
         user={user}
         onLoginClick={() => router.push("/auth/login")}
       />
