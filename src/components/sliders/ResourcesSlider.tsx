@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useMemo, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import type { AffiliateProduct, AffiliateAdvertiser } from "@/types/supabase";
@@ -37,74 +39,81 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
 
   return (
     <section className={styles.resourcesSliderSection}>
+      <div className={styles.sectionMeta}>
+        <h2 className={styles.sectionTitle}>The Mosaic Toolkit</h2>
+        <p className={styles.sectionSub}>
+          Curated tools &amp; resources for photographers
+        </p>
+      </div>
+
       <div className={styles.pillsRow}>
         {FILTERS.map((f) => (
           <button
             key={f.value}
             className={selected === f.value ? styles.pillActive : styles.pill}
             onClick={() => setSelected(f.value)}
-            type="button"
           >
             {f.label}
           </button>
         ))}
       </div>
+
       <div className={styles.embla} ref={emblaRef}>
         <div className={styles.emblaContainer}>
-          {filtered.map((product) => {
-            const advertiser = product.affiliate_advertisers;
-            return (
-              <div className={styles.emblaSlide} key={product.id}>
-                <div className={styles.card}>
-                  <div className={styles.cardImageWrap}>
+          {filtered.map((product) => (
+            <div className={styles.emblaSlide} key={product.id}>
+              <div className={styles.card}>
+                {/* Full-bleed image */}
+                <div className={styles.cardImageWrap}>
+                  <Image
+                    src={product.image_url || "/default.jpg"}
+                    alt={product.title?.[locale] ?? ""}
+                    fill
+                    className={styles.cardImage}
+                  />
+                  <div className={styles.cardOverlay} />
+                </div>
+
+                {/* Advertiser badge */}
+                {product.affiliate_advertisers?.logo_url && (
+                  <div className={styles.advertiserBadge}>
                     <Image
-                      src={
-                        product.image_url ||
-                        advertiser?.logo_url ||
-                        "/favicons/android-chrome-512x512.png"
-                      }
-                      alt={product.title?.[locale] || "Product image"}
-                      width={120}
-                      height={120}
-                      className={styles.cardImage}
+                      src={product.affiliate_advertisers.logo_url}
+                      alt={product.affiliate_advertisers.name ?? ""}
+                      width={40}
+                      height={40}
                     />
                   </div>
-                  <div className={styles.cardBody}>
-                    <div className={styles.advertiserRow}>
-                      {advertiser?.logo_url && (
-                        <Image
-                          src={advertiser.logo_url}
-                          alt={advertiser.name}
-                          width={32}
-                          height={32}
-                          className={styles.advertiserLogo}
-                        />
-                      )}
-                      <span className={styles.advertiserName}>
-                        {advertiser?.name}
-                      </span>
-                    </div>
-                    <div className={styles.productTitle}>
-                      {product.title?.[locale]}
-                    </div>
-                    {product.description?.[locale] && (
-                      <div className={styles.productDesc}>
-                        {product.description[locale]}
-                      </div>
-                    )}
+                )}
+
+                {/* Content overlays image */}
+                <div className={styles.cardBody}>
+                  <div className={styles.productTitle}>
+                    {product.title?.[locale]}
+                  </div>
+                  <div className={styles.productDesc}>
+                    {product.description?.[locale]}
+                  </div>
+                  <div className={styles.actions}>
                     <a
                       href={product.affiliate_url}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="sponsored"
                       className={styles.affiliateButton}
                     >
                       Shop Now
                     </a>
+                    <a
+                      href={`/guides/${product.id}`}
+                      className={styles.deepDiveLink}
+                    >
+                      Why I recommend this →
+                    </a>
                   </div>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
     </section>

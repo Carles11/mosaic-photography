@@ -80,7 +80,7 @@ function HomeClientWrapper({
       {/* Main Content (obscured if age not confirmed) */}
       <section
         className={`${styles.pageContent} ${styles.visible} ${
-          !isMinimumAgeConfirmed ? "obscuredContent" : ""
+          !isMinimumAgeConfirmed ? styles.obscuredContent : ""
         }`}
         aria-hidden={!isMinimumAgeConfirmed}
         style={
@@ -100,15 +100,15 @@ function HomeClientWrapper({
             onLoginRequired={onLoginClick}
           />
 
+          {/* SHOPPING RESOURCES */}
+
           {affiliateProducts && affiliateProducts.length > 0 && (
             <section
               aria-label="Creative Essentials"
-              style={{ marginBottom: 32 }}
+              style={{ margin: "32px 16px" }}
             >
-              <h2
-                style={{ textAlign: "center", marginBottom: 8, paddingTop: 32 }}
-              >
-                Mosaic Photography&apos;s Creative Essentials
+              <h2 className={styles.subTitle} id="resources-links-slider-title">
+                Mosaic Curated Selections
               </h2>
               <ResourcesSlider products={affiliateProducts} />
             </section>

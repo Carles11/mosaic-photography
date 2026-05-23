@@ -12,6 +12,10 @@
   height: 100%;
 }
 
+.subTitle {
+  margin: 2rem 0 0 0;
+}
+
 .visible {
   opacity: 1;
   pointer-events: auto;
