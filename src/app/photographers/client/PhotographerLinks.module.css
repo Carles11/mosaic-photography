@@ -1,253 +1,209 @@
-/* Existing project styles (kept and extended) */
-.sectionHeader {
-  display: flex;
-  flex-direction: column;
-  align-items: baseline;
-  margin: 22px 0 11px 0;
+/* ─── Section ─────────────────────────────────────────────────── */
+.section {
+  margin: 3rem 0;
+  padding: 0;
+}
+
+.sectionMeta {
+  padding: 0 1rem;
+  margin-bottom: 1.75rem;
 }
 
 .sectionTitle {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 0.35rem 0;
+}
+
+.sectionSub {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   margin: 0;
-  padding-left: 11px;
 }
 
-.sectionStoresContent {
-  padding: 0 0 0 22px;
-}
-
-@media (max-width: 768px) {
-  .sectionTitle {
-    padding-left: 0;
-  }
-}
-
-/* New styles for PhotographerLinks component */
-
-/* Layout + typography */
-.container {
-  margin: 1.25rem 0;
-}
-
-.header {
-  margin-bottom: 0.75rem;
-}
-
-.title {
-  margin: 0;
-  padding: 22px 0 0 0.4rem;
-}
-
-.subtitle {
-  margin: 0.25rem 0 0.75rem 0;
-  font-size: 0.95rem;
-  line-height: 1.3;
-}
-
-/* Unified Card Container */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
+/* ─── Embla ───────────────────────────────────────────────────── */
+.embla {
   overflow: hidden;
-  transition: all 0.2s ease;
+  padding: 0 1rem;
+}
+
+.emblaContainer {
+  display: flex;
+  gap: 0.85rem;
+}
+
+.emblaSlide {
+  flex: 0 0 220px;
+}
+
+/* ─── Card ─────────────────────────────────────────────────────── */
+.card {
   position: relative;
+  display: block;
+  height: 340px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  text-decoration: none;
+  transition: border-color 0.35s ease;
+  cursor: pointer;
 }
 
 .card:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
-.cardLink {
-  display: flex;
-  gap: 1rem;
-  padding: 1rem;
-  text-decoration: none;
-  color: inherit;
+.card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #fff;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+  z-index: 5;
 }
 
-/* Image styling */
-.cardMedia {
-  flex: 0 0 72px;
+.card:hover::after {
+  transform: scaleX(1);
+}
+
+/* ─── Image ─────────────────────────────────────────────────────── */
+.cardImageWrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #0e0e0e;
 }
 
 .cardImage {
-  width: 72px;
-  height: 72px;
-  border-radius: 8px;
   object-fit: cover;
-  background: #f8fafc;
+  transition: transform 0.7s ease;
 }
 
-/* Typography Hierarchy */
-.cardHeading {
+.card:hover .cardImage {
+  transform: scale(1.06);
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0) 20%,
+    rgba(0, 0, 0, 0.5) 50%,
+    rgba(0, 0, 0, 0.97) 100%
+  );
+  z-index: 1;
+}
+
+/* ─── Type Badge ───────────────────────────────────────────────── */
+.typeBadge {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  background: #fff;
+  color: #000;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.5rem;
+  z-index: 10;
+}
+
+/* ─── Body ─────────────────────────────────────────────────────── */
+.cardBody {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  margin-bottom: 0.5rem;
+  gap: 0.3rem;
+  max-height: 65%;
+  overflow: hidden;
 }
 
 .storeName {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: #1e293b;
-}
-
-.itemBadge {
-  align-self: flex-start;
-  background: #f1f5f9;
-  color: #475569;
-  font-size: 0.7rem;
-  padding: 0.15rem 0.6rem;
-  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
-  letter-spacing: 0.025em;
-  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
 }
 
-.description {
-  font-size: 0.85rem;
-  color: #64748b;
-  margin: 0.5rem 0;
-  line-height: 1.4;
-}
-
-.visit {
-  display: inline-flex;
-  align-items: center;
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: #2563eb;
-}
-
-/* Subtle icon styling */
-.linkExternal {
-  margin-left: 4px;
+.productTitle {
   font-size: 0.8rem;
-  opacity: 0.7;
-}
-/* Amazon previously had a separate UI; now we use a subtle modifier so layout stays unified */
-.amazon {
-  border-color: #f1f5f9;
-  background: #fbfbfd;
-}
-.amazon .storeName {
-  color: #374151;
-}
-.amazon .cardImage {
-  opacity: 0.95;
-  filter: saturate(0.92);
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Small visual indicator for affiliate stores (subtle) */
-.amazon .itemBadge {
-  background: #fff7ed;
-  color: #b45309;
+.productDesc {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 0.3rem;
 }
 
-/* Keep the deprecated amazonSection rules (won't be used with the unified layout)
-   but leave them in place in case some pages still rely on previous markup */
-.amazonSection {
-  margin-top: 0.5rem;
-  border-top: 1px dashed #e6e9ee;
-  padding-top: 0.75rem;
+.visitBtn {
+  display: inline-block;
+  background: #fff;
+  color: #000;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0.5rem 1rem;
+  transition: background 0.2s;
+  align-self: flex-start;
+  margin-top: 0.2rem;
 }
 
-.amazonToggle {
-  display: inline-flex;
-  gap: 0.5rem;
-  align-items: center;
-  background: transparent;
-  border: none;
-  color: #374151;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.95rem;
+.card:hover .visitBtn {
+  background: rgba(255, 255, 255, 0.85);
 }
 
-.amazonCount {
-  color: #6b7280;
-  font-weight: 500;
-  margin-left: 0.35rem;
-  font-size: 0.9rem;
-}
-
-.amazonList {
-  list-style: none;
-  padding: 0.5rem 0 0 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.amazonItem {
-  background: #fafafa;
-  border: 1px solid #f1f5f9;
-  border-radius: 6px;
-  padding: 0.5rem;
-}
-
-.amazonItem a {
-  text-decoration: none;
-  color: inherit;
-  display: block;
-}
-
-/* footer / learn more area */
-.more {
-  margin-top: 0.75rem;
-}
-
-.learnMoreTitle {
-  margin: 0;
-}
-
+/* ─── Learn More ───────────────────────────────────────────────── */
 .learnMore {
-  margin: 0.25rem 0 0 0;
+  padding: 1rem 1rem 0;
+  margin-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* Accessibility helper: make storeName wrap gracefully on small cards */
-.storeName,
-.itemBadge {
-  word-break: break-word;
+.learnMoreLink,
+.learnMoreLink:visited,
+.learnMoreLink:link {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: color 0.2s;
 }
 
-/* Small screens adjustments */
-@media (max-width: 640px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-  .cardLink {
-    gap: 0.5rem;
-  }
-  .cardMedia {
-    flex: 0 0 56px;
-  }
-  .cardImage {
-    width: 56px;
-    height: 56px;
-  }
-  .cardPlaceholder {
-    width: 56px;
-    height: 56px;
-  }
-
-  /* Slightly smaller badge on narrow screens */
-  .itemBadge {
-    padding: 0.08rem 0.38rem;
-    font-size: 0.68rem;
-  }
-
-  .storeName {
-    font-size: 0.95rem;
-  }
+.learnMoreLink:hover {
+  color: rgba(255, 255, 255, 0.7);
 }

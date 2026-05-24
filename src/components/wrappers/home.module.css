@@ -40,3 +40,8 @@
   user-select: none;
   transition: filter 0.3s;
 }
+
+.resourcesSection {
+  border-top: 1px solid lightgrey; /* Thin light-grey line on top */
+  margin: "32px 16px";
+}

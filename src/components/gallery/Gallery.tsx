@@ -180,7 +180,7 @@ const Gallery: React.FC<GalleryExtendedProps> = ({
   return (
     <div id={id} className={styles.galleryContainer}>
       <hr />
-      <h2>THE MOSAIC COLLECTION </h2>
+      <h2 className={styles.sectionTitle}>THE MOSAIC COLLECTION </h2>
       <p className={styles.sectionIntro}>
         Explore the Mosaic Collection—a curated archive of vintage nude and
         not-nude photography, celebrating history, beauty, and artistic freedom.

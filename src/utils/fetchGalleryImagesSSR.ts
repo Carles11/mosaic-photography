@@ -1,15 +1,6 @@
+import { shuffleArray } from "@/helpers/shuffle";
 import { supabase } from "@/lib/supabaseClient";
 import { ImageWithOrientation } from "@/types/gallery";
-
-// Fisher-Yates shuffle
-function shuffleArray<T>(array: T[]): T[] {
-  const arr = array.slice();
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
 
 export async function fetchGalleryImagesSSR(): Promise<
   ImageWithOrientation[] | null
@@ -18,12 +9,12 @@ export async function fetchGalleryImagesSSR(): Promise<
     const { data: images, error } = await supabase
       .from("images_resize")
       .select(
-        "id, base_url, filename, author, title, description, created_at, orientation, width, height, print_quality, gender, color, nudity, year"
+        "id, base_url, filename, author, title, description, created_at, orientation, width, height, print_quality, gender, color, nudity, year",
       );
     if (error || !images) {
       console.error(
         "[SSR fetchGalleryImagesSSR] Supabase error or no data",
-        error
+        error,
       );
       return null;
     }
@@ -65,7 +56,7 @@ export async function fetchGalleryImagesSSR(): Promise<
           orientation: img.orientation || "vertical",
           mosaicType,
         };
-      }
+      },
     );
     return processedImages;
   } catch (err) {

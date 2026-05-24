@@ -5,9 +5,13 @@ export interface AffiliateAdvertiser {
   name: string;
   slug: string;
   platform: string; // e.g., 'Awin', 'Amazon'
-  logo_url?: string | null;
+  logo_url?: string | null | undefined;
   description?: string | null;
   website_url?: string | null;
+  banner_image_url?: string | null;
+  banner_link_url?: string | null;
+  editorial_note?: Record<string, string | null>; // jsonb for localization
+  template?: string | null; // e.g., 'marketplace', 'software', 'print'
   created_at?: string;
 }
 
@@ -21,4 +25,6 @@ export interface AffiliateProduct {
   image_url?: string | null;
   photographer_author?: string | null; // references photographers.author
   created_at?: string;
+  featured?: boolean; // for highlighting certain products in templates
+  sort_order?: number; // for custom ordering of products within an advertiser
 }

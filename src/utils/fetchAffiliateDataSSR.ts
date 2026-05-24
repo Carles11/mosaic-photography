@@ -1,3 +1,4 @@
+import { shuffleArray } from "@/helpers/shuffle";
 import { supabaseServerClient } from "@/lib/supabaseServerClient";
 import type { AffiliateProduct, AffiliateAdvertiser } from "@/types/supabase";
 
@@ -11,15 +12,17 @@ export async function getGeneralAffiliateResources(): Promise<
 > {
   const { data, error } = await supabaseServerClient
     .from("affiliate_products")
-    .select("*, affiliate_advertisers(*)")
-    .is("photographer_author", null);
+    .select("*, affiliate_advertisers(*)");
+  // .is("photographer_author", null);
 
   if (error) {
     console.error("Error fetching general affiliate resources:", error);
     throw error;
   }
 
-  return data as AffiliateProductWithAdvertiser[];
+  const shuffledData = shuffleArray(data);
+
+  return shuffledData as AffiliateProductWithAdvertiser[];
 }
 
 export async function getAffiliateProductsByAuthor(

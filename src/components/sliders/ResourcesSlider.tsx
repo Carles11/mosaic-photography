@@ -27,6 +27,7 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
   products,
   locale = "en",
 }) => {
+  console.log({ products });
   const [selected, setSelected] = useState("all");
   const filtered = useMemo(
     () =>
@@ -39,13 +40,6 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
 
   return (
     <section className={styles.resourcesSliderSection}>
-      <div className={styles.sectionMeta}>
-        <h2 className={styles.sectionTitle}>The Mosaic Toolkit</h2>
-        <p className={styles.sectionSub}>
-          Curated tools &amp; resources for photographers
-        </p>
-      </div>
-
       <div className={styles.pillsRow}>
         {FILTERS.map((f) => (
           <button
@@ -65,31 +59,55 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
               <div className={styles.card}>
                 {/* Full-bleed image */}
                 <div className={styles.cardImageWrap}>
-                  <Image
-                    src={product.image_url || "/default.jpg"}
-                    alt={product.title?.[locale] ?? ""}
-                    fill
-                    className={styles.cardImage}
-                  />
+                  <a
+                    href={product.affiliate_url}
+                    target="_blank"
+                    rel="sponsored"
+                    style={{
+                      display: "block",
+                      position: "relative",
+                      zIndex: 10, // Bring the link to the front
+                      cursor: "pointer",
+                    }}
+                    className="no-fancy-link"
+                  >
+                    <Image
+                      src={
+                        product.image_url ||
+                        "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp"
+                      }
+                      alt={product.title?.[locale] ?? ""}
+                      width={250}
+                      height={200}
+                      className={styles.cardImage}
+                    />
+                  </a>
                   <div className={styles.cardOverlay} />
+                  {/* {product.affiliate_advertisers?.logo_url && (
+                    <div className={styles.advertiserBadge}>
+                      <Image
+                        src={product.affiliate_advertisers.logo_url}
+                        alt={product.affiliate_advertisers.name ?? ""}
+                        width={75}
+                        height={40}
+                      />
+                    </div>
+                  )} */}
+                  <div className={styles.productTypeLabel}>{product.type}</div>
                 </div>
 
                 {/* Advertiser badge */}
-                {product.affiliate_advertisers?.logo_url && (
-                  <div className={styles.advertiserBadge}>
-                    <Image
-                      src={product.affiliate_advertisers.logo_url}
-                      alt={product.affiliate_advertisers.name ?? ""}
-                      width={40}
-                      height={40}
-                    />
-                  </div>
-                )}
-
                 {/* Content overlays image */}
                 <div className={styles.cardBody}>
                   <div className={styles.productTitle}>
-                    {product.title?.[locale]}
+                    {product.photographer_author
+                      ? `${product.photographer_author}’s ${product.title?.[locale] ?? ""}`
+                      : (product.title?.[locale] ?? "")}
+                  </div>
+                  <div className={styles.productStore}>
+                    {(product.affiliate_advertisers?.name &&
+                      `Found in ${product.affiliate_advertisers?.name}`) ||
+                      ""}
                   </div>
                   <div className={styles.productDesc}>
                     {product.description?.[locale]}
@@ -103,12 +121,14 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
                     >
                       Shop Now
                     </a>
-                    <a
-                      href={`/guides/${product.id}`}
-                      className={styles.deepDiveLink}
-                    >
-                      Why I recommend this →
-                    </a>
+                    {product.affiliate_advertisers?.slug && (
+                      <a
+                        href={`/toolkit/${product.affiliate_advertisers.slug}`}
+                        className={`${styles.deepDiveLink} no-fancy-link`}
+                      >
+                        Why I recommend this →
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>

@@ -4,28 +4,6 @@
   padding: 0;
 }
 
-.sectionMeta {
-  padding: 0 1rem;
-  margin-bottom: 1.75rem;
-}
-
-.sectionTitle {
-  font-size: clamp(1rem, 2vw, 1.15rem);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #fff;
-  margin: 0 0 0.35rem 0;
-}
-
-.sectionSub {
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.35);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin: 0;
-}
-
 /* ─── Filter Pills ─────────────────────────────────────────────── */
 .pillsRow {
   display: flex;
@@ -84,7 +62,6 @@
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.07);
   transition: border-color 0.35s ease;
-  cursor: pointer;
 }
 
 .card:hover {
@@ -112,11 +89,12 @@
 
 /* ─── Image ─────────────────────────────────────────────────────── */
 .cardImageWrap {
-  position: absolute;
+  position: relative;
   inset: 0;
   z-index: 0;
   /* Dark fallback for broken/missing images */
   background: #0e0e0e;
+  cursor: pointer;
 }
 
 .cardImage {
@@ -137,7 +115,7 @@
     rgba(0, 0, 0, 0.55) 0%,
     rgba(0, 0, 0, 0) 30%,
     rgba(0, 0, 0, 0) 40%,
-    rgba(0, 0, 0, 0.75) 65%,
+    rgba(0, 0, 0, 0.75) 50%,
     rgba(0, 0, 0, 0.97) 100%
   );
   z-index: 1;
@@ -146,8 +124,9 @@
 /* ─── Advertiser Badge ─────────────────────────────────────────── */
 .advertiserBadge {
   position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  opacity: 0.75;
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -173,11 +152,35 @@
   gap: 0.4rem;
 }
 
+.productTypeLabel {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  align-self: flex-start;
+  background: var(--accent-color, #475569);
+  color: #475569;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  font-weight: 600;
+  z-index: 10;
+}
+
 .productTitle {
   font-size: 0.82rem;
   font-weight: 700;
   color: #fff;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: auto;
+}
+
+.productStore {
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: #fff;
   letter-spacing: 0.08em;
   line-height: 1.3;
 }

@@ -105,11 +105,16 @@ function HomeClientWrapper({
           {affiliateProducts && affiliateProducts.length > 0 && (
             <section
               aria-label="Creative Essentials"
-              style={{ margin: "32px 16px" }}
+              className={styles.resourcesSection}
             >
-              <h2 className={styles.subTitle} id="resources-links-slider-title">
-                Mosaic Curated Selections
+              <h2 className={styles.subTitle} id="artists-gallery-title">
+                THE MOSAIC TOOLKIT
               </h2>
+              <p className={styles.sectionIntro}>
+                Curated tools &amp; resources for photographers and vintage
+                photography lovers
+              </p>
+
               <ResourcesSlider products={affiliateProducts} />
             </section>
           )}
