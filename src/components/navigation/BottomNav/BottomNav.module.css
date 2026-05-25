@@ -185,6 +185,20 @@
   font-weight: 500;
 }
 
+.thankYou {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: start;
+  align-items: center;
+}
+
+.text {
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 1rem 1.5rem;
+}
+
 /* Animations */
 @keyframes slideUpModal {
   from {

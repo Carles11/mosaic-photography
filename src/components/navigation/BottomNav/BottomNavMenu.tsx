@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import styles from "./BottomNav.module.css";
 import { SupabaseUser } from "@/lib/supabaseClient";
 import ThemeToggle from "@/components/theme/ThemeToggle"; // Add import
+import Image from "next/image";
 
 interface BottomNavMenuProps {
   user?: SupabaseUser | null;
@@ -98,6 +99,33 @@ const BottomNavMenu = ({
                   Change theme <span style={{ marginLeft: 4 }}>→</span>
                 </span>
                 <ThemeToggle />
+              </div>
+
+              <div className={styles.thankYou}>
+                <p className={styles.text}>
+                  Mosaic is free and open-source — If it&apos;s ever been useful
+                  to you, a small contribution helps to keep it running.
+                </p>
+
+                <a
+                  href="https://ko-fi.com/Q5Q6R6S40"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image
+                    height="36"
+                    width="144"
+                    style={{
+                      border: "0px",
+                      height: "36px",
+                      margin: "0 0.3rem",
+                    }}
+                    src="https://storage.ko-fi.com/cdn/kofi6.png?v=6"
+                    alt="Buy Me a Coffee at ko-fi.com"
+                    priority={false}
+                    loading="lazy"
+                  />
+                </a>
               </div>
 
               <div className={styles.menuDivider} />
