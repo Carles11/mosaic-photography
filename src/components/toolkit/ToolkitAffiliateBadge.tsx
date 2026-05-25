@@ -4,8 +4,8 @@ export default function ToolkitAffiliateBadge() {
   return (
     <div
       style={{
-        fontSize: "0.7rem",
-        color: "rgba(255,255,255,0.25)",
+        fontSize: "0.9rem",
+        color: "var(--text-color)",
         borderTop: "1px solid rgba(255,255,255,0.06)",
         paddingTop: "1.5rem",
         marginTop: "4rem",
