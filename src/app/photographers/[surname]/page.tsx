@@ -282,13 +282,13 @@ export default async function PhotographerDetailPage({
           <div className={styles.sectionContent}>
             <ReactMarkdown
               components={{
-                h3: ({ node, ...props }) => (
+                h3: ({ ...props }) => (
                   <h3 className={styles.sectionTitle} {...props} />
                 ),
-                p: ({ node, ...props }) => (
+                p: ({ ...props }) => (
                   <p className={styles.sectionContent} {...props} />
                 ),
-                li: ({ node, ...props }) => (
+                li: ({ ...props }) => (
                   <li style={{ marginBottom: "10px" }} {...props} />
                 ),
               }}

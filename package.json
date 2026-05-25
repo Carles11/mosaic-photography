@@ -67,7 +67,7 @@
     "sharp": "^0.34.4",
     "ts-jest": "^29.4.1",
     "tsx": "^4.20.3",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "browserslist": [
     "defaults and not IE 11 and not dead and not < 0.5%",
