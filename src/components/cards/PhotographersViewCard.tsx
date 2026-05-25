@@ -164,7 +164,7 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                     )}
                   </div>
 
-                  <p>
+                  <p className={styles.lifespan}>
                     <time dateTime={photographer.birthdate ?? undefined}>
                       {formatHumanDate(photographer.birthdate)}
                     </time>

@@ -40,6 +40,15 @@
   margin: 0.1rem 0.3rem;
 }
 
+.lifespan {
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
 .biography {
   display: -webkit-box;
   -webkit-line-clamp: 4;
