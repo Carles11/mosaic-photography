@@ -91,6 +91,26 @@ body {
   font-size: 1.25rem !important;
 }
 
+.home-titles {
+  margin-bottom: 5rem;
+  margin-top: -4rem;
+}
+
+.home-titles h1 {
+  padding: 0.4rem;
+}
+
+.home-titles h2 {
+  padding: 0;
+  margin: 1rem;
+}
+
+@media (max-width: 767px) {
+  .home-titles {
+    margin-bottom: 3rem;
+    margin-top: 0;
+  }
+}
 /* .fancy-link {
   text-decoration: none;
   color: var(--text-color);

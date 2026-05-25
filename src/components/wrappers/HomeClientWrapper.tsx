@@ -5,7 +5,6 @@
 
 import { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
-import { HomeTitles } from "../header/titles/HomeTitles";
 import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
 import styles from "./home.module.css";
 import { useAgeConsent } from "@/context/AgeConsentContext";
@@ -89,11 +88,7 @@ function HomeClientWrapper({
             : {}
         }
       >
-        <div className={styles.content}>
-          <div className="v-margin">
-            {/* Vintage Nude Photography Gallery – Public Domain & Copyright-Free Art */}
-            <HomeTitles />
-          </div>
+        <div className={styles.content} id="our-photographers">
           {/* VINTAGE NUDE ART PHOTOGRAPHERS */}
           <PhotographersCardsSlide
             photographers={photographers}
@@ -107,8 +102,8 @@ function HomeClientWrapper({
               aria-label="Creative Essentials"
               className={styles.resourcesSection}
             >
-              <h2 className={styles.subTitle} id="artists-gallery-title">
-                THE MOSAIC TOOLKIT
+              <h2 className={styles.subTitle} id="toolkits">
+                MOSAIC&apos;S TOOLKITS
               </h2>
               <p className={styles.sectionIntro}>
                 Curated tools &amp; resources for photographers and vintage

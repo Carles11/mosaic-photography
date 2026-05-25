@@ -3,7 +3,7 @@ import DesktopNav from "../navigation/DesktopNav/DesktopNav";
 import styles from "./header.module.css";
 import { SupabaseUser } from "@/lib/supabaseClient";
 // ✅ Update this import to use your new logo component
-import ThemedLogo from "../logo/ThemedLogo";
+import HeroSection from "../hero/HeroSection";
 
 export interface HeaderProps {
   onLoginClick?: () => void;
@@ -28,16 +28,7 @@ export default function Header({
       <nav className={styles.navContainer}>
         <ul className={styles.navGrid}>
           {isHome ? (
-            <li className={styles.navLogo}>
-              <Link href="/" className="no-fancy-link">
-                {/* ✅ Use ThemedLogo here */}
-                <ThemedLogo
-                  alt="Mosaic Logo"
-                  // Pass down theme and forceMobile if needed
-                  className={styles.themeImage}
-                />
-              </Link>
-            </li>
+            <HeroSection />
           ) : (
             <li className={styles.navLogo}>
               <Link href="/" className={styles.backToHomeButton}>

@@ -15,7 +15,7 @@ const PhotographersCardsSlide: React.FC<PhotographersCardsSlideProps> = ({
   return (
     <div className={styles.photographersCardsSlideContainer}>
       <h2 className={styles.subTitle} id="artists-gallery-title">
-        VINTAGE NUDE ART PHOTOGRAPHERS
+        MOSAIC&apos;S PHOTOGRAPHERS
       </h2>
       <p className={styles.sectionIntro}>
         Explore their fascinating lives, and view their copyright-free

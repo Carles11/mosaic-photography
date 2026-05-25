@@ -1,39 +1,15 @@
-import { sendGTMEvent } from "@next/third-parties/google";
-
-import styles from "./Titles.module.css";
 import HomeAppBanner from "@/components/appBanner/HomeAppBanner";
+import { HomeTabs } from "../homeTabs/HomeTabs"; // Import your new component
+import styles from "./Titles.module.css";
 
 export const HomeTitles = () => {
   return (
     <div className={styles.mainTitleContainer}>
-      {/* <h1 className={styles.mainTitle}>
-        Vintage Nude Photography Gallery – Public Domain & Copyright-Free Art
-      </h1> */}
-
       <div className={styles.homeTitleGrid}>
-        {/* <h2>
-          Iconic works by legendary photographers who shaped the history of nude
-          art and nude photography.
-        </h2> */}
-
-        {/* APP Stores icons */}
         <HomeAppBanner />
 
-        <div className={styles.homeTitleGridItemRight}>
-          <h2>
-            <a
-              href="#gallery-section"
-              title="View the full collection of vintage nude photos"
-              onClick={() =>
-                sendGTMEvent({
-                  event: "browseAllPhotosClicked",
-                  value: "gallery-section",
-                })
-              }
-            >
-              GO TO MOSAIC COLLECTION
-            </a>
-          </h2>
+        <div className={styles.homeTitleTabs}>
+          <HomeTabs />
         </div>
       </div>
     </div>

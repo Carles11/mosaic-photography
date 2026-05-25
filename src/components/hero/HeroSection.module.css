@@ -1,0 +1,120 @@
+.heroSection {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.bgImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 2rem 1rem 1.5rem 1rem;
+}
+
+.badges {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  justify-content: center;
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .themeImage {
+    object-fit: cover;
+  }
+}
+
+/* Media query for mobile devices */
+@media (max-width: 767px) {
+  .navGrid {
+    min-height: 8vh;
+  }
+
+  .themeImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .themeImage img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Hide desktop user menu on mobile */
+  .desktopOnly {
+    display: none !important;
+  }
+
+  .actionSection {
+    justify-content: center;
+  }
+
+  .rightActions {
+    justify-content: center;
+  }
+  .bgImage {
+    background-image: url("https://cdn.mosaic.photography/mosaic-collections/public-domain-collection/mario-von-bucovich/originalsWEBP/mario-von-bucovich_unknown_female-nude_annotated-atelier-schenker_year-1925_vertical_female_bw.webp");
+  }
+
+  .fadeOverlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    /* Fade from transparent to var(--background-color) */
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 25%,
+      var(--background-color) 55%,
+      var(--background-color) 100%
+    );
+  }
+}
+
+@media (min-width: 769px) {
+  .heroSection {
+    min-height: 95vh;
+  }
+  .bgImage {
+    background-image: url("https://cdn.mosaic.photography/mosaic-collections/public-domain-collection/edward-weston/originalsWEBP/edward-weston_nude-charis-wilson-laying-on-the-beach-naked-full-body_year-1936_horizontal_female_bw.webp");
+  }
+
+  .fadeOverlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    /* Fade from transparent to var(--background-color) */
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 40%,
+      var(--background-color) 65%,
+      var(--background-color) 100%
+    );
+  }
+}

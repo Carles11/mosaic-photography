@@ -61,10 +61,10 @@ export default function AppHero() {
           >
             <span className={styles.qr}>
               <Image
-                src="/images/QR/Mosaic-photography-app-play-store-qr-code-mobile-2048px.svg"
+                src="/images/QR/Mosaic-Photography-Gallery.png"
                 alt="QR code linking to Mosaic app download page"
-                width={125}
-                height={125}
+                width={225}
+                height={225}
                 unoptimized
                 loading="eager"
               />

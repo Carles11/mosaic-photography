@@ -201,7 +201,7 @@ a:hover::before {
   align-items: center;
   justify-items: center;
   padding: 0;
-  margin: 4rem 0 0;
+  margin: 0;
 }
 .header_navGrid__a262G li {
   list-style: none;

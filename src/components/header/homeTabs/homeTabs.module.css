@@ -1,0 +1,29 @@
+.tabsContainer {
+  display: flex;
+  gap: 0.2rem;
+  justify-content: space-evenly;
+}
+
+.tab {
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  padding: 0.5rem 2rem;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.tab:hover {
+  color: #fff;
+}
+
+/* Make it stack on mobile if needed */
+@media (max-width: 768px) {
+  .tabsContainer {
+    flex-wrap: wrap;
+    gap: 0.1rem;
+  }
+}

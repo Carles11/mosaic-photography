@@ -1,12 +1,4 @@
 .bannerContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 8px;
-  box-shadow: none;
   width: 100%;
   max-width: 980px;
   background: transparent;
@@ -63,7 +55,6 @@
   }
 
   .inner {
-    flex-direction: row;
     align-items: center;
     gap: 12px;
   }

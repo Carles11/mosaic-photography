@@ -48,15 +48,15 @@ export default function HomeAppBanner() {
     }
   }, []);
 
-  const dismiss = () => {
-    try {
-      // Use sessionStorage so dismissal is per tab/window (reappears in new tabs)
-      sessionStorage.setItem(COOKIE_NAME, "1");
-    } catch (err) {
-      // swallow
-    }
-    setVisible(false);
-  };
+  // const dismiss = () => {
+  //   try {
+  //     // Use sessionStorage so dismissal is per tab/window (reappears in new tabs)
+  //     sessionStorage.setItem(COOKIE_NAME, "1");
+  //   } catch (err) {
+  //     // swallow
+  //   }
+  //   setVisible(false);
+  // };
 
   const pushBadgeClick = (platform: "ios" | "android") => {
     try {
@@ -92,14 +92,13 @@ export default function HomeAppBanner() {
             <Image
               src="/images/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg"
               alt="Download on the App Store"
-              width={135}
+              width={115}
               height={40}
               priority
               loading="eager"
               unoptimized
             />
-          </a>
-
+          </a>{" "}
           <a
             className={`${styles.badgeLink} no-fancy-link`}
             href={PLAY_STORE_URL}
@@ -112,7 +111,7 @@ export default function HomeAppBanner() {
             <Image
               src="/images/GetItOnGooglePlay_Badge_Web_color_English.svg"
               alt="Get it on Google Play"
-              width={135}
+              width={125}
               height={40}
               priority
               loading="eager"
@@ -121,15 +120,21 @@ export default function HomeAppBanner() {
           </a>
         </div>
 
-        <Link href="/app">Learn more...</Link>
+        <Link
+          href="/app"
+          className="app-about-link"
+          aria-label="Learn more about the Mosaic app"
+        >
+          About the app...
+        </Link>
 
-        <button
+        {/* <button
           className={styles.dismissButton}
           onClick={dismiss}
           aria-label="Dismiss app banner"
         >
           Dismiss
-        </button>
+        </button> */}
       </div>
     </div>
   );

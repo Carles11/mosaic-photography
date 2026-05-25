@@ -73,7 +73,8 @@ export default async function Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageSchema) }}
       />
-      <header>
+
+      <section className="home-titles">
         <h1>
           Vintage Nude Photography Gallery – Public Domain & Copyright-Free Art
         </h1>
@@ -81,12 +82,11 @@ export default async function Page() {
           Iconic works by legendary photographers who shaped the history of nude
           art and nude photography.
         </h2>
-      </header>
-
+      </section>
       {/* Note: If HomeClient contains the image gallery and ResourcesSlider,
         it will be rendered immediately. Suspense here acts as a boundary 
         for dynamic client-side interactivity.
-      */}
+        */}
       <Suspense
         fallback={<div className="loading-state">Loading gallery...</div>}
       >
