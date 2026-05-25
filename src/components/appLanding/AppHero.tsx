@@ -53,23 +53,17 @@ export default function AppHero() {
         </div>
         <div className={styles.qrRow}>
           <p className={styles.lead}>Scan to download the app:</p>
-          <Link
-            href="/app"
-            aria-label="App landing QR"
-            data-gtm="app-landing-qr"
-            className="no-fancy-link"
-          >
-            <span className={styles.qr}>
-              <Image
-                src="/images/QR/Mosaic-Photography-Gallery.png"
-                alt="QR code linking to Mosaic app download page"
-                width={225}
-                height={225}
-                unoptimized
-                loading="eager"
-              />
-            </span>
-          </Link>
+
+          <span className={styles.qr}>
+            <Image
+              src="/images/QR/Mosaic-Photography-Gallery.png"
+              alt="QR code linking to Mosaic app download page"
+              width={225}
+              height={225}
+              unoptimized
+              loading="eager"
+            />
+          </span>
         </div>
       </div>
     </header>
