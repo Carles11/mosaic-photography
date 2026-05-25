@@ -34,9 +34,9 @@
 
 .pillActive {
   composes: pill;
-  background: var(--pill-active-bg, #fff);
-  border-color: var(--pill-active-bg, #fff);
-  color: var(--text-color, #000);
+  background: var(--card-background, #333);
+  border-color: var(--foreground-muted, #aaa);
+  color: var(--text-color, #fff);
   font-weight: 700;
 }
 
