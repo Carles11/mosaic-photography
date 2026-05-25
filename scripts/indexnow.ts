@@ -1,9 +1,9 @@
 /**
  * IndexNow submission script
  *
- * Submits all photographer pages (plus the homepage) to the IndexNow API so
- * Bing, Yandex, and any other participating search engine index them immediately
- * after a build that introduces new or updated photographer pages.
+ * Submits all photographer pages, toolkit pages, and the homepage to the
+ * IndexNow API so Bing, Yandex, and any other participating search engine
+ * index them immediately after a build that introduces new or updated pages.
  *
  * Docs: https://www.indexnow.org/documentation
  *
@@ -53,12 +53,16 @@ async function submitIndexNow() {
 
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  const { data: photographers, error } = await supabase
+  // ── Photographers ──────────────────────────────────────────────
+  const { data: photographers, error: photographersError } = await supabase
     .from("photographers")
     .select("surname");
 
-  if (error) {
-    console.error("[IndexNow] Error fetching photographers:", error);
+  if (photographersError) {
+    console.error(
+      "[IndexNow] Error fetching photographers:",
+      photographersError,
+    );
     process.exit(1);
   }
 
@@ -67,7 +71,27 @@ async function submitIndexNow() {
     return `${SITE_URL}/photographers/${slug}`;
   });
 
-  const urls = [SITE_URL, `${SITE_URL}/faq`, ...photographerUrls];
+  // ── Toolkit / Advertisers ──────────────────────────────────────
+  const { data: advertisers, error: advertisersError } = await supabase
+    .from("affiliate_advertisers")
+    .select("slug");
+
+  if (advertisersError) {
+    console.error("[IndexNow] Error fetching advertisers:", advertisersError);
+    process.exit(1);
+  }
+
+  const toolkitUrls = (advertisers ?? []).map(
+    (a) => `${SITE_URL}/toolkit/${a.slug}`,
+  );
+
+  // ── Full URL list ──────────────────────────────────────────────
+  const urls = [
+    SITE_URL,
+    `${SITE_URL}/faq`,
+    ...photographerUrls,
+    ...toolkitUrls,
+  ];
 
   const payload = {
     host: "www.mosaic.photography",
@@ -76,7 +100,9 @@ async function submitIndexNow() {
     urlList: urls,
   };
 
-  console.log(`[IndexNow] Submitting ${urls.length} URLs…`);
+  console.log(
+    `[IndexNow] Submitting ${urls.length} URLs (${photographerUrls.length} photographers, ${toolkitUrls.length} toolkit pages)…`,
+  );
 
   const response = await fetch(INDEXNOW_ENDPOINT, {
     method: "POST",
