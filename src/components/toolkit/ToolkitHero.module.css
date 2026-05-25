@@ -1,0 +1,72 @@
+.heroSection {
+  position: relative;
+  width: 100%;
+  min-height: 260px;
+  padding: 2.5rem 1.5rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contentWrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.title {
+  color: #fff;
+  font-size: clamp(1.8rem, 5vw, 3.5rem);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  margin: 0;
+}
+
+.platformBadge {
+  display: inline-block;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.2rem 0.7rem;
+  margin-top: 0.5rem;
+  font-size: 0.6rem;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.description {
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 1rem;
+  max-width: 560px;
+  font-size: 1.1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.ctaButton {
+  display: inline-block;
+  margin-top: 2.2rem;
+  background: #fff;
+  color: #111;
+  padding: 0.75rem 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-decoration: none;
+}
+
+/* Logo container: Hidden by default on mobile, shown on desktop */
+.logoContainer {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .logoContainer {
+    display: block;
+    position: absolute;
+    bottom: 1.5rem;
+    right: 2rem;
+  }
+}

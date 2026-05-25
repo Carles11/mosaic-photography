@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: transparent;
   padding: 1rem;
 }
 
@@ -17,13 +17,13 @@
   animation: slideUp 0.3s ease-out;
 }
 
-.logoSection {
+/* .logoSection {
   padding: 2rem 2rem 1rem;
   text-align: center;
   border-bottom: 1px solid var(--secondary-color);
-}
+} */
 
-.logo {
+/* .logo {
   font-size: 2.5rem;
   font-weight: 800;
   background: var(--text-gradient);
@@ -31,13 +31,13 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin: 0;
-}
+} */
 
-.tagline {
+/* .tagline {
   color: var(--text-color);
   margin: 0.5rem 0 0;
   font-size: 0.9rem;
-}
+} */
 
 .formSection {
   padding: 2rem;

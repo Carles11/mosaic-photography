@@ -8,7 +8,9 @@ export interface AffiliateAdvertiser {
   logo_url?: string | null | undefined;
   description?: string | null;
   website_url?: string | null;
+  header_url?: string | null;
   banner_image_url?: string | null;
+  promo_url?: string | null;
   banner_link_url?: string | null;
   editorial_note?: Record<string, string | null>; // jsonb for localization
   template?: string | null; // e.g., 'marketplace', 'software', 'print'

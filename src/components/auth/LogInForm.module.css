@@ -33,7 +33,7 @@
   padding: 0.7rem 1rem;
   font-size: 1rem;
   background: var(--background-color, #181818);
-  border: 1.5px solid var(--tertiary-color, #444);
+  border: 1.5px solid var(--text-color, #fff);
   border-radius: 9px;
   color: var(--text-color, #fff);
   outline: none;
@@ -79,7 +79,10 @@
 }
 
 .link {
-  color: var(--accent-color, #f4d35e);
+  color: var(--text-color, #fff);
+  border: 1px solid var(--text-color, #fff);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
   text-decoration: none;
   font-size: 0.98rem;
   letter-spacing: 0.3px;

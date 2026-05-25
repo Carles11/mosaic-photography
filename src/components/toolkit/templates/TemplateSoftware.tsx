@@ -43,14 +43,16 @@ export default function TemplateSoftware({
               rel="sponsored"
               style={{ display: "block" }}
             >
-              <Image
-                src={advertiser.banner_image_url}
-                alt={`${advertiser.name} before and after`}
-                width={2000}
-                height={2000}
-                style={{ width: "100%", height: "auto", display: "block" }}
-                unoptimized
-              />
+              {advertiser.promo_url && (
+                <Image
+                  src={advertiser.promo_url}
+                  alt={`${advertiser.name} before and after`}
+                  width={2000}
+                  height={2000}
+                  style={{ width: "100%", height: "auto", display: "block" }}
+                  unoptimized
+                />
+              )}
             </a>
           )}
         </section>
@@ -269,59 +271,62 @@ export default function TemplateSoftware({
           </div>
         </div>
       </section>
-      {/* Free Trial CTA (Retouch4me only) */}
-      {advertiser.slug === "retouch4me" && (
+
+      {/* Free Trial CTA (Retouch4me only, using banner_image_url) */}
+      {advertiser.slug === "retouch4me" && advertiser.banner_image_url && (
         <section
           style={{
-            background: "#1d1d1d",
-            border: "1px solid rgba(255,255,255,0.07)",
-            padding: "2.5rem 0",
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url(${advertiser.banner_image_url})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            padding: "4rem 2rem",
             margin: "3rem 0",
+            textAlign: "center",
           }}
         >
-          <div style={{ textAlign: "center" }}>
-            <h2
-              style={{
-                color: "#fff",
-                textTransform: "uppercase",
-                letterSpacing: "0.1em",
-                fontWeight: 700,
-                fontSize: "1.2rem",
-                marginBottom: "1.2rem",
-              }}
-            >
-              TRY IT FREE
-            </h2>
-            <div
-              style={{
-                color: "rgba(255,255,255,0.7)",
-                fontSize: "1.1rem",
-                marginBottom: "1.5rem",
-              }}
-            >
-              20 free retouches. No credit card required.
-            </div>
-            {advertiser.website_url && (
-              <a
-                href={advertiser.website_url}
-                target="_blank"
-                rel="sponsored"
-                style={{
-                  background: "#fff",
-                  color: "#111",
-                  padding: "0.75rem 2rem",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.12em",
-                  fontWeight: 700,
-                  fontSize: "0.75rem",
-                  textDecoration: "none",
-                  borderRadius: 0,
-                }}
-              >
-                Try Now
-              </a>
-            )}
+          <h2
+            style={{
+              color: "#fff",
+              textTransform: "uppercase",
+              letterSpacing: "0.1em",
+              fontWeight: 700,
+              fontSize: "1.5rem", // Slightly larger for impact
+              marginBottom: "1.2rem",
+            }}
+          >
+            TRY IT FREE
+          </h2>
+          <div
+            style={{
+              color: "rgba(255,255,255,0.9)", // Brighter for better contrast
+              fontSize: "1.1rem",
+              marginBottom: "2rem",
+              textShadow: "0 2px 4px rgba(0,0,0,0.5)",
+            }}
+          >
+            20 free retouches. No credit card required.
           </div>
+          {advertiser.website_url && (
+            <a
+              href={advertiser.website_url}
+              target="_blank"
+              rel="sponsored"
+              style={{
+                background: "#fff",
+                color: "#111",
+                padding: "0.85rem 2.5rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                fontWeight: 700,
+                fontSize: "0.75rem",
+                textDecoration: "none",
+                display: "inline-block",
+              }}
+            >
+              Try Now
+            </a>
+          )}
         </section>
       )}
       <ToolkitAffiliateBadge />

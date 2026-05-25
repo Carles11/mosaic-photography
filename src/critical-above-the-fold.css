@@ -18,8 +18,7 @@
   --foreground: #fff;
   --foreground-muted: #aaa;
   --card-background: #2d2d2d;
-  --card-details-background: "transparent"
-  --background: #1d1d1d;
+  --card-details-background: "transparent" --background: #1d1d1d;
   --background-secondary: #333;
   --border-color: #444;
   --button-primary-bg: var(--background-color);
@@ -46,8 +45,7 @@
   --foreground: var(--secondary-color);
   --foreground-muted: #666;
   --card-background: #ffffff;
-  --card-details-background: "transparent"
-  --background: #fff;
+  --card-details-background: "transparent" --background: #fff;
   --background-secondary: #f8f9fa;
   --border-color: #e0e0e0;
   --button-primary-bg: var(--link-color);
@@ -119,7 +117,6 @@ a:hover::before {
   bottom: 0;
   height: 100%;
 }
-
 
 .fancy-link {
   position: relative;
@@ -250,7 +247,7 @@ a:hover::before {
   z-index: 102;
   display: none;
   background: var(--background-color, #232323);
-  border-top: 1px solid var(--tertiary-color, rgba(255, 255, 255, 0.1));
+  border-top: 1px solid var(--accent-color, #f4d35e);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   will-change: transform, opacity;

@@ -1,7 +1,7 @@
 .primaryButton {
-  background-color: var(--tertiary-color);
-  color: var(--text-color);
-  border: 1px solid var(--text-color);
+  background-color: var(--secondary-color, #f4d35e);
+  color: var(--text-color, #fff);
+  border: 1px solid var(--text-color, #fff);
   padding: 10px 20px;
   font-size: 16px;
   border-radius: 5px;

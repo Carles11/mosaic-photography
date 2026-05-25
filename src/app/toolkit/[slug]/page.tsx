@@ -37,11 +37,9 @@ export async function generateStaticParams() {
   return (data || []).map((row: { slug: string }) => ({ slug: row.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export async function generateMetadata(props: { params: { slug: string } }) {
+  const params = await Promise.resolve(props.params);
+
   const { slug } = params;
   const { data: advertiser } = await supabaseServerClient
     .from("affiliate_advertisers")

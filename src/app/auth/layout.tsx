@@ -20,10 +20,10 @@ export default function AuthLayout({
   return (
     <div className={styles.authContainer}>
       <div className={styles.authWrapper}>
-        <div className={styles.logoSection}>
+        {/* <div className={styles.logoSection}>
           <h1 className={styles.logo}>Mosaic</h1>
           <p className={styles.tagline}>Public domain photography gallery</p>
-        </div>
+        </div> */}
         <div className={styles.formSection}>
           <Suspense fallback={<div className={styles.loading}>Loading...</div>}>
             {children}

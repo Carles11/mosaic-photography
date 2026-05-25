@@ -22,13 +22,14 @@
 }
 
 .menuButton:hover {
-  background: var(--tertiary-color, rgba(255, 255, 255, 0.1));
+  background: var(--secondary-color, #2c106a);
   border-color: var(--accent-color, #f4d35e);
   transform: translateY(-1px);
+  color: var(--text-color, #fff);
 }
 
 .menuButtonOpen {
-  background: var(--tertiary-color, rgba(255, 255, 255, 0.1));
+  background: var(--secondary-color, #2c106a);
   border-color: var(--accent-color, #f4d35e);
 }
 
@@ -114,7 +115,7 @@
 }
 
 .menuItem:hover {
-  background: var(--tertiary-color, rgba(255, 255, 255, 0.1));
+  background: var(--secondary-color, #2c106a);
 }
 
 .menuItemIcon {

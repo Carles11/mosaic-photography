@@ -17,6 +17,7 @@ export default function TemplatePrint({
   products,
   locale,
 }: TemplatePrintProps) {
+  console.log({ advertiser });
   return (
     <div
       style={{
@@ -175,16 +176,20 @@ export default function TemplatePrint({
       {/* CTA Footer */}
       <section
         style={{
-          background: "#111",
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${advertiser.banner_image_url})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
           padding: "4rem 2rem",
           textAlign: "center",
           borderRadius: "12px",
           margin: "4rem 0",
+          position: "relative", // Ensures overlay covers the section correctly
         }}
       >
         <h2
           style={{
-            color: "var(--text-color, #333)",
+            color: "#fff", // Changed to white so it contrasts with the image overlay
             fontSize: "1.8rem",
             marginBottom: "1.5rem",
           }}
@@ -205,6 +210,7 @@ export default function TemplatePrint({
               fontWeight: 700,
               textDecoration: "none",
               letterSpacing: "0.1em",
+              display: "inline-block", // Good practice for links styled as buttons
             }}
           >
             Visit Shop

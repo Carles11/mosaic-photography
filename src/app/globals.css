@@ -71,6 +71,12 @@ body {
   color: var(--text-color);
 }
 
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 .font-trade-gothic {
   font-family: var(--font-trade-gothic), sans-serif;
 }
