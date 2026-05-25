@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { sendGTMEvent } from "@next/third-parties/google";
-import styles from "./HomeTabs.module.css";
+import styles from "./homeTabs.module.css";
 
 const TABS = [
   {
