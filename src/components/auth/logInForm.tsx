@@ -121,8 +121,8 @@ export default function LoginForm({
                   ? "Sending magic link..."
                   : "Logging in..."
                 : useMagicLink
-                ? "Send Magic Link"
-                : "Login"
+                  ? "Send Magic Link"
+                  : "Login"
             }
             handleClick={() => {}} // The form handles submit
             className=""
@@ -135,7 +135,7 @@ export default function LoginForm({
         To restore magic-link login, uncomment the block below.
       */}
 
-      <div className={styles.linksRow}>
+      {/* <div className={styles.linksRow}>
         <a
           className={styles.link}
           onClick={() => setUseMagicLink(!useMagicLink)}
@@ -144,7 +144,7 @@ export default function LoginForm({
         >
           {useMagicLink ? "Use password instead" : "Use only email instead"}
         </a>
-      </div>
+      </div> */}
 
       {/* Only show internal links when used in modal (when callbacks are provided) */}
       {(onSwitchToSignup || onForgotPassword) && (
