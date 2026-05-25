@@ -27,7 +27,6 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
   products,
   locale = "en",
 }) => {
-  console.log({ products });
   const [selected, setSelected] = useState("all");
   const filtered = useMemo(
     () =>
