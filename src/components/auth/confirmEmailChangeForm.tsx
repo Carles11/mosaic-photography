@@ -61,7 +61,7 @@ export default function ConfirmEmailChangeForm({
       setError("Invalid email change confirmation link.");
       setLoading(false);
     }
-  }, [searchParams]);
+  }, [searchParams, onSuccess, redirectTo, router]);
 
   type OtpType =
     | "email_change"

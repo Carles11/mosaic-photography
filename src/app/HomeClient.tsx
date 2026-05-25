@@ -6,7 +6,7 @@ import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import { useAuth } from "@/hooks/useAuth";
 import { useComments } from "@/context/CommentsContext";
 import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
-import { AuthView } from "@/types/auth";
+// import { AuthView } from "@/types/auth"; // removed unused
 import { Photographer } from "@/types/gallery";
 import { ImageWithOrientation } from "@/types/gallery";
 import { AffiliateProductWithAdvertiser } from "@/utils/fetchAffiliateDataSSR";
@@ -31,7 +31,7 @@ export default function HomeClient({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authView, setAuthView] = useState<AuthView>("login");
+  // Removed unused authView state
   const [isInitialized, setIsInitialized] = useState(false);
 
   const { loadCommentCountsBatch } = useComments();
@@ -50,17 +50,9 @@ export default function HomeClient({
   useEffect(() => {
     if (!isInitialized && searchParams) {
       const modal = searchParams.get("modal");
-      const type = searchParams.get("type");
-
+      // Only show modal if needed, no authView logic
       if (modal === "auth") {
         setShowAuthModal(true);
-        if (type === "password-reset") {
-          setAuthView("password-reset");
-        } else if (type === "verify-email") {
-          setAuthView("verify-email");
-        } else {
-          setAuthView("login");
-        }
       }
       setIsInitialized(true);
     }
@@ -69,7 +61,6 @@ export default function HomeClient({
   // Handle modal closing
   useEffect(() => {
     if (isInitialized && !showAuthModal) {
-      setAuthView("login");
       // Clear URL parameters when modal is closed
       if (typeof window !== "undefined") {
         const url = new URL(window.location.href);

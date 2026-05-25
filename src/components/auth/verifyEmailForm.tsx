@@ -58,7 +58,7 @@ export default function VerifyEmailForm({
       setError("Invalid verification link.");
       setLoading(false);
     }
-  }, [searchParams]);
+  }, [searchParams, onSuccess, redirectTo, router]);
 
   type OtpType =
     | "signup"

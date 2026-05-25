@@ -57,7 +57,7 @@ export default function MagicLinkForm({
       setError("Invalid magic link.");
       setLoading(false);
     }
-  }, [searchParams]);
+  }, [searchParams, onSuccess, redirectTo, router]);
 
   return (
     <div className={styles.magicLinkFormContainer}>

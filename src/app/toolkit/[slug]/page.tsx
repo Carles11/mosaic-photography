@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import dynamic from "next/dynamic";
 import type { AffiliateAdvertiser, AffiliateProduct } from "@/types/supabase";
-import { supabaseServerClient } from "@/lib/supabaseServerClient";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import { getToolkitDataBySlug } from "@/utils/fetchAffiliateDataSSR";
 
@@ -11,7 +10,6 @@ type TemplateProps = {
   locale: string;
 };
 
-// Components...
 const TemplateSoftware = dynamic(
   () => import("@/components/toolkit/templates/TemplateSoftware"),
 );
@@ -33,26 +31,31 @@ const TEMPLATE_MAP: Record<string, React.ComponentType<TemplateProps>> = {
 };
 
 export async function generateStaticParams() {
-  const { data, error } = await supabaseServerClient
+  const { createClient } = await import("@supabase/supabase-js");
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  );
+  const { data, error } = await supabase
     .from("affiliate_advertisers")
     .select("slug");
   if (error) throw error;
   return (data || []).map((row: { slug: string }) => ({ slug: row.slug }));
 }
 
-export async function generateMetadata(props: { params: { slug: string } }) {
-  const params = await Promise.resolve(props.params);
-  const { slug } = params;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
 
-  const { data: advertiser } = await supabaseServerClient
-    .from("affiliate_advertisers")
-    .select("*")
-    .eq("slug", slug)
-    .single();
+  const { getToolkitDataBySlug: fetchAdvertiser } =
+    await import("@/utils/fetchAffiliateDataSSR");
+  const advertiser = await fetchAdvertiser(slug);
 
   if (!advertiser) return {};
 
-  // SEO Keywords generated from name and platform
   const keywords = [
     advertiser.name,
     advertiser.platform,
@@ -83,15 +86,20 @@ export async function generateMetadata(props: { params: { slug: string } }) {
       images: advertiser.logo_url ? [advertiser.logo_url] : [],
     },
     robots: { index: true, follow: true },
-    alternates: { canonical: `https://www.mosaic.photography/toolkit/${slug}` },
+    alternates: {
+      canonical: `https://www.mosaic.photography/toolkit/${slug}`,
+    },
   };
 }
 
-export default async function ToolkitPage(props: { params: { slug: string } }) {
-  const params = await Promise.resolve(props.params);
-  const { slug } = params;
+export default async function ToolkitPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
 
-  const advertiser = await getToolkitDataBySlug(params.slug);
+  const advertiser = await getToolkitDataBySlug(slug);
 
   if (!advertiser) return notFound();
 
@@ -106,7 +114,7 @@ export default async function ToolkitPage(props: { params: { slug: string } }) {
         name={`${advertiser.name} Photography Toolkit`}
         url={`https://www.mosaic.photography/toolkit/${slug}`}
         description={advertiser.description || ""}
-        images={products?.map((p: AffiliateProduct) => ({
+        images={products.map((p: AffiliateProduct) => ({
           contentUrl: p.image_url || "",
           name:
             typeof p.title === "string"
@@ -121,7 +129,7 @@ export default async function ToolkitPage(props: { params: { slug: string } }) {
           encodingFormat: "image/webp",
         }))}
       />
-      <Template advertiser={advertiser} products={products || []} locale="en" />
+      <Template advertiser={advertiser} products={products} locale="en" />
     </>
   );
 }
