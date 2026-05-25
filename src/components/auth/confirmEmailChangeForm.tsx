@@ -26,6 +26,35 @@ export default function ConfirmEmailChangeForm({
     const token = searchParams?.get("token");
     const type = searchParams?.get("type");
 
+    const handleEmailChangeConfirmation = async (
+      token: string,
+      type: string,
+    ) => {
+      try {
+        const { error } = await supabase.auth.verifyOtp({
+          token_hash: token,
+          type: type as OtpType,
+        });
+
+        if (error) {
+          setError(error.message);
+        } else {
+          setSuccess("Email change confirmed successfully!");
+          setTimeout(() => {
+            if (onSuccess) {
+              onSuccess();
+            } else {
+              router.push(redirectTo);
+            }
+          }, 2000);
+        }
+      } catch (err) {
+        setError("Email change confirmation failed. Please try again.");
+        console.log("Error confirming email change:", err);
+      }
+      setLoading(false);
+    };
+
     if (token && type) {
       handleEmailChangeConfirmation(token, type);
     } else {
@@ -40,32 +69,6 @@ export default function ConfirmEmailChangeForm({
     | "recovery"
     | "invite"
     | "magiclink";
-
-  const handleEmailChangeConfirmation = async (token: string, type: string) => {
-    try {
-      const { error } = await supabase.auth.verifyOtp({
-        token_hash: token,
-        type: type as OtpType,
-      });
-
-      if (error) {
-        setError(error.message);
-      } else {
-        setSuccess("Email change confirmed successfully!");
-        setTimeout(() => {
-          if (onSuccess) {
-            onSuccess();
-          } else {
-            router.push(redirectTo);
-          }
-        }, 2000);
-      }
-    } catch (err) {
-      setError("Email change confirmation failed. Please try again.");
-      console.log("Error confirming email change:", err);
-    }
-    setLoading(false);
-  };
 
   const handleContinue = () => {
     if (onSuccess) {

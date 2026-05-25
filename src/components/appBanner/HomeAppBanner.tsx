@@ -37,13 +37,13 @@ export default function HomeAppBanner() {
         ) {
           sessionStorage.removeItem(COOKIE_NAME);
         }
-      } catch (e) {
+      } catch {
         // ignore
       }
 
       const dismissed = sessionStorage.getItem(COOKIE_NAME);
       if (!dismissed) setVisible(true);
-    } catch (err) {
+    } catch {
       setVisible(true);
     }
   }, []);

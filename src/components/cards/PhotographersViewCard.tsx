@@ -197,8 +197,8 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                       <br />
                       <ReactMarkdown
                         components={{
-                          p: ({ node, ...props }) => <span {...props} />,
-                          strong: ({ node, ...props }) => <strong {...props} />,
+                          p: (props) => <span {...props} />,
+                          strong: (props) => <strong {...props} />,
                         }}
                       >
                         {getCleanIntro(photographer.intro_md)}

@@ -31,7 +31,7 @@ export default function NotFound() {
           marginBottom: "2.5rem",
         }}
       >
-        This toolkit page doesn't exist yet.
+        This toolkit page doesn&apos;t exist yet.
       </p>
       <Link
         href="/"

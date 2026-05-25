@@ -26,6 +26,32 @@ export default function VerifyEmailForm({
     const token = searchParams?.get("token");
     const type = searchParams?.get("type");
 
+    const handleEmailVerification = async (token: string, type: string) => {
+      try {
+        const { error } = await supabase.auth.verifyOtp({
+          token_hash: token,
+          type: type as OtpType,
+        });
+
+        if (error) {
+          setError(error.message);
+        } else {
+          setSuccess("Email verified successfully!");
+          setTimeout(() => {
+            if (onSuccess) {
+              onSuccess();
+            } else {
+              router.push(redirectTo);
+            }
+          }, 2000);
+        }
+      } catch (err) {
+        setError("Verification failed. Please try again.");
+        console.log("Error verifying email:", err);
+      }
+      setLoading(false);
+    };
+
     if (token && type) {
       handleEmailVerification(token, type);
     } else {
@@ -40,32 +66,6 @@ export default function VerifyEmailForm({
     | "magiclink"
     | "recovery"
     | "email_change";
-
-  const handleEmailVerification = async (token: string, type: string) => {
-    try {
-      const { error } = await supabase.auth.verifyOtp({
-        token_hash: token,
-        type: type as OtpType,
-      });
-
-      if (error) {
-        setError(error.message);
-      } else {
-        setSuccess("Email verified successfully!");
-        setTimeout(() => {
-          if (onSuccess) {
-            onSuccess();
-          } else {
-            router.push(redirectTo);
-          }
-        }, 2000);
-      }
-    } catch (err) {
-      setError("Verification failed. Please try again.");
-      console.log("Error verifying email:", err);
-    }
-    setLoading(false);
-  };
 
   const handleContinue = () => {
     if (onSuccess) {

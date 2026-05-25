@@ -26,6 +26,31 @@ export default function MagicLinkForm({
     const token = searchParams?.get("token");
     const type = searchParams?.get("type");
 
+    const handleMagicLinkVerification = async (token: string, type: string) => {
+      try {
+        const { error } = await supabase.auth.verifyOtp({
+          token_hash: token,
+          type: type as "magiclink" | "recovery" | "invite" | "signup",
+        });
+
+        if (error) {
+          setError(error.message);
+        } else {
+          setSuccess("Login successful! Redirecting...");
+          setTimeout(() => {
+            if (onSuccess) {
+              onSuccess();
+            } else {
+              router.push(redirectTo);
+            }
+          }, 2000);
+        }
+      } catch (err) {
+        setError("Magic link verification failed. Please try again.");
+        console.log("Error verifying magic link:", err);
+      }
+      setLoading(false);
+    };
     if (token && type) {
       handleMagicLinkVerification(token, type);
     } else {
@@ -33,32 +58,6 @@ export default function MagicLinkForm({
       setLoading(false);
     }
   }, [searchParams]);
-
-  const handleMagicLinkVerification = async (token: string, type: string) => {
-    try {
-      const { error } = await supabase.auth.verifyOtp({
-        token_hash: token,
-        type: type as "magiclink" | "recovery" | "invite" | "signup",
-      });
-
-      if (error) {
-        setError(error.message);
-      } else {
-        setSuccess("Login successful! Redirecting...");
-        setTimeout(() => {
-          if (onSuccess) {
-            onSuccess();
-          } else {
-            router.push(redirectTo);
-          }
-        }, 2000);
-      }
-    } catch (err) {
-      setError("Magic link verification failed. Please try again.");
-      console.log("Error verifying magic link:", err);
-    }
-    setLoading(false);
-  };
 
   return (
     <div className={styles.magicLinkFormContainer}>
