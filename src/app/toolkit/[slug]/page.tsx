@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import dynamic from "next/dynamic";
 import type { AffiliateAdvertiser, AffiliateProduct } from "@/types/supabase";
 import { supabaseServerClient } from "@/lib/supabaseServerClient";
+import JsonLdSchema from "@/components/seo/JsonLdSchema";
+import { getToolkitDataBySlug } from "@/utils/fetchAffiliateDataSSR";
 
 type TemplateProps = {
   advertiser: AffiliateAdvertiser;
@@ -9,6 +11,7 @@ type TemplateProps = {
   locale: string;
 };
 
+// Components...
 const TemplateSoftware = dynamic(
   () => import("@/components/toolkit/templates/TemplateSoftware"),
 );
@@ -39,53 +42,86 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: { params: { slug: string } }) {
   const params = await Promise.resolve(props.params);
-
   const { slug } = params;
+
   const { data: advertiser } = await supabaseServerClient
     .from("affiliate_advertisers")
     .select("*")
     .eq("slug", slug)
     .single();
+
   if (!advertiser) return {};
+
+  // SEO Keywords generated from name and platform
+  const keywords = [
+    advertiser.name,
+    advertiser.platform,
+    "Photography Toolkit",
+    "Photography Resources",
+    "Mosaic Photography",
+    `${advertiser.name} review`,
+    `${advertiser.name} affiliate`,
+  ];
+
   return {
-    title: `${advertiser.name} – Mosaic Toolkit`,
-    description: advertiser.description || undefined,
+    title: `${advertiser.name} – Photography Toolkit | Mosaic`,
+    description:
+      advertiser.description ||
+      `Explore ${advertiser.name} resources and tools on Mosaic Photography Toolkit.`,
+    keywords: keywords.join(", "),
     openGraph: {
-      title: advertiser.name,
-      description: advertiser.description || undefined,
-      images: advertiser.logo_url ? [advertiser.logo_url] : [],
+      title: `${advertiser.name} | Mosaic Toolkit`,
+      description: advertiser.description || "",
+      siteName: "Mosaic Photography",
+      images: advertiser.logo_url ? [{ url: advertiser.logo_url }] : [],
+      type: "website",
     },
     twitter: {
       card: "summary_large_image",
-      title: advertiser.name,
-      description: advertiser.description || undefined,
+      title: `${advertiser.name} – Mosaic Toolkit`,
+      description: advertiser.description || "",
       images: advertiser.logo_url ? [advertiser.logo_url] : [],
     },
     robots: { index: true, follow: true },
-    alternates: { canonical: `/toolkit/${slug}` },
+    alternates: { canonical: `https://www.mosaic.photography/toolkit/${slug}` },
   };
 }
 
 export default async function ToolkitPage(props: { params: { slug: string } }) {
   const params = await Promise.resolve(props.params);
   const { slug } = params;
-  const { data: advertiser } = await supabaseServerClient
-    .from("affiliate_advertisers")
-    .select("*")
-    .eq("slug", slug)
-    .single();
+
+  const advertiser = await getToolkitDataBySlug(params.slug);
+
   if (!advertiser) return notFound();
 
-  const { data: products } = await supabaseServerClient
-    .from("affiliate_products")
-    .select("*")
-    .eq("advertiser_id", advertiser.id)
-    .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: true });
+  const products = advertiser.products || [];
 
   const Template = TEMPLATE_MAP[advertiser.template] || TemplateDefault;
 
   return (
-    <Template advertiser={advertiser} products={products || []} locale="en" />
+    <>
+      <JsonLdSchema
+        type="CollectionPage"
+        name={`${advertiser.name} Photography Toolkit`}
+        url={`https://www.mosaic.photography/toolkit/${slug}`}
+        description={advertiser.description || ""}
+        images={products?.map((p: AffiliateProduct) => ({
+          contentUrl: p.image_url || "",
+          name:
+            typeof p.title === "string"
+              ? p.title
+              : (p.title as { en?: string })?.en || "",
+          description:
+            typeof p.description === "string"
+              ? p.description
+              : (p.description as { en?: string })?.en || "",
+          width: 800,
+          height: 600,
+          encodingFormat: "image/webp",
+        }))}
+      />
+      <Template advertiser={advertiser} products={products || []} locale="en" />
+    </>
   );
 }

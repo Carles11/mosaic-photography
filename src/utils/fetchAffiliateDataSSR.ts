@@ -43,3 +43,23 @@ export async function getAffiliateProductsByAuthor(
 
   return data as AffiliateProductWithAdvertiser[];
 }
+
+export async function getToolkitDataBySlug(slug: string) {
+  const { data, error } = await supabaseServerClient
+    .from("affiliate_advertisers")
+    .select(
+      `
+      *,
+      products:affiliate_products(*)
+    `,
+    )
+    .eq("slug", slug)
+    .single();
+
+  if (error) {
+    console.error(`Error fetching toolkit data for slug ${slug}:`, error);
+    throw error;
+  }
+
+  return data;
+}

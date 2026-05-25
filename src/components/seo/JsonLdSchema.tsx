@@ -21,7 +21,13 @@ type OrganizationProps = {
 type PublisherProps = OrganizationProps;
 
 type JsonLdSchemaProps = {
-  type: "ImageGallery" | "ImageObject" | "WebSite" | "WebPage" | "Organization";
+  type:
+    | "ImageGallery"
+    | "ImageObject"
+    | "WebSite"
+    | "WebPage"
+    | "Organization"
+    | "CollectionPage";
   name: string;
   description?: string;
   url?: string;
@@ -152,6 +158,7 @@ export default function JsonLdSchema({
           }
         : undefined,
     };
+
     return (
       <script
         type="application/ld+json"
@@ -191,6 +198,30 @@ export default function JsonLdSchema({
       name,
       url,
       description,
+    };
+    return (
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+      />
+    );
+  }
+
+  if (type === "CollectionPage" && url) {
+    const schemaData = {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name,
+      url,
+      description,
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: images?.map((img, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: img.name,
+        })),
+      },
     };
     return (
       <script
