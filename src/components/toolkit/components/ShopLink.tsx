@@ -19,8 +19,12 @@ export default function ShopLink({ href, label }: ShopLinkProps) {
       onMouseOut={() => setIsHovered(false)}
       style={{
         display: "inline-block",
-        border: "1px solid #fff",
-        color: isHovered ? "#000" : "#fff",
+        border: isHovered
+          ? "1px solid var(--text-color, #fff)"
+          : "1px solid transparent",
+        color: isHovered
+          ? "var(--secondary-color, #2c106a)"
+          : "var(--text-color, #fff)",
         background: isHovered ? "#fff" : "transparent",
         padding: "0.75rem 1.5rem",
         fontSize: "0.8rem",

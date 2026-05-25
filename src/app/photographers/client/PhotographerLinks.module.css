@@ -190,7 +190,6 @@
 .learnMore {
   padding: 1rem 1rem 0;
   margin-top: 0.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .learnMoreLink,
@@ -202,6 +201,7 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   transition: color 0.2s;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
 }
 
 .learnMoreLink:hover {

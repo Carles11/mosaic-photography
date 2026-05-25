@@ -90,23 +90,37 @@ export default function TemplatePrint({
 
               {/* Details */}
               <div style={{ flexGrow: 1 }}>
+                <h2
+                  style={{
+                    color: "var(--text-color, #333)",
+                    fontSize: "1.1rem",
+                    fontWeight: 600,
+                    letterSpacing: "0.05em",
+                    padding: "0.5rem 0",
+                    margin: 0,
+                  }}
+                >
+                  {product.photographer_author || ""}
+                </h2>
                 <h3
                   style={{
                     fontSize: "1.2rem",
                     marginBottom: "0.75rem",
                     fontWeight: 600,
+                    margin: "1rem 0.5rem",
                   }}
                 >
                   {product.title?.[locale] || product.title?.en}
                 </h3>
                 <p
                   style={{
-                    color: "rgba(255,255,255,0.6)",
+                    color: "var(--text-color, #333)",
                     fontSize: "0.95rem",
                     lineHeight: "1.6",
                     marginBottom: "1.5rem",
                   }}
                 >
+                  {" "}
                   {product.description?.[locale] || product.description?.en}
                 </p>
                 <ShopLink href={product.affiliate_url} label="View Details" />
@@ -146,7 +160,12 @@ export default function TemplatePrint({
             >
               {item.label}
             </div>
-            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.9rem" }}>
+            <div
+              style={{
+                color: "var(--text-color, #333)",
+                fontSize: "0.9rem",
+              }}
+            >
               {item.desc}
             </div>
           </div>
@@ -163,7 +182,13 @@ export default function TemplatePrint({
           margin: "4rem 0",
         }}
       >
-        <h2 style={{ fontSize: "1.8rem", marginBottom: "1.5rem" }}>
+        <h2
+          style={{
+            color: "var(--text-color, #333)",
+            fontSize: "1.8rem",
+            marginBottom: "1.5rem",
+          }}
+        >
           PRINT YOUR COLLECTION
         </h2>
         {advertiser.website_url && (

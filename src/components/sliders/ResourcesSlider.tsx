@@ -106,7 +106,7 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
                   </div>
                   <div className={styles.productStore}>
                     {(product.affiliate_advertisers?.name &&
-                      `Found in ${product.affiliate_advertisers?.name}`) ||
+                      `${product.affiliate_advertisers?.name}`) ||
                       ""}
                   </div>
                   <div className={styles.productDesc}>

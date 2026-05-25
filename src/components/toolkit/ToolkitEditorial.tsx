@@ -27,7 +27,7 @@ export default function ToolkitEditorial({
         style={{
           fontSize: "0.65rem",
           textTransform: "uppercase",
-          color: "rgba(255,255,255,0.6)",
+          color: "var(--text-color, #333)",
           marginBottom: "0.7rem",
           letterSpacing: "0.08em",
         }}
@@ -35,12 +35,14 @@ export default function ToolkitEditorial({
         WHY I RECOMMEND THIS
       </div>
       {hasContent ? (
-        <div style={{ color: "#fff", lineHeight: 1.7 }}>{note}</div>
+        <div style={{ color: "var(--text-color, #333)", lineHeight: 1.7 }}>
+          {note}
+        </div>
       ) : (
         <div
           style={{
             border: "1.5px dashed rgba(255,255,255,0.13)",
-            color: "rgba(255,255,255,0.3)",
+            color: "var(--text-color, #333)",
             padding: "1.2rem 1rem",
             fontStyle: "italic",
             fontSize: "1rem",

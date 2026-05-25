@@ -4,6 +4,7 @@ import ToolkitEditorial from "../ToolkitEditorial";
 import ToolkitAffiliateBadge from "../ToolkitAffiliateBadge";
 import Image from "next/image";
 import type { AffiliateAdvertiser, AffiliateProduct } from "@/types/supabase";
+import { ExpandableText } from "../components/ExpandableTextEllipsis";
 
 interface TemplateDefaultProps {
   advertiser: AffiliateAdvertiser;
@@ -83,6 +84,7 @@ export default function TemplateDefault({
                   flex: 1,
                   display: "flex",
                   flexDirection: "column",
+                  background: "var(--background-color, #333)",
                 }}
               >
                 <h2
@@ -111,17 +113,13 @@ export default function TemplateDefault({
                   {product.title?.[locale] || product.title?.en}
                 </h3>
 
-                <p
-                  style={{
-                    color: "var(--foreground-muted, #aaa)",
-                    fontSize: "0.9rem",
-                    lineHeight: "1.5",
-                    marginBottom: "2rem",
-                    flex: 1,
-                  }}
-                >
-                  {product.description?.[locale] || product.description?.en}
-                </p>
+                <ExpandableText
+                  text={
+                    product.description?.[locale] ||
+                    product.description?.en ||
+                    ""
+                  }
+                />
 
                 <a
                   href={product.affiliate_url}
@@ -129,14 +127,17 @@ export default function TemplateDefault({
                   rel="sponsored"
                   style={{
                     display: "inline-block",
-                    background: "#fff",
-                    color: "#000",
+                    border: "1px solid var(--text-color, #fff)",
+                    color: "var(--text-color, #fff)",
+                    background: "transparent",
                     padding: "0.75rem 1.5rem",
-                    fontSize: "0.75rem",
+                    fontSize: "0.8rem",
                     textTransform: "uppercase",
-                    letterSpacing: "0.15em",
-                    fontWeight: 700,
+                    letterSpacing: "0.1em",
                     textDecoration: "none",
+                    fontWeight: 700,
+                    transition: "all 0.2s ease",
+
                     textAlign: "center",
                   }}
                 >

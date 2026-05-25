@@ -94,7 +94,7 @@ export const PhotographerLinks: React.FC<PhotographerLinksProps> = ({
                   {/* Content overlays image */}
                   <div className={styles.cardBody}>
                     <div className={styles.storeName}>
-                      {advertiser?.name && `Found in ${advertiser.name}`}
+                      {advertiser?.name && `${advertiser.name}`}
                     </div>
                     <div className={styles.productTitle}>{title}</div>
                     {product.description?.[locale] && (

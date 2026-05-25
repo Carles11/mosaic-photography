@@ -48,7 +48,7 @@ const Timeline: React.FC<TimelineProps> = ({
           cardBgColor: getCssVar("--card-background", "#2d2d2d"),
           cardDetailsBackGround: getCssVar(
             "--card-details-background",
-            "transparent"
+            "transparent",
           ),
           cardDetailsColor: getCssVar("--text-color", "#fff"),
           cardSubtitleColor: getCssVar("--text-color", "#fff"),
