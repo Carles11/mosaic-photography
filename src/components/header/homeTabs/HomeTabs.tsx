@@ -10,7 +10,7 @@ const TABS = [
     anchor: "#our-photographers",
     event: "photographersClicked",
   },
-  { label: "Toolkits", anchor: "#toolkits", event: "toolkitsClicked" },
+  { label: "Selection", anchor: "#toolkits", event: "toolkitsClicked" },
   {
     label: "Gallery",
     anchor: "#gallery-section",

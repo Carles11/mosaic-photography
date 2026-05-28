@@ -103,7 +103,7 @@ function HomeClientWrapper({
               className={styles.resourcesSection}
             >
               <h2 className={styles.subTitle} id="toolkits">
-                MOSAIC&apos;S TOOLKITS
+                MOSAIC&apos;S CURATED FINDS
               </h2>
               <p className={styles.sectionIntro}>
                 Curated tools &amp; resources for photographers and vintage
