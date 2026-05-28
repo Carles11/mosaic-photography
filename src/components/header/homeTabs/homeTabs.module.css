@@ -17,7 +17,10 @@
 }
 
 .tab:hover {
-  color: #fff;
+  color: var(--text-color);
+}
+.active {
+  color: var(--text-color);
 }
 
 /* Make it stack on mobile if needed */

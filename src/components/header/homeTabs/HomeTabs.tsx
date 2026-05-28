@@ -8,13 +8,13 @@ const TABS = [
   {
     label: "Photographers",
     anchor: "#our-photographers",
-    event: "photographersClicked",
+    event: "photographersTABClicked",
   },
-  { label: "Selection", anchor: "#toolkits", event: "toolkitsClicked" },
+  { label: "Selection", anchor: "#toolkits", event: "toolkitsTABClicked" },
   {
     label: "Gallery",
     anchor: "#gallery-section",
-    event: "browseAllPhotosClicked",
+    event: "galleryTABClicked",
   },
 ];
 

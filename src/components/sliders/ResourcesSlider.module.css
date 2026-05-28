@@ -84,7 +84,7 @@
 
 .pill {
   background: transparent;
-  border: 1px solid rgba(var(--pill-border-rgb, 255, 255, 255), 0.2);
+  border: 1px solid var(--border-color, #444);
   border-radius: 0;
   padding: 0.35rem 0.9rem;
   font-size: 0.7rem;
@@ -97,8 +97,8 @@
 }
 
 .pill:hover {
-  border-color: rgba(var(--pill-border-rgb, 255, 255, 255), 0.5);
-  color: rgba(var(--pill-text-rgb, 255, 255, 255), 0.85);
+  border-color: var(--foreground-muted, #666);
+  color: var(--text-color, #fff);
 }
 
 .pillActive {

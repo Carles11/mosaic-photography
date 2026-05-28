@@ -50,7 +50,7 @@ body {
   --card-details-background: "transparent";
   --background: #fff;
   --background-secondary: #f8f9fa;
-  --border-color: #e0e0e0;
+  --border-color: #444;
   --button-primary-bg: var(--link-color);
   --button-primary-text: #fff;
   --button-primary-hover: #5a9bc4;
