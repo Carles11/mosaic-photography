@@ -122,10 +122,10 @@ export default function HomeAppBanner() {
 
         <Link
           href="/app"
-          className="app-about-link"
+          className="no-fancy-link"
           aria-label="Learn more about the Mosaic app"
         >
-          About the app...
+          <p className={styles.appAboutLink}>About the app &rarr;</p>{" "}
         </Link>
 
         {/* <button

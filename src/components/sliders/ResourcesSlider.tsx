@@ -43,6 +43,7 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
 }) => {
   const [selected, setSelected] = useState("all");
   const [advertiser, setAdvertiser] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<"list" | "grid">("list");
 
   // Filter by type
   const filteredByType = useMemo(
@@ -79,16 +80,116 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
 
   return (
     <section className={styles.resourcesSliderSection}>
-      <div className={styles.pillsRow}>
-        {FILTERS.map((f) => (
+      <div className={styles.topRow}>
+        <div className={styles.pillsRow}>
+          {FILTERS.map((f) => (
+            <button
+              key={f.value}
+              className={selected === f.value ? styles.pillActive : styles.pill}
+              onClick={() => setSelected(f.value)}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+        <div className={styles.viewToggle}>
           <button
-            key={f.value}
-            className={selected === f.value ? styles.pillActive : styles.pill}
-            onClick={() => setSelected(f.value)}
+            className={
+              viewMode === "list"
+                ? styles.viewToggleBtnActive
+                : styles.viewToggleBtn
+            }
+            onClick={() => setViewMode("list")}
+            aria-label="List view"
+            type="button"
           >
-            {f.label}
+            {/* List icon SVG */}
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 22 22"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="4"
+                y="5"
+                width="14"
+                height="2"
+                rx="1"
+                fill="currentColor"
+              />
+              <rect
+                x="4"
+                y="10"
+                width="14"
+                height="2"
+                rx="1"
+                fill="currentColor"
+              />
+              <rect
+                x="4"
+                y="15"
+                width="14"
+                height="2"
+                rx="1"
+                fill="currentColor"
+              />
+            </svg>
           </button>
-        ))}
+          <button
+            className={
+              viewMode === "grid"
+                ? styles.viewToggleBtnActive
+                : styles.viewToggleBtn
+            }
+            onClick={() => setViewMode("grid")}
+            aria-label="Grid view"
+            type="button"
+          >
+            {/* Grid icon SVG */}
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 22 22"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                x="4"
+                y="4"
+                width="5"
+                height="5"
+                rx="1"
+                fill="currentColor"
+              />
+              <rect
+                x="13"
+                y="4"
+                width="5"
+                height="5"
+                rx="1"
+                fill="currentColor"
+              />
+              <rect
+                x="4"
+                y="13"
+                width="5"
+                height="5"
+                rx="1"
+                fill="currentColor"
+              />
+              <rect
+                x="13"
+                y="13"
+                width="5"
+                height="5"
+                rx="1"
+                fill="currentColor"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Advertiser pills row, only show if type is not 'all' and there are multiple advertisers */}
@@ -120,12 +221,99 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
         </div>
       )}
 
-      <div className={styles.embla} ref={emblaRef}>
-        <div className={styles.emblaContainer}>
+      {viewMode === "list" ? (
+        <div className={styles.embla} ref={emblaRef}>
+          <div className={styles.emblaContainer}>
+            {filtered.map((product) => (
+              <div className={styles.emblaSlide} key={product.id}>
+                <div className={styles.card}>
+                  {/* Full-bleed image */}
+                  <div className={styles.cardImageWrap}>
+                    <a
+                      href={product.affiliate_url}
+                      target="_blank"
+                      rel="sponsored"
+                      style={{
+                        display: "block",
+                        position: "relative",
+                        zIndex: 10, // Bring the link to the front
+                        cursor: "pointer",
+                        width: "100%",
+                      }}
+                      className="no-fancy-link"
+                    >
+                      <Image
+                        src={
+                          product.image_url ||
+                          "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp"
+                        }
+                        alt={product.title?.[locale] ?? ""}
+                        width={250}
+                        height={200}
+                        className={styles.cardImage}
+                      />
+                    </a>
+                    <div className={styles.cardOverlay} />
+                    {/* {product.affiliate_advertisers?.logo_url && (
+                      <div className={styles.advertiserBadge}>
+                        <Image
+                          src={product.affiliate_advertisers.logo_url}
+                          alt={product.affiliate_advertisers.name ?? ""}
+                          width={75}
+                          height={40}
+                        />
+                      </div>
+                    )} */}
+                    <div className={styles.productTypeLabel}>
+                      {product.type}
+                    </div>
+                  </div>
+
+                  {/* Advertiser badge */}
+                  {/* Content overlays image */}
+                  <div className={styles.cardBody}>
+                    <div className={styles.productTitle}>
+                      {product.photographer_author
+                        ? `${product.photographer_author}’s ${product.title?.[locale] ?? ""}`
+                        : (product.title?.[locale] ?? "")}
+                    </div>
+                    <div className={styles.productStore}>
+                      {(product.affiliate_advertisers?.name &&
+                        `${product.affiliate_advertisers?.name}`) ||
+                        ""}
+                    </div>
+                    <div className={styles.productDesc}>
+                      {product.description?.[locale]}
+                    </div>
+                    <div className={styles.actions}>
+                      <a
+                        href={product.affiliate_url}
+                        target="_blank"
+                        rel="sponsored"
+                        className={styles.affiliateButton}
+                      >
+                        Shop Now
+                      </a>
+                      {product.affiliate_advertisers?.slug && (
+                        <a
+                          href={`/toolkit/${product.affiliate_advertisers.slug}`}
+                          className={`${styles.deepDiveLink} no-fancy-link`}
+                        >
+                          Why I recommend this →
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className={styles.gridContainer}>
           {filtered.map((product) => (
-            <div className={styles.emblaSlide} key={product.id}>
+            <div className={styles.gridItem} key={product.id}>
               <div className={styles.card}>
-                {/* Full-bleed image */}
                 <div className={styles.cardImageWrap}>
                   <a
                     href={product.affiliate_url}
@@ -134,7 +322,7 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
                     style={{
                       display: "block",
                       position: "relative",
-                      zIndex: 10, // Bring the link to the front
+                      zIndex: 10,
                       cursor: "pointer",
                     }}
                     className="no-fancy-link"
@@ -151,21 +339,8 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
                     />
                   </a>
                   <div className={styles.cardOverlay} />
-                  {/* {product.affiliate_advertisers?.logo_url && (
-                    <div className={styles.advertiserBadge}>
-                      <Image
-                        src={product.affiliate_advertisers.logo_url}
-                        alt={product.affiliate_advertisers.name ?? ""}
-                        width={75}
-                        height={40}
-                      />
-                    </div>
-                  )} */}
                   <div className={styles.productTypeLabel}>{product.type}</div>
                 </div>
-
-                {/* Advertiser badge */}
-                {/* Content overlays image */}
                 <div className={styles.cardBody}>
                   <div className={styles.productTitle}>
                     {product.photographer_author
@@ -203,7 +378,7 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
             </div>
           ))}
         </div>
-      </div>
+      )}
     </section>
   );
 };

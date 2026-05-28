@@ -17,6 +17,14 @@
   line-height: 0;
 }
 
+.appAboutLink {
+  font-size: calc(0.4rem + 0.9vw) !important;
+  color: var(--text-color, #fff);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  transition: color 0.2s;
+}
+
 .dismissButton {
   background: transparent;
   border: none;
