@@ -17,7 +17,6 @@ export default function TemplatePrint({
   products,
   locale,
 }: TemplatePrintProps) {
-  console.log({ advertiser });
   return (
     <div
       style={{
