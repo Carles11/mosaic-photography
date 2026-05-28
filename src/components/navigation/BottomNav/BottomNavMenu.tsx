@@ -103,28 +103,17 @@ const BottomNavMenu = ({
 
               <div className={styles.thankYou}>
                 <p className={styles.text}>
-                  Mosaic is free and open-source — If it&apos;s ever been useful
-                  to you, a small contribution helps to keep it running.
+                  Mosaic is free and open-source — if it&apos;s ever been useful
+                  to you, a small contribution helps keep it running.
                 </p>
 
                 <a
                   href="https://ko-fi.com/Q5Q6R6S40"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className={styles.kofiButton}
                 >
-                  <Image
-                    height="36"
-                    width="144"
-                    style={{
-                      border: "0px",
-                      height: "36px",
-                      margin: "0 0.3rem",
-                    }}
-                    src="https://storage.ko-fi.com/cdn/kofi6.png?v=6"
-                    alt="Buy Me a Coffee at ko-fi.com"
-                    priority={false}
-                    loading="lazy"
-                  />
+                  Support Mosaic
                 </a>
               </div>
 

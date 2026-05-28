@@ -333,25 +333,3 @@
   color: var(--foreground-muted, #aaa);
   text-decoration: none;
 }
-
-/* ─── Light theme overrides ───────────────────────────────────── */
-/* Pills adapt to page theme; cards stay dark intentionally */
-
-:global(.light) .pill,
-:global([data-theme="light"]) .pill {
-  border-color: rgba(0, 0, 0, 0.2);
-  color: rgba(0, 0, 0, 0.5);
-}
-
-:global(.light) .pill:hover,
-:global([data-theme="light"]) .pill:hover {
-  border-color: rgba(0, 0, 0, 0.5);
-  color: rgba(0, 0, 0, 0.85);
-}
-
-:global(.light) .pillActive,
-:global([data-theme="light"]) .pillActive {
-  background: #000;
-  border-color: #000;
-  color: #fff;
-}
