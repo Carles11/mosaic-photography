@@ -92,6 +92,8 @@ export async function generateMetadata({
   };
 }
 
+import ToolkitPageView from "@/components/analytics/ToolkitPageView";
+
 export default async function ToolkitPage({
   params,
 }: {
@@ -109,6 +111,7 @@ export default async function ToolkitPage({
 
   return (
     <>
+      <ToolkitPageView advertiser={advertiser.name} />
       <JsonLdSchema
         type="CollectionPage"
         name={`${advertiser.name} Photography Toolkit`}

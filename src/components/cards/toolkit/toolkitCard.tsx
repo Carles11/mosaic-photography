@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import styles from "./toolkitCard.module.css";
+import { sendGTMEvent } from "@next/third-parties/google";
 import type { AffiliateProductWithAdvertiser } from "@/components/sliders/ResourcesSlider";
 
 interface ToolkitCardProps {
@@ -12,6 +13,33 @@ const ToolkitCard: React.FC<ToolkitCardProps> = ({
   product,
   locale = "en",
 }) => {
+  // Track card click (main image/link)
+  const handleCardClick = () => {
+    sendGTMEvent({
+      event: "toolkitCardClicked",
+      advertiser: product.affiliate_advertisers?.name,
+      product: product.title?.[locale] ?? "",
+    });
+  };
+
+  // Track Shop Now button
+  const handleShopNowClick = () => {
+    sendGTMEvent({
+      event: "toolkitShopNowClicked",
+      advertiser: product.affiliate_advertisers?.name,
+      product: product.title?.[locale] ?? "",
+    });
+  };
+
+  // Track Why I recommend this button
+  const handleWhyRecommendClick = () => {
+    sendGTMEvent({
+      event: "toolkitWhyRecommendClicked",
+      advertiser: product.affiliate_advertisers?.name,
+      product: product.title?.[locale] ?? "",
+    });
+  };
+
   return (
     <div className={styles.card}>
       <div className={styles.cardImageWrap}>
@@ -27,6 +55,7 @@ const ToolkitCard: React.FC<ToolkitCardProps> = ({
             width: "100%",
           }}
           className="no-fancy-link"
+          onClick={handleCardClick}
         >
           <Image
             src={
@@ -72,6 +101,7 @@ const ToolkitCard: React.FC<ToolkitCardProps> = ({
             target="_blank"
             rel="sponsored"
             className={styles.affiliateButton}
+            onClick={handleShopNowClick}
           >
             Shop Now
           </a>
@@ -79,6 +109,7 @@ const ToolkitCard: React.FC<ToolkitCardProps> = ({
             <a
               href={`/toolkit/${product.affiliate_advertisers.slug}`}
               className={`${styles.deepDiveLink} no-fancy-link`}
+              onClick={handleWhyRecommendClick}
             >
               Why I recommend this →
             </a>
