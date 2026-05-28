@@ -18,6 +18,20 @@ const FILTERS = [
   { label: "Prints", value: "print" },
 ];
 
+// Helper to get unique advertisers for a set of products
+function getUniqueAdvertisers(products: AffiliateProductWithAdvertiser[]) {
+  const seen = new Set<string>();
+  const advertisers: { name: string; slug: string | null }[] = [];
+  for (const p of products) {
+    const adv = p.affiliate_advertisers;
+    if (adv && adv.name && !seen.has(adv.name)) {
+      seen.add(adv.name);
+      advertisers.push({ name: adv.name, slug: adv.slug ?? null });
+    }
+  }
+  return advertisers;
+}
+
 interface ResourcesSliderProps {
   products: AffiliateProductWithAdvertiser[];
   locale?: string;
@@ -28,14 +42,40 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
   locale = "en",
 }) => {
   const [selected, setSelected] = useState("all");
-  const filtered = useMemo(
+  const [advertiser, setAdvertiser] = useState<string | null>(null);
+
+  // Filter by type
+  const filteredByType = useMemo(
     () =>
       selected === "all"
         ? products
         : products.filter((p) => p.type?.toLowerCase() === selected),
     [products, selected],
   );
+
+  // Get unique advertisers for this type
+  const advertisers = useMemo(
+    () => getUniqueAdvertisers(filteredByType),
+    [filteredByType],
+  );
+
+  // Filter by advertiser if set
+  const filtered = useMemo(
+    () =>
+      advertiser
+        ? filteredByType.filter(
+            (p) => p.affiliate_advertisers?.name === advertiser,
+          )
+        : filteredByType,
+    [filteredByType, advertiser],
+  );
+
   const [emblaRef] = useEmblaCarousel({ loop: false, align: "start" });
+
+  // Reset advertiser filter when type changes
+  React.useEffect(() => {
+    setAdvertiser(null);
+  }, [selected]);
 
   return (
     <section className={styles.resourcesSliderSection}>
@@ -50,6 +90,35 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
           </button>
         ))}
       </div>
+
+      {/* Advertiser pills row, only show if type is not 'all' and there are multiple advertisers */}
+      {selected !== "all" && advertisers.length > 1 && (
+        <div className={styles.advertiserPillsRow}>
+          <button
+            className={
+              advertiser === null
+                ? styles.advertiserPillActive
+                : styles.advertiserPill
+            }
+            onClick={() => setAdvertiser(null)}
+          >
+            All Advertisers
+          </button>
+          {advertisers.map((adv) => (
+            <button
+              key={adv.name}
+              className={
+                advertiser === adv.name
+                  ? styles.advertiserPillActive
+                  : styles.advertiserPill
+              }
+              onClick={() => setAdvertiser(adv.name)}
+            >
+              {adv.name}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className={styles.embla} ref={emblaRef}>
         <div className={styles.emblaContainer}>

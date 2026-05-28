@@ -1,3 +1,43 @@
+/* ─── Advertiser Pills Row ───────────────────────────────────── */
+.advertiserPillsRow {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  padding: 0 1rem;
+  align-items: center;
+}
+
+.advertiserPill {
+  background: var(--background-secondary, #222);
+  border: 1.5px dashed var(--foreground-muted, #aaa);
+  border-radius: 999px;
+  padding: 0.32rem 1.1rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-color, #fff);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  transition: all 0.18s;
+  opacity: 0.85;
+}
+
+.advertiserPill:hover {
+  border-color: var(--foreground, #fff);
+  background: var(--card-background, #333);
+  color: var(--foreground, #fff);
+  opacity: 1;
+}
+
+.advertiserPillActive {
+  composes: advertiserPill;
+  background: var(--foreground, #fff);
+  color: var(--background-secondary, #222);
+  border-style: solid;
+  font-weight: 700;
+  opacity: 1;
+}
 /* ─── Section ─────────────────────────────────────────────────── */
 .resourcesSliderSection {
   margin: 4rem 0;
@@ -151,7 +191,7 @@
   flex-direction: column;
   gap: 0.2rem;
   max-height: 60%;
-  height: 55%;
+  height: 57%;
   overflow: hidden;
   padding: 0.5rem;
   background: color-mix(
@@ -196,6 +236,12 @@
   color: var(--text-color, #fff);
   letter-spacing: 0.06em;
   line-height: 1.3;
+  background-color: transparent;
+  border-radius: 0.2rem;
+  border: 1px solid var(--text-color, #fff);
+  padding: 0.1rem 0.2rem;
+  margin: 0.2rem 0;
+  width: fit-content;
 }
 
 .productDesc {
