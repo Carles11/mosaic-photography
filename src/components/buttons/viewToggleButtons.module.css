@@ -1,0 +1,47 @@
+/* ViewToggleButtons styles extracted from ResourcesSlider.module.css */
+.viewToggle {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.viewToggleBtn {
+  border: 1px solid var(--text-color, #fff);
+  background: none;
+  color: var(--text-color, #fff);
+  padding: 0.18rem 0.4rem;
+  border-radius: 7px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition:
+    border-color 0.18s,
+    color 0.18s,
+    background 0.18s;
+  outline: none;
+}
+
+.viewToggleBtn:hover,
+.viewToggleBtn:focus {
+  border-color: var(--foreground, #aaa);
+  color: var(--foreground, #aaa);
+}
+
+.viewToggleBtnActive {
+  composes: viewToggleBtn;
+  border-color: var(--foreground, #fff);
+  color: var(--foreground, #fff);
+  background: rgba(255, 255, 255, 0.13);
+  box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.viewToggleBtnActive svg {
+  filter: drop-shadow(0 0 2px var(--foreground, #fff));
+  opacity: 1;
+}
+
+.viewToggleBtn svg {
+  opacity: 0.7;
+  transition: opacity 0.18s;
+}
