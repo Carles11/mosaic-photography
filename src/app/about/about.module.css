@@ -7,7 +7,7 @@
 .header {
   margin: 3rem 0 2.5rem;
   padding-bottom: 1.5rem;
-  border-bottom: 2px solid var(--secondary-color);
+  border-bottom: 2px solid var(--accent-color);
 }
 
 .mainTitle {
@@ -61,13 +61,13 @@
   gap: 0.3rem;
   margin-top: 1.5rem;
   padding: 1rem 1.25rem;
-  border-left: 3px solid var(--tertiary-color, #fd6c6c);
+  border-left: 3px solid var(--accent-color, #f4d35e);
   background: rgba(255, 255, 255, 0.03);
 }
 
 .instagramLink {
   text-decoration: none;
-  color: var(--tertiary-color, #fd6c6c);
+  color: var(--text-color, #fff);
 }
 
 .instagramLink:hover .handle {
@@ -90,7 +90,7 @@
   display: inline-block;
   margin-top: 0.75rem;
   font-size: 0.9rem;
-  color: var(--link-color, #6b9ac0);
+  color: var(--text-color, #fff);
   text-decoration: none;
   word-break: break-all;
 }

@@ -192,7 +192,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
       </div>
     );
   }
-  console.log({ avatarUrl, formData, user });
+
   return (
     <div className={styles.container}>
       {avatarUrl ? (
@@ -200,7 +200,8 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           userId={user.id}
           displayName={formData.name || user.email}
           currentAvatarUrl={avatarUrl}
-          onUploadSuccess={(newUrl: string | null) => setAvatarUrl(newUrl)}
+          onUploadSuccess={(newUrl) => setAvatarUrl(newUrl)}
+          onDeleteSuccess={() => setAvatarUrl(null)}
         />
       ) : (
         <div className={styles.avatarPlaceholder}>
@@ -215,6 +216,43 @@ export default function ProfileForm({ user }: ProfileFormProps) {
       {message && (
         <div className={`${styles.message} ${styles[message.type]}`}>
           {message.text}
+        </div>
+      )}
+
+      {databaseError && (
+        <div className={styles.databaseSetup}>
+          <h3>🔧 Database Setup Required</h3>
+          <p>
+            To use the profile functionality, you need to create the database
+            table first.
+          </p>
+          <details className={styles.instructions}>
+            <summary>Click here for setup instructions</summary>
+            <ol>
+              <li>
+                Go to your{" "}
+                <a
+                  href="https://supabase.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Supabase Dashboard
+                </a>
+              </li>
+              <li>
+                Navigate to the <strong>SQL Editor</strong> tab
+              </li>
+              <li>
+                Copy and paste the SQL from <code>DATABASE_SETUP.md</code>
+              </li>
+              <li>Click &quot;Run&quot; to execute the SQL</li>
+              <li>Refresh this page</li>
+            </ol>
+            <p>
+              The SQL file is located in your project root:{" "}
+              <code>DATABASE_SETUP.md</code>
+            </p>
+          </details>
         </div>
       )}
 

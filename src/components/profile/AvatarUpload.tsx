@@ -10,6 +10,7 @@ interface AvatarUploadProps {
   displayName?: string;
   currentAvatarUrl?: string | null;
   onUploadSuccess: (newUrl: string) => void;
+  onDeleteSuccess: () => void;
 }
 
 export default function AvatarUpload({
@@ -17,20 +18,21 @@ export default function AvatarUpload({
   displayName,
   currentAvatarUrl,
   onUploadSuccess,
+  onDeleteSuccess,
 }: AvatarUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     currentAvatarUrl ?? null,
   );
 
   const initial = displayName?.trim()?.[0]?.toUpperCase() ?? "?";
+  const busy = uploading || deleting;
 
   const handleClick = () => {
-    if (!uploading) {
-      inputRef.current?.click();
-    }
+    if (!busy) inputRef.current?.click();
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +42,6 @@ export default function AvatarUpload({
     setUploading(true);
     setError(null);
 
-    // Show local preview immediately
     const objectUrl = URL.createObjectURL(file);
     setPreviewUrl(objectUrl);
 
@@ -74,12 +75,40 @@ export default function AvatarUpload({
     } catch (err) {
       console.error("Avatar upload error:", err);
       setError("Upload failed. Please try again.");
-      // Revert preview on failure
       setPreviewUrl(currentAvatarUrl ?? null);
     } finally {
       setUploading(false);
-      // Reset input so the same file can be re-selected
       if (inputRef.current) inputRef.current.value = "";
+    }
+  };
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    setError(null);
+
+    try {
+      const path = `${userId}/avatar.jpg`;
+
+      const { error: storageError } = await supabase.storage
+        .from("avatars")
+        .remove([path]);
+
+      if (storageError) throw storageError;
+
+      const { error: dbError } = await supabase
+        .from("user_profiles")
+        .update({ avatar_url: null, updated_at: new Date().toISOString() })
+        .eq("id", userId);
+
+      if (dbError) throw dbError;
+
+      setPreviewUrl(null);
+      onDeleteSuccess();
+    } catch (err) {
+      console.error("Avatar delete error:", err);
+      setError("Could not remove avatar. Please try again.");
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -90,7 +119,7 @@ export default function AvatarUpload({
         className={styles.avatarButton}
         onClick={handleClick}
         aria-label="Change profile picture"
-        disabled={uploading}
+        disabled={busy}
       >
         {previewUrl ? (
           <Image
@@ -125,6 +154,18 @@ export default function AvatarUpload({
         tabIndex={-1}
         aria-hidden="true"
       />
+
+      {previewUrl && (
+        <button
+          type="button"
+          className={styles.removeButton}
+          onClick={handleDelete}
+          disabled={busy}
+          aria-label="Remove profile picture"
+        >
+          {deleting ? "Removing…" : "Remove photo"}
+        </button>
+      )}
 
       {error && <p className={styles.error}>{error}</p>}
     </div>

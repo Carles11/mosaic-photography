@@ -66,20 +66,14 @@ const AboutPage = () => {
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Who made this?</h2>
           <p className={styles.body}>
-            I&apos;m Carles — a Spanish developer and analogue photographer
-            currently living in Santiago de Chile. I built Mosaic because I kept
-            losing track of the photographers and images I loved, and nothing
-            out there felt right for this kind of archive.
+            I&apos;m Carles — a Spanish developer and hobby analogue
+            photographer currently living in Santiago de Chile. I built Mosaic
+            because I kept losing track of the photographers and images I loved,
+            and nothing out there felt right for this kind of archive.
           </p>
           <p className={styles.body}>
-            No team, no funding, no ads. Just spare time and a genuine love for
+            No team, no funding, no ads. Just my own time and a genuine love for
             old photographs and the people who made them.
-          </p>
-          <p className={styles.body}>
-            Keeping Mosaic running has a cost — hosting, storage, and more hours
-            than I care to count. But Mosaic is free, and I&apos;d like to keep
-            it that way. If it&apos;s ever given you a moment worth having, a
-            small contribution helps more than you&apos;d think.
           </p>
 
           <div className={styles.socialBlock}>
@@ -104,14 +98,16 @@ const AboutPage = () => {
             Mosaic is fully open source. The code is on GitHub — feel free to
             explore, report issues, or contribute.
           </p>
-          <a
-            href="https://github.com/Carles11/mosaic-photography-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.githubLink}
-          >
-            github.com/Carles11/mosaic-photography-app
-          </a>
+          <div className={styles.socialBlock}>
+            <a
+              href="https://github.com/Carles11/mosaic-photography-app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.githubLink}
+            >
+              github.com/Carles11/mosaic-photography-app
+            </a>
+          </div>
         </section>
 
         {/* Support Mosaic */}
@@ -119,9 +115,9 @@ const AboutPage = () => {
           <h2 className={styles.sectionTitle}>Support Mosaic</h2>
           <p className={styles.body}>
             Keeping Mosaic running has a cost — hosting, storage, and more hours
-            than I care to count. But Mosaic is free, and I&apos;d like to keep
-            it that way. If it&apos;s ever given you a moment worth having, a
-            small contribution helps more than you&apos;d think.
+            than I care to count. But Mosaic is free, and ad-free, and I&apos;d
+            like to keep it that way. If it&apos;s ever given you a moment worth
+            having, a small contribution helps more than you&apos;d think.
           </p>
           <a
             href="https://ko-fi.com/Q5Q6R6S40"
@@ -136,7 +132,7 @@ const AboutPage = () => {
 
       <footer className={styles.pageFooter}>
         <p className={styles.footerLine}>
-          Mosaic · Free forever · No ads · Public domain
+          Mosaic · Free downloads · No ads · Public domain
         </p>
       </footer>
     </div>

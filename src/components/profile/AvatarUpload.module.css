@@ -91,6 +91,27 @@
   display: none;
 }
 
+.removeButton {
+  font-size: 0.78rem;
+  color: var(--foreground-muted, #aaa);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+
+.removeButton:hover:not(:disabled) {
+  color: var(--tertiary-color, #fd6c6c);
+}
+
+.removeButton:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
 .error {
   font-size: 0.85rem;
   color: var(--tertiary-color, #fd6c6c);
