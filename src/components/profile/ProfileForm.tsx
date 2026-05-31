@@ -195,23 +195,13 @@ export default function ProfileForm({ user }: ProfileFormProps) {
 
   return (
     <div className={styles.container}>
-      {avatarUrl ? (
-        <AvatarUpload
-          userId={user.id}
-          displayName={formData.name || user.email}
-          currentAvatarUrl={avatarUrl}
-          onUploadSuccess={(newUrl) => setAvatarUrl(newUrl)}
-          onDeleteSuccess={() => setAvatarUrl(null)}
-        />
-      ) : (
-        <div className={styles.avatarPlaceholder}>
-          <span className={styles.initial}>
-            {formData.name
-              ? formData.name.charAt(0).toUpperCase()
-              : user.email && user.email.charAt(0).toUpperCase()}
-          </span>
-        </div>
-      )}
+      <AvatarUpload
+        userId={user.id}
+        displayName={formData.name || user.email || "User"}
+        currentAvatarUrl={avatarUrl}
+        onUploadSuccess={(newUrl) => setAvatarUrl(newUrl)}
+        onDeleteSuccess={() => setAvatarUrl(null)}
+      />
 
       {message && (
         <div className={`${styles.message} ${styles[message.type]}`}>
