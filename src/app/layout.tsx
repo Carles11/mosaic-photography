@@ -177,6 +177,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           name="impact-site-verification"
           content="8a120ba2-3dc3-4135-ac06-990388022693"
         />
+        {/* YANDEX */}
+        <meta name="yandex-verification" content="4d7b85a7f1cd21b8" />
       </head>
       <body className="font-trade-gothic">
         <NonCriticalCSSLoader />
