@@ -1,9 +1,9 @@
 /**
  * IndexNow submission script
  *
- * Submits all photographer pages, toolkit pages, and the homepage to the
- * IndexNow API so Bing, Yandex, and any other participating search engine
- * index them immediately after a build that introduces new or updated pages.
+ * Submits all photographer pages, toolkit pages, and static pages to the
+ * IndexNow API so Bing and any other participating search engine index them
+ * immediately after a build that introduces new or updated pages.
  *
  * Docs: https://www.indexnow.org/documentation
  *
@@ -15,7 +15,6 @@
  *      Skip the API call locally: it only runs when NODE_ENV=production.
  */
 import { config } from "dotenv";
-// Load .env then .env.local (Next.js convention; .env.local overrides)
 config();
 config({ path: ".env.local", override: true });
 import { createClient } from "@supabase/supabase-js";
@@ -24,8 +23,17 @@ import path from "path";
 
 const SITE_URL = "https://www.mosaic.photography";
 const INDEXNOW_KEY = process.env.INDEXNOW_KEY ?? "";
-// Submit to the shared IndexNow endpoint – it fans out to all participating engines
 const INDEXNOW_ENDPOINT = "https://api.indexnow.org/indexnow";
+
+const STATIC_URLS = [
+  SITE_URL,
+  `${SITE_URL}/about`,
+  `${SITE_URL}/faq`,
+  `${SITE_URL}/photo-curations`,
+  `${SITE_URL}/legal/privacy-policy`,
+  `${SITE_URL}/legal/terms-of-service`,
+  `${SITE_URL}/legal/credits`,
+];
 
 async function submitIndexNow() {
   if (!INDEXNOW_KEY) {
@@ -35,7 +43,6 @@ async function submitIndexNow() {
     return;
   }
 
-  // Only submit in production to avoid polluting search engines with dev URLs
   if (process.env.NODE_ENV !== "production") {
     console.log(
       "[IndexNow] NODE_ENV is not 'production' – skipping submission.",
@@ -46,53 +53,52 @@ async function submitIndexNow() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 
+  let photographerUrls: string[] = [];
+  let toolkitUrls: string[] = [];
+
   if (!supabaseUrl || !supabaseKey) {
-    console.error("[IndexNow] Missing Supabase env vars – aborting.");
-    process.exit(1);
-  }
-
-  const supabase = createClient(supabaseUrl, supabaseKey);
-
-  // ── Photographers ──────────────────────────────────────────────
-  const { data: photographers, error: photographersError } = await supabase
-    .from("photographers")
-    .select("surname");
-
-  if (photographersError) {
-    console.error(
-      "[IndexNow] Error fetching photographers:",
-      photographersError,
+    console.warn(
+      "[IndexNow] Missing Supabase env vars – submitting static URLs only.",
     );
-    process.exit(1);
+  } else {
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // ── Photographers ────────────────────────────────────────────
+    const { data: photographers, error: photographersError } = await supabase
+      .from("photographers")
+      .select("surname");
+
+    if (photographersError) {
+      console.warn(
+        "[IndexNow] Error fetching photographers – skipping photographer URLs:",
+        photographersError.message,
+      );
+    } else {
+      photographerUrls = (photographers ?? []).map((p) => {
+        const slug = p.surname.toLowerCase().replace(/\s+/g, "-");
+        return `${SITE_URL}/photographers/${slug}`;
+      });
+    }
+
+    // ── Toolkit / Advertisers ────────────────────────────────────
+    const { data: advertisers, error: advertisersError } = await supabase
+      .from("affiliate_advertisers")
+      .select("slug");
+
+    if (advertisersError) {
+      console.warn(
+        "[IndexNow] Error fetching advertisers – skipping toolkit URLs:",
+        advertisersError.message,
+      );
+    } else {
+      toolkitUrls = (advertisers ?? []).map(
+        (a) => `${SITE_URL}/toolkit/${a.slug}`,
+      );
+    }
   }
 
-  const photographerUrls = (photographers ?? []).map((p) => {
-    const slug = p.surname.toLowerCase().replace(/\s+/g, "-");
-    return `${SITE_URL}/photographers/${slug}`;
-  });
-
-  // ── Toolkit / Advertisers ──────────────────────────────────────
-  const { data: advertisers, error: advertisersError } = await supabase
-    .from("affiliate_advertisers")
-    .select("slug");
-
-  if (advertisersError) {
-    console.error("[IndexNow] Error fetching advertisers:", advertisersError);
-    process.exit(1);
-  }
-
-  const toolkitUrls = (advertisers ?? []).map(
-    (a) => `${SITE_URL}/toolkit/${a.slug}`,
-  );
-
-  // ── Full URL list ──────────────────────────────────────────────
-  const urls = [
-    SITE_URL,
-    `${SITE_URL}/faq`,
-    `${SITE_URL}/about`,
-    ...photographerUrls,
-    ...toolkitUrls,
-  ];
+  // ── Full URL list ────────────────────────────────────────────
+  const urls = [...STATIC_URLS, ...photographerUrls, ...toolkitUrls];
 
   const payload = {
     host: "www.mosaic.photography",
@@ -102,7 +108,7 @@ async function submitIndexNow() {
   };
 
   console.log(
-    `[IndexNow] Submitting ${urls.length} URLs (${photographerUrls.length} photographers, ${toolkitUrls.length} toolkit pages)…`,
+    `[IndexNow] Submitting ${urls.length} URLs (${STATIC_URLS.length} static, ${photographerUrls.length} photographers, ${toolkitUrls.length} toolkit)…`,
   );
 
   const response = await fetch(INDEXNOW_ENDPOINT, {
