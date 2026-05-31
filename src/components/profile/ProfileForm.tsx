@@ -6,6 +6,7 @@ import styles from "./ProfileForm.module.css";
 import { supabase, SupabaseUser } from "@/lib/supabaseClient";
 import { useFavorites } from "@/context/FavoritesContext";
 import type { UserProfile } from "@/types";
+import AvatarUpload from "./AvatarUpload";
 
 interface ProfileFormProps {
   user: SupabaseUser;
@@ -16,6 +17,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [message, setMessage] = useState<{
     type: "success" | "error";
     text: string;
@@ -105,6 +107,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         }
       } else if (data) {
         setProfile(data);
+        setAvatarUrl(data.avatar_url ?? null);
         setFormData({
           name: data.name || "",
           instagram: data.instagram || "",
@@ -189,49 +192,29 @@ export default function ProfileForm({ user }: ProfileFormProps) {
       </div>
     );
   }
-
+  console.log({ avatarUrl, formData, user });
   return (
     <div className={styles.container}>
-      {message && (
-        <div className={`${styles.message} ${styles[message.type]}`}>
-          {message.text}
+      {avatarUrl ? (
+        <AvatarUpload
+          userId={user.id}
+          displayName={formData.name || user.email}
+          currentAvatarUrl={avatarUrl}
+          onUploadSuccess={(newUrl: string | null) => setAvatarUrl(newUrl)}
+        />
+      ) : (
+        <div className={styles.avatarPlaceholder}>
+          <span className={styles.initial}>
+            {formData.name
+              ? formData.name.charAt(0).toUpperCase()
+              : user.email && user.email.charAt(0).toUpperCase()}
+          </span>
         </div>
       )}
 
-      {databaseError && (
-        <div className={styles.databaseSetup}>
-          <h3>🔧 Database Setup Required</h3>
-          <p>
-            To use the profile functionality, you need to create the database
-            table first.
-          </p>
-          <details className={styles.instructions}>
-            <summary>Click here for setup instructions</summary>
-            <ol>
-              <li>
-                Go to your{" "}
-                <a
-                  href="https://supabase.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Supabase Dashboard
-                </a>
-              </li>
-              <li>
-                Navigate to the <strong>SQL Editor</strong> tab
-              </li>
-              <li>
-                Copy and paste the SQL from <code>DATABASE_SETUP.md</code>
-              </li>
-              <li>Click &quot;Run&quot; to execute the SQL</li>
-              <li>Refresh this page</li>
-            </ol>
-            <p>
-              The SQL file is located in your project root:{" "}
-              <code>DATABASE_SETUP.md</code>
-            </p>
-          </details>
+      {message && (
+        <div className={`${styles.message} ${styles[message.type]}`}>
+          {message.text}
         </div>
       )}
 

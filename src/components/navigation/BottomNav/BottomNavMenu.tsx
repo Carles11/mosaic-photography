@@ -85,13 +85,11 @@ const BottomNavMenu = ({
                 <span className={styles.menuLabel}>FAQ</span>
               </Link>
 
+              <Link href="/about" className={styles.menuItem} onClick={onClose}>
+                <span className={styles.menuLabel}>About</span>
+              </Link>
+
               {/* <button
-                className={styles.menuItem}
-                onClick={() => handleActionAndClose(onGoProClick!)}
-              >
-                 <span className={styles.menuIcon}>⭐</span> 
-                <span className={styles.menuLabel}>Go Pro</span>
-              </button> */}
 
               {/* Theme toggle button */}
               <div className={styles.themeToggleWrapper}>
@@ -149,6 +147,10 @@ const BottomNavMenu = ({
               <Link href="/faq" className={styles.menuItem} onClick={onClose}>
                 {/* <span className={styles.menuIcon}>❓</span> */}
                 <span className={styles.menuLabel}>FAQ</span>
+              </Link>
+
+              <Link href="/about" className={styles.menuItem} onClick={onClose}>
+                <span className={styles.menuLabel}>About</span>
               </Link>
 
               {/* <button

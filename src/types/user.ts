@@ -6,6 +6,7 @@ export interface UserProfile {
   website: string;
   own_store_name: string;
   own_store_url: string;
+  avatar_url?: string | null;
   created_at: string;
   updated_at: string;
 }

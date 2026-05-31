@@ -26,6 +26,10 @@ const Footer: React.FC = () => {
             <a href="/faq" className="fancy-link">
               {" "}
               FAQs
+            </a>{" "}
+            |{" "}
+            <a href="/about" className="fancy-link">
+              About
             </a>
           </p>
           <p>

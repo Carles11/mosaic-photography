@@ -1,0 +1,165 @@
+.pageWrapper {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+}
+
+.header {
+  margin: 3rem 0 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--secondary-color);
+}
+
+.mainTitle {
+  margin: 0;
+  padding: 0;
+  background: var(--text-color);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.section {
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--secondary-color);
+}
+
+.section:last-of-type {
+  border-bottom: none;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 1.25rem;
+  color: var(--text-color);
+  letter-spacing: 0.01em;
+}
+
+.body {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-color);
+  margin: 0 0 1rem;
+  opacity: 0.88;
+}
+
+.body:last-of-type {
+  margin-bottom: 0;
+}
+
+/* Social blocks */
+.socialBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-left: 3px solid var(--tertiary-color, #fd6c6c);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.instagramLink {
+  text-decoration: none;
+  color: var(--tertiary-color, #fd6c6c);
+}
+
+.instagramLink:hover .handle {
+  text-decoration: underline;
+}
+
+.handle {
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+}
+
+.socialCaption {
+  font-size: 0.85rem;
+  color: var(--foreground-muted, #aaa);
+}
+
+/* GitHub link */
+.githubLink {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--link-color, #6b9ac0);
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.githubLink:hover {
+  text-decoration: underline;
+}
+
+/* Support section */
+.supportSection {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--secondary-color);
+  border-radius: 8px;
+  padding: 2rem;
+  margin-top: 1rem;
+}
+
+.kofiButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.25rem;
+  padding: 0.85rem 1.5rem;
+  border: 1px solid var(--accent-color, #f4d35e);
+  background: transparent;
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.kofiButton:hover,
+.kofiButton:focus {
+  background: var(--accent-color, #f4d35e);
+  color: var(--background-color, #1d1d1d);
+}
+
+/* Footer line */
+.pageFooter {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--secondary-color);
+  text-align: center;
+}
+
+.footerLine {
+  font-size: 0.8rem;
+  color: var(--foreground-muted, #aaa);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pageWrapper {
+    padding: 0 1rem 5rem;
+  }
+
+  .header {
+    margin: 2rem 0 1.5rem;
+  }
+
+  .supportSection {
+    padding: 1.5rem 1rem;
+  }
+}

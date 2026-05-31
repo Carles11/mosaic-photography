@@ -52,6 +52,14 @@ const DesktopNavDropdown = ({
             <span className={styles.menuLabel}>FAQ</span>
           </Link>
 
+          <Link
+            href="/about"
+            className={`no-fancy-link ${styles.menuItem}`}
+            onClick={onClose}
+          >
+            <span className={styles.menuLabel}>About</span>
+          </Link>
+
           {/* <button
             className={`no-fancy-link ${styles.menuItem}`}
             onClick={() => handleActionAndClose(onGoProClick!)}
@@ -105,6 +113,14 @@ const DesktopNavDropdown = ({
             onClick={onClose}
           >
             <span className={styles.menuLabel}>FAQ</span>
+          </Link>
+
+          <Link
+            href="/about"
+            className={`no-fancy-link ${styles.menuItem}`}
+            onClick={onClose}
+          >
+            <span className={styles.menuLabel}>About</span>
           </Link>
 
           {/* <button

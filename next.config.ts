@@ -57,7 +57,7 @@ const nextConfig: NextConfig = {
             value: [
               "default-src 'self';",
               // allow images from self, CDN, analytics, clarity
-              "img-src 'self' data: https://cdn.mosaic.photography https://storage.ko-fi.com https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://c.clarity.ms https://c.bing.com;",
+              "img-src 'self' data: https://cdn.mosaic.photography https://storage.ko-fi.com https://gdzqgrfitiixbhlhppef.supabase.co https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://c.clarity.ms https://c.bing.com;",
               // allow scripts from self, GA, clarity
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https:;",
               "style-src 'self' 'unsafe-inline' https:;",
