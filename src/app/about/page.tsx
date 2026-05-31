@@ -100,13 +100,29 @@ const AboutPage = () => {
           </p>
           <div className={styles.socialBlock}>
             <a
-              href="https://github.com/Carles11/mosaic-photography-app"
+              href="https://github.com/Carles11/mosaic-photography.git"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.githubLink}
+            >
+              github.com/Carles11/mosaic-photography
+            </a>
+            <span className={styles.socialCaption}>
+              Website repository on GitHub
+            </span>
+          </div>
+          <div className={styles.socialBlock}>
+            <a
+              href="https://github.com/Carles11/mosaic-photography-app.git"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.githubLink}
             >
               github.com/Carles11/mosaic-photography-app
             </a>
+            <span className={styles.socialCaption}>
+              Mobile App repository on GitHub
+            </span>
           </div>
         </section>
 
@@ -123,7 +139,7 @@ const AboutPage = () => {
             href="https://ko-fi.com/Q5Q6R6S40"
             target="_blank"
             rel="noopener noreferrer"
-            className={styles.kofiButton}
+            className={`${styles.kofiButton} no-fancy-link`}
           >
             ☕ Support Mosaic on Ko-fi
           </a>
