@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
   const urls: string[] =
     Array.isArray(body.urls) && body.urls.length > 0
       ? body.urls
-      : [SITE_URL, `${SITE_URL}/faq`];
+      : [SITE_URL, `${SITE_URL}/faq`, `${SITE_URL}/about`];
 
   // ── Submit ──────────────────────────────────────────────────────────────
   const payload = {

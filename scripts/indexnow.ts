@@ -89,6 +89,7 @@ async function submitIndexNow() {
   const urls = [
     SITE_URL,
     `${SITE_URL}/faq`,
+    `${SITE_URL}/about`,
     ...photographerUrls,
     ...toolkitUrls,
   ];
