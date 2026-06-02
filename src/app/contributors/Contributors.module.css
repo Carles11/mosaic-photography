@@ -1,0 +1,83 @@
+.page {
+  padding: 11px;
+}
+
+.pageTitle {
+  margin: 0;
+  padding: 22px 0 0 0.4rem;
+}
+
+.intro {
+  padding: 0.75rem 0.4rem 2rem 0.4rem;
+  max-width: 780px;
+  line-height: 1.65;
+  color: var(--text-color);
+  opacity: 0.85;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.card {
+  display: block;
+  text-decoration: none;
+  padding: 22px;
+  border: 1px solid #ccc;
+  background-color: var(--card-background);
+  transition: border-color 0.25s ease;
+}
+
+.card:hover {
+  border-color: var(--accent-color);
+}
+
+.cardName {
+  margin: 0 0 0.6rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-color);
+}
+
+.cardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.cardMetaItem {
+  font-size: 0.82rem;
+  color: var(--text-color);
+  opacity: 0.65;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.emptyState {
+  padding: 3rem 0.4rem;
+  color: var(--text-color);
+  opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.85rem;
+  }
+
+  .card {
+    padding: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
