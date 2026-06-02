@@ -130,9 +130,13 @@ const AboutPage = () => {
         <section className={`${styles.section} ${styles.supportSection}`}>
           <h2 className={styles.sectionTitle}>Support Mosaic</h2>
           <p className={styles.body}>
+            Mosaic is built and maintained by a single independent developer and
+            analogue photography enthusiast.
+          </p>
+          <p className={styles.body}>
             Keeping Mosaic running has a cost — hosting, storage, and more hours
             than I care to count. But Mosaic is free, and ad-free, and I&apos;d
-            like to keep it that way. If it&apos;s ever given you a moment worth
+            love to keep it that way. If it&apos;s ever given you a moment worth
             having, a small contribution helps more than you&apos;d think.
           </p>
           <a

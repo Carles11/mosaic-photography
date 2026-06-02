@@ -5,6 +5,7 @@ import { getGeneralAffiliateResources } from "@/utils/fetchAffiliateDataSSR";
 import { fetchPhotographersWithFeaturedSSR } from "@/utils/fetchPhotographersWithFeaturedSSR";
 import { fetchGalleryImagesSSR } from "@/utils/fetchGalleryImagesSSR";
 import type { ImageWithOrientation } from "@/types/gallery";
+import { getContributorBySlug } from "@/utils/fetchContributorsSSR";
 
 export const metadata: Metadata = {
   title: {

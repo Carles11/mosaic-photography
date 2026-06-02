@@ -13,10 +13,10 @@ export interface AffiliateProductWithAdvertiser extends AffiliateProduct {
 
 const FILTERS = [
   { label: "All", value: "all" },
-  { label: "Tools", value: "tool" },
-  { label: "Framing", value: "framing" },
   { label: "Books", value: "book" },
   { label: "Prints", value: "print" },
+  { label: "Framing", value: "framing" },
+  { label: "Tools", value: "tool" },
 ];
 
 // Helper to get unique advertisers for a set of products

@@ -16,6 +16,7 @@ body {
   --text-color: #fff;
   --headfoot-background-gradient: linear-gradient(135deg, #555555, #999999);
   --secondary-color: #2c106a;
+  --avatar-placeholder: #2c106a;
   --foreground: #fff;
   --foreground-muted: #aaa;
   --card-background: #2d2d2d;
