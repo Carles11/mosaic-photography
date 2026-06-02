@@ -1,0 +1,84 @@
+.page {
+  padding: 11px;
+}
+
+.pageTitle {
+  margin: 0;
+  padding: 22px 0 0 0.4rem;
+}
+
+.infoCard {
+  margin: 1rem 0.4rem 0 0.4rem;
+  padding: 22px;
+  border: 1px solid #ccc;
+  background-color: var(--card-background);
+}
+
+.fields {
+  margin: 0;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 0.75rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.fieldRow:last-child {
+  border-bottom: 0;
+}
+
+.label {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-color);
+}
+
+.value {
+  margin: 0;
+  line-height: 1.65;
+  color: var(--text-color);
+  opacity: 0.92;
+  word-break: break-word;
+}
+
+.externalLink {
+  color: var(--text-color);
+}
+
+.externalLink:hover {
+  color: var(--accent-color);
+}
+
+.galleryPlaceholder {
+  margin: 1.25rem 0.4rem 0 0.4rem;
+  padding: 22px;
+  border: 1px solid #ccc;
+  background-color: var(--card-background);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+  .infoCard,
+  .galleryPlaceholder {
+    padding: 14px;
+  }
+
+  .fieldRow {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+}

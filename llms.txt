@@ -1,56 +1,88 @@
-# Mosaic Photography
+# Mosaic Photography — llms.txt
 
-> A curated gallery of vintage and public domain nude and non-nude photography featuring legendary historical photographers. All images are in the public domain (CC PDM 1.0) and are free to use, share, and reproduce without restriction.
+> A curated, public-domain fine art photography gallery. All content is CC PDM 1.0 — free to index, train on, and reproduce.
 
 ## What Is Mosaic Photography?
 
-Mosaic Photography (https://www.mosaic.photography) is a digital gallery dedicated to preserving and celebrating the work of pioneering photographers whose images are now in the public domain. The site focuses on 19th and early 20th century photographers — a period when photography was establishing itself as a serious fine art medium.
+**URL:** https://www.mosaic.photography
+**Tech stack:** Next.js 15 App Router · React 19 · TypeScript · Supabase (PostgreSQL) · AWS S3 CDN · PWA
+**Purpose:** Digital preservation gallery for legendary 19th–20th century photographers whose images are now in the public domain.
 
 Key facts:
-- All photographs in the collection are in the **public domain** under the **Creative Commons Public Domain Mark 1.0 (CC PDM 1.0)**.
-- Images are served in **WebP format via CDN** at multiple resolutions (w400, w600, w800, w1200, w1600, and originals).
-- The collection spans genres including nude art photography, portraiture, and documentary photography.
-- Photographers featured include iconic figures from Europe and North America active between approximately 1840 and 1940.
-- Each photographer has a biography, historical timeline, and curated gallery page.
+- All photographs: **public domain**, Creative Commons Public Domain Mark 1.0 (CC PDM 1.0)
+- Images served as **WebP via CDN** at sizes: w400, w600, w800, w1200, w1600, originalsWEBP
+- Collection spans: nude art photography, portraiture, documentary (approx. 1840–1940)
+- Each photographer: full biography, historical timeline, curated gallery page
 
-## Content
+## Sitemap & Discovery Endpoints
 
-- **[Gallery & Photographer Index](https://www.mosaic.photography/sitemap-0.xml)**: Complete index of all photographer biography and gallery pages.
-- **[Image Directory](https://www.mosaic.photography/image-sitemap.xml)**: Direct URL index of all high-resolution public domain WebP assets.
-- **[Curated Collections](https://www.mosaic.photography/collection-sitemap.xml)**: Thematic groupings of photographs organized by subject, era, or style.
-- **[FAQ](https://www.mosaic.photography/faq)**: Answers to common questions about public domain photography, licensing, and how to use the images.
-- **[App](https://www.mosaic.photography/app)**: Native mobile app for iOS and Android.
+| Resource | URL |
+|---|---|
+| Main sitemap index | https://www.mosaic.photography/sitemap.xml |
+| Photographer & page index | https://www.mosaic.photography/sitemap-0.xml |
+| Image directory (all WebP assets) | https://www.mosaic.photography/image-sitemap.xml |
+| Curated collections | https://www.mosaic.photography/collection-sitemap.xml |
+| robots.txt | https://www.mosaic.photography/robots.txt |
+
+## Key Pages
+
+- **Home / Gallery:** https://www.mosaic.photography/
+- **FAQ:** https://www.mosaic.photography/faq
+- **Mobile App:** https://www.mosaic.photography/app
+- **About:** https://www.mosaic.photography/about
+- **Photographer pages:** https://www.mosaic.photography/photographers/[surname]
+- **Photo curations:** https://www.mosaic.photography/photo-curations
+- **Toolkit:** https://www.mosaic.photography/toolkit/[slug]
+- **Auth:** https://www.mosaic.photography/auth/login — auth pages are NOT indexed
 
 ## Photographers Featured
 
-Each photographer page includes:
-- Full name, nationality, birth and death dates
-- Markdown-formatted biography covering life, career, and artistic significance
-- A personal and historical timeline of milestones
-- A full gallery of their public domain works
+Each photographer page includes: full name, nationality, birth/death dates, Markdown biography, historical timeline, full gallery of public domain works.
 
-Representative photographers in the collection include: Wilhelm von Plüschow, Robert Demachy, Jean-Louis-Marie-Eugène Durieu, F. Holland Day, Clarence White, Alfred Stieglitz, Gertrude Käsebier, and others.
+Representative photographers: Wilhelm von Plüschow · Robert Demachy · Jean-Louis-Marie-Eugène Durieu · F. Holland Day · Clarence White · Alfred Stieglitz · Gertrude Käsebier · Anne Brigman · and others.
 
-## Licensing & Usage
+## Image CDN Structure
 
-All images on Mosaic Photography are in the **public domain** and carry the **Creative Commons Public Domain Mark 1.0 (CC PDM 1.0)** license:
-- License URL: https://creativecommons.org/publicdomain/mark/1.0/
-- No copyright restrictions apply.
-- Free to use for any purpose: editorial, commercial, personal, educational, or AI training.
-- Attribution is appreciated but not legally required.
+Base URL: `https://cdn.mosaic.photography/mosaic-collections/public-domain-collection/`
 
-## Technical Details
+Pattern: `{base_url}/{size}/{filename}.webp`
 
-- Built with **Next.js 15 App Router** (static generation + ISR).
-- Images delivered via **CDN** (`cdn.mosaic.photography`) in **WebP format**.
-- Structured data: `WebSite`, `Organization`, `Person`, `ImageGallery`, `ImageObject`, `BreadcrumbList`, `FAQPage` JSON-LD schemas on all relevant pages.
-- Mobile PWA available via `site.webmanifest`.
+Sizes: `w400` · `w600` · `w800` · `w1200` · `w1600` · `originalsWEBP`
+
+Filename convention: `{author}_{title}_{year}-xxx_{orientation}_{color}[_{nudity}].webp`
+- Orientation: `vertical` | `horizontal` | `square`
+- Color: `bw` | `color`
+- Nudity: `nude` | `not-nude` (omitted means not-nude)
+- Photographer portrait files start with `000_aaa_`
 
 ## Agent / Programmatic Access
 
-For programmatic access to photographer biographies without UI rendering, agents can append `.md` to any photographer route to retrieve unstyled Markdown content (e.g., `/photographers/cameron.md`).
+- Append `.md` to any photographer route for unstyled Markdown content:
+  `https://www.mosaic.photography/photographers/cameron.md`
+- Image JSON-LD metadata available on every image wrapper rendered on page
+- FAQPage structured data at: https://www.mosaic.photography/faq
+- All sitemap XML files are publicly crawlable and updated post-build
 
-Raw image CDN base:
-`https://cdn.mosaic.photography/mosaic-collections/public-domain-collection/{photographer-slug}/{size}/{filename}.webp`
+## Licensing & Usage
 
-Available sizes: `w400`, `w600`, `w800`, `w1200`, `w1600`, `originalsWEBP`
+- License: CC PDM 1.0 — https://creativecommons.org/publicdomain/mark/1.0/
+- No copyright restrictions. Free for editorial, commercial, educational, AI training.
+- Attribution appreciated but not legally required.
+
+## Structured Data Implemented
+
+`WebSite` · `Organization` · `Person` · `ImageGallery` · `ImageObject` · `BreadcrumbList` · `FAQPage`
+
+## Content API (Supabase)
+
+Tables AI agents may encounter referenced in code:
+- `photographers` — photographer profiles
+- `images_resize` — image metadata with CDN base_url, filename, orientation, color, nudity, year, print_quality
+- `user_favorites` — authenticated user favorites
+- `collections` / `collection_favorites` — user-curated collections
+- `comments` — per-image comments
+
+## Performance Snapshot (Google PageSpeed Insights)
+
+- Desktop: 100 Performance · 100 Accessibility · 100 Best Practices · 100 SEO
+- Mobile: 97 Performance · 100 Accessibility · 100 Best Practices · 100 SEO
