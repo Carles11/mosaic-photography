@@ -5,7 +5,7 @@ import { useState } from "react";
 import styles from "./Contributors.module.css";
 
 export default function ContributorClient() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false); // Changed to false
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -279,7 +279,6 @@ Mosaic Submission System
         className={`${styles.formContainer} ${
           isFormOpen ? styles.formContainerOpen : ""
         }`}
-        style={{ overflow: "visible" }}
       >
         <form
           onSubmit={handleSubmit}

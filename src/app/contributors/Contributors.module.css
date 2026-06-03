@@ -117,7 +117,7 @@
 }
 
 .formContainerOpen {
-  max-height: none;
+  max-height: 800px;
   overflow: visible;
 }
 
@@ -334,6 +334,11 @@
     margin-top: 1rem;
   }
 
+  .formContainerOpen {
+    max-height: none;
+    overflow: visible;
+  }
+
   .applicationForm {
     padding: 1.25rem;
     border-radius: 20px;
@@ -417,15 +422,11 @@
   }
 }
 
-/* Improve scrolling within form */
-.formContainerOpen {
-  max-height: none;
-  overflow: visible;
-}
-
 @media (max-width: 768px) {
+  /* Improve scrolling within form */
   .formContainerOpen {
     max-height: none;
+    overflow: visible;
   }
 
   .applicationForm {

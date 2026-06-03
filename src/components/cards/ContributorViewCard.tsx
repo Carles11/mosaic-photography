@@ -193,7 +193,7 @@ const ContributorViewCard: React.FC<ContributorViewCardProps> = ({
                     Explore contributor →
                   </Link>
 
-                  {contributor.website && (
+                  {/* {contributor.website && (
                     <a
                       href={contributor.website}
                       target="_blank"
@@ -209,7 +209,7 @@ const ContributorViewCard: React.FC<ContributorViewCardProps> = ({
                     >
                       Website
                     </a>
-                  )}
+                  )} */}
 
                   {contributor.instagram && (
                     <a
