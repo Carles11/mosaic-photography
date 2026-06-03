@@ -1,11 +1,11 @@
 "use client";
 
-// BottomNav is now rendered globally by ClientLayout;
-// individual pages should not render another BottomNav directly.
+// BottomNav is rendered globally by ClientLayout; do not add it here.
 
 import { useEffect, useState, useRef } from "react";
 import Cookies from "js-cookie";
 import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
+import ContributorsSlide from "../sliders/contributors/ContributorsSlide";
 import styles from "./home.module.css";
 import { useAgeConsent } from "@/context/AgeConsentContext";
 import { SupabaseUser } from "@/lib/supabaseClient";
@@ -13,18 +13,16 @@ import {
   AffiliateProductWithAdvertiser,
   ResourcesSlider,
 } from "@/components/sliders/ResourcesSlider";
-
 import Gallery from "@/components/gallery/Gallery";
-
 import { AgeConsent } from "@/components/modals/ageConsent/AgeConsent";
-
 import { Photographer, ImageWithOrientation } from "@/types/gallery";
+import { ContributorWithFeatured } from "@/utils/fetchContributorsWithFeaturedSSR";
 
 interface HomeClientWrapperProps {
   photographers?: Photographer[];
   images?: ImageWithOrientation[];
   affiliateProducts?: AffiliateProductWithAdvertiser[];
-
+  contributors?: ContributorWithFeatured[];
   onLoginClick?: () => void;
   onLogoutClick?: () => void;
   user?: SupabaseUser | null;
@@ -34,29 +32,24 @@ function HomeClientWrapper({
   images,
   photographers,
   affiliateProducts,
+  contributors,
   onLoginClick,
 }: HomeClientWrapperProps) {
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
   const [isCrawlerBot, setCrawlerIsBot] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // Debug: show a sample to ensure data is passed
-  // console.log("HomeClientWrapper rendered with photographers:", photographers?.[0]);
-  // console.log("HomeClientWrapper rendered with images:", images?.[0]);
-
   useEffect(() => {
-    // Bot detection: check userAgent for major bots
     const botRegex =
       /bot|crawl|slurp|spider|bing|duckduckgo|baidu|yandex|sogou|exabot|facebot|ia_archiver/i;
     const isBot = botRegex.test(navigator.userAgent);
     const skipForBots = Cookies.get("skip_age_modal") === "1";
     if (isBot || skipForBots) {
       setCrawlerIsBot(true);
-      setIsMinimumAgeConfirmed(true); // Automatically confirm age for bots
+      setIsMinimumAgeConfirmed(true);
     }
   }, [setIsMinimumAgeConfirmed]);
 
-  // Focus trap for modal
   const handleModalKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Tab" && modalRef.current) {
       const focusable = modalRef.current.querySelectorAll(
@@ -76,7 +69,6 @@ function HomeClientWrapper({
 
   return (
     <div className={styles.container}>
-      {/* Main Content (obscured if age not confirmed) */}
       <section
         className={`${styles.pageContent} ${styles.visible} ${
           !isMinimumAgeConfirmed ? styles.obscuredContent : ""
@@ -89,14 +81,13 @@ function HomeClientWrapper({
         }
       >
         <div className={styles.content} id="our-photographers">
-          {/* VINTAGE NUDE ART PHOTOGRAPHERS */}
+          {/* VINTAGE NUDe ART PHOTOGRAPHERS */}
           <PhotographersCardsSlide
             photographers={photographers}
             onLoginRequired={onLoginClick}
           />
 
           {/* SHOPPING RESOURCES */}
-
           {affiliateProducts && affiliateProducts.length > 0 && (
             <section
               aria-label="Creative Essentials"
@@ -109,11 +100,22 @@ function HomeClientWrapper({
                 Curated tools &amp; resources for photographers and vintage
                 photography lovers
               </p>
-
               <ResourcesSlider products={affiliateProducts} />
             </section>
           )}
-          {/* Pass the photographers array into Gallery so it can attach slugs to images */}
+
+          {/* CONTRIBUTORS */}
+          {contributors && contributors.length > 0 && (
+            <section
+              aria-label="Contributors"
+              className={styles.resourcesSection}
+              id="contributors"
+            >
+              <ContributorsSlide contributors={contributors} />
+            </section>
+          )}
+
+          {/* GALLERY */}
           <Gallery
             id="gallery-section"
             images={images}
@@ -122,7 +124,8 @@ function HomeClientWrapper({
           />
         </div>
       </section>
-      {/* Age Consent Modal (with overlay), only for real users and if age not confirmed */}
+
+      {/* Age Consent Modal */}
       {!isCrawlerBot && !isMinimumAgeConfirmed && (
         <div
           ref={modalRef}
@@ -148,7 +151,6 @@ function HomeClientWrapper({
           <AgeConsent
             setIsMinimumAgeConfirmed={(value) => {
               setIsMinimumAgeConfirmed(value);
-              // Persist consent in cookie for 1 year
               if (value) {
                 Cookies.set("isMinimumAgeConfirmed", "true", { expires: 365 });
               }

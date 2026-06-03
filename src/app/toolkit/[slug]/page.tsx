@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import type { AffiliateAdvertiser, AffiliateProduct } from "@/types/supabase";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import { getToolkitDataBySlug } from "@/utils/fetchAffiliateDataSSR";
+import ToolkitPageView from "@/components/analytics/ToolkitPageView";
 
 type TemplateProps = {
   advertiser: AffiliateAdvertiser;
@@ -91,8 +92,6 @@ export async function generateMetadata({
     },
   };
 }
-
-import ToolkitPageView from "@/components/analytics/ToolkitPageView";
 
 export default async function ToolkitPage({
   params,

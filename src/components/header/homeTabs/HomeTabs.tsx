@@ -12,6 +12,11 @@ const TABS = [
   },
   { label: "Selection", anchor: "#toolkits", event: "toolkitsTABClicked" },
   {
+    label: "Contributors",
+    anchor: "#contributors",
+    event: "contributorsTABClicked",
+  },
+  {
     label: "Gallery",
     anchor: "#gallery-section",
     event: "galleryTABClicked",

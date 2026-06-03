@@ -6,10 +6,10 @@ import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import { useAuth } from "@/hooks/useAuth";
 import { useComments } from "@/context/CommentsContext";
 import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
-// import { AuthView } from "@/types/auth"; // removed unused
 import { Photographer } from "@/types/gallery";
 import { ImageWithOrientation } from "@/types/gallery";
 import { AffiliateProductWithAdvertiser } from "@/utils/fetchAffiliateDataSSR";
+import { ContributorWithFeatured } from "@/utils/fetchContributorsWithFeaturedSSR";
 
 // Import session debug for development
 if (process.env.NODE_ENV === "development") {
@@ -20,18 +20,19 @@ interface HomeClientProps {
   photographers?: Photographer[];
   images?: ImageWithOrientation[];
   affiliateProducts?: AffiliateProductWithAdvertiser[];
+  contributors?: ContributorWithFeatured[];
 }
 
 export default function HomeClient({
   photographers,
   images,
   affiliateProducts,
+  contributors,
 }: HomeClientProps) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showAuthModal, setShowAuthModal] = useState(false);
-  // Removed unused authView state
   const [isInitialized, setIsInitialized] = useState(false);
 
   const { loadCommentCountsBatch } = useComments();
@@ -50,7 +51,6 @@ export default function HomeClient({
   useEffect(() => {
     if (!isInitialized && searchParams) {
       const modal = searchParams.get("modal");
-      // Only show modal if needed, no authView logic
       if (modal === "auth") {
         setShowAuthModal(true);
       }
@@ -58,10 +58,9 @@ export default function HomeClient({
     }
   }, [searchParams, isInitialized]);
 
-  // Handle modal closing
+  // Clear URL parameters when modal is closed
   useEffect(() => {
     if (isInitialized && !showAuthModal) {
-      // Clear URL parameters when modal is closed
       if (typeof window !== "undefined") {
         const url = new URL(window.location.href);
         const hadParams =
@@ -91,24 +90,13 @@ export default function HomeClient({
   }
 
   return (
-    <>
-      <HomeClientWrapper
-        photographers={photographers}
-        images={images}
-        affiliateProducts={affiliateProducts}
-        user={user}
-        onLoginClick={() => router.push("/auth/login")}
-      />
-
-      {/* NOTE: AuthModal is commented out for backward compatibility with email redirects.
-        Uncomment and implement if required for your authentication flow.
-      */}
-      {/* <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        initialView={authView}
-        initialEmail=""
-      /> */}
-    </>
+    <HomeClientWrapper
+      photographers={photographers}
+      images={images}
+      affiliateProducts={affiliateProducts}
+      contributors={contributors}
+      user={user}
+      onLoginClick={() => router.push("/auth/login")}
+    />
   );
 }

@@ -4,6 +4,7 @@ import HomeClient from "./HomeClient";
 import { getGeneralAffiliateResources } from "@/utils/fetchAffiliateDataSSR";
 import { fetchPhotographersWithFeaturedSSR } from "@/utils/fetchPhotographersWithFeaturedSSR";
 import { fetchGalleryImagesSSR } from "@/utils/fetchGalleryImagesSSR";
+import { fetchContributorsWithFeaturedSSR } from "@/utils/fetchContributorsWithFeaturedSSR";
 import type { ImageWithOrientation } from "@/types/gallery";
 
 export const metadata: Metadata = {
@@ -58,12 +59,14 @@ function buildHomePageSchema(images: ImageWithOrientation[]) {
 }
 
 export default async function Page() {
-  // Fetching data in parallel for performance
-  const [photographers, images, affiliateProducts] = await Promise.all([
-    fetchPhotographersWithFeaturedSSR(),
-    fetchGalleryImagesSSR(),
-    getGeneralAffiliateResources(),
-  ]);
+  // All fetches run in parallel for performance
+  const [photographers, images, affiliateProducts, contributors] =
+    await Promise.all([
+      fetchPhotographersWithFeaturedSSR(),
+      fetchGalleryImagesSSR(),
+      getGeneralAffiliateResources(),
+      fetchContributorsWithFeaturedSSR(),
+    ]);
 
   const homePageSchema = buildHomePageSchema(images ?? []);
 
@@ -83,10 +86,7 @@ export default async function Page() {
           art and nude photography.
         </h2>
       </section>
-      {/* Note: If HomeClient contains the image gallery and ResourcesSlider,
-        it will be rendered immediately. Suspense here acts as a boundary 
-        for dynamic client-side interactivity.
-        */}
+
       <Suspense
         fallback={<div className="loading-state">Loading gallery...</div>}
       >
@@ -94,6 +94,7 @@ export default async function Page() {
           photographers={photographers || []}
           images={images || []}
           affiliateProducts={affiliateProducts || []}
+          contributors={contributors || []}
         />
       </Suspense>
     </>

@@ -1,0 +1,203 @@
+.contributorViewCardContainer {
+  height: 100%;
+  width: 100%;
+  margin-bottom: 4rem;
+}
+
+.contributorViewCard {
+  width: auto;
+  max-width: none;
+  padding: 22px;
+  border: 1px solid #ccc;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.88),
+      rgba(247, 243, 236, 0.94)
+    ),
+    var(--background-color);
+  height: auto;
+  min-height: 0;
+  text-align: left;
+}
+
+.contributorName {
+  cursor: pointer;
+  z-index: 1;
+  margin: 0.1rem 0.3rem 0.8rem;
+}
+
+.imageContainer {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.imageLink {
+  display: block;
+}
+
+.imageLink :global(.imageCard) {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+
+.imageLink :global(.imageContainer) {
+  border-radius: 0;
+}
+
+.imageLink :global(img) {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  display: block;
+}
+
+.imageFallback {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  padding: 1rem;
+  background:
+    linear-gradient(145deg, rgba(25, 25, 25, 0.12), rgba(25, 25, 25, 0.42)),
+    linear-gradient(160deg, #c7b8a6, #efe5d8 55%, #9e8c77);
+}
+
+.imageFallbackLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #fff;
+}
+
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-bottom: 0.75rem;
+}
+
+.country,
+.license {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--text-color) 78%, transparent);
+}
+
+.biography {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.6;
+  cursor: pointer;
+  margin: 0 0 1rem;
+  min-height: 6.4rem;
+}
+
+.expanded {
+  -webkit-line-clamp: unset;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.85rem 1rem;
+}
+
+.profileLink,
+.externalLink {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-color);
+}
+
+.externalLink {
+  opacity: 0.8;
+}
+
+.embla__navigation {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.embla__navigation__arrows {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.embla__navigation__dots {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 1rem;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.emptyState {
+  padding: 1rem 0;
+}
+
+@media (max-width: 768px) {
+  .contributorViewCardContainer {
+    margin-bottom: 3rem;
+  }
+
+  .contributorViewCard {
+    width: 87vw;
+    max-width: 87vw;
+    padding: 11px;
+    margin: 0;
+  }
+
+  .biography {
+    min-height: 0;
+  }
+
+  .embla__navigation {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .embla__navigation__dots {
+    justify-content: center;
+    margin: 0.5rem 0 0;
+    gap: calc(0.1rem + 1vw);
+  }
+}
+
+@media (max-width: 480px) {
+  .actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .embla__navigation__arrows :global(button) {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}

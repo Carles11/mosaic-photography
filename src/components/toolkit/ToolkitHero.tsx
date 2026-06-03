@@ -48,7 +48,7 @@ export default function ToolkitHero({
             alt={advertiser.name}
             height={44}
             width={168}
-            style={{ maxHeight: 48, objectFit: "contain", width: "auto" }}
+            style={{ objectFit: "contain" }}
           />
         )}
       </div>

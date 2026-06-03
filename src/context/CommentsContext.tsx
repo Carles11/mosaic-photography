@@ -88,16 +88,11 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
       .filter((id) => !isNaN(id));
     if (numericIds.length === 0) return;
     try {
-      console.log("loadCommentCountsBatch imageIds", imageIds);
-      console.log("numericIds", numericIds);
       // This fetches all comment rows for the given image IDs
       const { data, error } = await supabase
         .from("comments")
         .select("image_id")
         .in("image_id", numericIds);
-
-      console.log("comment count query result", data);
-      console.log("comment count query error", error);
 
       if (error) throw error;
 

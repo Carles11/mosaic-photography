@@ -81,9 +81,12 @@ export default function TemplatePrint({
                     alt={
                       product.title?.[locale] || product.title?.en || "Print"
                     }
-                    fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    loading="eager"
+                    unoptimized
+                    fill
                     style={{ objectFit: "cover" }}
+                    priority
                   />
                 </div>
               )}
