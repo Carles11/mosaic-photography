@@ -9,13 +9,7 @@
   max-width: none;
   padding: 22px;
   border: 1px solid #ccc;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.88),
-      rgba(247, 243, 236, 0.94)
-    ),
-    var(--background-color);
+  background-color: var(--background-color);
   height: auto;
   min-height: 0;
   text-align: left;

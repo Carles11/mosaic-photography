@@ -1,6 +1,8 @@
+// app/contributors/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getContributors } from "@/utils/fetchContributorsSSR";
+import ContributorClient from "./ContributorsClient";
 import styles from "./Contributors.module.css";
 
 export const metadata: Metadata = {
@@ -19,43 +21,43 @@ export default async function ContributorsPage() {
 
   return (
     <main className={styles.page}>
-      <h1 className={styles.pageTitle}>Contributors</h1>
+      <header className={styles.header}>
+        <h1 className={styles.pageTitle}>Contributors</h1>
+        <p className={styles.intro}>
+          Contemporary photographers and creators who have chosen to share part
+          of their work through Mosaic. Each collection remains under the
+          photographer&apos;s license, presented with their permission.
+        </p>
+      </header>
 
-      <p className={styles.intro}>
-        Contributors are contemporary photographers and creators who have chosen
-        to share part of their work through Mosaic. Unlike the historical
-        public-domain archive, these collections remain under their respective
-        licenses and are presented with the contributor&apos;s permission.
-      </p>
+      <section className={styles.contributorSection}>
+        <h2 className={styles.sectionTitle}>Active Collections</h2>
+        {!contributors || contributors.length === 0 ? (
+          <p className={styles.emptyState}>
+            The gallery is growing. More contributors coming soon.
+          </p>
+        ) : (
+          <div className={styles.grid}>
+            {contributors.map((c) => (
+              <Link
+                key={c.id}
+                href={`/contributors/${c.slug}`}
+                className={`${styles.card} no-fancy-link`}
+              >
+                <div className={styles.avatarPlaceholder} />
+                <h3 className={styles.cardName}>{c.name}</h3>
+                <div className={styles.cardMeta}>
+                  <span>{c.country || "Global"}</span>
+                  <span className={styles.license}>{c.license_default}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
 
-      {!contributors || contributors.length === 0 ? (
-        <p className={styles.emptyState}>No contributors found.</p>
-      ) : (
-        <div className={styles.grid}>
-          {contributors.map((contributor) => (
-            <Link
-              key={contributor.id}
-              href={`/contributors/${contributor.slug}`}
-              className={`no-fancy-link ${styles.card}`}
-              aria-label={`View contributor ${contributor.name}`}
-            >
-              <h2 className={styles.cardName}>{contributor.name}</h2>
-              <div className={styles.cardMeta}>
-                {contributor.country && (
-                  <span className={styles.cardMetaItem}>
-                    {contributor.country}
-                  </span>
-                )}
-                {contributor.license_default && (
-                  <span className={styles.cardMetaItem}>
-                    {contributor.license_default}
-                  </span>
-                )}
-              </div>
-            </Link>
-          ))}
-        </div>
-      )}
+      {/* New Call to Action with collapsible form */}
+      <ContributorClient />
     </main>
   );
 }

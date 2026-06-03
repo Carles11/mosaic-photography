@@ -1,83 +1,307 @@
+/* app/contributors/Contributors.module.css */
 .page {
-  padding: 11px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
+}
+
+.header {
+  margin-bottom: 3rem;
+  position: relative;
 }
 
 .pageTitle {
-  margin: 0;
-  padding: 22px 0 0 0.4rem;
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: var(--text-color, "#fff");
 }
 
 .intro {
-  padding: 0.75rem 0.4rem 2rem 0.4rem;
-  max-width: 780px;
-  line-height: 1.65;
+  padding: 0;
+  max-width: 700px;
+  line-height: 1.7;
   color: var(--text-color);
   opacity: 0.85;
+  font-size: 1.1rem;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1.25rem;
+.sectionTitle {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  border-left: 3px solid var(--accent-color);
+  padding-left: 1rem;
+}
+
+.avatarPlaceholder {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card:hover .avatarPlaceholder {
+  transform: scale(1.02);
+}
+
+/* CTA Section */
+.ctaSection {
+  margin-top: 5rem;
+  padding: 3rem;
+  background: linear-gradient(
+    145deg,
+    rgba(30, 30, 35, 0.6) 0%,
+    var(--background-color) 100%
+  );
+  backdrop-filter: blur(2px);
+  text-align: center;
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+.ctaSection h3 {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text-color);
+}
+
+.ctaSection p {
+  max-width: 500px;
+  margin: 0 auto 1.5rem;
+  opacity: 0.8;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2rem;
+  background: var(--accent-color);
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 40px;
+  transition: all 0.25s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Collapsible Form */
+.formContainer {
+  margin-top: 1.5rem;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-height: 0;
+}
+
+.formContainerOpen {
+  max-height: 800px;
+}
+
+.applicationForm {
+  background: var(--background-secondary);
+  backdrop-filter: blur(12px);
+  border-radius: 28px;
+  padding: 2rem 2rem 2rem 2rem;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
   margin-top: 1rem;
 }
 
-.card {
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
   display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  color: var(--text-color);
+  text-transform: uppercase;
+}
+
+.formGroup input,
+.formGroup textarea {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  background: var(--card-background, "#2d2d2d");
+  border: 1px solid var(--border-color, "#444");
+  border-radius: 16px;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: var(--foreground-muted, "#aaa");
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(255, 200, 100, 0.2);
+  color: var(--foreground-muted, "#aaa");
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+
+.submitButton {
+  background: var(--accent-color);
+  color: #000;
+  border: none;
+  padding: 1rem 1.8rem;
+  font-weight: 700;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+  width: 100%;
+  margin-top: 0.5rem;
+  font-family: inherit;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+.formFooter {
+  margin-top: 1.2rem;
+  font-size: 0.7rem;
+  text-align: center;
+  opacity: 0.5;
+  letter-spacing: 0.02em;
+}
+
+/* Grid and cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.75rem;
+  margin-top: 1.5rem;
+}
+
+.card {
+  padding: 1.8rem;
+  background: var(--card-background, "#2d2d2d");
+  border-radius: 24px;
+  border: 1px solid var(--border-color, "#444");
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
   text-decoration: none;
-  padding: 22px;
-  border: 1px solid #ccc;
-  background-color: var(--card-background);
-  transition: border-color 0.25s ease;
+  backdrop-filter: blur(4px);
 }
 
 .card:hover {
+  transform: translateY(-6px);
   border-color: var(--accent-color);
+  background: var(--card-details-background, "#3a3a3a");
+  box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.3);
 }
 
 .cardName {
-  margin: 0 0 0.6rem 0;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--text-color);
 }
 
 .cardMeta {
   display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-top: 0.2rem;
 }
 
-.cardMetaItem {
-  font-size: 0.82rem;
-  color: var(--text-color);
-  opacity: 0.65;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.license {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.2rem 0.6rem;
+  border-radius: 40px;
+  font-size: 0.7rem;
 }
 
 .emptyState {
   padding: 3rem 0.4rem;
-  color: var(--text-color);
-  opacity: 0.6;
+  text-align: center;
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 32px;
+  margin-top: 1rem;
 }
 
 @media (max-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 0.85rem;
+  .page {
+    padding: 1.5rem 1.2rem 3rem;
   }
-
-  .card {
-    padding: 14px;
+  .pageTitle {
+    font-size: 2.5rem;
+  }
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .ctaSection {
+    padding: 2rem 1.5rem;
+  }
+  .applicationForm {
+    padding: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
   .grid {
     grid-template-columns: 1fr;
+  }
+  .card {
+    padding: 1.2rem;
   }
 }

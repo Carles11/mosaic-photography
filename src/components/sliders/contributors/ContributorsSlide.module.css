@@ -1,5 +1,12 @@
 .contributorsSlideContainer {
-  border-top: 1px solid lightgrey;
+  border-top: 1px solid var(--foreground-muted);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
 }
 
 .subTitle {

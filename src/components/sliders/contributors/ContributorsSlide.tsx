@@ -1,8 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import styles from "./ContributorsSlide.module.css";
 import ContributorViewCard from "@components/cards/ContributorViewCard";
 import { ContributorWithFeatured } from "@/utils/fetchContributorsWithFeaturedSSR";
+
+import styles from "./ContributorsSlide.module.css";
 
 interface ContributorsSlideProps {
   contributors: ContributorWithFeatured[];
@@ -13,12 +14,17 @@ const ContributorsSlide: React.FC<ContributorsSlideProps> = ({
 }) => {
   return (
     <div className={styles.contributorsSlideContainer}>
-      <h2 className={styles.subTitle} id="contributors-title">
-        MOSAIC&apos;S CONTRIBUTORS
-      </h2>
+      <div className={styles.sectionHeader}>
+        <h2 className={styles.subTitle} id="contributors-title">
+          MOSAIC&apos;S CONTRIBUTORS
+        </h2>
+        <h4 className={styles.subTitle}>
+          <Link href="/contributors">Learn how to contribute →</Link>
+        </h4>
+      </div>
       <p className={styles.sectionIntro}>
         Contemporary photographers who have chosen to share their work through
-        Mosaic. Explore their collections and learn how to contribute yours.
+        Mosaic.
       </p>
 
       <ContributorViewCard contributors={contributors} />
