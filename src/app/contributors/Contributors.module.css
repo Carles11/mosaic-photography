@@ -117,7 +117,8 @@
 }
 
 .formContainerOpen {
-  max-height: 800px;
+  max-height: none;
+  overflow: visible;
 }
 
 .applicationForm {
@@ -315,6 +316,67 @@
   .applicationForm {
     padding: 1.5rem;
   }
+  .ctaSection {
+    padding: 1.5rem 1rem;
+    margin-top: 3rem;
+  }
+
+  .ctaSection h3 {
+    font-size: 1.5rem;
+  }
+
+  .ctaSection p {
+    font-size: 0.9rem;
+    padding: 0 0.5rem;
+  }
+
+  .formContainer {
+    margin-top: 1rem;
+  }
+
+  .applicationForm {
+    padding: 1.25rem;
+    border-radius: 20px;
+    max-height: 70vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .formGroup {
+    margin-bottom: 1.25rem;
+  }
+
+  .formGroup label {
+    font-size: 0.8rem;
+  }
+
+  .formGroup input,
+  .formGroup textarea {
+    padding: 0.75rem 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .submitButton {
+    padding: 0.85rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .formFooter {
+    font-size: 0.65rem;
+  }
+
+  .hintText {
+    font-size: 0.65rem;
+  }
+
+  .errorMessage {
+    font-size: 0.7rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -323,5 +385,51 @@
   }
   .card {
     padding: 1.2rem;
+  }
+  .ctaSection {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .applicationForm {
+    padding: 1rem;
+    max-height: 75vh;
+  }
+
+  .formGroup input,
+  .formGroup textarea {
+    padding: 0.7rem 0.85rem;
+    font-size: 0.85rem;
+  }
+
+  .ctaButton {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Ensure body/html don't overflow on mobile */
+@media (max-width: 768px) {
+  .page {
+    padding: 1rem 1rem 2rem;
+    overflow-x: hidden;
+  }
+}
+
+/* Improve scrolling within form */
+.formContainerOpen {
+  max-height: none;
+  overflow: visible;
+}
+
+@media (max-width: 768px) {
+  .formContainerOpen {
+    max-height: none;
+  }
+
+  .applicationForm {
+    max-height: 70vh;
+    overflow-y: auto;
   }
 }

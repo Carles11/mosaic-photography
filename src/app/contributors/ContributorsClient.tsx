@@ -5,7 +5,7 @@ import { useState } from "react";
 import styles from "./Contributors.module.css";
 
 export default function ContributorClient() {
-  const [isFormOpen, setIsFormOpen] = useState(true);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -279,6 +279,7 @@ Mosaic Submission System
         className={`${styles.formContainer} ${
           isFormOpen ? styles.formContainerOpen : ""
         }`}
+        style={{ overflow: "visible" }}
       >
         <form
           onSubmit={handleSubmit}
@@ -397,7 +398,8 @@ Mosaic Submission System
 
           <div className={styles.formGroup}>
             <label htmlFor="message">
-              Your experience with film photography, preferred formats...
+              Your experience with film photography, preferred gear and
+              formats...
             </label>
             <textarea
               id="message"
