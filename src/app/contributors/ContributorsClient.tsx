@@ -1,7 +1,7 @@
 // app/contributors/ContributorClient.tsx
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styles from "./Contributors.module.css";
 
 export default function ContributorClient() {
@@ -25,6 +25,9 @@ export default function ContributorClient() {
   });
   const [rightsError, setRightsError] = useState("");
 
+  const fieldRefs = useRef<
+    Record<string, HTMLInputElement | HTMLTextAreaElement | null>
+  >({});
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -158,16 +161,24 @@ export default function ContributorClient() {
     let formattedInstagram = "";
     let formattedPortfolio = "";
     let formattedImageGallery = "";
+    let firstInvalidField: string | null = null;
 
     // Validate email
     if (!formData.email.trim()) {
-      setErrors((prev) => ({ ...prev, email: "Email address is required" }));
+      setErrors((prev) => ({
+        ...prev,
+        email: "Email address is required",
+      }));
+
+      firstInvalidField ??= "email";
       hasError = true;
     } else if (!validateEmail(formData.email.trim())) {
       setErrors((prev) => ({
         ...prev,
         email: "Please enter a valid email address (e.g., name@domain.com)",
       }));
+      firstInvalidField ??= "email";
+
       hasError = true;
     }
 
@@ -175,6 +186,7 @@ export default function ContributorClient() {
     const instagramValidation = validateInstagram(formData.instagram);
     if (!instagramValidation.isValid) {
       setErrors((prev) => ({ ...prev, instagram: instagramValidation.error }));
+      firstInvalidField ??= "instagram";
       hasError = true;
     } else {
       formattedInstagram = instagramValidation.formatted;
@@ -184,6 +196,7 @@ export default function ContributorClient() {
     const portfolioValidation = validatePortfolio(formData.portfolio);
     if (!portfolioValidation.isValid) {
       setErrors((prev) => ({ ...prev, portfolio: portfolioValidation.error }));
+      firstInvalidField ??= "portfolio";
       hasError = true;
     } else {
       formattedPortfolio = portfolioValidation.formatted;
@@ -202,12 +215,34 @@ export default function ContributorClient() {
       setRightsError(
         "Please confirm that you own or control the rights to the photographs you may submit.",
       );
-      return;
+
+      firstInvalidField ??= "licenseAgreement";
+      hasError = true;
+    } else {
+      setRightsError("");
     }
 
-    setRightsError("");
+    if (hasError) {
+      const element = firstInvalidField
+        ? fieldRefs.current[firstInvalidField]
+        : null;
 
-    if (hasError) return;
+      element?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+
+      if (
+        element instanceof HTMLInputElement ||
+        element instanceof HTMLTextAreaElement
+      ) {
+        setTimeout(() => {
+          element.focus();
+        }, 300);
+      }
+
+      return;
+    }
 
     // Build formatted email body
     const emailBody = `
@@ -332,6 +367,9 @@ Mosaic Submission System
           <div className={styles.formGroup}>
             <label htmlFor="email">Email address *</label>
             <input
+              ref={(el) => {
+                fieldRefs.current.email = el;
+              }}
               type="email"
               id="email"
               name="email"
@@ -362,6 +400,9 @@ Mosaic Submission System
             <div className={styles.formGroup}>
               <label htmlFor="instagram">Instagram</label>
               <input
+                ref={(el) => {
+                  fieldRefs.current.instagram = el;
+                }}
                 type="text"
                 id="instagram"
                 name="instagram"
@@ -383,6 +424,9 @@ Mosaic Submission System
             <div className={styles.formGroup}>
               <label htmlFor="portfolio">Portfolio / Website</label>
               <input
+                ref={(el) => {
+                  fieldRefs.current.portfolio = el;
+                }}
                 type="text"
                 id="portfolio"
                 name="portfolio"
@@ -410,6 +454,9 @@ Mosaic Submission System
               type="text"
               id="imageGallery"
               name="imageGallery"
+              ref={(el) => {
+                fieldRefs.current.imageGallery = el;
+              }}
               value={formData.imageGallery}
               onChange={handleChange}
               placeholder="https://flickr.com/photos/username or https://dropbox.com/..."
@@ -460,10 +507,14 @@ Mosaic Submission System
             <label>
               <input
                 type="checkbox"
+                name="licenseAgreement"
                 checked={rightsAccepted}
                 onChange={(e) => {
                   setRightsAccepted(e.target.checked);
                   setRightsError("");
+                }}
+                ref={(el) => {
+                  fieldRefs.current.licenseAgreement = el;
                 }}
               />
               I confirm that I own or control the rights to the photographs I
