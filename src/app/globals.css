@@ -33,6 +33,7 @@ body {
   --color-white: #fff;
   --color-black: #1d1d1d;
   --link-color: rgb(107, 154, 192);
+  --error-color: #ff6b6b;
 }
 
 [data-theme="light"] {
@@ -55,6 +56,7 @@ body {
   --button-primary-bg: var(--link-color);
   --button-primary-text: #fff;
   --button-primary-hover: #5a9bc4;
+  --error-color: #ff6b6b;
 }
 
 body {

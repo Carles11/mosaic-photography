@@ -274,6 +274,26 @@
   margin-top: 1rem;
 }
 
+.errorInput {
+  border-color: var(--error-color) !important;
+  box-shadow: 0 0 0 2px var(--error-color) !important;
+}
+
+.errorMessage {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--error-color);
+  opacity: 0.9;
+}
+
+.hintText {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+
 @media (max-width: 768px) {
   .page {
     padding: 1.5rem 1.2rem 3rem;
