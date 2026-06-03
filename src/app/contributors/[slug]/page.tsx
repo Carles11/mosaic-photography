@@ -1,31 +1,45 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getContributorBySlug } from "@/utils/fetchContributorsSSR";
 import styles from "./ContributorDetail.module.css";
-
+import {
+  fetchAllContributorSlugsSSR,
+  fetchContributorBySlugSSR,
+} from "@/utils/fetchContributorBySlugSSR";
+import PhotographerGalleryZoom from "@/components/gallery/PhotographerGalleryZoom";
 type ContributorPageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export async function generateStaticParams() {
+  const slugs = await fetchAllContributorSlugsSSR();
+
+  return slugs.map((slug) => ({
+    slug,
+  }));
+}
 
 export async function generateMetadata({
   params,
 }: ContributorPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const contributor = await getContributorBySlug(slug);
+  const contributor = await fetchContributorBySlugSSR(slug);
 
   if (!contributor) {
     return {
       title: "Contributor – Mosaic Contributors",
-      description: "Contributor profile on Mosaic Photography.",
+      description:
+        "Contributor gallery on Mosaic Photography. Browse photographs, collections and public domain works.",
     };
   }
 
+  const description = `${contributor.name} contributor gallery on Mosaic Photography. Browse photographs, collections and public domain works.`;
+
   return {
     title: `${contributor.name} – Mosaic Contributors`,
-    description: "Contributor profile on Mosaic Photography.",
+    description,
     openGraph: {
       title: `${contributor.name} – Mosaic Contributors`,
-      description: "Contributor profile on Mosaic Photography.",
+      description,
     },
   };
 }
@@ -40,7 +54,7 @@ export default async function ContributorDetailPage({
   const { slug } = await params;
   if (!slug) return notFound();
 
-  const contributor = await getContributorBySlug(slug);
+  const contributor = await fetchContributorBySlugSSR(slug);
   if (!contributor) return notFound();
 
   return (
@@ -112,8 +126,18 @@ export default async function ContributorDetailPage({
       </section>
 
       <section className={styles.galleryPlaceholder}>
-        <h2 className={styles.sectionTitle}>Gallery coming soon</h2>
+        <h2 className={styles.sectionTitle}>
+          Gallery ({contributor.images?.length ?? 0})
+        </h2>
       </section>
+      <PhotographerGalleryZoom
+        images={(contributor.images ?? []).map((img) => ({
+          ...img,
+          url:
+            img.s3Progressive?.[0]?.url ??
+            "/favicons/android-chrome-512x512.png",
+        }))}
+      />
     </main>
   );
 }

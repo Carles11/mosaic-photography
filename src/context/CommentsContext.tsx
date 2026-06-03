@@ -88,11 +88,16 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
       .filter((id) => !isNaN(id));
     if (numericIds.length === 0) return;
     try {
+      console.log("loadCommentCountsBatch imageIds", imageIds);
+      console.log("numericIds", numericIds);
       // This fetches all comment rows for the given image IDs
       const { data, error } = await supabase
         .from("comments")
         .select("image_id")
         .in("image_id", numericIds);
+
+      console.log("comment count query result", data);
+      console.log("comment count query error", error);
 
       if (error) throw error;
 
@@ -124,7 +129,7 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
     }
     if (
       loadingRef.current[imageId] ||
-      commentsRef.current[imageId] !== undefined ||
+      // commentsRef.current[imageId] !== undefined ||
       activeRequestsRef.current.has(imageId)
     ) {
       return;
@@ -143,6 +148,7 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
         setLoading((prev) => ({ ...prev, [imageId]: false }));
         return;
       }
+      console.log("Loading comments for image:", imageId);
 
       const { data: commentsData, error } = await supabase
         .from("comments")
@@ -158,6 +164,8 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
         .eq("image_id", numericImageId)
         .order("created_at", { ascending: true });
 
+      console.log("Comments returned:", commentsData);
+      console.log("Comments error:", error);
       if (error) {
         setComments((prev) => ({ ...prev, [imageId]: [] }));
         activeRequestsRef.current.delete(imageId);

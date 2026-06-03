@@ -5,6 +5,9 @@ export type Contributor = {
   name: string;
   bio: string | null;
   description: string | null;
+  email: string | null;
+  submission_notes: string | null;
+  default_license_url: string | null;
   avatar_url: string | null;
   website: string | null;
   instagram: string | null;

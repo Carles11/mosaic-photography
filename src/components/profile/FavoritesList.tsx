@@ -88,28 +88,69 @@ export default function FavoritesList({
     }
     setImagesLoading(true);
     try {
-      const imageIds = Array.from(favorites);
+      const imageIds = Array.from(favorites).map(Number);
 
-      const { data: images, error } = await supabase
-        .from("images_resize")
-        .select(
-          "id, base_url, filename, author, title, description, orientation,created_at, width, height, year, print_quality",
-        )
-        .in("id", imageIds);
+      const regularIds = imageIds.filter((id) => id > 0);
+      const contributorIds = imageIds.filter((id) => id < 0);
 
-      if (error) {
-        console.error("Error loading favorite images:", error);
-        setImagesLoading(false);
-        return;
+      const [regularResult, contributorResult] = await Promise.all([
+        regularIds.length
+          ? supabase
+              .from("images_resize")
+              .select(
+                "id, base_url, filename, author, title, description, orientation, created_at, width, height, year, print_quality",
+              )
+              .in("id", regularIds)
+          : Promise.resolve({ data: [] }),
+
+        contributorIds.length
+          ? supabase
+              .from("contributor_images")
+              .select(
+                "image_id, base_url, filename, title, description, created_at, width, height, year, print_quality",
+              )
+              .in("image_id", contributorIds)
+          : Promise.resolve({ data: [] }),
+      ]);
+
+      const contributorImages =
+        contributorResult.data?.map((img) => ({
+          ...img,
+          id: String(img.image_id),
+          author: "Contributor",
+          orientation:
+            img.width > img.height
+              ? "horizontal"
+              : img.height > img.width
+                ? "vertical"
+                : "square",
+        })) ?? [];
+
+      const allImages = [...(regularResult.data ?? []), ...contributorImages];
+
+      if ("error" in regularResult && regularResult.error) {
+        console.error(
+          "Error loading regular favorite images:",
+          regularResult.error,
+        );
       }
 
-      if (images) {
-        const favoriteImagesData: FavoriteImageData[] = images.map((image) => ({
-          ...image,
-          favoriteId: image.id,
-          width: image.width ?? 1920,
-          height: image.height ?? 1080,
-        }));
+      if ("error" in contributorResult && contributorResult.error) {
+        console.error(
+          "Error loading contributor favorite images:",
+          contributorResult.error,
+        );
+      }
+
+      if (allImages) {
+        const favoriteImagesData: FavoriteImageData[] = allImages.map(
+          (image) => ({
+            ...image,
+            favoriteId: String(image.id),
+            width: image.width ?? 1920,
+            height: image.height ?? 1080,
+          }),
+        );
 
         setFavoriteImages(favoriteImagesData);
       }

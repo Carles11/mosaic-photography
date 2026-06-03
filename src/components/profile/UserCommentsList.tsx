@@ -74,42 +74,87 @@ export default function UserCommentsList() {
             commentsData
               .map((c) => c.image_id)
               .filter(Boolean)
-              .map((id) => String(id))
+              .map((id) => String(id)),
           ),
         ];
 
-        const imageMap = new Map<string, ImageData>();
-        if (imageIds.length > 0) {
-          const { data: imagesData, error: imagesError } = await supabase
-            .from("images_resize")
-            .select(
-              "id, title, base_url, filename, author, description, created_at, width, height, orientation"
-            )
-            .in("id", imageIds);
+        const numericIds = imageIds.map(Number);
 
-          if (imagesError) {
-            console.error("Error loading image details:", imagesError);
-          } else if (imagesData) {
-            imagesData.forEach((image) => {
-              imageMap.set(String(image.id), {
-                id: String(image.id),
-                url:
-                  image.base_url && image.filename
-                    ? `${image.base_url}/w800/${image.filename}`
-                    : "/favicons/android-chrome-512x512.png",
-                base_url: image.base_url,
-                filename: image.filename,
-                author: image.author || "Unknown",
-                title: image.title || "",
-                description: image.description || "",
-                created_at: image.created_at || "",
-                width: image.width,
-                height: image.height,
-                orientation: image.orientation,
-              });
-            });
-          }
+        const regularIds = numericIds.filter((id) => id > 0);
+        const contributorIds = numericIds.filter((id) => id < 0);
+
+        const imageMap = new Map<string, ImageData>();
+        console.log("regularIds", regularIds);
+
+        const [regularResult, contributorResult] = await Promise.all([
+          regularIds.length
+            ? supabase
+                .from("images_resize")
+                .select(
+                  "id, title, base_url, filename, author, description, created_at, width, height, orientation",
+                )
+                .in("id", regularIds)
+            : Promise.resolve({ data: [], error: null }),
+          contributorIds.length
+            ? supabase
+                .from("contributor_images")
+                .select(
+                  "image_id, title, base_url, filename, attribution, description, created_at, width, height",
+                )
+                .in("image_id", contributorIds)
+            : Promise.resolve({ data: [], error: null }),
+        ]);
+        console.log("imagesData", regularResult.data);
+        console.log("imagesError", regularResult.error);
+        if (regularResult.error) {
+          console.error("Error loading regular images:", regularResult.error);
         }
+
+        if (contributorResult.error) {
+          console.error(
+            "Error loading contributor images:",
+            contributorResult.error,
+          );
+        }
+
+        regularResult.data?.forEach((image) => {
+          imageMap.set(String(image.id), {
+            id: String(image.id),
+            url: `${image.base_url}/w800/${image.filename}`,
+            base_url: image.base_url,
+            filename: image.filename,
+            author: image.author || "Unknown",
+            title: image.title || "",
+            description: image.description || "",
+            created_at: image.created_at || "",
+            width: image.width,
+            height: image.height,
+            orientation: image.orientation,
+          });
+        });
+
+        contributorResult.data?.forEach((image) => {
+          imageMap.set(String(image.image_id), {
+            id: String(image.image_id),
+            url: `${image.base_url}/w800/${image.filename}`,
+            base_url: image.base_url,
+            filename: image.filename,
+            author: image.attribution || "Contributor",
+            title: image.title || "",
+            description: image.description || "",
+            created_at: image.created_at || "",
+            width: image.width,
+            height: image.height,
+            orientation:
+              image.width && image.height
+                ? image.width > image.height
+                  ? "horizontal"
+                  : image.height > image.width
+                    ? "vertical"
+                    : "square"
+                : undefined,
+          });
+        });
 
         // 3. Attach image info to comments
         const transformedComments: UserCommentWithImage[] = commentsData.map(
@@ -124,7 +169,7 @@ export default function UserCommentsList() {
               image_author: imageDetails?.author,
               imageData: imageDetails,
             };
-          }
+          },
         );
 
         if (reset) {
@@ -140,7 +185,7 @@ export default function UserCommentsList() {
         setLoading(false);
       }
     },
-    [user]
+    [user],
   );
 
   useEffect(() => {
@@ -182,8 +227,8 @@ export default function UserCommentsList() {
           prev.map((comment) =>
             comment.id === commentId
               ? { ...comment, content: editContent.trim() }
-              : comment
-          )
+              : comment,
+          ),
         );
         setEditingComment(null);
         setEditContent("");
@@ -222,7 +267,7 @@ export default function UserCommentsList() {
                   console.error("Error deleting comment:", error);
                 } else {
                   setComments((prev) =>
-                    prev.filter((comment) => comment.id !== commentId)
+                    prev.filter((comment) => comment.id !== commentId),
                   );
                   toast.success("Comment deleted.");
                 }

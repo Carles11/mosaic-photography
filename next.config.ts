@@ -43,6 +43,26 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
+
+  // ---------------------------------------------------------------------------
+  // Rewrite: /photographers/[surname].md → /api/photographers/[surname]
+  //
+  // This lets AI search engines and agents fetch a plain-text Markdown biography
+  // for any photographer without rendering the full React page. The URL pattern
+  // is documented in llms.txt so crawlers know to use it.
+  //
+  // Next.js treats URLs with dots as static file requests and skips routing,
+  // so a rewrite here is the only reliable way to intercept .md URLs.
+  // ---------------------------------------------------------------------------
+  async rewrites() {
+    return [
+      {
+        source: "/photographers/:surname.md",
+        destination: "/api/photographers/:surname",
+      },
+    ];
+  },
+
   async headers() {
     return [
       {
@@ -83,7 +103,7 @@ const nextConfig: NextConfig = {
                 // allow clarity collection endpoints
                 "https://www.clarity.ms",
                 "https://z.clarity.ms",
-                "https://l.clarity.ms", // <-- newly added
+                "https://l.clarity.ms",
               ].join(" "),
             ].join(" "),
           },

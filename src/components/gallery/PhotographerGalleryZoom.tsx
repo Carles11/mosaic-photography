@@ -22,6 +22,7 @@ import styles from "./photographerGalleryZoom.module.css";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import toast from "react-hot-toast";
 import { sendGTMEvent } from "@next/third-parties/google";
+import { useComments } from "@/context/CommentsContext";
 
 const Lightbox = lazy(() => import("yet-another-react-lightbox"));
 
@@ -36,7 +37,15 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
   const { currentModal, open: openModal } = useModal();
   const lastLightboxIndex = useRef<number | null>(null);
   const prevModal = useRef<string>(null);
+  const { loadCommentCountsBatch } = useComments();
 
+  useEffect(() => {
+    const imageIds = images?.map((img) => String(img.id));
+
+    if (imageIds && imageIds.length > 0) {
+      loadCommentCountsBatch(imageIds);
+    }
+  }, [images, loadCommentCountsBatch]);
   // Defensive mapping: ensure each image always has a valid url and s3Progressive, and created_at
   const imagesWithUrl = useMemo(
     () =>
