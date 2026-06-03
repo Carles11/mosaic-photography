@@ -22,7 +22,6 @@
 
 .intro {
   padding: 0;
-  max-width: 700px;
   line-height: 1.7;
   color: var(--text-color);
   opacity: 0.85;
