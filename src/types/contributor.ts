@@ -1,3 +1,5 @@
+import { ImageData } from "./gallery";
+
 // Contributor type
 export type Contributor = {
   id: string;
@@ -17,4 +19,50 @@ export type Contributor = {
   source_type: string | null;
   created_at: string;
   updated_at: string;
+  featuredImage?: ContributorImage | null;
 };
+
+export interface ContributorImage {
+  id: string; // uuid
+
+  contributor_id: string;
+
+  image_id?: number;
+
+  filename: string;
+  base_url: string;
+  s3Progressive?: Array<{
+    url: string;
+    width: number;
+  }>;
+
+  title?: string;
+  description?: string;
+
+  year?: number;
+
+  width?: number;
+  height?: number;
+
+  license?: string;
+  license_url?: string;
+
+  attribution?: string;
+  source_url?: string;
+
+  sort_order?: number;
+
+  featured?: boolean;
+  published?: boolean;
+
+  source_identifier?: string;
+
+  print_quality?: string;
+
+  nudity?: boolean;
+
+  created_at?: string;
+  updated_at?: string;
+
+  url?: string;
+}

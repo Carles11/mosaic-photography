@@ -17,10 +17,10 @@ export async function getGeneralAffiliateResources(): Promise<
 
   if (error) {
     console.error("Error fetching general affiliate resources:", error);
-    throw error;
+    return [];
   }
 
-  const shuffledData = shuffleArray(data);
+  const shuffledData = shuffleArray(data ?? []);
 
   return shuffledData as AffiliateProductWithAdvertiser[];
 }
@@ -38,7 +38,7 @@ export async function getAffiliateProductsByAuthor(
       `Error fetching affiliate products for author ${author}:`,
       error,
     );
-    throw error;
+    return [];
   }
 
   return data as AffiliateProductWithAdvertiser[];
@@ -58,7 +58,7 @@ export async function getToolkitDataBySlug(slug: string) {
 
   if (error) {
     console.error(`Error fetching toolkit data for slug ${slug}:`, error);
-    throw error;
+    return null;
   }
 
   return data;

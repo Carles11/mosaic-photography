@@ -37,6 +37,40 @@
   padding-left: 1rem;
 }
 
+.infoSection {
+  margin-bottom: 4rem;
+}
+
+.infoCard {
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 1.5rem;
+  line-height: 1.7;
+}
+
+.infoCard p:last-child {
+  margin-bottom: 0;
+}
+
+.infoList {
+  margin-top: 1rem;
+  padding-left: 1.2rem;
+}
+
+.infoList li {
+  margin-bottom: 0.6rem;
+}
+
+.cardImage {
+  object-fit: cover;
+  transition: transform 0.7s ease;
+}
+
+.card:hover .cardImage {
+  transform: scale(1.06);
+}
+
 .avatarPlaceholder {
   width: 56px;
   height: 56px;
@@ -111,12 +145,12 @@
 .formContainer {
   margin-top: 1.5rem;
   overflow: hidden;
-  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   max-height: 0;
+  transition: max-height 0.4s ease;
 }
 
 .formContainerOpen {
-  max-height: 800px;
+  max-height: none;
   overflow: visible;
 }
 
@@ -182,6 +216,47 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.2rem;
+}
+
+.licenseNotice {
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.licenseNotice h4 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.licenseNotice p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.checkboxGroup {
+  margin-bottom: 1.5rem;
+}
+
+.checkboxGroup label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  line-height: 1.5;
+  text-transform: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.checkboxGroup input[type="checkbox"] {
+  width: auto;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
 }
 
 .submitButton {
@@ -333,11 +408,6 @@
     margin-top: 1rem;
   }
 
-  .formContainerOpen {
-    max-height: none;
-    overflow: visible;
-  }
-
   .applicationForm {
     padding: 1.25rem;
     border-radius: 20px;
@@ -422,12 +492,6 @@
 }
 
 @media (max-width: 768px) {
-  /* Improve scrolling within form */
-  .formContainerOpen {
-    max-height: none;
-    overflow: visible;
-  }
-
   .applicationForm {
     max-height: 70vh;
     overflow-y: auto;

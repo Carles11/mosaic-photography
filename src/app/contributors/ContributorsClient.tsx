@@ -5,7 +5,7 @@ import { useState } from "react";
 import styles from "./Contributors.module.css";
 
 export default function ContributorClient() {
-  const [isFormOpen, setIsFormOpen] = useState(false); // Changed to false
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,12 +15,15 @@ export default function ContributorClient() {
     imageGallery: "",
     message: "",
   });
+  const [rightsAccepted, setRightsAccepted] = useState(false);
+
   const [errors, setErrors] = useState({
     email: "",
     instagram: "",
     portfolio: "",
     imageGallery: "",
   });
+  const [rightsError, setRightsError] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -195,6 +198,15 @@ export default function ContributorClient() {
       formattedImageGallery = galleryValidation.formatted;
     }
 
+    if (!rightsAccepted) {
+      setRightsError(
+        "Please confirm that you own or control the rights to the photographs you may submit.",
+      );
+      return;
+    }
+
+    setRightsError("");
+
     if (hasError) return;
 
     // Build formatted email body
@@ -223,6 +235,14 @@ A new photographer is interested in joining the archive.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ${formData.message || "No message provided."}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RIGHTS CONFIRMATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Applicant confirmed ownership or control of rights
+✓ Applicant confirmed authority to license submitted photographs
+✓ Applicant confirmed required permissions have been obtained
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   APPLICATION DETAILS
@@ -262,7 +282,18 @@ Mosaic Submission System
 
   return (
     <section className={styles.ctaSection}>
-      <h3>Join the Archive</h3>
+      <h3>Share Your Work</h3>
+
+      <p>
+        Mosaic welcomes photographers whose work aligns with the spirit of the
+        archive: thoughtful image-making, strong visual storytelling, and a
+        respect for photographic heritage.
+      </p>
+
+      <p>
+        Contributors retain copyright to their work and choose the license under
+        which their images are made available.
+      </p>
       <p>
         Are you an analogue photographer? We are looking for submissions that
         honor the classic medium.
@@ -405,11 +436,45 @@ Mosaic Submission System
               name="message"
               value={formData.message}
               onChange={handleChange}
-              placeholder="Tell us anything about you and your analogue work — artistic statement, favorite cameras, formats, or why you love shooting on film..."
+              placeholder="Tell us anything about you, your background, and your analogue work — artistic statement, favorite cameras, formats, or why you love shooting on film..."
               rows={4}
             />
           </div>
+          <div className={styles.licenseNotice}>
+            <h4>Rights & Licensing</h4>
 
+            <p>
+              By applying, you confirm that any photographs later submitted to
+              Mosaic are your own work or that you have the necessary rights to
+              license them.
+            </p>
+
+            <p>
+              You also confirm that publication of the photographs does not
+              knowingly infringe the rights of third parties and that any
+              required permissions have been obtained where applicable.
+            </p>
+          </div>
+
+          <div className={styles.checkboxGroup}>
+            <label>
+              <input
+                type="checkbox"
+                checked={rightsAccepted}
+                onChange={(e) => {
+                  setRightsAccepted(e.target.checked);
+                  setRightsError("");
+                }}
+              />
+              I confirm that I own or control the rights to the photographs I
+              may submit and that I have authority to grant Mosaic permission to
+              display them under the selected license.
+            </label>
+
+            {rightsError && (
+              <small className={styles.errorMessage}>{rightsError}</small>
+            )}
+          </div>
           <button type="submit" className={styles.submitButton}>
             Preview & send application
           </button>

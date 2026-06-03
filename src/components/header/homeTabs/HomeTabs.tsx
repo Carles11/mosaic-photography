@@ -12,7 +12,7 @@ const TABS = [
   },
   { label: "Selection", anchor: "#toolkits", event: "toolkitsTABClicked" },
   {
-    label: "Contributors",
+    label: "Community",
     anchor: "#contributors",
     event: "contributorsTABClicked",
   },

@@ -1,10 +1,9 @@
 import { supabaseServerClient } from "@/lib/supabaseServerClient";
-import { Contributor } from "@/types/contributor";
-import { ImageData } from "@/types/gallery";
+import { Contributor, ContributorImage } from "@/types/contributor";
 import { getAllS3Urls } from "@/utils/imageResizingS3";
 
 export type ContributorWithFeatured = Contributor & {
-  featuredImage: ImageData | null;
+  featuredImage: ContributorImage | null;
 };
 
 /**
@@ -44,7 +43,7 @@ export async function fetchContributorsWithFeaturedSSR(): Promise<
         }
 
         const img = images[0];
-        const featuredImage: ImageData = {
+        const featuredImage: ContributorImage = {
           ...img,
           id: img.image_id,
           author: contributor.name,

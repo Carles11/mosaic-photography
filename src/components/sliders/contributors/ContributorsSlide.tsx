@@ -52,7 +52,7 @@ const ContributorsSlide: React.FC<ContributorsSlideProps> = ({
     <div className={styles.contributorsSlideContainer}>
       <div className={styles.sectionHeader}>
         <h2 className={styles.subTitle} id="contributors-title">
-          MOSAIC&apos;S CONTRIBUTORS
+          FROM THE MOSAIC&apos;S COMMUNITY
         </h2>
         <h4 className={styles.subTitle}>
           <Link href="/contributors">Learn how to contribute →</Link>
