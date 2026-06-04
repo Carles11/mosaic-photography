@@ -8,6 +8,7 @@ import {
 import PhotographerGalleryZoom from "@/components/gallery/PhotographerGalleryZoom";
 import Image from "next/image";
 import { fetchContributorBySlugWithFeaturedSSR } from "@/utils/fetchContributorBySlugWithFeaturedSSR";
+import ShareButtons from "@/components/buttons/ShareButtons";
 
 type ContributorPageProps = {
   params: Promise<{ slug: string }>;
@@ -74,7 +75,11 @@ export default async function ContributorDetailPage({
   if (!contributor) return notFound();
 
   const heroImage = contributor.featuredImage;
+  // Add this inside your ContributorDetailPage component, before the return
+  const shareUrl = `https://www.mosaic.photography/community/photography/${slug}`;
+  const shareText = `${contributor.name} on Mosaic Photography`;
 
+  // Then in the JSX, add this after the <h2> in aboutSection:
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
@@ -117,6 +122,7 @@ export default async function ContributorDetailPage({
 
       <section className={styles.aboutSection}>
         <h2>About the collection</h2>
+        <ShareButtons url={shareUrl} title={shareText} />
 
         {contributor.description && <p>{contributor.description}</p>}
 

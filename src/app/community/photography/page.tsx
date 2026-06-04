@@ -5,6 +5,7 @@ import { fetchContributorsWithFeaturedSSR } from "@/utils/fetchContributorsWithF
 import PhotographyClientForm from "./PhotographyClientForm";
 import styles from "./PhotographyCommunity.module.css";
 import Image from "next/image";
+import ShareButtons from "@/components/buttons/ShareButtons";
 
 export const metadata: Metadata = {
   title: "Community Contributors – Mosaic Photography",
@@ -24,7 +25,9 @@ export const metadata: Metadata = {
 
 export default async function ContributorsPage() {
   const contributors = await fetchContributorsWithFeaturedSSR();
-
+  const shareUrl = "https://www.mosaic.photography/community/photography";
+  const shareText =
+    "Mosaic Photography Community – Contemporary photographers with a timeless eye";
   return (
     <main className={styles.page}>
       <header className={styles.header}>
@@ -50,6 +53,7 @@ export default async function ContributorsPage() {
           the visual heritage of our archive. Digital work is welcome when it
           captures the spirit of vintage classic photography.
         </p>
+        <ShareButtons url={shareUrl} title={shareText} />
       </header>
 
       <section className={styles.infoSection}>

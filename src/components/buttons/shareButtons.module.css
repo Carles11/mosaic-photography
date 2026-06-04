@@ -1,7 +1,8 @@
 .shareButtonsContainer {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: 1fr;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
   gap: 1rem;
-  margin-top: 2rem;
+  margin: 2rem;
 }
