@@ -46,6 +46,8 @@ export interface UniversalGalleryImage {
   height?: number;
 
   orientation?: "vertical" | "horizontal" | "square";
+  mosaicType?: "normal" | "large" | "wide" | "tall";
+
   gender?: string;
   color?: string;
   nudity?: string | boolean | null;
