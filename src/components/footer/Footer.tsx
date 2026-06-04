@@ -70,7 +70,7 @@ const Footer: React.FC = () => {
           <span className={styles.separator}> | </span>
           <a
             className="fancy-link"
-            href="https://www.instagram.com/analogue_carles"
+            href="https://www.instagram.com/mosaic.photography.gallery"
             target="_blank"
             rel="noopener noreferrer"
           >
