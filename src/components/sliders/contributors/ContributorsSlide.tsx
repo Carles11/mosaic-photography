@@ -52,16 +52,16 @@ const ContributorsSlide: React.FC<ContributorsSlideProps> = ({
     <div className={styles.contributorsSlideContainer}>
       <div className={styles.sectionHeader}>
         <h2 className={styles.subTitle} id="contributors-title">
-          FROM THE MOSAIC&apos;S COMMUNITY
+          FROM THE COMMUNITY
         </h2>
         <h4 className={styles.subTitle}>
-          <Link href="/contributors">Learn how to contribute →</Link>
+          <Link href="/contributors">Add your piece to the mosaic →</Link>
         </h4>
       </div>
 
       <p className={styles.sectionIntro}>
-        Contemporary photographers who have chosen to share their work through
-        Mosaic.
+        A growing circle of contemporary photographers who believe the silver
+        process still has something to say.
       </p>
 
       <div className={styles.topRow}>
@@ -108,7 +108,7 @@ const ContributorsSlide: React.FC<ContributorsSlideProps> = ({
           href="/contributors"
           className={`no-fancy-link ${styles.seeAllLink}`}
         >
-          How to contribute →
+          Contemporary voices. Analogue hearts. →
         </Link>
       </div>
     </div>

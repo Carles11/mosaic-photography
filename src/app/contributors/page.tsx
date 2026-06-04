@@ -23,17 +23,26 @@ export default async function ContributorsPage() {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <h1 className={styles.pageTitle}>Community contributors</h1>
+        <h1 className={styles.pageTitle}>The community</h1>
+        <h2 className={styles.pageSubTitle}>
+          Contemporary photographers and visual artists who share selected work
+          through Mosaic Photography.
+        </h2>
+
         <p className={styles.intro}>
-          Contemporary photographers and creators who have chosen to share
-          selected work through Mosaic Photography.
+          Unlike the public domain archive, these photographs are contemporary
+          work — owned by the photographers who made them, presented here by
+          their choice. Mosaic displays them. The photographers keep everything
+          else. Their work reflects a similar appreciation for craftsmanship,
+          visual storytelling, and photographic heritage.
         </p>
 
         <p className={styles.intro}>
-          Unlike the main historical public domain archive, contributor
-          collections contain contemporary photographs that remain under the
-          copyright of their creators. Community contributors retain ownership
-          of their work and choose how it may be licensed and distributed.
+          Mosaic is particularly interested in photographers whose work reflects
+          a thoughtful, timeless approach to image-making. We are especially
+          drawn to analogue photography, traditional processes, documentary
+          work, portraiture, artistic nude photography, and projects that
+          resonate with the visual heritage represented throughout the archive.
         </p>
       </header>
 
@@ -44,30 +53,19 @@ export default async function ContributorsPage() {
 
         <div className={styles.infoCard}>
           <p>
-            Mosaic is best known for preserving and sharing public domain
-            photography. Community contributor collections are different.
-          </p>
-
-          <p>
-            Photographers retain ownership of their images and grant Mosaic
-            permission to display selected works within the archive.
+            Unlike the public domain archive, these photographs are contemporary
+            work — owned by the photographers who made them, presented here by
+            their choice. Mosaic displays them. The photographers keep
+            everything else.
           </p>
 
           <ul className={styles.infoList}>
+            <li>Your photographs remain yours, always.</li>
+            <li>You choose how others may use them.</li>
+            <li>Mosaic never claims ownership of your work.</li>
             <li>
-              Community contributors remain the copyright holders of their
-              photographs.
-            </li>
-            <li>
-              Community contributors choose the license under which their work
-              is made available.
-            </li>
-            <li>
-              Mosaic does not claim ownership of community contributor images.
-            </li>
-            <li>
-              Every community contributor confirms they have the necessary
-              rights to submit and license their work.
+              Every photographer confirms they hold the rights to what they
+              submit.
             </li>
           </ul>
         </div>

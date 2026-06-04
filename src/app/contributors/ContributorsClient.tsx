@@ -15,6 +15,8 @@ export default function ContributorClient() {
     portfolio: "",
     imageGallery: "",
     message: "",
+    workType: "",
+    nudity: "",
   });
   const [rightsAccepted, setRightsAccepted] = useState(false);
 
@@ -24,6 +26,9 @@ export default function ContributorClient() {
     portfolio: "",
     imageGallery: "",
     confirmEmail: "",
+    licenseAgreement: "",
+    workType: "",
+    nudity: "",
   });
   const [rightsError, setRightsError] = useState("");
 
@@ -49,6 +54,8 @@ export default function ContributorClient() {
           portfolio: "",
           imageGallery: "",
           message: "",
+          workType: "",
+          nudity: "",
         },
       );
 
@@ -210,6 +217,9 @@ export default function ContributorClient() {
       instagram: "",
       portfolio: "",
       imageGallery: "",
+      licenseAgreement: "",
+      workType: "",
+      nudity: "",
     });
 
     let hasError = false;
@@ -237,6 +247,7 @@ export default function ContributorClient() {
       hasError = true;
     }
 
+    // Validate confirm email
     if (formData.email.trim() !== formData.confirmEmail.trim()) {
       setErrors((prev) => ({
         ...prev,
@@ -271,10 +282,34 @@ export default function ContributorClient() {
     const galleryValidation = validateImageGallery(formData.imageGallery);
     if (!galleryValidation.isValid) {
       setErrors((prev) => ({ ...prev, imageGallery: galleryValidation.error }));
+      firstInvalidField ??= "imageGallery";
       hasError = true;
     } else {
       formattedImageGallery = galleryValidation.formatted;
     }
+
+    // Validate work type
+    if (!formData.workType) {
+      setErrors((prev) => ({
+        ...prev,
+        workType:
+          "Please select the type of work you are interested in contributing",
+      }));
+      firstInvalidField ??= "workType";
+      hasError = true;
+    }
+
+    // Validate nudity
+    if (!formData.nudity) {
+      setErrors((prev) => ({
+        ...prev,
+        nudity: "Please select whether your work includes artistic nudity",
+      }));
+      firstInvalidField ??= "nudity";
+      hasError = true;
+    }
+
+    // Validate rights agreement
 
     if (!rightsAccepted) {
       setRightsError(
@@ -317,7 +352,7 @@ export default function ContributorClient() {
 
 Hello Mosaic Team,
 
-I am interested in joining the archive.
+I am interested in joining Mosaic as a photographer.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   APPLICANT DETAILS
@@ -329,6 +364,8 @@ I am interested in joining the archive.
 • Instagram: ${formattedInstagram || "Not provided"}
 • Portfolio: ${formattedPortfolio || "Not provided"}
 • Image Gallery / Link: ${formattedImageGallery || "Not provided"}
+• Primarily interested in contributing: ${formData.workType || "Not specified"}
+• Artistic nudity: ${formData.nudity || "Not specified"}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   ARTISTIC STATEMENT
@@ -388,8 +425,8 @@ ${formattedPortfolio || ""}
         which their images are made available.
       </p>
       <p>
-        Are you an analogue photographer? We are looking for submissions that
-        honor the classic medium.
+        Especially — but not only — for photographers working with film,
+        alternative processes, or anything that takes time to make.
       </p>
       <button
         onClick={() => setIsFormOpen(!isFormOpen)}
@@ -421,7 +458,6 @@ ${formattedPortfolio || ""}
               placeholder="e.g., Jane Doe"
             />
           </div>
-
           <div className={styles.formGroup}>
             <label htmlFor="email">Email address *</label>
             <input
@@ -462,7 +498,6 @@ ${formattedPortfolio || ""}
               </small>
             )}
           </div>
-
           <div className={styles.formGroup}>
             <label htmlFor="location">Location</label>
             <input
@@ -474,7 +509,6 @@ ${formattedPortfolio || ""}
               placeholder="City, Country"
             />
           </div>
-
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
               <label htmlFor="instagram">Instagram</label>
@@ -524,7 +558,6 @@ ${formattedPortfolio || ""}
               </small>
             </div>
           </div>
-
           <div className={styles.formGroup}>
             <label htmlFor="imageGallery">
               Link to where images can be found
@@ -551,18 +584,78 @@ ${formattedPortfolio || ""}
               your work
             </small>
           </div>
+          {
+            // New fields for work type and artistic nudity
+          }
+          <div className={styles.formGroup}>
+            <label>Work type *</label>
+            <div className={styles.radioGroup}>
+              {["Analogue", "Digital", "Both"].map((option, index) => (
+                <label key={option} className={styles.radioOption}>
+                  <input
+                    type="radio"
+                    name="workType"
+                    value={option}
+                    checked={formData.workType === option}
+                    onChange={handleChange}
+                    // Assign ref only to the first input in the group
+                    ref={
+                      index === 0
+                        ? (el) => {
+                            fieldRefs.current.workType = el;
+                          }
+                        : undefined
+                    }
+                  />
+                  <span>{option}</span>
+                </label>
+              ))}
+            </div>
+            {errors.workType && (
+              <small className={styles.errorMessage}>{errors.workType}</small>
+            )}
+          </div>
 
           <div className={styles.formGroup}>
+            <label>Nudity preference *</label>
+            <div className={styles.radioGroup}>
+              {["Artistic nude", "Non-nude", "Both"].map((option, index) => (
+                <label key={option} className={styles.radioOption}>
+                  <input
+                    type="radio"
+                    name="nudity"
+                    value={option}
+                    checked={formData.nudity === option}
+                    onChange={handleChange}
+                    // Assign ref only to the first input in the group
+                    ref={
+                      index === 0
+                        ? (el) => {
+                            fieldRefs.current.nudity = el;
+                          }
+                        : undefined
+                    }
+                  />
+                  <span>{option}</span>
+                </label>
+              ))}
+            </div>
+            {errors.nudity && (
+              <small className={styles.errorMessage}>{errors.nudity}</small>
+            )}
+          </div>
+          <div className={styles.formGroup}>
             <label htmlFor="message">
-              Your experience with film photography, preferred gear and
-              formats...
+              Tell us about your work — what you shoot, how you shoot it, and
+              why it matters to you. Cameras, formats, processes, obsessions.
+              Whatever feels right.
             </label>
             <textarea
               id="message"
               name="message"
               value={formData.message}
               onChange={handleChange}
-              placeholder="Tell us anything about you, your background, and your analogue work — artistic statement, favorite cameras, formats, or why you love shooting on film..."
+              placeholder="Share anything about you, your background, and your analogue work — artistic statement, favorite cameras, formats, or why you love shooting on film..."
               rows={4}
             />
           </div>
@@ -581,7 +674,6 @@ ${formattedPortfolio || ""}
               required permissions have been obtained where applicable.
             </p>
           </div>
-
           <div className={styles.checkboxGroup}>
             <label>
               <input
@@ -623,6 +715,8 @@ ${formattedPortfolio || ""}
                 portfolio: "",
                 imageGallery: "",
                 message: "",
+                workType: "",
+                nudity: "",
               });
 
               setRightsAccepted(false);
@@ -633,6 +727,9 @@ ${formattedPortfolio || ""}
                 instagram: "",
                 portfolio: "",
                 imageGallery: "",
+                licenseAgreement: "",
+                workType: "",
+                nudity: "",
               });
 
               setRightsError("");
