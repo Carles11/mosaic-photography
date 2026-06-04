@@ -6,8 +6,9 @@ import sharp from "sharp";
 // CONFIG
 // ==================================================
 
-const CONTRIBUTOR = "akiuonsen";
+const CONTRIBUTOR = "elcarles";
 
+// DO NOT CHANGE THIS PATH. MOVE YOUR photographer named folder with IMAGES TO THIS LOCATION INSTEAD.
 const ROOT = "C:\\Users\\elcar\\Documents\\WEBs\\Mosaic\\Contributors";
 
 const TARGET_WIDTHS = [400, 600, 800, 1200, 1600];

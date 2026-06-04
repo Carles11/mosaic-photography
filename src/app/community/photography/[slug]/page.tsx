@@ -125,7 +125,6 @@ export default async function ContributorDetailPage({
               href={contributor.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="no-fancy-link"
             >
               Instagram →
             </a>

@@ -171,7 +171,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
               imgStyleOverride={
                 img.orientation === "horizontal"
                   ? {
-                      objectFit: "contain",
+                      objectFit: "cover",
                       width: "auto",
                       height: "100%",
                     }
