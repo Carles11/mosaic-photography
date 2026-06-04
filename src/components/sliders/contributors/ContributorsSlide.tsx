@@ -13,32 +13,43 @@ interface ContributorsSlideProps {
 }
 
 const FILTERS = [
-  { label: "All", value: "all" },
+  { label: "All", value: "mixed" },
   { label: "Nude", value: "nude" },
-  { label: "Not nude", value: "not-nude" },
+  { label: "Not nude", value: "non-nude" },
 ];
 
 const ContributorsSlide: React.FC<ContributorsSlideProps> = ({
   contributors,
 }) => {
-  const [selected, setSelected] = useState<"all" | "nude" | "not-nude">("all");
+  const [selected, setSelected] = useState<"mixed" | "nude" | "non-nude">(
+    "mixed",
+  );
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   console.log("Rendering ContributorsSlide", { contributors });
   const normalizedContributors = useMemo(
     () => contributors.filter((contributor) => contributor.slug),
     [contributors],
   );
-
   const filteredContributors = useMemo(() => {
-    if (selected === "all") return normalizedContributors;
+    switch (selected) {
+      case "mixed":
+        return normalizedContributors;
 
-    return normalizedContributors.filter((contributor) => {
-      const nudityValue = contributor.nudity ?? "non-nude";
+      case "nude":
+        return normalizedContributors.filter((contributor) => {
+          const nudityValue = contributor.nudity ?? "non-nude";
+          return nudityValue === "nude" || nudityValue === "mixed";
+        });
 
-      const isNude = nudityValue === "nude";
+      case "non-nude":
+        return normalizedContributors.filter((contributor) => {
+          const nudityValue = contributor.nudity ?? "non-nude";
+          return nudityValue === "non-nude" || nudityValue === "mixed";
+        });
 
-      return selected === "nude" ? isNude : !isNude;
-    });
+      default:
+        return normalizedContributors;
+    }
   }, [normalizedContributors, selected]);
 
   const [emblaRef] = useEmblaCarousel({
@@ -72,7 +83,7 @@ const ContributorsSlide: React.FC<ContributorsSlideProps> = ({
               type="button"
               className={selected === f.value ? styles.pillActive : styles.pill}
               onClick={() =>
-                setSelected(f.value as "all" | "nude" | "not-nude")
+                setSelected(f.value as "mixed" | "nude" | "non-nude")
               }
             >
               {f.label}
@@ -104,10 +115,7 @@ const ContributorsSlide: React.FC<ContributorsSlideProps> = ({
       )}
 
       <div className={styles.footerLinks}>
-        <Link
-          href="/community/photography"
-          className={`no-fancy-link ${styles.seeAllLink}`}
-        >
+        <Link href="/community/photography" className={`${styles.seeAllLink}`}>
           Contemporary voices. Analogue hearts. →
         </Link>
       </div>

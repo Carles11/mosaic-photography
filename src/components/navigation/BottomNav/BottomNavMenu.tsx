@@ -7,6 +7,7 @@ import { SupabaseUser } from "@/lib/supabaseClient";
 import ThemeToggle from "@/components/theme/ThemeToggle"; // Add import
 import Image from "next/image";
 import ShareButtons from "@/components/buttons/ShareButtons";
+import LogoutButton from "@/components/auth/logOutButton";
 
 interface BottomNavMenuProps {
   user?: SupabaseUser | null;
@@ -127,7 +128,6 @@ const BottomNavMenu = ({
               <ShareButtons url={shareUrl} title={shareText} />
 
               <div className={styles.menuDivider} />
-
               <button
                 className={`${styles.menuItem} ${styles.logoutItem}`}
                 onClick={() => handleActionAndClose(onLogoutClick!)}

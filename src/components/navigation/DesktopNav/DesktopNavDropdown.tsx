@@ -4,7 +4,6 @@ import Link from "next/link";
 import styles from "./DesktopNav.module.css";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import type { DesktopNavDropdownProps } from "@/types";
-import Image from "next/image";
 import ShareButtons from "@/components/buttons/ShareButtons";
 
 const DesktopNavDropdown = ({

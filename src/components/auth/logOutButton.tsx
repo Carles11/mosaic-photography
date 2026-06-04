@@ -7,9 +7,5 @@ export default function LogoutButton() {
     window.location.reload(); // Or use router.refresh()
   };
 
-  return (
-    <button onClick={handleLogout}>
-      Logout
-    </button>
-  );
+  return <button onClick={handleLogout}>Logout</button>;
 }

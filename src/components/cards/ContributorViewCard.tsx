@@ -64,6 +64,13 @@ const ContributorViewCard: React.FC<ContributorViewCardProps> = ({
           sizes="(max-width: 768px) 87vw, 280px"
           className={styles.cardImage}
         />
+        <div className={styles.nudityBadge}>
+          {contributor.nudity === "nude"
+            ? "Nude"
+            : contributor.nudity === "non-nude"
+              ? "Not nude"
+              : "Mixed"}
+        </div>
       </Link>
 
       <div className={styles.cardOverlay} />
@@ -101,17 +108,6 @@ const ContributorViewCard: React.FC<ContributorViewCardProps> = ({
           >
             Explore contributor →
           </Link>
-
-          {contributor.instagram && (
-            <a
-              href={contributor.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.instagramLink}
-            >
-              Instagram
-            </a>
-          )}
         </div>
       </div>
     </article>

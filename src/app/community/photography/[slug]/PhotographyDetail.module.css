@@ -3,6 +3,17 @@
   margin: 0 auto;
 }
 
+.backLink {
+  color: var(--text-color);
+  text-decoration: none;
+
+  transition: opacity 0.2s ease;
+}
+
+.backLink:hover {
+  opacity: 0.8;
+}
+
 .hero {
   position: relative;
   min-height: 550px;

@@ -9,6 +9,7 @@ import PhotographerGalleryZoom from "@/components/gallery/PhotographerGalleryZoo
 import Image from "next/image";
 import { fetchContributorBySlugWithFeaturedSSR } from "@/utils/fetchContributorBySlugWithFeaturedSSR";
 import ShareButtons from "@/components/buttons/ShareButtons";
+import Link from "next/link";
 
 type ContributorPageProps = {
   params: Promise<{ slug: string }>;
@@ -98,7 +99,13 @@ export default async function ContributorDetailPage({
             />
           </div>
         )}
-
+        <div>
+          <p>
+            <Link href="/community/photography" className={styles.backLink}>
+              ← Back to Photography Community
+            </Link>
+          </p>
+        </div>
         <div className={styles.heroOverlay}>
           <h1 className={styles.pageTitle}>{contributor.name}</h1>
 

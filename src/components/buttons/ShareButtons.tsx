@@ -1,17 +1,27 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import {
   EmailShareButton,
-  FacebookShareButton,
-  TwitterShareButton,
-  LinkedinShareButton,
-  WhatsappShareButton,
   EmailIcon,
+  FacebookShareButton,
   FacebookIcon,
-  TwitterIcon,
+  XShareButton,
+  XIcon,
+  LinkedinShareButton,
   LinkedinIcon,
+  RedditShareButton,
   RedditIcon,
+  PinterestShareButton,
+  PinterestIcon,
+  WhatsappShareButton,
   WhatsappIcon,
+  TelegramShareButton,
+  TelegramIcon,
+  ThreadsShareButton,
+  ThreadsIcon,
+  TumblrShareButton,
+  TumblrIcon,
 } from "react-share";
 
 import styles from "./shareButtons.module.css";
@@ -21,46 +31,122 @@ interface ShareButtonsProps {
   title: string;
 }
 
+const Tooltip = dynamic(
+  () => import("react-tooltip").then((mod) => mod.Tooltip),
+  { ssr: false },
+);
+
 const ShareButtons = ({ url, title }: ShareButtonsProps) => {
+  const shareButtons = [
+    {
+      id: "share-email",
+      component: EmailShareButton,
+      icon: EmailIcon,
+      tooltip: "Share via Email",
+      props: {
+        subject: title,
+        body: "Check out this photo from Mosaic.photography",
+      },
+    },
+    {
+      id: "share-facebook",
+      component: FacebookShareButton,
+      icon: FacebookIcon,
+      tooltip: "Share on Facebook",
+      props: {},
+    },
+    {
+      id: "share-x",
+      component: XShareButton,
+      icon: XIcon,
+      tooltip: "Share on X (Twitter)",
+      props: {
+        via: "mosaic_photography",
+        hashtags: ["mosaicphotography", "photography", "mosaiccommunity"],
+      },
+    },
+    {
+      id: "share-pinterest",
+      component: PinterestShareButton,
+      icon: PinterestIcon,
+      tooltip: "Pin on Pinterest",
+      props: { media: "" },
+    },
+    {
+      id: "share-linkedin",
+      component: LinkedinShareButton,
+      icon: LinkedinIcon,
+      tooltip: "Share on LinkedIn",
+      props: { source: "mosaic.photography" },
+    },
+    {
+      id: "share-reddit",
+      component: RedditShareButton,
+      icon: RedditIcon,
+      tooltip: "Share on Reddit",
+      props: {},
+    },
+    {
+      id: "share-whatsapp",
+      component: WhatsappShareButton,
+      icon: WhatsappIcon,
+      tooltip: "Share on WhatsApp",
+      props: {},
+    },
+    {
+      id: "share-telegram",
+      component: TelegramShareButton,
+      icon: TelegramIcon,
+      tooltip: "Share on Telegram",
+      props: {},
+    },
+    {
+      id: "share-threads",
+      component: ThreadsShareButton,
+      icon: ThreadsIcon,
+      tooltip: "Share on Threads",
+      props: {},
+    },
+    {
+      id: "share-tumblr",
+      component: TumblrShareButton,
+      icon: TumblrIcon,
+      tooltip: "Share on Tumblr",
+      props: {
+        caption: "Beautiful photography from Mosaic.photography",
+        tags: ["mosaicphotography", "photography", "analog", "vintage"],
+      },
+    },
+  ];
+
   return (
-    <div className={styles.shareButtonsContainer}>
-      <EmailShareButton url={url}>
-        <EmailIcon size={32} round />
-      </EmailShareButton>
-      <FacebookShareButton url={url}>
-        <FacebookIcon size={32} round />
-      </FacebookShareButton>
-      <TwitterShareButton url={url} title={title}>
-        <TwitterIcon size={32} round />
-      </TwitterShareButton>
-      <LinkedinShareButton url={url} title={title}>
-        <LinkedinIcon size={32} round />
-      </LinkedinShareButton>
-      <button
-        type="button"
-        className={styles.redditCustomButton}
-        aria-label="Share on Reddit"
-        onClick={() => {
-          const redditUrl = `https://www.reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`;
-          window.open(
-            redditUrl,
-            "_blank",
-            "noopener,noreferrer,width=900,height=600",
-          );
-        }}
-        style={{
-          background: "none",
-          border: "none",
-          padding: 0,
-          cursor: "pointer",
-        }}
-      >
-        <RedditIcon size={32} round />
-      </button>
-      <WhatsappShareButton url={url} title={title}>
-        <WhatsappIcon size={32} round />
-      </WhatsappShareButton>
-    </div>
+    <>
+      <div className={styles.shareButtonsContainer}>
+        {shareButtons.map(
+          ({ id, component: Button, icon: Icon, tooltip, props }) => (
+            <button
+              key={id}
+              id={id}
+              onClick={() => window.open(url, "_blank")}
+              title={title}
+              {...props}
+            >
+              <Icon size={32} round />
+            </button>
+          ),
+        )}
+      </div>
+
+      {/* Tooltips */}
+      {shareButtons.map(({ id, tooltip }) => (
+        <Tooltip
+          key={`tooltip-${id}`}
+          anchorSelect={`#${id}`}
+          content={tooltip}
+          className={styles.tooltip}
+        />
+      ))}
+    </>
   );
 };
 

@@ -32,7 +32,7 @@ export default function Header({
           ) : (
             <li className={styles.navLogo}>
               <Link href="/" className={styles.backToHomeButton}>
-                ← Return to Mosaic
+                ← Return Home
               </Link>
             </li>
           )}

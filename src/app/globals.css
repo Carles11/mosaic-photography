@@ -113,6 +113,11 @@ body {
   margin: 1rem;
 }
 
+/* Tooltip arrow */
+:global(.react-tooltip) {
+  z-index: 1000;
+}
+
 @media (max-width: 767px) {
   .home-titles {
     margin-bottom: 3rem;
