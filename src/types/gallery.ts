@@ -1,7 +1,8 @@
 // Gallery and image-related types
 import { JSX } from "react";
+import { ContributorImage } from "./contributor";
 
-export type ImageWithOrientation = ImageData & {
+export type ImageWithOrientation = UniversalGalleryImage & {
   orientation?: "vertical" | "horizontal" | "square";
   mosaicType?: "normal" | "large" | "wide" | "tall";
 };
@@ -27,8 +28,39 @@ export interface Photographer {
   photographerSurname?: string;
   website?: string;
   instagram?: string;
-  images?: ImageData[];
+  images?: UniversalGalleryImage[];
   store?: [];
+}
+
+// types/galleryImage.ts
+
+export interface UniversalGalleryImage {
+  id: string;
+  author: string;
+
+  title?: string;
+  description?: string;
+
+  url?: string;
+
+  width?: number;
+  height?: number;
+
+  orientation?: "vertical" | "horizontal" | "square";
+
+  year?: number;
+
+  created_at?: string;
+
+  filename?: string;
+  base_url?: string;
+
+  s3Progressive?: Array<{
+    url: string;
+    width: number;
+  }>;
+
+  print_quality?: string;
 }
 
 export interface ImageData {
@@ -65,7 +97,7 @@ export type QualityLevel =
 
 export interface GalleryProps extends JSX.IntrinsicAttributes {
   id?: string;
-  images?: ImageData[];
+  images: UniversalGalleryImage[];
   onLoginRequired?: () => void;
 }
 
@@ -136,7 +168,7 @@ export interface UserCommentWithImage extends Comment {
   image_title?: string;
   image_url?: string;
   image_author?: string;
-  imageData?: ImageData; // For ImageWrapper
+  imageData?: UniversalGalleryImage; // For ImageWrapper
 }
 
 // Collections Types
@@ -168,8 +200,8 @@ export interface CollectionWithImages extends Collection {
 }
 
 export interface ImageWrapperProps {
-  image?: ImageData;
-  images?: ImageData[];
+  image?: UniversalGalleryImage;
+  images?: UniversalGalleryImage[];
   loading?: boolean;
   onLoginRequired?: () => void;
   imgStyleOverride?: React.CSSProperties;

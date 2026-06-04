@@ -1,10 +1,10 @@
 import { supabase } from "@/lib/supabaseClient";
 import { Contributor } from "@/types/contributor";
-import { ImageData } from "@/types/gallery";
+import { UniversalGalleryImage } from "@/types/gallery";
 import { getAllS3Urls } from "@/utils/imageResizingS3";
 
 export type ContributorWithImages = Contributor & {
-  images: ImageData[];
+  images: UniversalGalleryImage[];
 };
 
 // Fetch all contributor slugs for static generation
@@ -50,7 +50,7 @@ export async function fetchContributorBySlugSSR(
       .eq("published", true)
       .order("sort_order", { ascending: true });
 
-    let imagesWithProgressive: ImageData[] = [];
+    let imagesWithProgressive: UniversalGalleryImage[] = [];
 
     if (images) {
       imagesWithProgressive = images.map((img) => ({

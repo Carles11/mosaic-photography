@@ -7,6 +7,7 @@ import {
 } from "@/utils/fetchContributorBySlugSSR";
 import PhotographerGalleryZoom from "@/components/gallery/PhotographerGalleryZoom";
 import Image from "next/image";
+import { fetchContributorBySlugWithFeaturedSSR } from "@/utils/fetchContributorBySlugWithFeaturedSSR";
 type ContributorPageProps = {
   params: Promise<{ slug: string }>;
 };
@@ -55,17 +56,19 @@ export default async function ContributorDetailPage({
   const { slug } = await params;
   if (!slug) return notFound();
 
-  const contributor = await fetchContributorBySlugSSR(slug);
+  const contributor = await fetchContributorBySlugWithFeaturedSSR(slug);
   if (!contributor) return notFound();
+
+  const heroImage = contributor.featuredImage;
 
   return (
     <main className={styles.page}>
       <section className={styles.hero}>
-        {contributor.images?.[0] && (
+        {heroImage && (
           <div className={styles.heroImageWrapper}>
             <Image
               src={
-                contributor.images[0].s3Progressive?.[0]?.url ??
+                heroImage.s3Progressive?.[0]?.url ??
                 "/favicons/android-chrome-512x512.png"
               }
               alt={`${contributor.name} featured photograph`}
@@ -137,6 +140,8 @@ export default async function ContributorDetailPage({
         <PhotographerGalleryZoom
           images={(contributor.images ?? []).map((img) => ({
             ...img,
+            title: img.title ?? "",
+            author: contributor.name,
             url:
               img.s3Progressive?.[0]?.url ??
               "/favicons/android-chrome-512x512.png",

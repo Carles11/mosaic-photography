@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
-import { Photographer, ImageData } from "@/types/gallery";
+import { Photographer, UniversalGalleryImage } from "@/types/gallery";
 import { getAllS3Urls } from "@/utils/imageResizingS3";
 
 // Fetch all photographer slugs for static generation
@@ -45,10 +45,10 @@ export async function fetchPhotographerBySlugSSR(
       .select("*")
       .eq("author", photographer.author);
 
-    let imagesWithProgressive: ImageData[] = [];
+    let imagesWithProgressive: UniversalGalleryImage[] = [];
 
     if (images) {
-      imagesWithProgressive = images.map((img: ImageData) => ({
+      imagesWithProgressive = images.map((img: UniversalGalleryImage) => ({
         ...img,
         s3Progressive: getAllS3Urls(img),
       }));

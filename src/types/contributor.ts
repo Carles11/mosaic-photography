@@ -1,5 +1,3 @@
-import { ImageData } from "./gallery";
-
 // Contributor type
 export type Contributor = {
   id: string;
@@ -26,7 +24,7 @@ export interface ContributorImage {
   id: string; // uuid
 
   contributor_id: string;
-
+  author: string;
   image_id?: number;
 
   filename: string;
@@ -38,6 +36,7 @@ export interface ContributorImage {
 
   title?: string;
   description?: string;
+  orientation?: "vertical" | "horizontal" | "square";
 
   year?: number;
 
