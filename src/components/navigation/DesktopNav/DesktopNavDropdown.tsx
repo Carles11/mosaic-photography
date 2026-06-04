@@ -5,6 +5,7 @@ import styles from "./DesktopNav.module.css";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import type { DesktopNavDropdownProps } from "@/types";
 import Image from "next/image";
+import ShareButtons from "@/components/buttons/ShareButtons";
 
 const DesktopNavDropdown = ({
   user,
@@ -13,6 +14,10 @@ const DesktopNavDropdown = ({
   // onGoProClick,
   onClose,
 }: DesktopNavDropdownProps) => {
+  const shareUrl = "https://www.mosaic.photography";
+  const shareText =
+    "Discover Mosaic, a free archive of public domain photography.";
+
   const handleActionAndClose = (action: () => void) => {
     action();
     onClose();
@@ -59,6 +64,13 @@ const DesktopNavDropdown = ({
           >
             <span className={styles.menuLabel}>About</span>
           </Link>
+          <Link
+            href="/community/photography"
+            className={`no-fancy-link ${styles.menuItem}`}
+            onClick={onClose}
+          >
+            <span className={styles.menuLabel}>Community (new!)</span>
+          </Link>
 
           {/* <button
             className={`no-fancy-link ${styles.menuItem}`}
@@ -90,6 +102,7 @@ const DesktopNavDropdown = ({
             </a>
           </div>
           <div className={styles.menuDivider} />
+          <ShareButtons url={shareUrl} title={shareText} />
 
           <button
             className={`no-fancy-link ${styles.menuItem} ${styles.logoutItem}`}

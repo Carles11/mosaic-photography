@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import styles from "./about.module.css";
+import ShareButtons from "@/components/buttons/ShareButtons";
 
 export const metadata: Metadata = {
   title: "About – Mosaic Photography",
@@ -18,6 +19,9 @@ export const metadata: Metadata = {
 };
 
 const AboutPage = () => {
+  const shareUrl = "https://www.mosaic.photography/about";
+  const shareText =
+    "Learn about Mosaic, a free archive of public domain photography.";
   return (
     <div className={styles.pageWrapper}>
       <header className={styles.header}>
@@ -148,6 +152,7 @@ const AboutPage = () => {
             ☕ Support Mosaic on Ko-fi
           </a>
         </section>
+        <ShareButtons url={shareUrl} title={shareText} />
       </main>
 
       <footer className={styles.pageFooter}>

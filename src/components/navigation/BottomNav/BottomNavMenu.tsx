@@ -6,6 +6,7 @@ import styles from "./BottomNav.module.css";
 import { SupabaseUser } from "@/lib/supabaseClient";
 import ThemeToggle from "@/components/theme/ThemeToggle"; // Add import
 import Image from "next/image";
+import ShareButtons from "@/components/buttons/ShareButtons";
 
 interface BottomNavMenuProps {
   user?: SupabaseUser | null;
@@ -23,7 +24,9 @@ const BottomNavMenu = ({
   onClose,
 }: BottomNavMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
-
+  const shareUrl = "https://www.mosaic.photography";
+  const shareText =
+    "Discover Mosaic, a free archive of public domain photography.";
   // Close menu on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
@@ -88,6 +91,13 @@ const BottomNavMenu = ({
               <Link href="/about" className={styles.menuItem} onClick={onClose}>
                 <span className={styles.menuLabel}>About</span>
               </Link>
+              <Link
+                href="/community/photography"
+                className={styles.menuItem}
+                onClick={onClose}
+              >
+                <span className={styles.menuLabel}>Community (new!)</span>
+              </Link>
 
               {/* <button
 
@@ -114,6 +124,7 @@ const BottomNavMenu = ({
                   Support Mosaic
                 </a>
               </div>
+              <ShareButtons url={shareUrl} title={shareText} />
 
               <div className={styles.menuDivider} />
 
