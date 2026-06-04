@@ -1,7 +1,7 @@
 // app/contributors/ContributorClient.tsx
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./Contributors.module.css";
 
 export default function ContributorClient() {
@@ -9,6 +9,7 @@ export default function ContributorClient() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    confirmEmail: "",
     location: "",
     instagram: "",
     portfolio: "",
@@ -22,12 +23,59 @@ export default function ContributorClient() {
     instagram: "",
     portfolio: "",
     imageGallery: "",
+    confirmEmail: "",
   });
   const [rightsError, setRightsError] = useState("");
 
   const fieldRefs = useRef<
     Record<string, HTMLInputElement | HTMLTextAreaElement | null>
   >({});
+
+  useEffect(() => {
+    const saved = localStorage.getItem("contributorApplication");
+
+    if (!saved) return;
+
+    try {
+      const parsed = JSON.parse(saved);
+
+      setFormData(
+        parsed.formData ?? {
+          name: "",
+          email: "",
+          confirmEmail: "",
+          location: "",
+          instagram: "",
+          portfolio: "",
+          imageGallery: "",
+          message: "",
+        },
+      );
+
+      setRightsAccepted(parsed.rightsAccepted ?? false);
+
+      const hasContent = Object.values(parsed.formData ?? {}).some(
+        (value) => String(value).trim() !== "",
+      );
+
+      if (hasContent) {
+        setIsFormOpen(true);
+      }
+    } catch {
+      // ignore corrupted data
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "contributorApplication",
+      JSON.stringify({
+        formData,
+        rightsAccepted,
+      }),
+    );
+  }, [formData, rightsAccepted]);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -35,6 +83,7 @@ export default function ContributorClient() {
     const fieldName = e.target.name;
     if (
       fieldName === "email" ||
+      fieldName === "confirmEmail" ||
       fieldName === "instagram" ||
       fieldName === "portfolio" ||
       fieldName === "imageGallery"
@@ -155,7 +204,13 @@ export default function ContributorClient() {
     e.preventDefault();
 
     // Clear previous errors
-    setErrors({ email: "", instagram: "", portfolio: "", imageGallery: "" });
+    setErrors({
+      email: "",
+      confirmEmail: "",
+      instagram: "",
+      portfolio: "",
+      imageGallery: "",
+    });
 
     let hasError = false;
     let formattedInstagram = "";
@@ -179,6 +234,16 @@ export default function ContributorClient() {
       }));
       firstInvalidField ??= "email";
 
+      hasError = true;
+    }
+
+    if (formData.email.trim() !== formData.confirmEmail.trim()) {
+      setErrors((prev) => ({
+        ...prev,
+        confirmEmail: "Email addresses do not match",
+      }));
+
+      firstInvalidField ??= "confirmEmail";
       hasError = true;
     }
 
@@ -252,7 +317,7 @@ export default function ContributorClient() {
 
 Hello Mosaic Team,
 
-A new photographer is interested in joining the archive.
+I am interested in joining the archive.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   APPLICANT DETAILS
@@ -289,9 +354,13 @@ RIGHTS CONFIRMATION
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Please review this application and follow up with the photographer.
+Thank you for reviewing my application. I look forward to hearing from you.
 
-Mosaic Submission System
+Kind regards,
+
+${formData.name || "No name provided"}
+${formData.email || ""}
+${formattedPortfolio || ""}
 `.trim();
 
     const subject = encodeURIComponent(
@@ -301,17 +370,6 @@ Mosaic Submission System
 
     window.location.href = `mailto:submissions@mosaic.photography?subject=${subject}&body=${body}`;
 
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      location: "",
-      instagram: "",
-      portfolio: "",
-      imageGallery: "",
-      message: "",
-    });
-    setErrors({ email: "", instagram: "", portfolio: "", imageGallery: "" });
     setIsFormOpen(false);
   };
 
@@ -381,6 +439,27 @@ Mosaic Submission System
             />
             {errors.email && (
               <small className={styles.errorMessage}>{errors.email}</small>
+            )}
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="confirmEmail">Repeat email address *</label>
+            <input
+              type="email"
+              id="confirmEmail"
+              name="confirmEmail"
+              ref={(el) => {
+                fieldRefs.current.confirmEmail = el;
+              }}
+              required
+              value={formData.confirmEmail}
+              onChange={handleChange}
+              placeholder="hello@janedoe.com"
+              className={errors.confirmEmail ? styles.errorInput : ""}
+            />
+            {errors.confirmEmail && (
+              <small className={styles.errorMessage}>
+                {errors.confirmEmail}
+              </small>
             )}
           </div>
 
@@ -529,8 +608,42 @@ Mosaic Submission System
           <button type="submit" className={styles.submitButton}>
             Preview & send application
           </button>
+          <button
+            type="button"
+            className={styles.clearButton}
+            onClick={() => {
+              localStorage.removeItem("contributorApplication");
+
+              setFormData({
+                name: "",
+                email: "",
+                confirmEmail: "",
+                location: "",
+                instagram: "",
+                portfolio: "",
+                imageGallery: "",
+                message: "",
+              });
+
+              setRightsAccepted(false);
+
+              setErrors({
+                email: "",
+                confirmEmail: "",
+                instagram: "",
+                portfolio: "",
+                imageGallery: "",
+              });
+
+              setRightsError("");
+            }}
+          >
+            Clear form
+          </button>
           <div className={styles.formFooter}>
-            This will open your email client with a pre-filled message.
+            This will open your email client with a pre-filled message. Your
+            application is automatically saved in this browser until you clear
+            it.
           </div>
         </form>
       </div>
