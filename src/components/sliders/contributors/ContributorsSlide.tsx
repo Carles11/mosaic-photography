@@ -31,13 +31,11 @@ const ContributorsSlide: React.FC<ContributorsSlideProps> = ({
 
   const filteredContributors = useMemo(() => {
     if (selected === "all") return normalizedContributors;
-    console.log("Filtering contributors", { selected, normalizedContributors });
-    return normalizedContributors.filter((contributor) => {
-      const nudityValue =
-        (contributor as { featuredImage?: { nudity?: boolean | null } })
-          .featuredImage?.nudity ?? false;
 
-      const isNude = nudityValue === true;
+    return normalizedContributors.filter((contributor) => {
+      const nudityValue = contributor.nudity ?? "non-nude";
+
+      const isNude = nudityValue === "nude";
 
       return selected === "nude" ? isNude : !isNude;
     });
@@ -51,11 +49,13 @@ const ContributorsSlide: React.FC<ContributorsSlideProps> = ({
   return (
     <div className={styles.contributorsSlideContainer}>
       <div className={styles.sectionHeader}>
-        <h2 className={styles.subTitle} id="contributors-title">
+        <h2 className={styles.subTitle} id="community-section-title">
           FROM THE COMMUNITY
         </h2>
         <h4 className={styles.subTitle}>
-          <Link href="/contributors">Add your piece to the mosaic →</Link>
+          <Link href="/community/photography">
+            Add your piece to the mosaic →
+          </Link>
         </h4>
       </div>
 
@@ -105,7 +105,7 @@ const ContributorsSlide: React.FC<ContributorsSlideProps> = ({
 
       <div className={styles.footerLinks}>
         <Link
-          href="/contributors"
+          href="/community/photography"
           className={`no-fancy-link ${styles.seeAllLink}`}
         >
           Contemporary voices. Analogue hearts. →

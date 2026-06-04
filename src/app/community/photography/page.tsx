@@ -1,9 +1,9 @@
-// app/contributors/page.tsx
+// app/community/photography/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
 import { fetchContributorsWithFeaturedSSR } from "@/utils/fetchContributorsWithFeaturedSSR";
-import ContributorClient from "./ContributorsClient";
-import styles from "./Contributors.module.css";
+import PhotographyClientForm from "./PhotographyClientForm";
+import styles from "./PhotographyCommunity.module.css";
 import Image from "next/image";
 
 export const metadata: Metadata = {
@@ -88,7 +88,7 @@ export default async function ContributorsPage() {
               return (
                 <Link
                   key={c.id}
-                  href={`/contributors/${c.slug}`}
+                  href={`/community/photography/${c.slug}`}
                   className={`${styles.card} no-fancy-link`}
                 >
                   <div className={styles.cardImageWrapper}>
@@ -117,7 +117,7 @@ export default async function ContributorsPage() {
       </section>
 
       {/* New Call to Action with collapsible form */}
-      <ContributorClient />
+      <PhotographyClientForm />
     </main>
   );
 }

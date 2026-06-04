@@ -107,9 +107,9 @@ function HomeClientWrapper({
           {/* CONTRIBUTORS */}
           {contributors && contributors.length > 0 && (
             <section
-              aria-label="Contributors"
+              aria-label="Community Section"
               className={styles.resourcesSection}
-              id="contributors"
+              id="community-section"
             >
               <ContributorsSlide contributors={contributors} />
             </section>

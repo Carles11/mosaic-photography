@@ -13,8 +13,8 @@ const TABS = [
   { label: "Selection", anchor: "#toolkits", event: "toolkitsTABClicked" },
   {
     label: "Community",
-    anchor: "#contributors",
-    event: "contributorsTABClicked",
+    anchor: "#community-section",
+    event: "community-sectionTABClicked",
   },
   {
     label: "Gallery",

@@ -1,6 +1,5 @@
 // Gallery and image-related types
 import { JSX } from "react";
-import { ContributorImage } from "./contributor";
 
 export type ImageWithOrientation = UniversalGalleryImage & {
   orientation?: "vertical" | "horizontal" | "square";
@@ -47,7 +46,9 @@ export interface UniversalGalleryImage {
   height?: number;
 
   orientation?: "vertical" | "horizontal" | "square";
-
+  gender?: string;
+  color?: string;
+  nudity?: string | boolean | null;
   year?: number;
 
   created_at?: string;

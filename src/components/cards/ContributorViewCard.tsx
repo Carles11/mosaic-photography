@@ -26,7 +26,7 @@ function getContributorPreview(contributor: ContributorWithFeatured) {
 const ContributorViewCard: React.FC<ContributorViewCardProps> = ({
   contributor,
 }) => {
-  const href = `/contributors/${contributor.slug}`;
+  const href = `/community/photography/${contributor.slug}`;
   const preview = useMemo(
     () => getContributorPreview(contributor),
     [contributor],

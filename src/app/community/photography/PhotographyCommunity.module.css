@@ -1,0 +1,595 @@
+/* app/community/PhotographyCommunity.module.css */
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
+}
+
+.header {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.pageTitle {
+  font-size: 3.5rem;
+  margin-bottom: 0;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: var(--text-color, "#fff");
+}
+.pageSubTitle {
+  padding: 0 1rem;
+  margin-top: 0.5rem;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: var(--text-color, "#fff");
+}
+
+.intro {
+  padding: 0 1rem;
+  margin: 1rem;
+  line-height: 1.7;
+  color: var(--text-color);
+  opacity: 0.85;
+  font-size: 1.1rem;
+}
+
+.intro h2 {
+  margin: 0;
+}
+
+.sectionTitle {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  border-left: 3px solid var(--accent-color);
+  padding-left: 1rem;
+}
+
+.infoSection {
+  margin-bottom: 4rem;
+}
+
+.infoCard {
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  padding: 1.5rem;
+  line-height: 1.7;
+}
+
+.infoCard p:last-child {
+  margin-bottom: 0;
+}
+
+.infoList {
+  margin-top: 1rem;
+  padding-left: 3rem;
+}
+
+.infoList li {
+  margin-bottom: 0.6rem;
+}
+
+.cardImageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 18px 18px 0 0;
+  background: #1a1a1a;
+  margin-bottom: 1rem;
+}
+
+.cardImage {
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.card:hover .cardImage {
+  transform: scale(1.03);
+}
+
+.avatarPlaceholder {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card:hover .avatarPlaceholder {
+  transform: scale(1.02);
+}
+
+/* CTA Section */
+.ctaSection {
+  margin-top: 5rem;
+  padding: 3rem;
+  background: var(--card-background, #2d2d2d);
+  backdrop-filter: blur(2px);
+  text-align: center;
+  border-radius: 32px;
+  border: 1px solid var(--border-color, "#444");
+  transition: all 0.3s ease;
+}
+
+.ctaSection h3 {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text-color);
+}
+
+.ctaSection p {
+  max-width: 500px;
+  margin: 0 auto 1.5rem;
+  opacity: 0.8;
+  font-size: 1rem;
+  font-weight: 500;
+
+  color: var(--text-color);
+}
+
+.clearButton {
+  background: none;
+  border: none;
+  color: var(--foreground-muted);
+  opacity: 0.65;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin: 1rem auto;
+  display: block;
+  transition: opacity 0.2s ease;
+  border: 1px solid var(--foreground-muted);
+  border-radius: 40px;
+  padding: 0.5rem 1rem;
+}
+
+.clearButton:hover {
+  opacity: 1;
+}
+
+.clearButton:active {
+  transform: translateY(0);
+}
+
+.clearButton:focus-visible {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(255, 200, 100, 0.2);
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2rem;
+  background: var(--accent-color);
+  color: #000;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 40px;
+  transition: all 0.25s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Collapsible Form */
+.formContainer {
+  margin-top: 1.5rem;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease;
+}
+
+.formContainerOpen {
+  max-height: none;
+  overflow: visible;
+}
+
+.applicationForm {
+  background: var(--background-secondary);
+  backdrop-filter: blur(12px);
+  border-radius: 28px;
+  padding: 2rem 2rem 2rem 2rem;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.5);
+  margin-top: 1rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  color: var(--text-color);
+  text-transform: uppercase;
+}
+
+.formGroup input,
+.formGroup textarea {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  background: var(--card-background, "#2d2d2d");
+  border: 1px solid var(--border-color, "#444");
+  border-radius: 16px;
+  color: var(--text-color);
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: var(--foreground-muted, "#aaa");
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(255, 200, 100, 0.2);
+  color: var(--foreground-muted, "#aaa");
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+
+.radioGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.radioOption {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Hide the actual browser radio button */
+.radioOption input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Style the label as a compact pill */
+.radioOption span {
+  display: block;
+  padding: 0.4rem 0.8rem;
+  background: #f0f0f0; /* Light gray background */
+  color: #333;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+/* Hover state */
+.radioOption:hover span {
+  background: #e0e0e0;
+}
+
+/* Selected state */
+.radioOption input:checked + span {
+  background: #000; /* Black background for selected */
+  color: #fff;
+  border-color: #000;
+}
+
+.licenseNotice {
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.licenseNotice h4 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.licenseNotice p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.checkboxGroup {
+  margin-bottom: 1.5rem;
+}
+
+.checkboxGroup label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  line-height: 1.5;
+  text-transform: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.checkboxGroup input[type="checkbox"] {
+  width: auto;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+.submitButton {
+  background: var(--accent-color);
+  color: #000;
+  border: none;
+  padding: 1rem 1.8rem;
+  font-weight: 700;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+  width: 100%;
+  margin-top: 0.5rem;
+  font-family: inherit;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+}
+
+.formFooter {
+  margin-top: 1.2rem;
+  font-size: 0.7rem;
+  text-align: center;
+  opacity: 0.5;
+  letter-spacing: 0.02em;
+}
+
+/* Grid and cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.75rem;
+  margin-top: 1.5rem;
+}
+
+.card {
+  padding: 0;
+  background: var(--card-background, "#2d2d2d");
+  border-radius: 24px;
+  border: 1px solid var(--border-color, "#444");
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  text-decoration: none;
+  backdrop-filter: blur(4px);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent-color);
+  background: var(--card-details-background, "#3a3a3a");
+  box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.3);
+}
+
+.cardName {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-color);
+}
+
+.cardMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-top: 0.2rem;
+  padding: 1rem;
+}
+
+.license {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.2rem 0.6rem;
+  border-radius: 40px;
+  font-size: 0.7rem;
+}
+
+.emptyState {
+  padding: 3rem 0.4rem;
+  text-align: center;
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 32px;
+  margin-top: 1rem;
+}
+
+.errorInput {
+  border-color: var(--error-color) !important;
+  box-shadow: 0 0 0 2px var(--error-color) !important;
+}
+
+.errorMessage {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--error-color);
+  opacity: 0.9;
+}
+
+.hintText {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 1.5rem 1.2rem 3rem;
+  }
+  .pageTitle {
+    font-size: 2.5rem;
+  }
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .infoList {
+    padding-left: 1.5rem;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .ctaSection {
+    padding: 1.5rem 1rem;
+    margin-top: 3rem;
+  }
+  .applicationForm {
+    padding: 1.5rem;
+  }
+
+  .ctaSection h3 {
+    font-size: 1.5rem;
+  }
+
+  .ctaSection p {
+    font-size: 0.9rem;
+    padding: 0 0.5rem;
+  }
+
+  .formContainer {
+    margin-top: 1rem;
+  }
+
+  .applicationForm {
+    padding: 1.25rem;
+    border-radius: 20px;
+    max-height: 70vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .formGroup {
+    margin-bottom: 1.25rem;
+  }
+
+  .formGroup label {
+    font-size: 0.8rem;
+  }
+
+  .formGroup input,
+  .formGroup textarea {
+    padding: 0.75rem 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .submitButton {
+    padding: 0.85rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .formFooter {
+    font-size: 0.65rem;
+  }
+
+  .hintText {
+    font-size: 0.65rem;
+  }
+
+  .errorMessage {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .card {
+    padding: 1.2rem;
+  }
+  .ctaSection {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .applicationForm {
+    padding: 1rem;
+    max-height: 75vh;
+  }
+
+  .formGroup input,
+  .formGroup textarea {
+    padding: 0.7rem 0.85rem;
+    font-size: 0.85rem;
+  }
+
+  .ctaButton {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Ensure body/html don't overflow on mobile */
+@media (max-width: 768px) {
+  .page {
+    padding: 1rem 1rem 2rem;
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 768px) {
+  .applicationForm {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+}
