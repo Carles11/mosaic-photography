@@ -1,7 +1,7 @@
 // app/contributors/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getContributors } from "@/utils/fetchContributorsSSR";
+import { fetchContributorsWithFeaturedSSR } from "@/utils/fetchContributorsWithFeaturedSSR";
 import ContributorClient from "./ContributorsClient";
 import styles from "./Contributors.module.css";
 import Image from "next/image";
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ContributorsPage() {
-  const contributors = await getContributors();
+  const contributors = await fetchContributorsWithFeaturedSSR();
 
   return (
     <main className={styles.page}>
@@ -74,38 +74,45 @@ export default async function ContributorsPage() {
       </section>
 
       <section className={styles.contributorSection}>
-        <h2 className={styles.sectionTitle}>
-          Active Collections of current community contributors
-        </h2>
+        <h2 className={styles.sectionTitle}>Community Collections </h2>
         {!contributors || contributors.length === 0 ? (
           <p className={styles.emptyState}>
             The gallery is growing. More contributors coming soon.
           </p>
         ) : (
           <div className={styles.grid}>
-            {contributors.map((c) => (
-              <Link
-                key={c.id}
-                href={`/contributors/${c.slug}`}
-                className={`${styles.card} no-fancy-link`}
-              >
-                {c.featuredImage ? (
-                  <Image
-                    src={`${c.featuredImage.base_url}/w400/${c.featuredImage.filename}`}
-                    alt={c.featuredImage.title || c.name}
-                    className={styles.cardImage}
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className={styles.avatarPlaceholder} />
-                )}{" "}
-                <h3 className={styles.cardName}>{c.name}</h3>
-                <div className={styles.cardMeta}>
-                  <span>{c.country || "Global"}</span>
-                  <span className={styles.license}>{c.license_default}</span>
-                </div>
-              </Link>
-            ))}
+            {contributors.map((c) => {
+              const imageUrl =
+                c.featuredImage?.s3Progressive?.[0]?.url ??
+                c.featuredImage?.url ??
+                "/favicons/android-chrome-512x512.png";
+              return (
+                <Link
+                  key={c.id}
+                  href={`/contributors/${c.slug}`}
+                  className={`${styles.card} no-fancy-link`}
+                >
+                  <div className={styles.cardImageWrapper}>
+                    {c.featuredImage ? (
+                      <Image
+                        src={imageUrl}
+                        alt={c.featuredImage.title || c.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 400px"
+                        className={styles.cardImage}
+                      />
+                    ) : (
+                      <div className={styles.avatarPlaceholder} />
+                    )}
+                  </div>
+                  <h3 className={styles.cardName}>{c.name}</h3>
+                  <div className={styles.cardMeta}>
+                    <span>{c.country || "Global"}</span>
+                    <span className={styles.license}>{c.license_default}</span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         )}
       </section>

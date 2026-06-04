@@ -6,6 +6,7 @@ import {
   fetchContributorBySlugSSR,
 } from "@/utils/fetchContributorBySlugSSR";
 import PhotographerGalleryZoom from "@/components/gallery/PhotographerGalleryZoom";
+import Image from "next/image";
 type ContributorPageProps = {
   params: Promise<{ slug: string }>;
 };
@@ -59,85 +60,89 @@ export default async function ContributorDetailPage({
 
   return (
     <main className={styles.page}>
-      <h1 className={styles.pageTitle}>{contributor.name}</h1>
-
-      <section className={styles.infoCard} aria-label="Contributor details">
-        <dl className={styles.fields}>
-          <div className={styles.fieldRow}>
-            <dt className={styles.label}>Country</dt>
-            <dd className={styles.value}>{renderValue(contributor.country)}</dd>
+      <section className={styles.hero}>
+        {contributor.images?.[0] && (
+          <div className={styles.heroImageWrapper}>
+            <Image
+              src={
+                contributor.images[0].s3Progressive?.[0]?.url ??
+                "/favicons/android-chrome-512x512.png"
+              }
+              alt={`${contributor.name} featured photograph`}
+              fill
+              priority
+              sizes="100vw"
+              className={styles.heroImage}
+            />
           </div>
+        )}
 
-          <div className={styles.fieldRow}>
-            <dt className={styles.label}>Website</dt>
-            <dd className={styles.value}>
-              {contributor.website ? (
-                <a
-                  href={contributor.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`no-fancy-link ${styles.externalLink}`}
-                >
-                  {contributor.website}
-                </a>
-              ) : (
-                "Not provided"
-              )}
-            </dd>
-          </div>
+        <div className={styles.heroOverlay}>
+          <h1 className={styles.pageTitle}>{contributor.name}</h1>
 
-          <div className={styles.fieldRow}>
-            <dt className={styles.label}>Instagram</dt>
-            <dd className={styles.value}>
-              {contributor.instagram ? (
-                <a
-                  href={contributor.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`no-fancy-link ${styles.externalLink}`}
-                >
-                  {contributor.instagram}
-                </a>
-              ) : (
-                "Not provided"
-              )}
-            </dd>
-          </div>
+          <div className={styles.heroMeta}>
+            {contributor.country && (
+              <span className={styles.metaPill}>{contributor.country}</span>
+            )}
 
-          <div className={styles.fieldRow}>
-            <dt className={styles.label}>Bio</dt>
-            <dd className={styles.value}>{renderValue(contributor.bio)}</dd>
-          </div>
+            {contributor.license_default && (
+              <span className={styles.metaPill}>
+                {contributor.license_default}
+              </span>
+            )}
 
-          <div className={styles.fieldRow}>
-            <dt className={styles.label}>Description</dt>
-            <dd className={styles.value}>
-              {renderValue(contributor.description)}
-            </dd>
+            <span className={styles.metaPill}>
+              {contributor.images?.length ?? 0} photographs
+            </span>
           </div>
-
-          <div className={styles.fieldRow}>
-            <dt className={styles.label}>Default license</dt>
-            <dd className={styles.value}>
-              {renderValue(contributor.license_default)}
-            </dd>
-          </div>
-        </dl>
+        </div>
       </section>
 
-      <section className={styles.galleryPlaceholder}>
-        <h2 className={styles.sectionTitle}>
+      <section className={styles.aboutSection}>
+        <h2>About the collection</h2>
+
+        {contributor.description && <p>{contributor.description}</p>}
+
+        {contributor.bio && <p>{contributor.bio}</p>}
+
+        <div className={styles.links}>
+          {contributor.website && (
+            <a
+              href={contributor.website}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Website →
+            </a>
+          )}
+
+          {contributor.instagram && (
+            <a
+              href={contributor.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="no-fancy-link"
+            >
+              Instagram →
+            </a>
+          )}
+        </div>
+      </section>
+
+      <section className={styles.gallerySection}>
+        <h2 className={styles.galleryTitle}>
           Gallery ({contributor.images?.length ?? 0})
         </h2>
+
+        <PhotographerGalleryZoom
+          images={(contributor.images ?? []).map((img) => ({
+            ...img,
+            url:
+              img.s3Progressive?.[0]?.url ??
+              "/favicons/android-chrome-512x512.png",
+          }))}
+        />
       </section>
-      <PhotographerGalleryZoom
-        images={(contributor.images ?? []).map((img) => ({
-          ...img,
-          url:
-            img.s3Progressive?.[0]?.url ??
-            "/favicons/android-chrome-512x512.png",
-        }))}
-      />
     </main>
   );
 }

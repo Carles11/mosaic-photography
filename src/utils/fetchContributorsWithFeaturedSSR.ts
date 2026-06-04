@@ -30,19 +30,37 @@ export async function fetchContributorsWithFeaturedSSR(): Promise<
     // Fetch the first published image for each contributor in parallel
     const withFeatured: ContributorWithFeatured[] = await Promise.all(
       contributors.map(async (contributor) => {
-        const { data: images, error: imgError } = await supabaseServerClient
+        // Try contributor-selected featured image first
+        const { data: featuredImages } = await supabaseServerClient
           .from("contributor_images")
           .select("*")
           .eq("contributor_id", contributor.id)
           .eq("published", true)
-          .order("sort_order", { ascending: true })
+          .eq("featured", true)
           .limit(1);
 
-        if (imgError || !images || images.length === 0) {
-          return { ...(contributor as Contributor), featuredImage: null };
+        let img = featuredImages?.[0];
+
+        // Fallback: first published image
+        if (!img) {
+          const { data: fallbackImages } = await supabaseServerClient
+            .from("contributor_images")
+            .select("*")
+            .eq("contributor_id", contributor.id)
+            .eq("published", true)
+            .order("sort_order", { ascending: true })
+            .limit(1);
+
+          img = fallbackImages?.[0];
         }
 
-        const img = images[0];
+        // No image at all
+        if (!img) {
+          return {
+            ...(contributor as Contributor),
+            featuredImage: null,
+          };
+        }
         const featuredImage: ContributorImage = {
           ...img,
           id: img.image_id,
