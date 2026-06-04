@@ -4,7 +4,7 @@
   height: 385px;
   overflow: hidden;
   background: var(--card-background, #2d2d2d);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color, #444);
   transition: border-color 0.35s ease;
   cursor: pointer;
 }
@@ -188,7 +188,7 @@
 
 @media (max-width: 768px) {
   .card {
-    width: 87vw;
+    width: 100%;
     height: 385px;
   }
 }

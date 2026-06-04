@@ -22,6 +22,7 @@
   height: auto;
   min-height: 0;
   text-align: left;
+  min-height: -webkit-fill-available;
 }
 
 .photographersViewCard img {
