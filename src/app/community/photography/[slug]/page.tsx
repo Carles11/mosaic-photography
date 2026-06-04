@@ -27,11 +27,23 @@ export async function generateMetadata({
   const { slug } = await params;
   const contributor = await fetchContributorBySlugSSR(slug);
 
+  const baseUrl = `https://www.mosaic.photography/community/photography/${slug}`;
+
   if (!contributor) {
     return {
-      title: "Contributor – Mosaic Contributors",
+      title: "Community – Mosaic Photographers",
       description:
-        "Contributor gallery on Mosaic Photography. Browse photographs, collections and public domain works.",
+        "Community users contributing with a gallery on Mosaic Photography. Browse photographs, collections and private works.",
+      openGraph: {
+        title: "Community – Mosaic Photographers",
+        description:
+          "Mosaic is a free, ad-free archive of public domain photography from the late 19th and early 20th centuries.",
+        type: "website",
+        url: baseUrl,
+      },
+      alternates: {
+        canonical: baseUrl,
+      },
     };
   }
 
@@ -43,12 +55,13 @@ export async function generateMetadata({
     openGraph: {
       title: `${contributor.name} – Mosaic Contributors`,
       description,
+      type: "website",
+      url: baseUrl,
+    },
+    alternates: {
+      canonical: baseUrl,
     },
   };
-}
-
-function renderValue(value: string | null) {
-  return value && value.trim().length > 0 ? value : "Not provided";
 }
 
 export default async function ContributorDetailPage({

@@ -30,6 +30,8 @@ Key facts:
 - **FAQ:** https://www.mosaic.photography/faq
 - **Mobile App:** https://www.mosaic.photography/app
 - **About:** https://www.mosaic.photography/about
+- **Community:** https://www.mosaic.photography/community
+- **Community contributors:** https://www.mosaic.photography/community/[slug]
 - **Photographer pages:** https://www.mosaic.photography/photographers/[surname]
 - **Photo curations:** https://www.mosaic.photography/photo-curations
 - **Toolkit:** https://www.mosaic.photography/toolkit/[slug]

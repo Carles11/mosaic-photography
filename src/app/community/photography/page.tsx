@@ -7,13 +7,18 @@ import styles from "./PhotographyCommunity.module.css";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "Contributors | Mosaic Photography",
+  title: "Community Contributors – Mosaic Photography",
   description:
-    "Contemporary photographers and creators who have chosen to share part of their work through Mosaic Photography.",
+    "Contemporary photographers and creators who share their work through Mosaic Photography. Thoughtful, timeless image-making from around the world.",
   openGraph: {
-    title: "Contributors | Mosaic Photography",
+    title: "Community Contributors – Mosaic Photography",
     description:
-      "Contemporary photographers and creators who have chosen to share part of their work through Mosaic Photography.",
+      "Contemporary photographers and creators who share their work through Mosaic Photography. Thoughtful, timeless image-making from around the world.",
+    type: "website",
+    url: "https://www.mosaic.photography/community/photography",
+  },
+  alternates: {
+    canonical: "https://www.mosaic.photography/community/photography",
   },
 };
 
