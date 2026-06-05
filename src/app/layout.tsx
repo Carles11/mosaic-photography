@@ -148,7 +148,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           publisher={{
             name: "Mosaic Photography",
             url: "https://www.mosaic.photography",
-            logo: "https://www.mosaic.photography/images/logo.png",
+            logo: "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp",
           }}
         />
         <script
@@ -159,7 +159,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               "@type": "Organization",
               name: "Mosaic Photography",
               url: "https://www.mosaic.photography",
-              logo: "https://www.mosaic.photography/images/logo.png",
+              logo: "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp",
               description:
                 "Mosaic Photography is a curated gallery of public domain vintage nude photography, celebrating the timeless artistry of legendary photographers.",
               sameAs: [

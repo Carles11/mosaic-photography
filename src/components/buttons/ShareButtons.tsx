@@ -36,6 +36,9 @@ const Tooltip = dynamic(
   { ssr: false },
 );
 
+const MOSAIC_LOGO =
+  "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp";
+
 const ShareButtons = ({ url, title }: ShareButtonsProps) => {
   const shareButtons = [
     {
@@ -45,7 +48,7 @@ const ShareButtons = ({ url, title }: ShareButtonsProps) => {
       tooltip: "Share via Email",
       props: {
         subject: title,
-        body: "Check out this photo from Mosaic.photography",
+        body: "Check out this page from Mosaic.photography",
       },
     },
     {
@@ -70,7 +73,7 @@ const ShareButtons = ({ url, title }: ShareButtonsProps) => {
       component: PinterestShareButton,
       icon: PinterestIcon,
       tooltip: "Pin on Pinterest",
-      props: { media: "" },
+      props: { media: MOSAIC_LOGO },
     },
     {
       id: "share-linkedin",
@@ -117,24 +120,19 @@ const ShareButtons = ({ url, title }: ShareButtonsProps) => {
         tags: ["mosaicphotography", "photography", "analog", "vintage"],
       },
     },
-  ];
+  ] as const;
 
   return (
     <>
       <div className={styles.shareButtonsContainer}>
-        {shareButtons.map(
-          ({ id, component: Button, icon: Icon, tooltip, props }) => (
-            <button
-              key={id}
-              id={id}
-              onClick={() => window.open(url, "_blank")}
-              title={title}
-              {...props}
-            >
-              <Icon size={32} round />
-            </button>
-          ),
-        )}
+        {shareButtons.map((item) => {
+          const Button = item.component as React.ElementType;
+          return (
+            <Button key={item.id} id={item.id} url={url} {...item.props}>
+              <item.icon size={32} round />
+            </Button>
+          );
+        })}
       </div>
 
       {/* Tooltips */}
