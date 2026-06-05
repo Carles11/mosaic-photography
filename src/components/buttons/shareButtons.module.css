@@ -1,6 +1,6 @@
 .shareButtonsContainer {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap; /* ← allow line breaks */
   align-items: center;
   justify-content: flex-start;
   gap: 1rem;
@@ -20,4 +20,11 @@
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   font-family: var(--font-family, inherit);
+}
+
+@media (max-width: 768px) {
+  .shareButtonsContainer {
+    margin: 1rem 0.5rem;
+    gap: 0.75rem;
+  }
 }
