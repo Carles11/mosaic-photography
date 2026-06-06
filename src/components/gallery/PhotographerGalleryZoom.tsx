@@ -31,11 +31,15 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
   onLoginRequired,
 }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [lightboxIndex, setLightboxIndex] = useState<string>("");
+  const [nudityFilter, setNudityFilter] = useState<"all" | "nude" | "not-nude">(
+    "all",
+  );
+
   const router = useRouter();
   const { user } = useAuthSession();
   const { currentModal, open: openModal } = useModal();
-  const lastLightboxIndex = useRef<number | null>(null);
+  const lastLightboxIndex = useRef<string | null>(null);
   const prevModal = useRef<string>(null);
   const { loadCommentCountsBatch } = useComments();
 
@@ -46,10 +50,49 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
       loadCommentCountsBatch(imageIds);
     }
   }, [images, loadCommentCountsBatch]);
-  // Defensive mapping: ensure each image always has a valid url and s3Progressive, and created_at
-  const imagesWithUrl = useMemo(
-    () =>
-      images?.map((img) => ({
+
+  // Pre-calculate filter dynamic category counts accurately across variable tables
+  const counts = useMemo(() => {
+    if (!images) return { all: 0, nude: 0, notNude: 0 };
+    let nude = 0;
+    let notNude = 0;
+    images.forEach((img) => {
+      const isNude =
+        img.nudity === true || String(img.nudity).toLowerCase() === "true";
+      if (isNude) {
+        nude++;
+      } else {
+        notNude++;
+      }
+    });
+    return { all: images.length, nude, notNude };
+  }, [images]);
+
+  // Defensive mapping & active list filtering matching user criteria
+  const imagesWithUrl = useMemo(() => {
+    if (!images) {
+      console.log("📸 [GALLERY DEBUG] No images provided to component.");
+      return [];
+    }
+
+    if (images.length > 0) {
+      console.log(
+        "📸 [GALLERY DEBUG] Raw First Image from DB:",
+        JSON.stringify(images[0], null, 2),
+      );
+    }
+
+    // Filter incoming rows based on the active nudity filter state
+    const filtered = images.filter((img) => {
+      const isNude =
+        img.nudity === true || String(img.nudity).toLowerCase() === "true";
+      if (nudityFilter === "nude") return isNude;
+      if (nudityFilter === "not-nude") return !isNude;
+      return true;
+    });
+
+    const mapped = filtered.map((img) => {
+      return {
         ...img,
         url:
           img.s3Progressive?.[0]?.url ?? "/favicons/android-chrome-512x512.png",
@@ -64,15 +107,22 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
         year: img.year ?? "",
         description: img.description ?? "",
         created_at: img.created_at ?? "",
-        orientation:
-          img.orientation === "vertical" ||
-          img.orientation === "horizontal" ||
-          img.orientation === "square"
-            ? img.orientation
-            : undefined,
-      })),
-    [images],
-  );
+        orientation: img.orientation,
+      };
+    });
+
+    if (mapped.length > 0) {
+      console.log("📸 [GALLERY DEBUG] Mapped First Image Configuration:", {
+        id: mapped[0].id,
+        title: mapped[0].title,
+        width: mapped[0].width,
+        height: mapped[0].height,
+        orientation: mapped[0].orientation,
+      });
+    }
+
+    return mapped;
+  }, [images, nudityFilter]);
 
   useEffect(() => {
     if (currentModal && isLightboxOpen) {
@@ -94,10 +144,8 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
     prevModal.current = currentModal;
   }, [currentModal]);
 
-  const openLightbox = useCallback((idx: number) => {
-    setLightboxIndex(
-      lastLightboxIndex.current !== null ? lastLightboxIndex.current : idx,
-    );
+  const openLightbox = useCallback((id: string) => {
+    setLightboxIndex(id);
     setIsLightboxOpen(true);
     lastLightboxIndex.current = null;
   }, []);
@@ -109,7 +157,6 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
     }, 1200);
   }, [router]);
 
-  // SVG Download icon (Material style)
   const DownloadIcon = () => (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
       <rect width="22" height="22" rx="11" fill="rgba(244,211,94,0.10)" />
@@ -123,68 +170,117 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
     </svg>
   );
 
-  if (!imagesWithUrl || imagesWithUrl.length === 0)
+  // Safely compute lookahead index matching target Lightbox constraints
+  const computedActiveIndex = useMemo(() => {
+    const foundIdx = imagesWithUrl.findIndex(
+      (img) => String(img.id) === String(lightboxIndex),
+    );
+    return foundIdx === -1 ? 0 : foundIdx;
+  }, [imagesWithUrl, lightboxIndex]);
+
+  if (!imagesWithUrl || (imagesWithUrl.length === 0 && nudityFilter === "all"))
     return <p>No images found for this photographer.</p>;
 
   return (
     <>
+      {/* 🌟 Functional Filtering Pill Rows Container */}
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-          gap: 16,
+          display: "flex",
+          gap: "8px",
           width: "100%",
           maxWidth: 1200,
-          margin: "0 auto",
+          margin: "0 auto 24px auto",
+          padding: "0 4px",
         }}
       >
-        {imagesWithUrl.map((img, idx) => (
-          <div
-            key={img.id}
-            style={{
-              position: "relative",
-              width: "100%",
-              height: "auto",
-              aspectRatio: "1/1",
-              minHeight: 0,
-              borderRadius: 8,
-              overflow: "hidden",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-              background: "#f8f8f8",
-              cursor: "pointer",
-            }}
-            onClick={() => openLightbox(idx)}
-          >
-            <ImageWrapper
-              image={{
-                ...img,
-                year: typeof img.year === "number" ? img.year : undefined,
-              }}
-              onLoginRequired={onLoginRequired}
-              sizes="
-                (max-width: 480px) 160px,
-                (max-width: 768px) 180px,
-                200px
-              "
-              width={186}
-              height={186}
-              imgStyleOverride={
-                img.orientation === "horizontal"
-                  ? {
-                      objectFit: "cover",
-                      width: "auto",
-                      height: "100%",
-                    }
-                  : {
-                      width: "100%",
-                      height: "auto",
-                      objectFit: "contain",
-                    }
-              }
-            />
-          </div>
-        ))}
+        <button
+          onClick={() => setNudityFilter("all")}
+          className={`${styles.nudityPill} ${nudityFilter === "all" ? styles.nudityPillActive : ""}`}
+        >
+          All ({counts.all})
+        </button>
+        <button
+          onClick={() => setNudityFilter("not-nude")}
+          className={`${styles.nudityPill} ${nudityFilter === "not-nude" ? styles.nudityPillActive : ""}`}
+        >
+          Safe ({counts.notNude})
+        </button>
+        <button
+          onClick={() => setNudityFilter("nude")}
+          className={`${styles.nudityPill} ${nudityFilter === "nude" ? styles.nudityPillActive : ""}`}
+        >
+          Nude ({counts.nude})
+        </button>
       </div>
+
+      {imagesWithUrl.length === 0 ? (
+        <p
+          style={{
+            textAlign: "center",
+            width: "100%",
+            padding: "40px 0",
+            color: "#6b7280",
+          }}
+        >
+          No images match the selected filter criteria.
+        </p>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+            gap: 16,
+            width: "100%",
+            maxWidth: 1200,
+            margin: "0 auto",
+          }}
+        >
+          {imagesWithUrl.map((img) => (
+            <div
+              key={img.id}
+              style={{
+                position: "relative",
+                width: "100%",
+                aspectRatio: "1/1",
+                borderRadius: 8,
+                overflow: "hidden",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                background: "#f8f8f8",
+                cursor: "pointer",
+              }}
+              onClick={() => openLightbox(String(img.id))}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                <ImageWrapper
+                  image={{
+                    ...img,
+                    year: typeof img.year === "number" ? img.year : undefined,
+                  }}
+                  onLoginRequired={onLoginRequired}
+                  sizes="(max-width: 480px) 160px, (max-width: 768px) 180px, 200px"
+                  width={400}
+                  height={400}
+                  imgStyleOverride={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       <Suspense
         fallback={
           <div style={{ textAlign: "center", padding: "2em" }}>
@@ -226,8 +322,8 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                   }
                 : undefined,
           }))}
-          index={lightboxIndex}
-          plugins={[Zoom]} // No Download plugin, we use toolbar!
+          index={computedActiveIndex}
+          plugins={[Zoom]}
           zoom={{
             maxZoomPixelRatio: 3,
             minZoom: 1,
@@ -249,8 +345,14 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                 created_at?: string;
                 download?: { url?: string; filename?: string };
               };
+
+              const realTimeSlideData = imagesWithUrl.find(
+                (i) => String(i.id) === String(typedSlide.id),
+              );
               const safeZoom = typeof zoom === "number" && zoom > 1 ? zoom : 1;
-              const safeWidth = typedSlide.width ?? 900;
+              const safeWidth =
+                realTimeSlideData?.width ?? typedSlide.width ?? 900;
+
               const bestZoomImgUrl = getProgressiveZoomSrc(
                 typedSlide.s3Progressive || [],
                 safeZoom,
@@ -293,13 +395,14 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                         (typedSlide.year || "Unknown Year")}
                     </span>
                   </div>
+
                   <ImageWrapper
                     image={{
                       ...typedSlide,
                       id: String(typedSlide.id ?? ""),
                       url: bestZoomImgUrl,
-                      width: typedSlide.width ?? 1920,
-                      height: typedSlide.height ?? 1080,
+                      width: realTimeSlideData?.width ?? 900,
+                      height: realTimeSlideData?.height ?? 900,
                       title: typedSlide.title ?? "",
                       author: typedSlide.author ?? "",
                       created_at: typedSlide.created_at ?? "",
@@ -315,10 +418,11 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                       objectFit: "contain",
                     }}
                     sizes="100vw"
-                    width={typedSlide.width ?? 1920}
-                    height={typedSlide.height ?? 1080}
+                    width={realTimeSlideData?.width ?? 900}
+                    height={realTimeSlideData?.height ?? 900}
                     showOverlayButtons={false}
                   />
+
                   <div
                     className={styles.lightboxDescription}
                     style={{
@@ -329,7 +433,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                       textAlign: "center",
                       color: "#fff",
                       fontSize: "1.04rem",
-                      padding: "16px 24px 64px 24px", // extra bottom padding!
+                      padding: "16px 24px 64px 24px",
                       background: "rgba(0,0,0,0.4)",
                       borderTopLeftRadius: "12px",
                       borderTopRightRadius: "12px",
@@ -374,34 +478,29 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
             },
           }}
           on={{
-            view: ({ index }) => setLightboxIndex(index),
+            view: ({ index }) => {
+              const currentTargetImg = imagesWithUrl[index];
+              if (currentTargetImg)
+                setLightboxIndex(String(currentTargetImg.id));
+            },
           }}
           toolbar={{
             buttons: [
               (() => {
-                const currentSlide = imagesWithUrl[lightboxIndex];
+                const currentSlide = imagesWithUrl.find(
+                  (img) => String(img.id) === String(lightboxIndex),
+                );
                 const downloadUrl =
                   currentSlide?.filename && currentSlide?.base_url
                     ? `${currentSlide.base_url}/originals/${currentSlide.filename}`
                     : null;
 
-                // No download available: render disabled icon
                 if (!downloadUrl) {
                   return (
                     <button
                       key="download"
-                      title="Download"
-                      aria-label="Download"
                       className={styles.lightboxDownloadButton}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        color: "#fff",
-                        marginRight: 8,
-                        fontSize: 14,
-                        cursor: "not-allowed",
-                        opacity: 0.5,
-                      }}
+                      style={{ opacity: 0.5 }}
                       disabled
                     >
                       <DownloadIcon />
@@ -412,24 +511,10 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                 return (
                   <button
                     key="download"
-                    title="Download"
-                    aria-label="Download"
                     className={styles.lightboxDownloadButton}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      color: "#fff",
-                      marginRight: 8,
-                      fontSize: 14,
-                      cursor: "pointer",
-                    }}
                     onClick={() => {
-                      if (!currentSlide?.base_url || !currentSlide?.filename) {
+                      if (!currentSlide?.base_url || !currentSlide?.filename)
                         return;
-                      }
-
-                      const slideFilename = currentSlide.filename;
-
                       openModal("downloadOptions", {
                         image: {
                           base_url: currentSlide.base_url,
@@ -444,20 +529,14 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                           handleDownloadOptionClick({
                             option,
                             user,
-                            originalFilename: slideFilename,
+                            originalFilename: currentSlide.filename,
                             eventName: "downloadInPhotographerClicked",
                             onRequireLogin: handleLoginRequired,
                             trackEvent: (eventName, value) => {
                               sendGTMEvent({ event: eventName, value });
                             },
                             onErrorFallback: (err) => {
-                              console.error(
-                                "Download failed, fallback will open in new tab",
-                                err,
-                              );
-                              toast.error(
-                                "Could not download file directly — opening in a new tab.",
-                              );
+                              console.error(err);
                             },
                           });
                         },

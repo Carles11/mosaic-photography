@@ -8,6 +8,29 @@
   padding: 0;
 }
 
+.nudityPill {
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.nudityPill:hover {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+.nudityPillActive {
+  background-color: var(--background-color, #1d1d1d);
+  color: var(--text-color, #ffffff);
+  border-color: var(--background-color, #1d1d1d);
+}
+
 @media (max-width: 480px) {
   .lightboxDescription {
     padding-bottom: 80px !important;

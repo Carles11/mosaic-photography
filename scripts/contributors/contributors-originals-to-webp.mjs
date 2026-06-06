@@ -39,6 +39,7 @@ async function convertToWebp(imageName) {
 
   try {
     await sharp(inputFile)
+      .rotate()
       .webp({
         quality: 95,
       })

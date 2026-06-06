@@ -74,6 +74,7 @@ async function processImage(imageName) {
     if (imageWidth >= width) {
       try {
         await sharp(inputFile)
+          .rotate()
           .resize({
             width,
             withoutEnlargement: true,

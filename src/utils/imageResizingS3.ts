@@ -10,21 +10,22 @@ export function convertToWebpExtension(filename: string): string {
 // Helper for best image size for zoomed view
 export function getBestS3FolderForWidth(
   image: ImageWithOrientation,
-  renderedWidth: number
+  renderedWidth: number,
 ) {
-  const imgWidth = image.width ?? 1920;
+  const imgWidth = image.width; // no fallback
   const imgFilename = image.filename ?? "";
   const imgBaseUrl = image.base_url ?? "";
   // Only include sizes that exist for this image
-  const availableSizes = S3_SIZE_WIDTHS.filter((w) => w <= imgWidth);
-  // Find the smallest available S3 size >= renderedWidth, or largest available
+  const availableSizes = imgWidth
+    ? S3_SIZE_WIDTHS.filter((w) => w <= imgWidth)
+    : [400, 600, 800]; // conservative fallback when width unknown  // Find the smallest available S3 size >= renderedWidth, or largest available
   const largerOrEqual = availableSizes.filter((w) => w >= renderedWidth);
-  const bestSize =
+  const bestSize: number =
     largerOrEqual.length > 0
       ? largerOrEqual[0]
       : availableSizes.length > 0
-      ? availableSizes[availableSizes.length - 1]
-      : imgWidth;
+        ? availableSizes[availableSizes.length - 1]
+        : (imgWidth ?? 800);
 
   // If bestSize equals imgWidth and it's not in availableSizes, use originalsWEBP
   const folder = availableSizes.includes(bestSize)
@@ -35,7 +36,7 @@ export function getBestS3FolderForWidth(
     url:
       imgBaseUrl && filename
         ? `${imgBaseUrl}/${folder}/${filename}`
-        : image.url ?? "",
+        : (image.url ?? ""),
     width: bestSize,
     folder,
     filename,
@@ -44,7 +45,7 @@ export function getBestS3FolderForWidth(
 
 // Helper to mount all S3 URLs for progressive loading
 export function getAllS3Urls(image: ImageWithOrientation) {
-  const imgWidth = image.width ?? 1920;
+  const imgWidth = image.width ?? 800;
   const imgFilename = image.filename ?? "";
   const imgBaseUrl = image.base_url ?? "";
   if (!imgBaseUrl || !imgFilename) return [];
@@ -60,7 +61,7 @@ export function getAllS3Urls(image: ImageWithOrientation) {
     .concat([
       {
         url: `${imgBaseUrl}/originalsWEBP/${convertToWebpExtension(
-          imgFilename
+          imgFilename,
         )}`,
         width: imgWidth,
       },
@@ -73,7 +74,7 @@ export function getProgressiveZoomSrc(
   s3Progressive: Array<{ url: string; width: number }>,
   zoomLevel: number,
   imageWidth: number,
-  fallbackSrc?: string
+  fallbackSrc?: string,
 ): string {
   if (!s3Progressive || s3Progressive.length === 0) {
     return fallbackSrc || "";
@@ -102,7 +103,7 @@ export function getProgressiveZoomSrc(
 
 export function getImageStyle(
   orientation: string,
-  imgStyleOverride?: React.CSSProperties
+  imgStyleOverride?: React.CSSProperties,
 ) {
   let style: React.CSSProperties = {};
   if (orientation === "vertical") {

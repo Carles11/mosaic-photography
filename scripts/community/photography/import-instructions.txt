@@ -1,0 +1,114 @@
+# Mosaic — Add a Photography Contributor
+
+## Folder structure required
+
+```
+Contributors/
+└── <contributor-slug>/
+    ├── contributor.json        # required
+    ├── images.json             # optional, per-image overrides
+    └── originals/
+        └── used/               # place final images here
+            ├── photo-01.jpg
+            └── photo-02.jpg
+```
+
+---
+
+## 1. Prepare the contributor folder
+
+Place the contributor's folder under:
+```
+C:\Users\elcar\Documents\WEBs\Mosaic\Contributors\
+```
+
+Put all final images inside `originals/used/`. Supported formats: `.jpg`, `.jpeg`, `.png`, `.tif`, `.tiff`, `.webp`, `.nef`.
+
+---
+
+## 2. Create contributor.json
+
+```json
+{
+  "slug": "contributor-slug",
+  "name": "Full Name",
+  "bio": "Short bio.",
+  "description": "Longer description.",
+  "website": "https://...",
+  "instagram": "@handle",
+  "featured": false,
+  "license_default": "cc-by-4.0",
+  "default_license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "country": "CL",
+  "email": "email@example.com",
+  "source_type": "community",
+  "submission_notes": "",
+  "nudity": false,
+  "workType": "photography",
+  "category": "nature"
+}
+```
+
+---
+
+## 3. Create images.json (optional)
+
+Only needed if you want to override default values for specific images. Any field omitted falls back to the auto-generated default (title from filename, `featured: false`, `nudity: false`, etc.).
+
+```json
+{
+  "photo-01.jpg": {
+    "title": "Custom Title",
+    "description": "Custom description.",
+    "year": 2023,
+    "featured": true,
+    "nudity": false
+  }
+}
+```
+
+---
+
+## 4. Run the import script
+
+From the project root:
+
+```bash
+node scripts/community/photography/import-photography-contributor.mjs <contributor-slug>
+```
+
+**What this does, in order:**
+1. Converts all originals → `originalsWEBP/` (quality 95, skips already converted)
+2. Generates `w400/`, `w600/`, `w800/`, `w1200/`, `w1600/` variants from the WEBP originals (quality 85, only up to the original's actual width)
+3. Creates the contributor record in Supabase (skipped if slug already exists)
+4. Inserts all image records into Supabase using `contributor.json` + `images.json`
+5. Syncs `originals/used/` to S3 under `/originals`
+6. Syncs `originalsWEBP/` and all width variant folders to S3
+
+**S3 behavior:** new files are uploaded, unchanged files are skipped, modified files are replaced. Files are never deleted from S3 automatically.
+
+---
+
+## Optional flags
+
+```bash
+# Preview everything — nothing is written to DB or S3
+node scripts/community/photography/import-photography-contributor.mjs <slug> --dry-run
+
+# Skip image conversion and resizing (already done), go straight to DB + S3
+node scripts/community/photography/import-photography-contributor.mjs <slug> --skip-convert
+
+# Skip S3 sync, only update the database
+node scripts/community/photography/import-photography-contributor.mjs <slug> --skip-s3
+```
+
+---
+
+## Print quality reference
+
+| Megapixels | Rating |
+|---|---|
+| 20 MP+ | professional |
+| 10–20 MP | excellent |
+| 4–10 MP | good |
+| below 4 MP | standard |
