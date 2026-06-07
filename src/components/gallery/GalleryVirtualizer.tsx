@@ -10,6 +10,7 @@ import {
   useEffect,
   useRef,
 } from "react";
+import { useOverlayToggle } from "@/hooks/useOverlayToggle";
 import type React from "react";
 import type { ImageWithOrientation } from "@/types/gallery";
 import ImageWrapper from "@/components/wrappers/ImageWrapper";
@@ -46,7 +47,8 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
 }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const [overlaysVisible, setOverlaysVisible] = useState(true);
+  const { overlaysVisible, onSlideContainerClick, resetOverlays } =
+    useOverlayToggle();
   const { currentModal, open: openModal } = useModal();
   const lastLightboxIndex = useRef<number | null>(null);
   const prevModal = useRef<unknown>(null);
@@ -96,12 +98,12 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
         <div
           className={cssClass}
           style={{ aspectRatio }}
-          onClick={() => {
-            // open lightbox and ensure overlays are visible when opening
-            setLightboxIndex(index);
-            setOverlaysVisible(true);
-            setIsLightboxOpen(true);
-          }}
+            onClick={() => {
+              // open lightbox and ensure overlays are visible when opening
+              setLightboxIndex(index);
+              resetOverlays();
+              setIsLightboxOpen(true);
+            }}
         >
           <ImageWrapper
             image={data}
@@ -119,7 +121,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
         </div>
       );
     },
-    [onLoginRequired],
+    [onLoginRequired, resetOverlays],
   );
 
   useEffect(() => {
@@ -145,9 +147,9 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
   // Keep overlays visible when changing slides
   useEffect(() => {
     if (isLightboxOpen) {
-      setOverlaysVisible(true);
+      resetOverlays();
     }
-  }, [lightboxIndex, isLightboxOpen]);
+  }, [lightboxIndex, isLightboxOpen, resetOverlays]);
 
   const DownloadIcon = ({ size = 33 }: { size?: number }) => (
     <svg
@@ -168,27 +170,6 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
       />
     </svg>
   );
-
-  /**
-   * Click handler for the slide container.
-   * Toggle overlays only when the click wasn't inside an interactive element.
-   */
-  const onSlideContainerClick = (e: React.MouseEvent) => {
-    // if click is inside an interactive element, ignore
-    const target = e.target as HTMLElement | null;
-    if (!target) return;
-
-    // If the click is on or inside a link/button/control, do not toggle overlays.
-    // This covers <a>, <button>, [role="button"], inputs, selects, textareas, and elements having onclick handlers.
-    // We also include svg and path so clicking icons don't toggle inadvertently.
-    const interactive = target.closest(
-      "a, button, [role='button'], input, textarea, select, label, svg, path",
-    );
-    if (interactive) return;
-
-    // Otherwise toggle overlays visibility
-    setOverlaysVisible((v) => !v);
-  };
 
   // Build the toolbar buttons conditionally so toolbar is hidden when overlaysVisible === false
   const toolbarButtons = useMemo(() => {

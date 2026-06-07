@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import styles from "./PhotographyDetail.module.css";
 import {
   fetchAllContributorSlugsSSR,
   fetchContributorBySlugSSR,
@@ -10,6 +9,8 @@ import Image from "next/image";
 import { fetchContributorBySlugWithFeaturedSSR } from "@/utils/fetchContributorBySlugWithFeaturedSSR";
 import ShareButtons from "@/components/buttons/ShareButtons";
 import Link from "next/link";
+
+import styles from "./PhotographyDetail.module.css";
 
 type ContributorPageProps = {
   params: Promise<{ slug: string }>;

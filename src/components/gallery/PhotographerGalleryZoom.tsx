@@ -18,6 +18,7 @@ import { handleDownloadOptionClick } from "@/utils/handleDownloadOptionClick";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import type { GalleryProps } from "@/types/gallery";
+import { useOverlayToggle } from "@/hooks/useOverlayToggle";
 import styles from "./photographerGalleryZoom.module.css";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import toast from "react-hot-toast";
@@ -32,6 +33,8 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
 }) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<string>("");
+  const { overlaysVisible, onSlideContainerClick, resetOverlays } =
+    useOverlayToggle();
   const [nudityFilter, setNudityFilter] = useState<"all" | "nude" | "not-nude">(
     "all",
   );
@@ -147,8 +150,9 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
   const openLightbox = useCallback((id: string) => {
     setLightboxIndex(id);
     setIsLightboxOpen(true);
+    resetOverlays();
     lastLightboxIndex.current = null;
-  }, []);
+  }, [resetOverlays]);
 
   const handleLoginRequired = useCallback(() => {
     toast.error("Please log in to download images.");
@@ -367,34 +371,37 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                     width: "100%",
                     height: "100%",
                   }}
+                  onClick={onSlideContainerClick}
                 >
-                  <div
-                    className={styles.lightboxAuthor}
-                    style={{
-                      position: "absolute",
-                      left: 0,
-                      top: 0,
-                      width: "100%",
-                      height: "22px",
-                      textAlign: "center",
-                      color: "#fff",
-                      fontSize: "1.2rem",
-                      padding: "11px",
-                      background: "rgba(0,0,0,0.2)",
-                      borderTopLeftRadius: "12px",
-                      borderTopRightRadius: "12px",
-                      zIndex: 1,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <span>
-                      {(typedSlide.author || "Unknown Author") +
-                        ", " +
-                        (typedSlide.year || "Unknown Year")}
-                    </span>
-                  </div>
+                  {overlaysVisible ? (
+                    <div
+                      className={styles.lightboxAuthor}
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        top: 0,
+                        width: "100%",
+                        height: "22px",
+                        textAlign: "center",
+                        color: "#fff",
+                        fontSize: "1.2rem",
+                        padding: "11px",
+                        background: "rgba(0,0,0,0.2)",
+                        borderTopLeftRadius: "12px",
+                        borderTopRightRadius: "12px",
+                        zIndex: 1,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <span>
+                        {(typedSlide.author || "Unknown Author") +
+                          ", " +
+                          (typedSlide.year || "Unknown Year")}
+                      </span>
+                    </div>
+                  ) : null}
 
                   <ImageWrapper
                     image={{
@@ -423,132 +430,143 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                     showOverlayButtons={false}
                   />
 
-                  <div
-                    className={styles.lightboxDescription}
-                    style={{
-                      position: "absolute",
-                      left: 0,
-                      bottom: 0,
-                      width: "100%",
-                      textAlign: "center",
-                      color: "#fff",
-                      fontSize: "1.04rem",
-                      padding: "16px 24px 64px 24px",
-                      background: "rgba(0,0,0,0.4)",
-                      borderTopLeftRadius: "12px",
-                      borderTopRightRadius: "12px",
-                      zIndex: 1001,
-                      maxHeight: "28vh",
-                      overflowY: "auto",
-                      boxSizing: "border-box",
-                      pointerEvents: "auto",
-                      marginBottom: "0",
-                    }}
-                  >
-                    {typedSlide.description || ""}
-                  </div>
+                  {overlaysVisible ? (
+                    <div
+                      className={styles.lightboxDescription}
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        bottom: 0,
+                        width: "100%",
+                        textAlign: "center",
+                        color: "#fff",
+                        fontSize: "1.04rem",
+                        padding: "16px 24px 64px 24px",
+                        background: "rgba(0,0,0,0.4)",
+                        borderTopLeftRadius: "12px",
+                        borderTopRightRadius: "12px",
+                        zIndex: 1001,
+                        maxHeight: "28vh",
+                        overflowY: "auto",
+                        boxSizing: "border-box",
+                        pointerEvents: "auto",
+                        marginBottom: "0",
+                      }}
+                    >
+                      {typedSlide.description || ""}
+                    </div>
+                  ) : null}
 
-                  <div
-                    className={styles.lightboxButtonRow}
-                    style={{
-                      position: "fixed",
-                      bottom: 20,
-                      right: 20,
-                      zIndex: 2000,
-                      display: "flex",
-                      gap: "10px",
-                      pointerEvents: "auto",
-                    }}
-                  >
-                    <HeartButton
-                      imageId={String(typedSlide.id ?? "")}
-                      onLoginRequired={
-                        onLoginRequired || (() => router.push("/auth/login"))
-                      }
-                    />
-                    <CommentsLauncher
-                      imageId={String(typedSlide.id ?? "")}
-                      onLoginRequired={
-                        onLoginRequired || (() => router.push("/auth/login"))
-                      }
-                    />
-                  </div>
+                  {overlaysVisible ? (
+                    <div
+                      className={styles.lightboxButtonRow}
+                      style={{
+                        position: "fixed",
+                        bottom: 20,
+                        right: 20,
+                        zIndex: 2000,
+                        display: "flex",
+                        gap: "10px",
+                        pointerEvents: "auto",
+                      }}
+                    >
+                      <HeartButton
+                        imageId={String(typedSlide.id ?? "")}
+                        onLoginRequired={
+                          onLoginRequired || (() => router.push("/auth/login"))
+                        }
+                      />
+                      <CommentsLauncher
+                        imageId={String(typedSlide.id ?? "")}
+                        onLoginRequired={
+                          onLoginRequired || (() => router.push("/auth/login"))
+                        }
+                      />
+                    </div>
+                  ) : null}
                 </div>
               );
             },
           }}
+          className={
+            !overlaysVisible ? styles.hideLightboxUi : undefined
+          }
           on={{
             view: ({ index }) => {
               const currentTargetImg = imagesWithUrl[index];
-              if (currentTargetImg)
+              if (currentTargetImg) {
                 setLightboxIndex(String(currentTargetImg.id));
+                resetOverlays();
+              }
             },
           }}
           toolbar={{
-            buttons: [
-              (() => {
-                const currentSlide = imagesWithUrl.find(
-                  (img) => String(img.id) === String(lightboxIndex),
-                );
-                const downloadUrl =
-                  currentSlide?.filename && currentSlide?.base_url
-                    ? `${currentSlide.base_url}/originals/${currentSlide.filename}`
-                    : null;
+            buttons: !overlaysVisible
+              ? []
+              : [
+                  (() => {
+                    const currentSlide = imagesWithUrl.find(
+                      (img) => String(img.id) === String(lightboxIndex),
+                    );
+                    const downloadUrl =
+                      currentSlide?.filename && currentSlide?.base_url
+                        ? `${currentSlide.base_url}/originals/${currentSlide.filename}`
+                        : null;
 
-                if (!downloadUrl) {
-                  return (
-                    <button
-                      key="download"
-                      className={styles.lightboxDownloadButton}
-                      style={{ opacity: 0.5 }}
-                      disabled
-                    >
-                      <DownloadIcon />
-                    </button>
-                  );
-                }
+                    if (!downloadUrl) {
+                      return (
+                        <button
+                          key="download"
+                          className={styles.lightboxDownloadButton}
+                          style={{ opacity: 0.5 }}
+                          disabled
+                        >
+                          <DownloadIcon />
+                        </button>
+                      );
+                    }
 
-                return (
-                  <button
-                    key="download"
-                    className={styles.lightboxDownloadButton}
-                    onClick={() => {
-                      if (!currentSlide?.base_url || !currentSlide?.filename)
-                        return;
-                      openModal("downloadOptions", {
-                        image: {
-                          base_url: currentSlide.base_url,
-                          filename: currentSlide.filename,
-                          width: currentSlide.width,
-                          height: currentSlide.height,
-                          print_quality: currentSlide.print_quality,
-                        },
-                        title: "Choose your option",
-                        onClose: () => {},
-                        onDownloadOption: async (option) => {
-                          handleDownloadOptionClick({
-                            option,
-                            user,
-                            originalFilename: currentSlide.filename,
-                            eventName: "downloadInPhotographerClicked",
-                            onRequireLogin: handleLoginRequired,
-                            trackEvent: (eventName, value) => {
-                              sendGTMEvent({ event: eventName, value });
+                    return (
+                      <button
+                        key="download"
+                        className={styles.lightboxDownloadButton}
+                        onClick={() => {
+                          if (!currentSlide?.base_url || !currentSlide?.filename)
+                            return;
+                          openModal("downloadOptions", {
+                            image: {
+                              base_url: currentSlide.base_url,
+                              filename: currentSlide.filename,
+                              width: currentSlide.width,
+                              height: currentSlide.height,
+                              print_quality: currentSlide.print_quality,
                             },
-                            onErrorFallback: (err) => {
-                              console.error(err);
+                            title: "Choose your option",
+                            onClose: () => {},
+                            onDownloadOption: async (option) => {
+                              handleDownloadOptionClick({
+                                option,
+                                user,
+                                originalFilename: currentSlide.filename,
+                                eventName: "downloadInPhotographerClicked",
+                                onRequireLogin: handleLoginRequired,
+                                trackEvent: (eventName, value) => {
+                                  sendGTMEvent({ event: eventName, value });
+                                },
+                                onErrorFallback: (err) => {
+                                  console.error(err);
+                                },
+                              });
                             },
                           });
-                        },
-                      });
-                    }}
-                  >
-                    <DownloadIcon />
-                  </button>
-                );
-              })(),
-              "close",
-            ],
+                        }}
+                      >
+                        <DownloadIcon />
+                      </button>
+                    );
+                  })(),
+                  "close",
+                ],
           }}
         />
       </Suspense>

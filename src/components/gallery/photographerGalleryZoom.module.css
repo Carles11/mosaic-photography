@@ -31,11 +31,30 @@
   border-color: var(--background-color, #1d1d1d);
 }
 
+/* Hide built-in lightbox controls when overlays are hidden */
+.hideLightboxUi :global(.yarl__toolbar),
+.hideLightboxUi :global(.yarl__toolbar-button),
+.hideLightboxUi :global(.yarl__toolbarButtons),
+.hideLightboxUi :global(.yarl__zoom),
+.hideLightboxUi :global(.yarl__zoom-button),
+.hideLightboxUi :global(.yarl__button--zoom),
+.hideLightboxUi :global(.yarl__button--prev),
+.hideLightboxUi :global(.yarl__button--next),
+.hideLightboxUi :global(.yarl__slide__nav),
+.hideLightboxUi :global(.yarl__nav),
+.hideLightboxUi :global(.yarl__icon),
+.hideLightboxUi :global(.yarl__controls) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
 @media (max-width: 480px) {
   .lightboxDescription {
     padding-bottom: 80px !important;
   }
-  .lightboxAuthor {
+
+.lightboxAuthor {
     font-size: 0.9rem !important;
     padding-top: 22px !important;
     top: 33px !important;
