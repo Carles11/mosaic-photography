@@ -25,7 +25,7 @@ const ContributorsSlide: React.FC<ContributorsSlideProps> = ({
     "mixed",
   );
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
-  console.log("Rendering ContributorsSlide", { contributors });
+
   const normalizedContributors = useMemo(
     () => contributors.filter((contributor) => contributor.slug),
     [contributors],

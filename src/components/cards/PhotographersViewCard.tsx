@@ -97,7 +97,8 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                       return null;
                     }
                   })
-                  .filter((item): item is DropdownItem => item !== null);
+                  .filter((item): item is DropdownItem => item !== null)
+                  .filter((item) => item.store !== "Fine Art America");
               }
               return (
                 <div
