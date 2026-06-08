@@ -22,6 +22,16 @@
   filter: brightness(75%);
 }
 
+.description {
+  font-size: 1rem;
+  color: var(--text-color);
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  max-width: 275px;
+}
 /* Dropdown styles */
 .dropdown {
   position: relative;
@@ -32,7 +42,8 @@
   z-index: 2;
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  flex-direction: column;
 }
 
 .dropdown summary {
@@ -110,6 +121,15 @@
   cursor: pointer;
 }
 
-.paddingLeft {
-  padding-left: 11px;
+@media (max-width: 600px) {
+  /* Dropdown triangle */
+  .dropdown ul::before {
+    visibility: hidden;
+  }
+
+  .dropdown ul {
+    margin-top: 0;
+    padding-top: 0;
+    left: 50%;
+  }
 }

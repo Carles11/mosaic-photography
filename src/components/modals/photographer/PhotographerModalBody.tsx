@@ -10,7 +10,12 @@ const PhotographerModalBody: React.FC<ModalPropsMap["photographer"]> = ({
   onClose,
 }) => {
   const [stores, setStores] = useState<
-    { store: string; website: string; affiliate: boolean }[]
+    {
+      store: string;
+      website: string;
+      affiliate: boolean;
+      description: string;
+    }[]
   >([]);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -22,6 +27,7 @@ const PhotographerModalBody: React.FC<ModalPropsMap["photographer"]> = ({
           store: store.store,
           website: store.website,
           affiliate: store.affiliate,
+          description: store.description,
         };
       });
       setStores(parsedStores);
@@ -37,7 +43,7 @@ const PhotographerModalBody: React.FC<ModalPropsMap["photographer"]> = ({
         onClose();
       }
     },
-    [onClose, modalRef]
+    [onClose, modalRef],
   );
 
   const handleDropdownToggle = (isOpen: boolean) => {
@@ -66,7 +72,7 @@ const PhotographerModalBody: React.FC<ModalPropsMap["photographer"]> = ({
         <Image
           src={
             photographer.images?.find((img) =>
-              (img.url ?? "").startsWith("000_aaa")
+              (img.url ?? "").startsWith("000_aaa"),
             )?.url ||
             photographer.images?.[0]?.url ||
             ""

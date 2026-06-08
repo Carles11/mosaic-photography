@@ -57,7 +57,12 @@ export interface DesktopNavDropdownProps {
 
 export interface DropdownProps {
   buttonText: string;
-  items: { store: string; website: string; affiliate: boolean }[];
+  items: {
+    store: string;
+    website: string;
+    affiliate: boolean;
+    description: string;
+  }[];
   onToggle?: (isOpen: boolean) => void;
 }
 

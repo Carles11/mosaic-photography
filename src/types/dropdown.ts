@@ -2,6 +2,7 @@ export type DropdownItem = {
   store: string;
   website: string;
   affiliate: boolean;
+  description: string;
 };
 
 export type DropdownProps = {

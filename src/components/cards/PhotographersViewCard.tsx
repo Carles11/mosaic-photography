@@ -74,7 +74,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
     // 3. Trim extra whitespace
     return cleanText.trim();
   };
-
   return (
     <div className={styles.photographersViewCardContainer}>
       <div className="embla" ref={emblaRef}>
@@ -88,10 +87,13 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                   .map((storeString: string) => {
                     try {
                       const store = JSON.parse(storeString);
+                      console.log("Rendering store", { store });
+
                       return {
                         store: String(store.store),
                         website: String(store.website),
                         affiliate: Boolean(store.affiliate),
+                        description: String(store.description),
                       };
                     } catch {
                       return null;

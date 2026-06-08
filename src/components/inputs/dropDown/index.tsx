@@ -10,9 +10,7 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, onToggle }) => {
   return (
     <details className={styles.dropdown} onToggle={handleToggle}>
       <summary role="button">
-        <div className={`fancy-link ${styles.link} ${styles.paddingLeft}`}>
-          {buttonText}
-        </div>
+        <div className={`fancy-link ${styles.link}`}>{buttonText}</div>
       </summary>
       <ul>
         {items.map((item, index) => (
@@ -29,7 +27,12 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, onToggle }) => {
                 })
               }
             >
-              {item.store}
+              {/* {item.store} */}
+              {item.description && (
+                <p className={`${styles.description} no-fancy-link`}>
+                  {item.description}
+                </p>
+              )}
             </a>
           </li>
         ))}
