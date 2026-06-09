@@ -199,78 +199,133 @@ export default function TemplateSoftware({
           ))}
         </div>
       </section>
-      {/* Pricing Note */}
-      <section
-        style={{
-          display: "flex",
-          gap: "2rem",
-          margin: "3rem 0",
-          flexWrap: "wrap",
-        }}
-      >
-        <div
+      {/* Promo Code */}
+      {advertiser.promo_code && (
+        <section
           style={{
-            flex: 1,
-            minWidth: 220,
-            border: "1px solid rgba(255,255,255,0.07)",
-            padding: "1.5rem",
-            borderRadius: 0,
+            display: "flex",
+            gap: "2rem",
+            margin: "3rem 0",
+            flexWrap: "wrap",
           }}
         >
           <div
             style={{
-              color: "#fff",
-              textTransform: "uppercase",
-              fontWeight: 700,
-              fontSize: "1rem",
-              letterSpacing: "0.09em",
-              marginBottom: 8,
+              flex: 1,
+              minWidth: 220,
+              border: "1px solid rgba(255,255,255,0.07)",
+              padding: "1.5rem",
             }}
           >
-            ONE-TIME
+            <div
+              style={{
+                color: "#fff",
+                textTransform: "uppercase",
+                fontWeight: 700,
+                fontSize: "1rem",
+                letterSpacing: "0.09em",
+                marginBottom: 8,
+              }}
+            >
+              USE CODE
+            </div>
+            <div
+              style={{
+                color: "#fff",
+                fontSize: "2rem",
+                fontWeight: 700,
+                letterSpacing: "0.15em",
+                marginBottom: 12,
+              }}
+            >
+              {advertiser.promo_code}
+            </div>
+            <div
+              style={{
+                color: "rgba(255,255,255,0.6)",
+                fontSize: "0.98rem",
+                marginBottom: 16,
+              }}
+            >
+              Enter at checkout to save on every plugin.
+            </div>
+            {advertiser.website_url && (
+              <a
+                href={
+                  advertiser.name === "Retouch4me"
+                    ? "https://retouch4.me/promo"
+                    : advertiser.website_url
+                }
+                target="_blank"
+                rel="sponsored"
+                style={{
+                  background: "#fff",
+                  color: "#111",
+                  padding: "0.6rem 1.5rem",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                  fontWeight: 700,
+                  fontSize: "0.75rem",
+                  textDecoration: "none",
+                  display: "inline-block",
+                }}
+              >
+                Shop Now
+              </a>
+            )}
           </div>
           <div
             style={{
-              color: "rgba(255,255,255,0.6)",
-              fontSize: "0.98rem",
-              marginBottom: 12,
+              flex: 1,
+              minWidth: 220,
+              border: "1px solid rgba(255,255,255,0.07)",
+              padding: "1.5rem",
             }}
           >
-            Pay once, own forever.
+            <div
+              style={{
+                color: "#fff",
+                textTransform: "uppercase",
+                fontWeight: 700,
+                fontSize: "1rem",
+                letterSpacing: "0.09em",
+                marginBottom: 8,
+              }}
+            >
+              PREFER A LINK?
+            </div>
+            <div
+              style={{
+                color: "rgba(255,255,255,0.6)",
+                fontSize: "0.98rem",
+                marginBottom: 16,
+              }}
+            >
+              Discount applied automatically. No code needed.
+            </div>
+            {advertiser.promo_code_url && (
+              <a
+                href={advertiser.promo_code_url}
+                target="_blank"
+                rel="sponsored"
+                style={{
+                  background: "#fff",
+                  color: "#111",
+                  padding: "0.6rem 1.5rem",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                  fontWeight: 700,
+                  fontSize: "0.75rem",
+                  textDecoration: "none",
+                  display: "inline-block",
+                }}
+              >
+                Browse Plugins
+              </a>
+            )}
           </div>
-        </div>
-        <div
-          style={{
-            flex: 1,
-            minWidth: 220,
-            border: "1px solid rgba(255,255,255,0.07)",
-            padding: "1.5rem",
-            borderRadius: 0,
-          }}
-        >
-          <div
-            style={{
-              color: "#fff",
-              textTransform: "uppercase",
-              fontWeight: 700,
-              fontSize: "1rem",
-              letterSpacing: "0.09em",
-              marginBottom: 8,
-            }}
-          >
-            SUBSCRIPTION
-          </div>
-          <div
-            style={{
-              color: "rgba(255,255,255,0.6)",
-              fontSize: "0.98rem",
-              marginBottom: 12,
-            }}
-          >
-            Flexible access. Try multiple tools at lower cost.
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Free Trial CTA (Retouch4me only, using banner_image_url) */}
       {advertiser.slug === "retouch4me" && advertiser.banner_image_url && (
