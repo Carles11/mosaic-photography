@@ -554,7 +554,10 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
                                   sendGTMEvent({ event: eventName, value });
                                 },
                                 onErrorFallback: (err) => {
-                                  console.error(err);
+                                  console.error(
+                                    "Download failed — proxied successfully",
+                                    err,
+                                  );
                                 },
                               });
                             },

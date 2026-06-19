@@ -91,7 +91,7 @@ export function handleDownloadOptionClick({
     })
     .catch((error) => {
       onErrorFallback?.(error);
-      // Fallback always opens in a new tab, never replacing the app tab.
-      triggerBrowserDownload(option.url);
+      const proxyUrl = `/api/download-image?url=${encodeURIComponent(option.url)}&filename=${encodeURIComponent(suggestedFilename)}`;
+      triggerBrowserDownload(proxyUrl, suggestedFilename);
     });
 }

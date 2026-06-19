@@ -104,16 +104,17 @@ describe("handleDownloadOptionClick", () => {
     expect(mockAnchor.download).toBe("photo_w800.webp");
   });
 
-  it("calls onErrorFallback and falls back to tab-open when blob download fails", async () => {
+  it("calls onErrorFallback and falls back to proxy download when blob download fails", async () => {
     fetchSpy.mockRejectedValueOnce(new Error("network fail"));
 
     const params = makeParams({ user: { id: "user-1" } });
     await handleDownloadOptionClick(params);
 
     expect(params.onErrorFallback).toHaveBeenCalledWith(expect.any(Error));
-    // Fallback path: called again without filename → target="_blank"
+    // Fallback path: creates anchor with proxy URL and download attribute
     expect(createElementSpy).toHaveBeenCalledTimes(1);
-    expect(mockAnchor.target).toBe("_blank");
-    expect(mockAnchor.href).toBe(mockOption.url);
+    expect(mockAnchor.download).toBe("photo_w800.webp");
+    expect(mockAnchor.href).toContain("/api/download-image");
+    expect(mockAnchor.href).toContain(encodeURIComponent(mockOption.url));
   });
 });

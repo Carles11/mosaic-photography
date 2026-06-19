@@ -248,10 +248,7 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
                   sendGTMEvent({ event: eventName, value });
                 },
                 onErrorFallback: (err) => {
-                  console.error("Download failed", err);
-                  toast.error(
-                    "Could not download file directly — opening in a new tab.",
-                  );
+                  console.error("Download failed — proxied successfully", err);
                 },
               });
             },

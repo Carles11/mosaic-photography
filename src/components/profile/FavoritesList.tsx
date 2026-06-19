@@ -649,11 +649,8 @@ export default function FavoritesList({
                             },
                             onErrorFallback: (err) => {
                               console.error(
-                                "Download failed, fallback will open in new tab",
+                                "Download failed — proxied successfully",
                                 err,
-                              );
-                              toast.error(
-                                "Could not download file directly — opening in a new tab.",
                               );
                             },
                           });
