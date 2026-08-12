@@ -123,7 +123,13 @@ function makeImageXml(
 ) {
   // base_url already contains the full CDN base path; just append size bucket + filename
   const filenameWebp = image.filename.replace(/\.[^/.]+$/, ".webp");
-  const loc = `${image.base_url}/${bestSizeFolder(image.width)}/${filenameWebp}`;
+  // A few filenames contain characters that must be percent-encoded to fetch:
+  // spaces and non-ASCII ("gärtners") are invalid in a sitemap <loc>, and a
+  // literal "+" is decoded as a space by the CDN, so the object 403s unless
+  // sent as %2B. encodeURI leaves "+" alone, hence the extra replace.
+  const loc = encodeURI(
+    `${image.base_url}/${bestSizeFolder(image.width)}/${filenameWebp}`,
+  ).replace(/\+/g, "%2B");
   return `    <image:image>
       <image:loc>${loc}</image:loc>
       <image:title>${escapeXml(

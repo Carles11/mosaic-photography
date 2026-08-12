@@ -36,16 +36,34 @@ function toWebp(filename) {
 }
 
 // List filenames in an S3 "folder" (prefix). Returns a Set.
+//
+// Uses s3api's JSON output rather than `aws s3 ls`: the latter's columnar
+// output can't be split on whitespace safely (some filenames contain spaces)
+// and mangles non-ASCII characters, which silently hides objects that exist.
 function listFolder(prefix) {
   try {
-    const out = execFileSync("aws", ["s3", "ls", `s3://${BUCKET}/${prefix}/`], {
-      encoding: "utf8",
-    });
+    const out = execFileSync(
+      "aws",
+      [
+        "s3api",
+        "list-objects-v2",
+        "--bucket",
+        BUCKET,
+        "--prefix",
+        `${prefix}/`,
+        "--query",
+        "Contents[].Key",
+        "--output",
+        "json",
+      ],
+      { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 },
+    );
+    const keys = JSON.parse(out || "null") || [];
     return new Set(
-      out
-        .split("\n")
-        .map((line) => line.trim().split(/\s+/).pop())
-        .filter((name) => name && name.endsWith(".webp")),
+      keys
+        .map((key) => key.slice(`${prefix}/`.length))
+        // Ignore nested keys; we only want objects directly in this folder
+        .filter((name) => name && !name.includes("/")),
     );
   } catch {
     // Folder doesn't exist / empty listing
