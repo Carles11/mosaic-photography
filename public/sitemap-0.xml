@@ -7,145 +7,151 @@
     xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
     <loc>https://www.mosaic.photography/</loc>
-    <lastmod>2026-05-22T13:32:41.400Z</lastmod>
+    <lastmod>2026-08-12T22:05:41.307Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.mosaic.photography/photo-curations</loc>
-    <lastmod>2026-05-22T13:32:41.400Z</lastmod>
+    <lastmod>2026-08-12T22:05:41.307Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.mosaic.photography/faq</loc>
-    <lastmod>2026-05-22T13:32:41.400Z</lastmod>
+    <lastmod>2026-08-12T22:05:41.307Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.mosaic.photography/about</loc>
-    <lastmod>2026-05-31T00:00:00.000Z</lastmod>
+    <lastmod>2026-08-12T22:05:41.307Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mosaic.photography/app</loc>
+    <lastmod>2026-08-12T22:05:41.307Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.mosaic.photography/community/photography</loc>
-    <lastmod>2026-05-31T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mosaic.photography/community/photography/akiuonsen</loc>
-    <lastmod>2026-05-31T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mosaic.photography/community/photography/elcarles</loc>
-    <lastmod>2026-05-31T00:00:00.000Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <lastmod>2026-08-12T22:05:41.307Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.mosaic.photography/legal/privacy-policy</loc>
-    <lastmod>2026-05-22T13:32:41.400Z</lastmod>
+    <lastmod>2026-08-12T22:05:41.307Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.mosaic.photography/legal/terms-of-service</loc>
-    <lastmod>2026-05-22T13:32:41.400Z</lastmod>
+    <lastmod>2026-08-12T22:05:41.307Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.mosaic.photography/legal/credits</loc>
-    <lastmod>2026-05-22T13:32:41.400Z</lastmod>
+    <lastmod>2026-08-12T22:05:41.307Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.mosaic.photography/photographers/hudson-white</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mosaic.photography/photographers/holland-day</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mosaic.photography/photographers/demachy</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mosaic.photography/photographers/moulin</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mosaic.photography/photographers/de-la-vaudère</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mosaic.photography/photographers/brigman</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mosaic.photography/photographers/von-bucovich</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mosaic.photography/photographers/brady</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.mosaic.photography/photographers/von-plueschow</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
+    <loc>https://www.mosaic.photography/photographers/durieu</loc>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.mosaic.photography/photographers/weston</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.mosaic.photography/photographers/durieu</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
+    <loc>https://www.mosaic.photography/photographers/von-plueschow</loc>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mosaic.photography/photographers/demachy</loc>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mosaic.photography/photographers/brady</loc>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.mosaic.photography/photographers/von-gloeden</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.mosaic.photography/photographers/stieglitz</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
+    <loc>https://www.mosaic.photography/photographers/von-bucovich</loc>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mosaic.photography/photographers/holland-day</loc>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mosaic.photography/photographers/brigman</loc>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mosaic.photography/photographers/moulin</loc>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mosaic.photography/photographers/de-la-vaudère</loc>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.mosaic.photography/photographers/cameron</loc>
-    <lastmod>2026-05-22T13:32:41.401Z</lastmod>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mosaic.photography/photographers/hudson-white</loc>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mosaic.photography/photographers/stieglitz</loc>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mosaic.photography/community/photography/elcarles78</loc>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.mosaic.photography/community/photography/akiuonsen</loc>
+    <lastmod>2026-08-12T22:05:41.308Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

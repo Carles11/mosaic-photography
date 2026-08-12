@@ -21,6 +21,16 @@ async function generateSitemap0() {
     return;
   }
 
+  // Fetch community contributors for /community/photography/[slug] pages
+  const { data: contributors, error: contributorError } = await supabase
+    .from("contributors")
+    .select("slug");
+
+  if (contributorError) {
+    console.error("Error fetching contributors:", contributorError);
+    return;
+  }
+
   // Static pages
   const staticPages = [
     {
@@ -40,6 +50,24 @@ async function generateSitemap0() {
       lastmod: new Date().toISOString(),
       changefreq: "weekly",
       priority: "0.7",
+    },
+    {
+      loc: "https://www.mosaic.photography/about",
+      lastmod: new Date().toISOString(),
+      changefreq: "monthly",
+      priority: "0.7",
+    },
+    {
+      loc: "https://www.mosaic.photography/app",
+      lastmod: new Date().toISOString(),
+      changefreq: "monthly",
+      priority: "0.6",
+    },
+    {
+      loc: "https://www.mosaic.photography/community/photography",
+      lastmod: new Date().toISOString(),
+      changefreq: "weekly",
+      priority: "0.8",
     },
     {
       loc: "https://www.mosaic.photography/legal/privacy-policy",
@@ -86,6 +114,18 @@ async function generateSitemap0() {
       const slug = `${photographer.surname}`.toLowerCase().replace(/\s+/g, "-");
       sitemap += `  <url>\n`;
       sitemap += `    <loc>https://www.mosaic.photography/photographers/${slug}</loc>\n`;
+      sitemap += `    <lastmod>${new Date().toISOString()}</lastmod>\n`;
+      sitemap += `    <changefreq>weekly</changefreq>\n`;
+      sitemap += `    <priority>0.7</priority>\n`;
+      sitemap += `  </url>\n`;
+    });
+  }
+
+  // Add community contributor pages
+  if (contributors) {
+    contributors.forEach((contributor) => {
+      sitemap += `  <url>\n`;
+      sitemap += `    <loc>https://www.mosaic.photography/community/photography/${contributor.slug}</loc>\n`;
       sitemap += `    <lastmod>${new Date().toISOString()}</lastmod>\n`;
       sitemap += `    <changefreq>weekly</changefreq>\n`;
       sitemap += `    <priority>0.7</priority>\n`;

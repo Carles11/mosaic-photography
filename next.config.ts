@@ -54,6 +54,24 @@ const nextConfig: NextConfig = {
   // Next.js treats URLs with dots as static file requests and skips routing,
   // so a rewrite here is the only reliable way to intercept .md URLs.
   // ---------------------------------------------------------------------------
+  // Permanent redirects for routes that moved. /contributors lived briefly in
+  // June 2026 and was submitted to search engines via IndexNow before moving
+  // to /community/photography — keep these so crawlers consolidate the URLs.
+  async redirects() {
+    return [
+      {
+        source: "/contributors",
+        destination: "/community/photography",
+        permanent: true,
+      },
+      {
+        source: "/contributors/:slug",
+        destination: "/community/photography/:slug",
+        permanent: true,
+      },
+    ];
+  },
+
   async rewrites() {
     return [
       {

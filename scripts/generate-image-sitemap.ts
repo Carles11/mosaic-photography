@@ -89,6 +89,22 @@ async function generateImageSitemap() {
   console.log("Image sitemap generated successfully!");
 }
 
+// Size buckets the resize pipeline actually generates (no upscaling —
+// a bucket only exists when the original is at least that wide).
+// Keep in sync with S3_SIZE_WIDTHS in src/utils/imageResizingS3.ts.
+const S3_SIZE_WIDTHS = [400, 600, 800, 1200, 1600];
+
+// Largest size bucket guaranteed to exist for an image of the given width.
+// Falls back to originalsWEBP (always present) when width is unknown or
+// smaller than every bucket.
+function bestSizeFolder(width?: number): string {
+  if (!width) return "originalsWEBP";
+  const available = S3_SIZE_WIDTHS.filter((w) => w <= width);
+  return available.length > 0
+    ? `w${available[available.length - 1]}`
+    : "originalsWEBP";
+}
+
 // Helper function to create <image:image> block
 function makeImageXml(
   image: {
@@ -107,7 +123,7 @@ function makeImageXml(
 ) {
   // base_url already contains the full CDN base path; just append size bucket + filename
   const filenameWebp = image.filename.replace(/\.[^/.]+$/, ".webp");
-  const loc = `${image.base_url}/w1600/${filenameWebp}`;
+  const loc = `${image.base_url}/${bestSizeFolder(image.width)}/${filenameWebp}`;
   return `    <image:image>
       <image:loc>${loc}</image:loc>
       <image:title>${escapeXml(
