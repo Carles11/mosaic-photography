@@ -40,6 +40,13 @@ function toWebp(filename) {
 // Uses s3api's JSON output rather than `aws s3 ls`: the latter's columnar
 // output can't be split on whitespace safely (some filenames contain spaces)
 // and mangles non-ASCII characters, which silently hides objects that exist.
+//
+// PYTHONIOENCODING is required because the AWS CLI is a Python program: with a
+// piped (non-tty) stdout on Windows it encodes output using the locale
+// codepage, so a key like "…gärtners…" comes back as bytes Node then misreads
+// as UTF-8 — the object looks missing and gets reported as unrecoverable.
+const AWS_ENV = { ...process.env, PYTHONIOENCODING: "utf-8" };
+
 function listFolder(prefix) {
   try {
     const out = execFileSync(
@@ -56,7 +63,7 @@ function listFolder(prefix) {
         "--output",
         "json",
       ],
-      { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 },
+      { encoding: "utf8", maxBuffer: 64 * 1024 * 1024, env: AWS_ENV },
     );
     const keys = JSON.parse(out || "null") || [];
     return new Set(
@@ -71,6 +78,47 @@ function listFolder(prefix) {
   }
 }
 
+// The AWS CLI ships as a frozen binary that ignores PYTHONIOENCODING, so any
+// non-ASCII character in a listed key still comes back as U+FFFD and can never
+// be matched against the (correct) database value. Passing the key *in* works
+// fine, so for those few filenames we ask about the single object directly
+// instead of trusting the bulk listing.
+const isAscii = (s) => /^[\x20-\x7e]*$/.test(s);
+
+function objectExists(key) {
+  try {
+    const out = execFileSync(
+      "aws",
+      [
+        "s3api",
+        "list-objects-v2",
+        "--bucket",
+        BUCKET,
+        "--prefix",
+        key,
+        "--max-items",
+        "1",
+        "--query",
+        "length(Contents)",
+        "--output",
+        "json",
+      ],
+      { encoding: "utf8", env: AWS_ENV },
+    );
+    return (JSON.parse(out.trim() || "null") || 0) > 0;
+  } catch {
+    return false;
+  }
+}
+
+// Is `name` present in `folder`? Uses the cheap bulk listing for ordinary
+// ASCII filenames and a direct lookup for the ones it cannot represent.
+function hasObject(listing, prefix, folder, name) {
+  return isAscii(name)
+    ? listing.has(name)
+    : objectExists(`${prefix}/${folder}/${name}`);
+}
+
 function copyObject(prefix, fromFolder, toFolder, filename) {
   const src = `s3://${BUCKET}/${prefix}/${fromFolder}/${filename}`;
   const dst = `s3://${BUCKET}/${prefix}/${toFolder}/${filename}`;
@@ -78,7 +126,10 @@ function copyObject(prefix, fromFolder, toFolder, filename) {
     console.log(`[dry-run] would copy ${src} -> ${dst}`);
     return;
   }
-  execFileSync("aws", ["s3", "cp", src, dst], { stdio: "inherit" });
+  execFileSync("aws", ["s3", "cp", src, dst, "--only-show-errors"], {
+    stdio: "inherit",
+    env: AWS_ENV,
+  });
 }
 
 async function main() {
@@ -116,11 +167,11 @@ async function main() {
     for (const row of rows) {
       const name = toWebp(row.filename);
       for (const folder of TARGET_FOLDERS) {
-        if (existing[folder].has(name)) {
+        if (hasObject(existing[folder], prefix, folder, name)) {
           alreadyOk++;
           continue;
         }
-        if (!originals.has(name)) {
+        if (!hasObject(originals, prefix, "originalsWEBP", name)) {
           failures.push(`${prefix}/${folder}/${name} (no originalsWEBP source)`);
           continue;
         }

@@ -48,3 +48,6 @@ awscliv2.zip
 
 # backup files
 *.bak
+
+# scratch output from scripts/restore-missing-large-renditions.mjs
+restore-failures.txt
