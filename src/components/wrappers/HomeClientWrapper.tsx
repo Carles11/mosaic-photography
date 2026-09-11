@@ -146,7 +146,10 @@ function HomeClientWrapper({
             left: 0,
             width: "100vw",
             height: "100vh",
-            background: "rgba(10,10,10,0.45)",
+            // Backdrop lives in AgeConsent.module.css (one layer, ~60%).
+            // Three stacked layers used to sum to ~97% black, so crawlers'
+            // rendered screenshot of the homepage was a black rectangle.
+            background: "transparent",
             zIndex: 10000,
             display: "flex",
             alignItems: "center",
