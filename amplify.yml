@@ -22,7 +22,7 @@ frontend:
         # taschen.com with no Awin hop, and nothing is tracked.
         #
         # Add any future server-only runtime variable to this grep.
-        - env | grep -e '^AWIN_PUBLISHER_ID=' >> .env.production || echo "WARNING: AWIN_PUBLISHER_ID missing - TASCHEN links will be untracked"
+        - "env | grep -e '^AWIN_PUBLISHER_ID=' >> .env.production || echo 'WARNING - AWIN_PUBLISHER_ID is missing, TASCHEN links will not be tracked'"
         - yarn build
         # The 'postbuild' script in package.json runs automatically after yarn build
   artifacts:
