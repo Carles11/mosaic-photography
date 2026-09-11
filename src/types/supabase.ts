@@ -16,6 +16,8 @@ export interface AffiliateAdvertiser {
   promo_code_url?: string | null;
   editorial_note?: Record<string, string | null>; // jsonb for localization
   template?: string | null; // e.g., 'marketplace', 'software', 'print'
+  /** false = hidden from every surface (slider, photographer pages, /toolkit, sitemap). */
+  is_active?: boolean;
   created_at?: string;
 }
 
@@ -31,4 +33,6 @@ export interface AffiliateProduct {
   created_at?: string;
   featured?: boolean; // for highlighting certain products in templates
   sort_order?: number; // for custom ordering of products within an advertiser
+  /** false = hidden without deleting. */
+  is_active?: boolean;
 }

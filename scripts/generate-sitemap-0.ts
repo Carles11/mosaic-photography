@@ -31,6 +31,17 @@ async function generateSitemap0() {
     return;
   }
 
+  // Toolkit pages for active affiliate partners (/toolkit/[slug])
+  const { data: advertisers, error: advertiserError } = await supabase
+    .from("affiliate_advertisers")
+    .select("slug")
+    .eq("is_active", true);
+
+  if (advertiserError) {
+    console.error("Error fetching affiliate advertisers:", advertiserError);
+    return;
+  }
+
   // Static pages
   const staticPages = [
     {
@@ -129,6 +140,18 @@ async function generateSitemap0() {
       sitemap += `    <lastmod>${new Date().toISOString()}</lastmod>\n`;
       sitemap += `    <changefreq>weekly</changefreq>\n`;
       sitemap += `    <priority>0.7</priority>\n`;
+      sitemap += `  </url>\n`;
+    });
+  }
+
+  // Add toolkit pages
+  if (advertisers) {
+    advertisers.forEach((advertiser) => {
+      sitemap += `  <url>\n`;
+      sitemap += `    <loc>https://www.mosaic.photography/toolkit/${advertiser.slug}</loc>\n`;
+      sitemap += `    <lastmod>${new Date().toISOString()}</lastmod>\n`;
+      sitemap += `    <changefreq>monthly</changefreq>\n`;
+      sitemap += `    <priority>0.5</priority>\n`;
       sitemap += `  </url>\n`;
     });
   }

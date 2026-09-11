@@ -14,7 +14,7 @@ export default function ShopLink({ href, label }: ShopLinkProps) {
     <a
       href={href}
       target="_blank"
-      rel="sponsored"
+      rel="sponsored noopener noreferrer"
       onMouseOver={() => setIsHovered(true)}
       onMouseOut={() => setIsHovered(false)}
       style={{

@@ -39,7 +39,8 @@ export async function generateStaticParams() {
   );
   const { data, error } = await supabase
     .from("affiliate_advertisers")
-    .select("slug");
+    .select("slug")
+    .eq("is_active", true);
   if (error) throw error;
   return (data || []).map((row: { slug: string }) => ({ slug: row.slug }));
 }

@@ -1,0 +1,20 @@
+create table public.affiliate_advertisers (
+  id uuid not null default gen_random_uuid (),
+  name text not null,
+  slug text not null,
+  platform text not null,
+  logo_url text null,
+  description text null,
+  website_url text null,
+  created_at timestamp with time zone null default now(),
+  template text not null default 'default'::text,
+  editorial_note jsonb null default '{"en": "", "es": ""}'::jsonb,
+  banner_image_url text null,
+  banner_link_url text null,
+  header_url text null,
+  promo_url text null,
+  promo_code text null,
+  promo_code_url text null,
+  constraint affiliate_advertisers_pkey primary key (id),
+  constraint affiliate_advertisers_slug_key unique (slug)
+) TABLESPACE pg_default;
