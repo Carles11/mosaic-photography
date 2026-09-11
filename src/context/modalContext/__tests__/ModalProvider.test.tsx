@@ -13,6 +13,11 @@ function TestModalBody({ onClose, message }: any) {
   );
 }
 
+// The real tests below are still a draft (the registry mock needs to match
+// modalRegistry's loader shape). Jest refuses a suite with zero tests, so keep
+// the file valid with a todo until they are finished.
+test.todo("ModalProvider: open()/openAsync() open and close a registry modal");
+
 // Mock the registry to return our test component for keys
 // jest.mock("../modalRegistry", () => ({
 //   modalRegistry: {

@@ -5,7 +5,15 @@ import {
   getAuthenticatedRedirect,
 } from "@/lib/auth/auth-guards";
 
-// Middleware to handle bot cookies and auth protection
+// Middleware: SSR theme header and auth-route redirects.
+//
+// Until 2026-09-11 this also sniffed the user agent and handed every crawler
+// (Google, Bing, GPTBot, …) a `skip_age_modal` cookie so bots never saw the
+// age gate that humans see. Serving a different experience keyed on the user
+// agent is the definition of cloaking in Google's spam policies, and the site
+// was demoted by the June 2026 spam update. The page is now fully
+// server-rendered with the gate mounted as a dialog on top of the content, so
+// crawlers and people get exactly the same response.
 export async function middleware(req: NextRequest) {
   // Skip middleware during build time
   if (
@@ -15,11 +23,6 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const userAgent = req.headers.get("user-agent") || "";
-  const isBot =
-    /bot|crawl|slurp|spider|google|bing|yandex|duckduck|perplexitybot|anthropic|claude|gptbot|oai-searchbot|chatgpt|cohere|amazonbot|applebot|meta-external|facebot|baiduspider|sogou|exabot|ia_archiver|diffbot|ccbot/i.test(
-      userAgent,
-    );
   const { pathname, searchParams } = req.nextUrl;
 
   // Create response
@@ -29,15 +32,6 @@ export async function middleware(req: NextRequest) {
   const themeCookie = req.cookies.get("theme")?.value;
   if (themeCookie === "dark" || themeCookie === "light") {
     response.headers.set("x-theme", themeCookie);
-  }
-
-  // Handle bot cookie logic
-  if (isBot) {
-    response.cookies.set("skip_age_modal", "1", {
-      path: "/",
-    });
-  } else {
-    response.cookies.delete("skip_age_modal");
   }
 
   // Skip auth checks for static files and API routes

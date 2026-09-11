@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import useIsMobile from "../../hooks/useIsMobile";
-import { useTheme } from "next-themes";
+import styles from "./ThemedLogo.module.css";
 
 type ThemedLogoProps = {
   /** Optionally override mobile/desktop, otherwise will detect */
@@ -28,6 +28,22 @@ const LOGO_URLS = {
   },
 };
 
+/**
+ * Theme-aware logo.
+ *
+ * Both variants are rendered and CSS picks one via `[data-theme]` on `<html>`
+ * (see ThemedLogo.module.css). Choosing the URL in JS with `useTheme()` broke
+ * once the site became server-rendered (2026-09-11): the server does not know
+ * next-themes' resolved theme and emitted the light logo, the client's first
+ * render already knew "dark" from localStorage, and React does not repair
+ * attribute mismatches during hydration — so the DOM kept the light `src`
+ * until the user toggled the theme twice. Letting CSS decide removes the
+ * dependency on hydration order entirely: `data-theme` is set from the cookie
+ * on the server and by next-themes' inline script before first paint.
+ *
+ * The hidden variant is `display: none` with `loading="lazy"`, so browsers
+ * never fetch it.
+ */
 const ThemedLogo: React.FC<ThemedLogoProps> = ({
   forceMobile,
   alt = "Mosaic Photography Logo",
@@ -37,25 +53,34 @@ const ThemedLogo: React.FC<ThemedLogoProps> = ({
   const effectiveIsMobile =
     typeof forceMobile === "boolean" ? forceMobile : isMobile;
 
-  // Use next-themes for theme detection
-  const { resolvedTheme } = useTheme();
-  const theme = resolvedTheme === "dark" ? "dark" : "light";
-
-  const logoUrl = effectiveIsMobile
-    ? LOGO_URLS.mobile[theme]
-    : LOGO_URLS.desktop[theme];
+  const urls = effectiveIsMobile ? LOGO_URLS.mobile : LOGO_URLS.desktop;
+  const width = effectiveIsMobile ? 500 : 766;
+  const height = effectiveIsMobile ? 353 : 541;
+  const sizes = "(max-width: 600px) 250px, (max-width: 1200px) 500px, 766px";
 
   return (
-    <Image
-      src={logoUrl}
-      alt={alt}
-      width={effectiveIsMobile ? 500 : 766}
-      height={effectiveIsMobile ? 353 : 541}
-      className={className}
-      priority
-      style={{ display: "block", maxWidth: "100%", height: "auto" }}
-      sizes="(max-width: 600px) 250px, (max-width: 1200px) 500px, 766px"
-    />
+    <>
+      <Image
+        src={urls.dark}
+        alt={alt}
+        width={width}
+        height={height}
+        className={`${styles.logoDark} ${className}`}
+        loading="lazy"
+        style={{ maxWidth: "100%", height: "auto" }}
+        sizes={sizes}
+      />
+      <Image
+        src={urls.light}
+        alt={alt}
+        width={width}
+        height={height}
+        className={`${styles.logoLight} ${className}`}
+        loading="lazy"
+        style={{ maxWidth: "100%", height: "auto" }}
+        sizes={sizes}
+      />
+    </>
   );
 };
 
