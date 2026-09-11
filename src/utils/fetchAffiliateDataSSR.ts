@@ -10,9 +10,13 @@ export interface AffiliateProductWithAdvertiser extends AffiliateProduct {
 export async function getGeneralAffiliateResources(): Promise<
   AffiliateProductWithAdvertiser[]
 > {
+  // `!inner` turns the join into a filter: products of hidden advertisers
+  // (is_active = false) are dropped, as are hidden products.
   const { data, error } = await supabaseServerClient
     .from("affiliate_products")
-    .select("*, affiliate_advertisers(*)");
+    .select("*, affiliate_advertisers!inner(*)")
+    .eq("is_active", true)
+    .eq("affiliate_advertisers.is_active", true);
   // .is("photographer_author", null);
 
   if (error) {
@@ -30,8 +34,10 @@ export async function getAffiliateProductsByAuthor(
 ): Promise<AffiliateProductWithAdvertiser[]> {
   const { data, error } = await supabaseServerClient
     .from("affiliate_products")
-    .select("*, affiliate_advertisers(*)")
-    .eq("photographer_author", author);
+    .select("*, affiliate_advertisers!inner(*)")
+    .eq("photographer_author", author)
+    .eq("is_active", true)
+    .eq("affiliate_advertisers.is_active", true);
 
   if (error) {
     console.error(
@@ -54,6 +60,8 @@ export async function getToolkitDataBySlug(slug: string) {
     `,
     )
     .eq("slug", slug)
+    .eq("is_active", true)
+    .eq("products.is_active", true)
     .single();
 
   if (error) {
