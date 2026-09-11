@@ -81,26 +81,11 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
           {photographersProp && photographersProp.length > 0 ? (
             photographersProp.map((photographer, idx) => {
               const portrait = photographer.images?.[0];
-              let parsedStores: DropdownItem[] = [];
-              if (photographer.store && photographer.store.length > 0) {
-                parsedStores = photographer.store
-                  .map((storeString: string) => {
-                    try {
-                      const store = JSON.parse(storeString);
-
-                      return {
-                        store: String(store.store),
-                        website: String(store.website),
-                        affiliate: Boolean(store.affiliate),
-                        description: String(store.description),
-                      };
-                    } catch {
-                      return null;
-                    }
-                  })
-                  .filter((item): item is DropdownItem => item !== null)
-                  .filter((item) => item.store !== "Fine Art America");
-              }
+              // Prepared server-side in src/app/page.tsx from the affiliate
+              // tables. This used to parse the legacy `store` jsonb, which
+              // still holds links to a terminated Amazon account and rendered
+              // them here undisclosed.
+              const parsedStores: DropdownItem[] = photographer.cardLinks ?? [];
               return (
                 <div
                   key={photographer.surname + idx}

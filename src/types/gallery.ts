@@ -1,3 +1,5 @@
+import type { DropdownItem } from "@/types/dropdown";
+
 // Gallery and image-related types
 import { JSX } from "react";
 
@@ -28,7 +30,17 @@ export interface Photographer {
   website?: string;
   instagram?: string;
   images?: UniversalGalleryImage[];
+  /**
+   * @deprecated Legacy jsonb column from before the affiliate tables existed.
+   * It still holds dead Amazon links, is no longer selected by any fetcher,
+   * and must not be rendered. Use `cardLinks` instead.
+   */
   store?: [];
+  /**
+   * Paid links for this photographer's card, prepared server-side in
+   * src/app/page.tsx so the card component holds no affiliate logic.
+   */
+  cardLinks?: DropdownItem[];
 }
 
 // types/galleryImage.ts

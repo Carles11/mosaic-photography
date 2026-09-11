@@ -57,9 +57,18 @@ export const PhotographerLinks: React.FC<PhotographerLinksProps> = ({
               : "noopener noreferrer sponsored";
             const imageUrl =
               product.image_url || advertiser?.logo_url || PLACEHOLDER_IMAGE;
-            const title = product.photographer_author
-              ? `${product.photographer_author}'s ${product.title?.[locale] ?? ""}`
-              : (product.title?.[locale] ?? "");
+            // The possessive belongs on a print OF this photographer's work.
+            // It does not belong on a book: "Eugene Durieu's 1000 Nudes" reads
+            // as if he wrote it, when the book merely contains him. General
+            // top-up products have no photographer_author and are never
+            // attributed to anyone.
+            const rawTitle = product.title?.[locale] ?? "";
+            const ownsTheWork =
+              product.type === "print" || product.type === "framing";
+            const title =
+              product.photographer_author && ownsTheWork
+                ? `${product.photographer_author}'s ${rawTitle}`
+                : rawTitle;
 
             return (
               <div className={styles.emblaSlide} key={product.id}>

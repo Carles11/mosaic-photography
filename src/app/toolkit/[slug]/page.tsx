@@ -31,6 +31,23 @@ const TEMPLATE_MAP: Record<string, React.ComponentType<TemplateProps>> = {
   default: TemplateDefault,
 };
 
+/**
+ * The advertiser list is known at build time, so any other slug is a real 404
+ * rather than something to render.
+ *
+ * This is not a micro-optimisation. `loading.tsx` in this folder makes the
+ * route stream, which means the 200 status header is already on the wire by
+ * the time the page body calls notFound() — so a hidden partner like
+ * /toolkit/amazon answered 200 with not-found content, i.e. a soft 404, on a
+ * URL Google has already indexed. dynamicParams = false moves the decision to
+ * the routing layer, before any rendering, and returns a true 404.
+ *
+ * Trade-off: a newly inserted advertiser needs a build to become reachable.
+ * That was already true of the sitemap, which is generated in postbuild, so
+ * the two now agree instead of disagreeing.
+ */
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const { createClient } = await import("@supabase/supabase-js");
   const supabase = createClient(
@@ -52,9 +69,8 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
 
-  const { getToolkitDataBySlug: fetchAdvertiser } =
-    await import("@/utils/fetchAffiliateDataSSR");
-  const advertiser = await fetchAdvertiser(slug);
+  // Same cached call the page makes — React.cache dedupes it per request.
+  const advertiser = await getToolkitDataBySlug(slug);
 
   if (!advertiser) return {};
 

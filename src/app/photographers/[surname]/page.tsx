@@ -128,13 +128,15 @@ function PhotographerJsonLd({
             deathDate: photographer.deceasedate,
           }),
           ...(photographer.origin && { nationality: photographer.origin }),
-          sameAs: [photographer.website].concat(
-            Array.isArray(photographer.store)
-              ? (photographer.store as { website?: string }[])
-                  .map((s) => s.website)
-                  .filter(Boolean)
-              : [],
-          ),
+          // sameAs is for references that identify the PERSON — their own
+          // site, Wikipedia, an archive. The legacy `store` column held
+          // affiliate shop links, and concatenating those here would have
+          // asserted that an amzn.to URL authoritatively identifies Edward
+          // Weston. It was inert only because fetchPhotographerBySlugSSR
+          // never selected `store`; one added column and it would have been
+          // publishing undeclared affiliate links as structured data.
+          // Paid links belong in PhotographerLinks with rel="sponsored".
+          sameAs: [photographer.website].filter(Boolean),
         }),
       }}
     />
