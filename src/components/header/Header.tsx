@@ -22,9 +22,9 @@ export default function Header({
 }: HeaderProps) {
   return (
     <header>
-      <h1 className="sr-only">
-        Mosaic Photography: Iconic Nude Photography Gallery
-      </h1>
+      {/* No H1 here. The header is on every route, so an H1 in it gave every
+          page two (three on the homepage, with the age gate). Each page owns
+          its own H1; on the homepage it lives in HeroSection, above the fold. */}
       <nav className={styles.navContainer}>
         <ul className={styles.navGrid}>
           {isHome ? (

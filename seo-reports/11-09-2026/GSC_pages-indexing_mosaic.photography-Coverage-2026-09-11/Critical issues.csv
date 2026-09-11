@@ -1,0 +1,6 @@
+Reason,Source,Validation,Pages
+Crawled - currently not indexed,Google systems,Failed,13
+Page with redirect,Website,Not Started,3
+Excluded by ‘noindex’ tag,Website,Not Started,2
+Blocked due to access forbidden (403),Website,Not Started,2
+Discovered - currently not indexed,Google systems,Started,13

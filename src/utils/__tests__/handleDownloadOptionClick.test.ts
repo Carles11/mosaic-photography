@@ -5,7 +5,9 @@ const mockOption: DownloadOption = {
   url: "https://cdn.example.com/w800/photo.webp",
   label: "800px WebP",
   folder: "w800",
+  width: 800,
   format: "webp",
+  isOriginal: false,
 };
 
 function makeParams(

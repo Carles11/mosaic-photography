@@ -77,10 +77,9 @@ export default async function Page() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageSchema) }}
       />
 
+      {/* The page's single H1 lives in HeroSection (above the fold, inside
+          the header's hero). This section carries only the H2. */}
       <section className="home-titles">
-        <h1>
-          Vintage Nude Photography Gallery – Public Domain & Copyright-Free Art
-        </h1>
         <h2>
           Iconic works by legendary photographers who shaped the history of nude
           art and nude photography.

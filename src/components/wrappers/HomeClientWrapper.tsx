@@ -2,7 +2,7 @@
 
 // BottomNav is rendered globally by ClientLayout; do not add it here.
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Cookies from "js-cookie";
 import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
 import ContributorsSlide from "../sliders/contributors/ContributorsSlide";
@@ -36,16 +36,18 @@ function HomeClientWrapper({
   onLoginClick,
 }: HomeClientWrapperProps) {
   const { isMinimumAgeConfirmed, setIsMinimumAgeConfirmed } = useAgeConsent();
-  const [isCrawlerBot, setCrawlerIsBot] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
+  // No user-agent sniffing. This used to detect Googlebot/Bingbot by UA and
+  // auto-confirm age for them, so crawlers got the page un-gated and un-blurred
+  // while humans got it blurred behind a dialog. Serving crawlers a different
+  // experience from users, keyed on the user agent, is the definition of
+  // cloaking in Google's spam policies — the one thing an adult-content site
+  // must never do. Everyone now gets the same page: content in the DOM, the
+  // dialog on top until confirmed. The `skip_age_modal` cookie stays as a
+  // manual escape hatch (e.g. for screenshots).
   useEffect(() => {
-    const botRegex =
-      /bot|crawl|slurp|spider|bing|duckduckgo|baidu|yandex|sogou|exabot|facebot|ia_archiver/i;
-    const isBot = botRegex.test(navigator.userAgent);
-    const skipForBots = Cookies.get("skip_age_modal") === "1";
-    if (isBot || skipForBots) {
-      setCrawlerIsBot(true);
+    if (Cookies.get("skip_age_modal") === "1") {
       setIsMinimumAgeConfirmed(true);
     }
   }, [setIsMinimumAgeConfirmed]);
@@ -100,7 +102,11 @@ function HomeClientWrapper({
                 Curated tools &amp; resources for photographers and vintage
                 photography lovers
               </p>
-              <ResourcesSlider products={affiliateProducts} />
+              {/* Capped: 44 cards × 2 sponsored links = 88 affiliate links on
+                  the page that carries ~95% of the site's traffic. Featured
+                  first, then sort_order; the full catalogue lives on the
+                  /toolkit pages. */}
+              <ResourcesSlider products={affiliateProducts} limit={12} />
             </section>
           )}
 
@@ -126,7 +132,7 @@ function HomeClientWrapper({
       </section>
 
       {/* Age Consent Modal */}
-      {!isCrawlerBot && !isMinimumAgeConfirmed && (
+      {!isMinimumAgeConfirmed && (
         <div
           ref={modalRef}
           tabIndex={-1}

@@ -29,9 +29,10 @@ export const AgeConsent = ({
     >
       <div className={styles.ageModalOverlay}>
         <div className={styles.ageConfirmationContent}>
-          <h1 id="ageConsentTitle" className={styles.consentTitle}>
+          {/* h2, not h1: a dialog title must not become the page's heading. */}
+          <h2 id="ageConsentTitle" className={styles.consentTitle}>
             Age Confirmation Required
-          </h1>
+          </h2>
 
           <p id="ageConsentDescription" className={styles.consentText}>
             By continuing, you confirm that you are of legal age to view

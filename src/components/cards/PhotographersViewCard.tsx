@@ -87,7 +87,6 @@ const PhotographersViewCard: React.FC<PhotographersViewCardProps> = ({
                   .map((storeString: string) => {
                     try {
                       const store = JSON.parse(storeString);
-                      console.log("Rendering store", { store });
 
                       return {
                         store: String(store.store),
