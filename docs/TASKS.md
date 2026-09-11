@@ -77,11 +77,24 @@ All 14 also have timeline data in `src/lib/timeline/photographersTimelines.ts`.
 
 ## Task 2 — Add more affiliate partners to the list
 
-`[~]` **Goal:** expand the affiliate/toolkit catalogue and make the toolkit pages actually indexable.
+`[x]` **Goal:** expand the affiliate/toolkit catalogue and make the toolkit pages actually indexable.
 
-**Status 2026-09-11:** partner set decided and the code is written; run
-`affiliate-reports/AFFILIATE-RUNBOOK-2026-09-11.md` end to end to land it.
-Decisions in `affiliate-reports/AFFILIATE-PARTNERS-PLAN-2026-09-11.md`.
+**Shipped 2026-09-11** and verified in production. Write-up:
+`affiliate-reports/AFFILIATE-PARTNERS-REPORT-2026-09-11.md` (decisions in
+`AFFILIATE-PARTNERS-PLAN-...`, the run itself in `AFFILIATE-RUNBOOK-...`).
+
+TASCHEN added across six Awin programmes behind `/api/go/taschen`; Amazon,
+Poster Master and Big Wall Décor hidden via `is_active`; migrations 007-010.
+Also fixed while in here: ~24 undisclosed links to the terminated Amazon
+account on the homepage photographer cards (from the legacy
+`photographers.store` column, never counted in the June cut from 88 to 12),
+affiliate URLs leaking into Person `sameAs` structured data, an untracked
+toolkit hero CTA, and `AWIN_PUBLISHER_ID` not reaching the SSR runtime on
+Amplify.
+
+**Remaining follow-ups are listed at the end of the report** — the big one is
+Fine Art America on Awin 88153, where 18 existing links earn nothing because
+that programme was never joined.
 
 ### Where the data lives
 
@@ -117,9 +130,10 @@ Decisions in `affiliate-reports/AFFILIATE-PARTNERS-PLAN-2026-09-11.md`.
 - [~] Outbound affiliate links use `rel="sponsored"` alone in 12 places (toolkit card,
       `ShopLink`, all four templates, `ToolkitHero`). Add `noopener noreferrer` — only
       `PhotographerLinks.tsx` does it correctly today.
-      Done 2026-09-11 in `ShopLink.tsx` and `TemplateDefault.tsx` (the two on the
-      live path). `TemplateSoftware/Print/Marketplace`, the toolkit card and
-      `ToolkitHero` still need it.
+      Done 2026-09-11 in `ShopLink.tsx`, `TemplateDefault.tsx`, `ToolkitHero.tsx`
+      and `inputs/dropDown` (which had never read `DropdownItem.affiliate` at all,
+      the reason the homepage Amazon links were undisclosed).
+      `TemplateSoftware/Print/Marketplace` still need it.
 - [ ] Duplicate file to delete: `src/components/toolkit/ToolkitAffiliateBadge (1).tsx`.
 - [x] `getGeneralAffiliateResources` has the `.is("photographer_author", null)` filter
       commented out, so photographer-specific products also appear in the homepage
@@ -151,6 +165,23 @@ Decisions in `affiliate-reports/AFFILIATE-PARTNERS-PLAN-2026-09-11.md`.
       Julia Margaret Cameron; those pages stay prints-only.
 - [ ] Do we want a `/toolkit` index page? Today there are only `[slug]` pages, so
       the section has no hub and no internal linking entry point.
+
+### Carried forward from the 2026-09-11 ship
+
+- [ ] **Fine Art America on Awin 88153.** Never joined; the 18 FAA links earn
+      nothing and FAA is hardcoded out of the homepage shelf. Approval turns
+      into revenue with one SQL update. Largest item outstanding.
+- [ ] **Soft 404 on `/toolkit/amazon`, `/toolkit/poster-master`,
+      `/toolkit/big-wall-decor`.** `dynamicParams = false` is set and only the
+      four active slugs are prerendered, but the middleware matcher makes the
+      route dynamic, so `notFound()` fires after the 200 header is sent. Three
+      previously-indexed URLs answer 200 with not-found content.
+- [ ] **Duplicate anchors in `toolkitCard.tsx`** — image and "Shop now" both
+      link to the same URL, so the homepage shows 30 sponsored anchors for 18
+      products.
+- [ ] **Drop `photographers.store`.** Dead in code, still populated.
+- [ ] Ask the TASCHEN programme manager which programme is credited for NL, PT
+      and AU orders, and what the commission rate is (not published).
 
 ---
 
