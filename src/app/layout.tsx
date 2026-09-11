@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.mosaic.photography"),
   title: {
     default: "Public Domain Vintage Nude Photography | Mosaic Gallery",
-    template: "%s | Vintage Nude Photography by Mosaic",
+    template: "%s | Mosaic Photography",
   },
   alternates: {
     canonical: "https://www.mosaic.photography/",
@@ -54,9 +54,9 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "Nude photography | Mosaic Photography curated Gallery",
+    title: "Mosaic Photography — Public Domain Vintage Photography Gallery",
     description:
-      "Meet the iconic photographers behind the stunning classic nude photography in our collection.",
+      "A curated gallery of public domain photographs by legendary photographers — biographies, timelines and copyright-free images.",
     images: [
       {
         url: "/images/og-image.jpg",
@@ -69,9 +69,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nude photography | Mosaic Photography curated Gallery",
+    title: "Mosaic Photography — Public Domain Vintage Photography Gallery",
     description:
-      "Explore our stunning image gallery featuring classic nude photography by iconic photographers.",
+      "A curated gallery of public domain photographs by legendary photographers — biographies, timelines and copyright-free images.",
     images: ["/images/og-image.jpg"],
     creator: "@mosaicphotography",
   },

@@ -46,7 +46,7 @@ const ToolkitCard: React.FC<ToolkitCardProps> = ({
         <a
           href={product.affiliate_url}
           target="_blank"
-          rel="sponsored"
+          rel="sponsored noopener noreferrer"
           style={{
             display: "block",
             position: "relative",
@@ -99,7 +99,7 @@ const ToolkitCard: React.FC<ToolkitCardProps> = ({
           <a
             href={product.affiliate_url}
             target="_blank"
-            rel="sponsored"
+            rel="sponsored noopener noreferrer"
             className={styles.affiliateButton}
             onClick={handleShopNowClick}
           >

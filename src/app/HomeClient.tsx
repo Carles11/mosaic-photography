@@ -2,7 +2,6 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { ClimbBoxLoaderContainer } from "@/components/loaders/ClimbBoxLoader";
 import { useAuth } from "@/hooks/useAuth";
 import { useComments } from "@/context/CommentsContext";
 import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
@@ -29,7 +28,7 @@ export default function HomeClient({
   affiliateProducts,
   contributors,
 }: HomeClientProps) {
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -74,21 +73,13 @@ export default function HomeClient({
     }
   }, [showAuthModal, router, isInitialized]);
 
-  if (loading) {
-    return (
-      <div
-        style={{
-          minHeight: "60vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {ClimbBoxLoaderContainer("var(--text-color)", 22, true)}
-      </div>
-    );
-  }
-
+  // Do NOT gate the page on auth `loading`. AuthSessionProvider starts with
+  // loading=true and only flips it inside an effect, and effects never run on
+  // the server — so gating here meant the SSR pass rendered a spinner instead
+  // of the gallery, the photographer cards and the affiliate section, and none
+  // of that reached the HTML Google receives. The content does not depend on
+  // who is logged in; `user` is null until the session resolves and the
+  // login-required callbacks already handle that case.
   return (
     <HomeClientWrapper
       photographers={photographers}

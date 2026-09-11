@@ -43,12 +43,26 @@ function getUniqueAdvertisers(products: AffiliateProductWithAdvertiser[]) {
 interface ResourcesSliderProps {
   products: AffiliateProductWithAdvertiser[];
   locale?: string;
+  /** Max cards to render (featured first, then sort_order). Omit for all. */
+  limit?: number;
 }
 
 export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
-  products,
+  products: allProducts,
   locale = "en",
+  limit,
 }) => {
+  const products = useMemo(() => {
+    if (!limit) return allProducts;
+    return [...allProducts]
+      .sort(
+        (a, b) =>
+          Number(Boolean(b.featured)) - Number(Boolean(a.featured)) ||
+          (a.sort_order ?? 0) - (b.sort_order ?? 0),
+      )
+      .slice(0, limit);
+  }, [allProducts, limit]);
+
   const [selected, setSelected] = useState("all");
   const [advertiser, setAdvertiser] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");

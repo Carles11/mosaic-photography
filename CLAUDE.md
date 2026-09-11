@@ -3,6 +3,7 @@
 > AI agent guide for Claude, Cursor, Copilot, and other coding assistants.
 > Read this file first. Then read `docs/architecture.md` for deep context.
 > For feature-specific work, read only the relevant `docs/features/*.md`.
+> **Current work in progress is tracked in `docs/TASKS.md` — check it before starting.**
 
 ---
 
@@ -106,6 +107,7 @@ migrations/            # Supabase SQL migrations
 | Photographer pages | `docs/features/photographers.md` |
 | New DB table or data | `docs/data-model.md` |
 | Coding style | `docs/conventions.md` |
+| What we're working on now | `docs/TASKS.md` |
 
 ---
 
@@ -137,6 +139,7 @@ Never expose `SUPABASE_SERVICE_ROLE_KEY` to the browser.
 
 ## Deep Docs
 
+- `docs/TASKS.md` — active task list for the web project
 - `docs/architecture.md` — complete system map
 - `docs/features/gallery.md` — gallery, masonry, virtualizer, lightbox
 - `docs/features/auth.md` — auth flow, guards, providers
