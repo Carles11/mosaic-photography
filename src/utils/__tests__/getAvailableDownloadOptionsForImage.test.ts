@@ -31,7 +31,9 @@ describe("getAvailableDownloadOptionsForImage", () => {
       width: 1600,
       url: "https://cdn.example.com/author-x/originals/photo-001.jpg",
     });
-    expect(options[6].label).toContain("Best for print");
+    expect(options[6].label).toBe(
+      "Best available quality is 1600x1920 px - This image is optimal for print",
+    );
   });
 
   it("returns only originalsWEBP and originals when width is below first bucket", () => {
@@ -72,7 +74,7 @@ describe("getAvailableDownloadOptionsForImage", () => {
     expect(originalOption.url).toBe(
       "https://cdn.example.com/author-z/originals/capture",
     );
-    expect(originalOption.label).toContain("1920w");
+    expect(originalOption.label).toBe("Best available quality is 1920x1920 px");
     expect(originalOption.format).toBe("jpg");
   });
 });
