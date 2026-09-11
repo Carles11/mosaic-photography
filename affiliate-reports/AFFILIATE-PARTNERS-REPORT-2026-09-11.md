@@ -11,12 +11,12 @@ production.
 
 Three purposes, four visible partners.
 
-| Partner | Purpose | Tracking | Notes |
-|---|---|---|---|
-| **TASCHEN** | books | Awin, six programmes via `/api/go/taschen` | new; 11 product rows |
-| WhiteWall | prints, framing | Awin (`tidd.ly`) | unchanged; product types corrected |
-| Retouch4me | software | Awin (`tidd.ly`) | unchanged |
-| Fine Art America | prints | **none** | never accepted; see follow-ups |
+| Partner          | Purpose         | Tracking                                   | Notes                              |
+| ---------------- | --------------- | ------------------------------------------ | ---------------------------------- |
+| **TASCHEN**      | books           | Awin, six programmes via `/api/go/taschen` | new; 11 product rows               |
+| WhiteWall        | prints, framing | Awin (`tidd.ly`)                           | unchanged; product types corrected |
+| Retouch4me       | software        | Awin (`tidd.ly`)                           | unchanged                          |
+| Fine Art America | prints          | **none**                                   | never accepted; see follow-ups     |
 
 Hidden via `is_active = false`, rows retained: **Amazon** (account terminated
 Sep 2026), **Poster Master**, **Big Wall Décor**. Their Awin programmes stay
@@ -50,9 +50,9 @@ specific book on a specific photographer's page.
 
 ### Titles
 
-Verified live and in stock on taschen.com on 11 Sep 2026: *Alfred Stieglitz.
-Camera Work* (45409), *1000 Nudes* (05423), *The Male Nude* (45504), *A History
-of Photography* (45405), *20th Century Photography* (45406).
+Verified live and in stock on taschen.com on 11 Sep 2026: _Alfred Stieglitz.
+Camera Work_ (45409), _1000 Nudes_ (05423), _The Male Nude_ (45504), _A History
+of Photography_ (45405), _20th Century Photography_ (45406).
 
 **There is no current TASCHEN Edward Weston** — the 2001 TASCHEN Icons edition
 is out of print — and none for Anne Brigman, Robert Demachy or Julia Margaret
@@ -163,16 +163,11 @@ so revenue from this work lands around January 2027.
 
 ## Follow-ups
 
-1. **Fine Art America on Awin (advertiser 88153, 30-day cookie).** Never
-   accepted, confirmed against `joined_advertiser-directory.csv`. The 18 FAA
-   links on the photographer pages are plain untracked URLs earning nothing,
-   and FAA is hardcoded out of the homepage shelf in `ResourcesSlider.tsx`
-   ("TEMPORARY EXCLUSION ... until partnership is confirmed"). This is the
-   largest sum left on the table: the rows, images and photographer mappings
-   all exist, so approval turns into revenue with one SQL update wrapping each
-   URL in `cread.php?awinmid=88153&awinaffid=2902359&ued=…`, plus deleting the
-   two exclusion blocks. The live `/toolkit/fine-art-america` page is good
-   supporting evidence for the application.
+1. **Fine Art America on Awin (advertiser 88153, 30-day cookie, US region).**
+   Applied months ago, still Pending Approval — not rejected, just never
+   actioned. Chased by email 11 Sep 2026. No direct alternative exists:
+   fineartamerica.com/affiliates.html is a 404, so Awin 88153 is the only
+   route to tracking. The 18 FAA
 2. **Soft 404 on retired toolkit URLs.** `dynamicParams = false` is correct and
    `generateStaticParams` prerenders only the four active slugs, but the
    middleware matcher (`/((?!_next/static|_next/image|favicon.ico|…).*)`)
