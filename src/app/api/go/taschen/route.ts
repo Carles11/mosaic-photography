@@ -180,7 +180,13 @@ export function GET(req: NextRequest) {
   const localised = withLocale(destination, route.locale);
 
   // No publisher id configured: send people to the book anyway, untracked.
+  // Loud, because this failure is invisible from the outside — the visitor
+  // still reaches the right page, the money just never arrives. See the
+  // .env.production line in amplify.yml.
   if (!publisherId) {
+    console.error(
+      "[api/go/taschen] AWIN_PUBLISHER_ID is not set at runtime — redirecting untracked.",
+    );
     const plain = NextResponse.redirect(localised.toString(), 302);
     plain.headers.set("Cache-Control", "no-store");
     plain.headers.set("X-Robots-Tag", "noindex, nofollow");
