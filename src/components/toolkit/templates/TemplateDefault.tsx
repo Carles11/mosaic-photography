@@ -61,7 +61,7 @@ export default function TemplateDefault({
                   style={{
                     position: "relative",
                     width: "100%",
-                    aspectRatio: "16/9",
+                    aspectRatio: "3/4",
                     background: "#1a1a1a",
                   }}
                 >
@@ -72,7 +72,7 @@ export default function TemplateDefault({
                     }
                     fill
                     sizes="(max-width: 768px) 100vw, 300px"
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: "contain" }}
                   />
                 </div>
               )}
@@ -87,18 +87,21 @@ export default function TemplateDefault({
                   background: "var(--background-color, #333)",
                 }}
               >
-                <h2
-                  style={{
-                    color: "var(--text-color, #333)",
-                    fontSize: "1.1rem",
-                    fontWeight: 600,
-                    letterSpacing: "0.05em",
-                    padding: "0.5rem 0",
-                    margin: 0,
-                  }}
-                >
-                  {product.photographer_author || ""}
-                </h2>
+                {product.photographer_author && (
+                  <p
+                    style={{
+                      color: "var(--text-color, #333)",
+                      fontSize: "0.95rem",
+                      fontWeight: 600,
+                      letterSpacing: "0.05em",
+                      padding: "0.5rem 0",
+                      margin: 0,
+                      opacity: 0.8,
+                    }}
+                  >
+                    {product.photographer_author}
+                  </p>
+                )}
                 <h3
                   style={{
                     color: "var(--text-color, #333)",
@@ -124,7 +127,7 @@ export default function TemplateDefault({
                 <a
                   href={product.affiliate_url}
                   target="_blank"
-                  rel="sponsored"
+                  rel="sponsored noopener noreferrer"
                   style={{
                     display: "inline-block",
                     border: "1px solid var(--text-color, #fff)",

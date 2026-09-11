@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-09-07
+> Last reviewed: 2026-09-11
 
 ---
 
@@ -77,7 +77,11 @@ All 14 also have timeline data in `src/lib/timeline/photographersTimelines.ts`.
 
 ## Task 2 — Add more affiliate partners to the list
 
-`[ ]` **Goal:** expand the affiliate/toolkit catalogue and make the toolkit pages actually indexable.
+`[~]` **Goal:** expand the affiliate/toolkit catalogue and make the toolkit pages actually indexable.
+
+**Status 2026-09-11:** partner set decided and the code is written; run
+`affiliate-reports/AFFILIATE-RUNBOOK-2026-09-11.md` end to end to land it.
+Decisions in `affiliate-reports/AFFILIATE-PARTNERS-PLAN-2026-09-11.md`.
 
 ### Where the data lives
 
@@ -104,19 +108,25 @@ All 14 also have timeline data in `src/lib/timeline/photographersTimelines.ts`.
 
 ### Known gaps to fix as part of this task
 
-- [ ] **`/toolkit/[slug]` pages are not in any sitemap.** `scripts/generate-sitemap-0.ts`
-      queries `photographers` and `contributors` only. Add an `affiliate_advertisers`
-      query so every toolkit page is submitted. Without this, new partners are invisible to search.
+- [x] **`/toolkit/[slug]` pages are not in any sitemap.** Fixed 2026-09-11:
+      `scripts/generate-sitemap-0.ts` now queries `affiliate_advertisers` and emits a
+      URL per *active* advertiser.
 - [ ] Toolkit pages emit `CollectionPage` JSON-LD with **hardcoded `width: 800, height: 600`**
       for every product image (`src/app/toolkit/[slug]/page.tsx`). Use real dimensions, or
       consider `ItemList`/`Product` instead — the current markup asserts sizes that are wrong.
-- [ ] Outbound affiliate links use `rel="sponsored"` alone in 12 places (toolkit card,
+- [~] Outbound affiliate links use `rel="sponsored"` alone in 12 places (toolkit card,
       `ShopLink`, all four templates, `ToolkitHero`). Add `noopener noreferrer` — only
       `PhotographerLinks.tsx` does it correctly today.
+      Done 2026-09-11 in `ShopLink.tsx` and `TemplateDefault.tsx` (the two on the
+      live path). `TemplateSoftware/Print/Marketplace`, the toolkit card and
+      `ToolkitHero` still need it.
 - [ ] Duplicate file to delete: `src/components/toolkit/ToolkitAffiliateBadge (1).tsx`.
-- [ ] `getGeneralAffiliateResources` has the `.is("photographer_author", null)` filter
+- [x] `getGeneralAffiliateResources` has the `.is("photographer_author", null)` filter
       commented out, so photographer-specific products also appear in the homepage
-      slider. Decide whether that is intentional.
+      slider. **Decided 2026-09-11: filter back on.** The slider is a general
+      resources shelf; per-photographer products belong on the photographer page.
+      It also stops one partner with many per-photographer rows from crowding the
+      12 slots, which matters after the June spam update.
 
 ### Acceptance criteria
 
@@ -128,7 +138,17 @@ All 14 also have timeline data in `src/lib/timeline/photographersTimelines.ts`.
 
 ### Open decisions
 
-- [ ] Which partners/networks to add (Awin? Amazon? print-on-demand? software)?
+- [x] Which partners/networks to add (Awin? Amazon? print-on-demand? software)?
+      **Answered 2026-09-11.** Three purposes, three partners: books **TASCHEN**
+      (Awin, six regional programmes behind `/api/go/taschen`), prints **WhiteWall**
+      (Awin) and **Fine Art America**, software **Retouch4me** (Awin). Amazon
+      (terminated), Poster Master and Big Wall Décor hidden via `is_active = false`.
+      Enjox Toys never linked — an adult-products link would reclassify the site.
+      Nexbie and the 30 Awin invitations declined.
+      Follow-up: Fine Art America turns out to be on Awin (advertiser **88153**,
+      30-day cookie) and our 18 FAA links are untracked — apply, then rewrite them.
+      No TASCHEN edition exists for Edward Weston, Anne Brigman, Robert Demachy or
+      Julia Margaret Cameron; those pages stay prints-only.
 - [ ] Do we want a `/toolkit` index page? Today there are only `[slug]` pages, so
       the section has no hub and no internal linking entry point.
 

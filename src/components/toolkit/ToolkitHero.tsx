@@ -16,7 +16,9 @@ export default function ToolkitHero({
     <section
       className={styles.heroSection}
       style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${advertiser.header_url})`,
+        backgroundImage: advertiser.header_url
+          ? `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${advertiser.header_url})`
+          : "linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7))",
       }}
     >
       <div className={styles.contentWrapper}>
@@ -33,7 +35,7 @@ export default function ToolkitHero({
             href={advertiser.website_url}
             className={styles.ctaButton}
             target="_blank"
-            rel="sponsored"
+            rel="sponsored noopener noreferrer"
           >
             Visit {advertiser.name}
           </a>

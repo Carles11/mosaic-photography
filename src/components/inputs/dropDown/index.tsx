@@ -18,7 +18,13 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, items, onToggle }) => {
             <a
               href={item.website}
               target="_blank"
-              rel="noopener noreferrer"
+              rel={
+                // DropdownItem has carried an `affiliate` flag all along and
+                // nothing ever read it, so paid links went out undisclosed.
+                item.affiliate
+                  ? "sponsored noopener noreferrer"
+                  : "noopener noreferrer"
+              }
               className={styles.link}
               onClick={() =>
                 sendGTMEvent({

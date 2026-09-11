@@ -1,7 +1,10 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import HomeClient from "./HomeClient";
-import { getGeneralAffiliateResources } from "@/utils/fetchAffiliateDataSSR";
+import {
+  getGeneralAffiliateResources,
+  getPhotographerCardLinks,
+} from "@/utils/fetchAffiliateDataSSR";
 import { fetchPhotographersWithFeaturedSSR } from "@/utils/fetchPhotographersWithFeaturedSSR";
 import { fetchGalleryImagesSSR } from "@/utils/fetchGalleryImagesSSR";
 import { fetchContributorsWithFeaturedSSR } from "@/utils/fetchContributorsWithFeaturedSSR";
@@ -60,13 +63,28 @@ function buildHomePageSchema(images: ImageWithOrientation[]) {
 
 export default async function Page() {
   // All fetches run in parallel for performance
-  const [photographers, images, affiliateProducts, contributors] =
-    await Promise.all([
-      fetchPhotographersWithFeaturedSSR(),
-      fetchGalleryImagesSSR(),
-      getGeneralAffiliateResources(),
-      fetchContributorsWithFeaturedSSR(),
-    ]);
+  const [
+    photographersRaw,
+    images,
+    affiliateProducts,
+    contributors,
+    cardLinksByAuthor,
+  ] = await Promise.all([
+    fetchPhotographersWithFeaturedSSR(),
+    fetchGalleryImagesSSR(),
+    getGeneralAffiliateResources(),
+    fetchContributorsWithFeaturedSSR(),
+    getPhotographerCardLinks(),
+  ]);
+
+  // Attach each photographer's paid links here rather than threading a second
+  // prop through four components. The card renders whatever is on cardLinks
+  // and knows nothing about advertisers.
+  const photographers =
+    photographersRaw?.map((photographer) => ({
+      ...photographer,
+      cardLinks: cardLinksByAuthor[photographer.author] ?? [],
+    })) ?? null;
 
   const homePageSchema = buildHomePageSchema(images ?? []);
 

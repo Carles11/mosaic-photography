@@ -63,6 +63,21 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
       .slice(0, limit);
   }, [allProducts, limit]);
 
+  // Only offer a tab if something is behind it. "Prints" sat there empty once
+  // Poster Master and Big Wall Decor were hidden, and a tab that answers a
+  // click with a blank shelf reads as a broken page.
+  const availableFilters = useMemo(() => {
+    const present = new Set(
+      products
+        .filter(
+          (p) =>
+            p.affiliate_advertisers?.name?.toLowerCase() !== "fine art america",
+        )
+        .map((p) => p.type?.toLowerCase()),
+    );
+    return FILTERS.filter((f) => f.value === "all" || present.has(f.value));
+  }, [products]);
+
   const [selected, setSelected] = useState("all");
   const [advertiser, setAdvertiser] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
@@ -111,11 +126,15 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
     setAdvertiser(null);
   }, [selected]);
 
+  React.useEffect(() => {
+    if (!availableFilters.some((f) => f.value === selected)) setSelected("all");
+  }, [availableFilters, selected]);
+
   return (
     <section className={styles.resourcesSliderSection}>
       <div className={styles.topRow}>
         <div className={styles.pillsRow}>
-          {FILTERS.map((f) => (
+          {availableFilters.map((f) => (
             <button
               key={f.value}
               className={selected === f.value ? styles.pillActive : styles.pill}
