@@ -9,6 +9,20 @@ frontend:
         - yarn install
     build:
       commands:
+        # Amplify injects Console environment variables into the BUILD shell,
+        # which is enough for NEXT_PUBLIC_* (inlined into the bundle) and for
+        # the postbuild sitemap scripts (they read process.env directly while
+        # the build runs). It is NOT enough for a server-only variable that is
+        # read at REQUEST time by an SSR route: the compute that serves
+        # /api/go/taschen does not inherit the build shell's environment.
+        #
+        # Writing it into .env.production makes Next pick it up as part of the
+        # build output, so the route can read it at runtime. Without this the
+        # TASCHEN router silently falls back to sending visitors straight to
+        # taschen.com with no Awin hop, and nothing is tracked.
+        #
+        # Add any future server-only runtime variable to this grep.
+        - env | grep -e '^AWIN_PUBLISHER_ID=' >> .env.production || echo "WARNING: AWIN_PUBLISHER_ID missing - TASCHEN links will be untracked"
         - yarn build
         # The 'postbuild' script in package.json runs automatically after yarn build
   artifacts:
