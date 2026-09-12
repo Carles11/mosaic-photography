@@ -52,16 +52,15 @@ export const ResourcesSlider: React.FC<ResourcesSliderProps> = ({
   locale = "en",
   limit,
 }) => {
-  const products = useMemo(() => {
-    if (!limit) return allProducts;
-    return [...allProducts]
-      .sort(
-        (a, b) =>
-          Number(Boolean(b.featured)) - Number(Boolean(a.featured)) ||
-          (a.sort_order ?? 0) - (b.sort_order ?? 0),
-      )
-      .slice(0, limit);
-  }, [allProducts, limit]);
+  // Take the order we are given. This used to re-sort by featured then
+  // sort_order, which quietly undid the balancing done in
+  // getGeneralAffiliateResources: Retouch4me has five featured products at
+  // sort_order 0-5 and TASCHEN's books sit at 20 and 40, so the shelf always
+  // opened with three retouching tools no matter what the server sent.
+  const products = useMemo(
+    () => (limit ? allProducts.slice(0, limit) : allProducts),
+    [allProducts, limit],
+  );
 
   // Only offer a tab if something is behind it. "Prints" sat there empty once
   // Poster Master and Big Wall Decor were hidden, and a tab that answers a

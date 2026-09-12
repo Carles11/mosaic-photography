@@ -177,7 +177,19 @@ function offsetForAuthor(author: string, length: number): number {
  * the cap, keeps every tab populated, and stops any one partner with a deep
  * catalogue from taking the whole shelf.
  */
-const SHELF_TYPE_ORDER = ["book", "print", "framing", "tool"];
+/**
+ * How the 12 slots are handed out, read left to right and repeated until the
+ * shelf is full. "book" appears twice, so the shelf opens with two books and
+ * comes back to books on every pass — they are the most on-brand thing we
+ * sell and the least like advertising.
+ *
+ * Everything after the books is shuffled per request, so the mix a visitor
+ * sees changes between sessions rather than being the same twelve cards in
+ * the same order forever. The homepage is server-rendered on demand, so this
+ * runs per visit.
+ */
+const SHELF_LEAD_TYPE = "book";
+const SHELF_TYPE_ORDER = ["book", "book", "print", "framing", "tool"];
 
 export async function getGeneralAffiliateResources(): Promise<
   AffiliateProductWithAdvertiser[]
@@ -211,28 +223,38 @@ export async function getGeneralAffiliateResources(): Promise<
     else byType.set(key, [p]);
   }
 
-  // Featured items lead within their own type.
-  for (const group of byType.values()) {
-    group.sort(
-      (a, b) =>
-        Number(Boolean(b.featured)) - Number(Boolean(a.featured)) ||
-        (a.sort_order ?? 0) - (b.sort_order ?? 0),
-    );
-  }
+  // Deliberately NOT sorted by featured/sort_order here. With 16 general
+  // products and 12 slots nearly everything shows anyway, so that sort only
+  // decided order within a type — and it made the two featured books open the
+  // shelf on every single visit. Leaving the shuffle in place means the pair
+  // of books at the front changes between sessions. `featured` still orders
+  // the toolkit pages and the photographer shelves.
 
-  const orderedTypes = [
-    ...SHELF_TYPE_ORDER.filter((t) => byType.has(t)),
+  // Books lead; the rest of the rotation is shuffled per request.
+  const leadSlots = SHELF_TYPE_ORDER.filter(
+    (t) => t === SHELF_LEAD_TYPE && byType.has(t),
+  );
+  const followSlots = shuffleArray([
+    ...SHELF_TYPE_ORDER.filter((t) => t !== SHELF_LEAD_TYPE && byType.has(t)),
     ...[...byType.keys()].filter((t) => !SHELF_TYPE_ORDER.includes(t)),
-  ];
+  ]);
+  const orderedTypes = [...leadSlots, ...followSlots];
 
+  // A cursor per type rather than a shared depth, so a type listed twice in
+  // the rotation takes its next item each time instead of repeating one.
+  const taken: Record<string, number> = {};
   const shelf: AffiliateProductWithAdvertiser[] = [];
-  for (let depth = 0; shelf.length < SHELF_LIMIT; depth++) {
+
+  while (shelf.length < SHELF_LIMIT) {
     let addedThisPass = false;
     for (const type of orderedTypes) {
       if (shelf.length >= SHELF_LIMIT) break;
-      const group = byType.get(type)!;
-      if (depth < group.length) {
-        shelf.push(group[depth]);
+      const group = byType.get(type);
+      if (!group) continue;
+      const next = taken[type] ?? 0;
+      if (next < group.length) {
+        shelf.push(group[next]);
+        taken[type] = next + 1;
         addedThisPass = true;
       }
     }
