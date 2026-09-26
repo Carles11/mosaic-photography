@@ -108,6 +108,7 @@ migrations/            # Supabase SQL migrations
 | New DB table or data | `docs/data-model.md` |
 | Coding style | `docs/conventions.md` |
 | What we're working on now | `docs/TASKS.md` |
+| Recurring routines (new photographer, community contributor, affiliate partner, migration, deploy, mobile release) | `docs/RUNBOOKS.md` |
 
 ---
 
@@ -140,6 +141,7 @@ Never expose `SUPABASE_SERVICE_ROLE_KEY` to the browser.
 ## Deep Docs
 
 - `docs/TASKS.md` — active task list for the web project
+- `docs/RUNBOOKS.md` — "steps to follow to…" for recurring routines
 - `docs/architecture.md` — complete system map
 - `docs/features/gallery.md` — gallery, masonry, virtualizer, lightbox
 - `docs/features/auth.md` — auth flow, guards, providers
