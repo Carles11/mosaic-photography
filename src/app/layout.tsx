@@ -179,6 +179,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         />
         {/* YANDEX */}
         <meta name="yandex-verification" content="4d7b85a7f1cd21b8" />
+        {/* PINTEREST (website claim, mosaic_photography_gallery) */}
+        <meta name="p:domain_verify" content="f72f73437b1618d8d04907cd9f739394" />
       </head>
       <body className="font-trade-gothic">
         <NonCriticalCSSLoader />
