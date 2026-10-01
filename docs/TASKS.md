@@ -249,8 +249,11 @@ leading hypothesis and it is testable in Search Console.
       - `julia-margaret-cameron/w1200/julia-margaret-cameron_die-tochter-des-g%C3%A4rtners-...webp` (non-ASCII filename)
       → verify they 404 on the CDN, then either restore the renditions or drop them from the sitemap.
       Also check the matthew-brady failures (`ruins-of-strasburg`, `napoleon-sarony`) are genuinely absent from the sitemap.
-- [ ] **Raw non-ASCII page URL in the sitemap:** `https://www.mosaic.photography/photographers/de-la-vaudère`.
+- [x] **Raw non-ASCII page URL in the sitemap:** `https://www.mosaic.photography/photographers/de-la-vaudère`.
       Sitemap `<loc>` values must be URL-escaped. Ties to the slug decision in Task 1.
+      Fixed 2026-10-01: `generate-sitemap-0.ts` uses `photographers.slug`; 308 from
+      `/photographers/de-la-vaud%C3%A8re` (encoded `source` in `next.config.ts`; the raw
+      form does not match). Verified live: sitemap-0 lists `de-la-vaudere`, redirect 308.
 - [x] **Contributor slug changed without a redirect:** `/community/photography/elcarles`
       → `/community/photography/elcarles78` in `bb65846`. `next.config.ts` only redirects
       `/contributors` → `/community/photography`. Add a 301 for the old slug.
@@ -263,8 +266,12 @@ leading hypothesis and it is testable in Search Console.
       own policies, but `postbuild` runs the three custom `tsx` generators and never
       `next-sitemap`. `public/robots.txt` is hand-maintained. Either wire it back in or
       delete the config so nobody edits the wrong file.
-- [ ] Sitemaps are **committed to `public/`** and also **regenerated at build**. Confirm
+- [x] Sitemaps are **committed to `public/`** and also **regenerated at build**. Confirm
       a deploy cannot ship a stale committed copy.
+      Confirmed 2026-10-01: committed `sitemap-0.xml` still had the accented URL, the
+      live one after the Amplify build did not, so postbuild output wins.
+      Note: postbuild fails locally on Node 20 (Supabase realtime needs native
+      WebSocket); Amplify runs Node 22. Ties to the `.nvmrc` drift.
 
 ### Other things to rule out
 
