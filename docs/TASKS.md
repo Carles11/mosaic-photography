@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-09-11
+> Last reviewed: 2026-09-11 (Task 3 findings added 2026-10-01)
 
 ---
 
@@ -268,6 +268,34 @@ leading hypothesis and it is testable in Search Console.
    the drop shows in Search Console too (if only GA4 dropped → consent/tagging issue).
 5. Spot-check 10 image URLs from `image-sitemap.xml` for HTTP 200, including the two suspect ones above.
 6. Fix whatever the above proves, resubmit sitemaps, ping IndexNow, and re-check in 2–3 weeks.
+
+### Findings
+
+**2026-10-01 — first re-check after the 2026-09-11 fixes** (source:
+`docs/seo-reports/mosaic.photography-Performance-on-Search-2026-09-28/`,
+GSC Performance, Search type = **Web only**, data 2026-06-26 → 2026-09-25).
+
+| Window | Days | Clicks/day | Impressions/day |
+|---|---|---|---|
+| 26 Jun – 23 Jul (right after the cliff) | 28 | 1.6 | 22.6 |
+| 14 Aug – 10 Sep (after the 12–13 Aug sitemap rewrite, before the fixes) | 28 | 1.7 | 25.6 |
+| 12 – 25 Sep (after the fixes) | 14 | 2.4 | 17.8 |
+
+- **No mid-August step change in Web search.** Impressions/day are flat from
+  late June through 10 Sep. The drop is the **26 Jun cliff** (~−83% impressions,
+  149 → 25/day, position 5.6 → 23), attributed to the June 2026 spam update in
+  `seo-reports/11-09-2026/MOSAIC-SEO-DROP-ANALYSIS-2026-09-11.md`. The
+  "mid/late August" framing and the sitemap-rewrite hypothesis above still
+  need checking for **Image** search only — this export doesn't contain it.
+  Not rewriting the section until the Image split is in.
+- **After the fixes:** clicks/day up (~+40%), impressions/day down (~−30%).
+  Only 14 days, single-digit daily numbers — not a trend yet, no recovery yet.
+- Homepage takes 156 of the clicks; top query "vintage nude photography"
+  (43 clicks, 385 impr, pos 6.0). Four `/#section` fragment URLs show
+  126 impressions each at pos 8.4 (sitelinks), 0 clicks.
+- **Still missing for attribution:** same export with Search type = Image;
+  Pages → Indexing export after 09-11; Sitemaps report (submitted vs
+  indexed). Next re-check: scheduled task on 2026-10-02.
 
 ### Acceptance criteria
 
