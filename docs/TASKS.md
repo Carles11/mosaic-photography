@@ -297,6 +297,38 @@ GSC Performance, Search type = **Web only**, data 2026-06-26 → 2026-09-25).
   Pages → Indexing export after 09-11; Sitemaps report (submitted vs
   indexed). Next re-check: scheduled task on 2026-10-02.
 
+**2026-10-01 — Image vs Web split, 6 months** (sources:
+`docs/seo-reports/…-2026-10-01-IMAGE/`, `…-2026-10-01-WEB-6M/`,
+`…Coverage-2026-10-01/`). GSC's Web filter now has sub-options
+Text-based / Multimodal; picking Web exports Text-based, and its daily
+numbers match the 09-28 Web export exactly (92 overlapping days, 0 diffs).
+
+| Window | Web clicks/day | Web impr/day | Image impr/day |
+|---|---|---|---|
+| 1 Apr – 11 Jun | 5.6 | 92.9 | 6.2 |
+| 12 – 25 Jun (peak) | 11.9 | 136.0 | 3.1 |
+| 26 Jun – 23 Jul | 1.6 | 22.6 | 1.8 |
+| 15 Jul – 11 Aug | 1.5 | 17.9 | 2.3 |
+| 12 Aug – 10 Sep | 1.6 | 25.1 | 1.3 |
+| 12 – 30 Sep | 2.4 | 17.9 | 0.8 |
+
+- **The sitemap-rewrite hypothesis is ruled out as a cause of lost traffic.**
+  Image search was never a real channel: ~6 impressions/day at best,
+  0–2 clicks per week in 6 months. Image impressions did fall further
+  after 12 Aug (2.3 → 1.3/day), but from a base too small to matter.
+  The defects listed above (missing renditions, unescaped `<loc>`,
+  stale index lastmod) are still worth fixing, as hygiene, not recovery.
+- **Attribution:** the loss is the Web cliff on 2026-06-26 (136 → 23
+  impressions/day, −83%), matching the June 2026 spam update analysis.
+  Clicks/day since the 09-11 fixes are 2.4 vs 1.6 before; impressions
+  have not recovered.
+- **Indexing, 09-03 → 09-20:** indexed 14 → 16, not indexed 33 → 33.
+  Crawled–currently not indexed 13 → 10 (validation **Failed**),
+  Discovered–currently not indexed 13 → 15 (validation Started),
+  noindex 2 → 3, redirect 3, 403 2. Which URLs failed validation is not
+  in the export (needs the drilldown table per reason).
+- Sitemaps report: screenshot pending.
+
 ### Acceptance criteria
 
 - [ ] The drop is attributed to a named cause with GSC/GA4 evidence, written up in this file
