@@ -74,6 +74,11 @@ const nextConfig: NextConfig = {
         destination: "/community/photography/elcarles78",
         permanent: true,
       },
+      {
+        source: "/photographers/de-la-vaud%C3%A8re",
+        destination: "/photographers/de-la-vaudere",
+        permanent: true,
+      },
     ];
   },
 
