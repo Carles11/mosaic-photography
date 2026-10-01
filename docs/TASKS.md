@@ -185,11 +185,19 @@ that programme was never joined.
 
 ---
 
-## Task 3 — Investigate the visits drop (~mid/late August 2026)
+## Task 3 — Recover from the 26 June 2026 traffic drop
 
-`[ ]` **Goal:** explain and reverse the traffic drop that started roughly two weeks before 2026-09-05.
+`[~]` **Goal:** reverse the Google Web-search drop of 2026-06-26 (−83% impressions,
+June 2026 spam update) and track recovery after the 2026-09-11 fixes.
 
-### Prime suspect: the 12–13 August sitemap rewrite
+> **Reframed 2026-10-01.** This task was opened as a "mid/late August" drop with
+> the 12–13 Aug sitemap rewrite as prime suspect. GSC data (see **Findings**
+> below) shows no August step change in Web, and Image search was never a real
+> channel, so that hypothesis is ruled out. The section below is kept as the
+> record of it; its defect list still stands, as hygiene, not as the cause.
+> Cause write-up: `seo-reports/11-09-2026/MOSAIC-SEO-DROP-ANALYSIS-2026-09-11.md`.
+
+### Former prime suspect: the 12–13 August sitemap rewrite (ruled out 2026-10-01)
 
 Three commits landed on 12–13 August, immediately before the drop window:
 
@@ -327,11 +335,15 @@ numbers match the 09-28 Web export exactly (92 overlapping days, 0 diffs).
   Discovered–currently not indexed 13 → 15 (validation Started),
   noindex 2 → 3, redirect 3, 403 2. Which URLs failed validation is not
   in the export (needs the drilldown table per reason).
-- Sitemaps report: screenshot pending.
+- **Sitemaps report (read 21–28 Sep):** all four "Success". Discovered:
+  `sitemap.xml` index 54 = `sitemap-0` 29 + `collection-sitemap` 10 +
+  `image-sitemap` 15, identical to the `<loc>` counts in `public/`. Index
+  last read 09-28, so Google has the post-09-11 sitemaps.
 
 ### Acceptance criteria
 
-- [ ] The drop is attributed to a named cause with GSC/GA4 evidence, written up in this file
+- [x] The drop is attributed to a named cause with GSC/GA4 evidence, written up in this file (2026-10-01: 26 Jun spam update, GSC only; GA4 not checked)
+- [ ] Web impressions/day back above the pre-cliff 1 Apr – 11 Jun baseline (~93/day)
 - [ ] Every URL in `image-sitemap.xml` returns 200
 - [ ] No raw non-ASCII or unescaped characters in any sitemap `<loc>`
 - [ ] Old contributor slug 301s to the new one
