@@ -334,7 +334,8 @@ unique (10 images listed twice: 7 von Plueschow, 1 Stieglitz, 1 Brady, the
 Holland Day portrait), and `generate-image-sitemap.ts` has the same
 surname-instead-of-slug bug as sitemap-0, so the live file still has
 `/photographers/de-la-vaudère` with 38 images. Fix prompt:
-`docs/prompts/2026-10-01/image-sitemap-slug-dedupe.md`. Correction (same day): the 10 "duplicates" are the
+`docs/prompts/2026-10-01/image-sitemap-slug-dedupe.md`. **Shipped and verified
+live 2026-10-01:** image-sitemap lists `/photographers/de-la-vaudere`, 1010 images. Correction (same day): the 10 "duplicates" are the
 homepage's 10 featured images, listed once under `/` and once under their
 photographer page. That is valid (Google allows one image on several pages),
 not a defect. The fix keeps both listings and only dedupes within the
@@ -382,7 +383,7 @@ numbers match the 09-28 Web export exactly (92 overlapping days, 0 diffs).
 - [x] The drop is attributed to a named cause with GSC/GA4 evidence, written up in this file (2026-10-01: 26 Jun spam update, GSC only; GA4 not checked)
 - [ ] Web impressions/day back above the pre-cliff 1 Apr – 11 Jun baseline (~93/day)
 - [x] Every URL in `image-sitemap.xml` returns 200 (2026-10-01: all 1000 unique URLs checked live, all 200)
-- [ ] No raw non-ASCII or unescaped characters in any sitemap `<loc>`
+- [x] No raw non-ASCII or unescaped characters in any sitemap `<loc>` (2026-10-01: sitemap-0 and image-sitemap both use `photographers.slug`; image locs are percent-encoded)
 - [x] Old contributor slug 301s to the new one (308, 2026-10-01)
 - [ ] Sitemap index `lastmod` regenerates with its children
 
