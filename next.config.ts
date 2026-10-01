@@ -69,6 +69,11 @@ const nextConfig: NextConfig = {
         destination: "/community/photography/:slug",
         permanent: true,
       },
+      {
+        source: "/community/photography/elcarles",
+        destination: "/community/photography/elcarles78",
+        permanent: true,
+      },
     ];
   },
 

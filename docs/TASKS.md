@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-09-11 (Task 3 findings added 2026-10-01)
+> Last reviewed: 2026-10-01
 
 ---
 
@@ -127,14 +127,15 @@ that programme was never joined.
 - [ ] Toolkit pages emit `CollectionPage` JSON-LD with **hardcoded `width: 800, height: 600`**
       for every product image (`src/app/toolkit/[slug]/page.tsx`). Use real dimensions, or
       consider `ItemList`/`Product` instead — the current markup asserts sizes that are wrong.
-- [~] Outbound affiliate links use `rel="sponsored"` alone in 12 places (toolkit card,
+- [x] Outbound affiliate links use `rel="sponsored"` alone in 12 places (toolkit card,
       `ShopLink`, all four templates, `ToolkitHero`). Add `noopener noreferrer` — only
       `PhotographerLinks.tsx` does it correctly today.
       Done 2026-09-11 in `ShopLink.tsx`, `TemplateDefault.tsx`, `ToolkitHero.tsx`
       and `inputs/dropDown` (which had never read `DropdownItem.affiliate` at all,
       the reason the homepage Amazon links were undisclosed).
-      `TemplateSoftware/Print/Marketplace` still need it.
-- [ ] Duplicate file to delete: `src/components/toolkit/ToolkitAffiliateBadge (1).tsx`.
+      `TemplateSoftware/Print/Marketplace` done 2026-10-01 (openCode,
+      `docs/prompts/2026-10-01/seo-hygiene-batch-1.md`).
+- [x] Duplicate file to delete: `src/components/toolkit/ToolkitAffiliateBadge (1).tsx`. Deleted 2026-10-01.
 - [x] `getGeneralAffiliateResources` has the `.is("photographer_author", null)` filter
       commented out, so photographer-specific products also appear in the homepage
       slider. **Decided 2026-09-11: filter back on.** The slider is a general
@@ -171,11 +172,15 @@ that programme was never joined.
 - [ ] **Fine Art America on Awin 88153.** Never joined; the 18 FAA links earn
       nothing and FAA is hardcoded out of the homepage shelf. Approval turns
       into revenue with one SQL update. Largest item outstanding.
-- [ ] **Soft 404 on `/toolkit/amazon`, `/toolkit/poster-master`,
+- [~] **Soft 404 on `/toolkit/amazon`, `/toolkit/poster-master`,
       `/toolkit/big-wall-decor`.** `dynamicParams = false` is set and only the
       four active slugs are prerendered, but the middleware matcher makes the
       route dynamic, so `notFound()` fires after the 200 header is sent. Three
       previously-indexed URLs answer 200 with not-found content.
+      2026-10-01: real cause was `toolkit/[slug]/loading.tsx` (streaming sends
+      the 200 first); deleted. Local `yarn start`: all three + unknown slug → 404,
+      `/toolkit/taschen` → 200. **Verify on production after deploy**, then GSC
+      URL Inspection → request indexing for the three URLs.
 - [ ] **Duplicate anchors in `toolkitCard.tsx`** — image and "Shop now" both
       link to the same URL, so the homepage shows 30 sponsored anchors for 18
       products.
@@ -239,9 +244,11 @@ leading hypothesis and it is testable in Search Console.
       Also check the matthew-brady failures (`ruins-of-strasburg`, `napoleon-sarony`) are genuinely absent from the sitemap.
 - [ ] **Raw non-ASCII page URL in the sitemap:** `https://www.mosaic.photography/photographers/de-la-vaudère`.
       Sitemap `<loc>` values must be URL-escaped. Ties to the slug decision in Task 1.
-- [ ] **Contributor slug changed without a redirect:** `/community/photography/elcarles`
+- [~] **Contributor slug changed without a redirect:** `/community/photography/elcarles`
       → `/community/photography/elcarles78` in `bb65846`. `next.config.ts` only redirects
       `/contributors` → `/community/photography`. Add a 301 for the old slug.
+      2026-10-01: added in `next.config.ts` (permanent → 308); local check OK.
+      Verify on production after deploy.
 - [ ] **Stale sitemap index:** `public/sitemap.xml` `lastmod` is `2026-08-12T22:56:52Z`,
       but `image-sitemap.xml` was changed again on 08-13 (`e6ffe07`). The index does not
       signal the newer sitemap. Make `postbuild` regenerate the index too.
