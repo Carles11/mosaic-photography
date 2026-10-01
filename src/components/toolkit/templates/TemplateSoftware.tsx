@@ -40,7 +40,7 @@ export default function TemplateSoftware({
             <a
               href={advertiser.banner_link_url ?? advertiser.website_url}
               target="_blank"
-              rel="sponsored"
+              rel="sponsored noopener noreferrer"
               style={{ display: "block" }}
             >
               {advertiser.promo_url && (
@@ -178,7 +178,7 @@ export default function TemplateSoftware({
                 <a
                   href={product.affiliate_url}
                   target="_blank"
-                  rel="sponsored"
+                  rel="sponsored noopener noreferrer"
                   style={{
                     background: "#fff",
                     color: "#111",
@@ -257,7 +257,7 @@ export default function TemplateSoftware({
                     : advertiser.website_url
                 }
                 target="_blank"
-                rel="sponsored"
+                rel="sponsored noopener noreferrer"
                 style={{
                   background: "#fff",
                   color: "#111",
@@ -307,7 +307,7 @@ export default function TemplateSoftware({
               <a
                 href={advertiser.promo_code_url}
                 target="_blank"
-                rel="sponsored"
+                rel="sponsored noopener noreferrer"
                 style={{
                   background: "#fff",
                   color: "#111",
@@ -366,7 +366,7 @@ export default function TemplateSoftware({
             <a
               href={advertiser.website_url}
               target="_blank"
-              rel="sponsored"
+              rel="sponsored noopener noreferrer"
               style={{
                 background: "#fff",
                 color: "#111",

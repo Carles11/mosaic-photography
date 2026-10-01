@@ -202,7 +202,7 @@ export default function TemplatePrint({
           <a
             href={advertiser.website_url}
             target="_blank"
-            rel="sponsored"
+            rel="sponsored noopener noreferrer"
             style={{
               background: "#fff",
               color: "#000",

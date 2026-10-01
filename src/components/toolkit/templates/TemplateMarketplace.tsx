@@ -151,7 +151,7 @@ export default function TemplateMarketplace({
                     <a
                       href={product.affiliate_url}
                       target="_blank"
-                      rel="sponsored"
+                      rel="sponsored noopener noreferrer"
                       style={{
                         background: "#fff",
                         color: "#111",

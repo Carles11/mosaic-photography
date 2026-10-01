@@ -42,6 +42,9 @@ const TEMPLATE_MAP: Record<string, React.ComponentType<TemplateProps>> = {
  * URL Google has already indexed. dynamicParams = false moves the decision to
  * the routing layer, before any rendering, and returns a true 404.
  *
+ * loading.tsx was removed on 2026-10-01 for the same reason: it made the route
+ * stream and send 200 before notFound().
+ *
  * Trade-off: a newly inserted advertiser needs a build to become reachable.
  * That was already true of the sitemap, which is generated in postbuild, so
  * the two now agree instead of disagreeing.
