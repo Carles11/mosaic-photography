@@ -172,15 +172,15 @@ that programme was never joined.
 - [ ] **Fine Art America on Awin 88153.** Never joined; the 18 FAA links earn
       nothing and FAA is hardcoded out of the homepage shelf. Approval turns
       into revenue with one SQL update. Largest item outstanding.
-- [~] **Soft 404 on `/toolkit/amazon`, `/toolkit/poster-master`,
+- [x] **Soft 404 on `/toolkit/amazon`, `/toolkit/poster-master`,
       `/toolkit/big-wall-decor`.** `dynamicParams = false` is set and only the
       four active slugs are prerendered, but the middleware matcher makes the
       route dynamic, so `notFound()` fires after the 200 header is sent. Three
       previously-indexed URLs answer 200 with not-found content.
       2026-10-01: real cause was `toolkit/[slug]/loading.tsx` (streaming sends
       the 200 first); deleted. Local `yarn start`: all three + unknown slug → 404,
-      `/toolkit/taschen` → 200. **Verify on production after deploy**, then GSC
-      URL Inspection → request indexing for the three URLs.
+      `/toolkit/taschen` → 200. Verified on production 2026-10-01 (`56ddd34`):
+      amazon / poster-master / big-wall-decor / unknown slug → 404, taschen → 200.
 - [ ] **Duplicate anchors in `toolkitCard.tsx`** — image and "Shop now" both
       link to the same URL, so the homepage shows 30 sponsored anchors for 18
       products.
@@ -244,11 +244,11 @@ leading hypothesis and it is testable in Search Console.
       Also check the matthew-brady failures (`ruins-of-strasburg`, `napoleon-sarony`) are genuinely absent from the sitemap.
 - [ ] **Raw non-ASCII page URL in the sitemap:** `https://www.mosaic.photography/photographers/de-la-vaudère`.
       Sitemap `<loc>` values must be URL-escaped. Ties to the slug decision in Task 1.
-- [~] **Contributor slug changed without a redirect:** `/community/photography/elcarles`
+- [x] **Contributor slug changed without a redirect:** `/community/photography/elcarles`
       → `/community/photography/elcarles78` in `bb65846`. `next.config.ts` only redirects
       `/contributors` → `/community/photography`. Add a 301 for the old slug.
-      2026-10-01: added in `next.config.ts` (permanent → 308); local check OK.
-      Verify on production after deploy.
+      2026-10-01: added in `next.config.ts` (permanent → 308); verified on
+      production 2026-10-01: 308 → `/community/photography/elcarles78`.
 - [ ] **Stale sitemap index:** `public/sitemap.xml` `lastmod` is `2026-08-12T22:56:52Z`,
       but `image-sitemap.xml` was changed again on 08-13 (`e6ffe07`). The index does not
       signal the newer sitemap. Make `postbuild` regenerate the index too.
@@ -353,7 +353,7 @@ numbers match the 09-28 Web export exactly (92 overlapping days, 0 diffs).
 - [ ] Web impressions/day back above the pre-cliff 1 Apr – 11 Jun baseline (~93/day)
 - [ ] Every URL in `image-sitemap.xml` returns 200
 - [ ] No raw non-ASCII or unescaped characters in any sitemap `<loc>`
-- [ ] Old contributor slug 301s to the new one
+- [x] Old contributor slug 301s to the new one (308, 2026-10-01)
 - [ ] Sitemap index `lastmod` regenerates with its children
 
 ### Data we still need (not in the repo)
