@@ -69,9 +69,16 @@ All 14 also have timeline data in `src/lib/timeline/photographersTimelines.ts`.
 ### Open decisions
 
 - [ ] Target number for this round (e.g. +5 photographers)?
-- [ ] Slug policy for non-ASCII surnames — `de-la-vaudère` is currently a raw
+- [x] Slug policy for non-ASCII surnames — `de-la-vaudère` is currently a raw
       non-ASCII URL. Decide: transliterate to `de-la-vaudere` + 301, or keep and
       percent-encode everywhere. **Blocks Task 3.**
+      **Decided 2026-10-01: ASCII only** (Carles). Finding: the DB `slug` is
+      already `de-la-vaudere` and the site links to it; only
+      `scripts/generate-sitemap-0.ts` built the URL from `surname` instead of
+      `slug`. Fix + 301 for the accented URL:
+      `docs/prompts/2026-10-01/photographer-slug-ascii.md`. Follow-up (not
+      scheduled): `PhotographersViewCard.tsx` links via `slugify(surname)`
+      instead of the DB `slug`; works for the current 14, fragile for new names.
 
 ---
 

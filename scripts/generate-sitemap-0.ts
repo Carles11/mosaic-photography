@@ -14,7 +14,7 @@ async function generateSitemap0() {
   // Fetch all photographers
   const { data: photographers, error: photographerError } = await supabase
     .from("photographers")
-    .select("surname");
+    .select("surname, slug");
 
   if (photographerError) {
     console.error("Error fetching photographers:", photographerError);
@@ -122,7 +122,13 @@ async function generateSitemap0() {
   // Add photographer pages
   if (photographers) {
     photographers.forEach((photographer) => {
-      const slug = `${photographer.surname}`.toLowerCase().replace(/\s+/g, "-");
+      const slug = photographer.slug;
+      if (!slug || !/^[a-z0-9-]+$/.test(slug)) {
+        console.warn(
+          `[sitemap-0] skipping photographer with missing or non-ASCII slug: ${photographer.surname} -> ${slug}`,
+        );
+        return;
+      }
       sitemap += `  <url>\n`;
       sitemap += `    <loc>https://www.mosaic.photography/photographers/${slug}</loc>\n`;
       sitemap += `    <lastmod>${new Date().toISOString()}</lastmod>\n`;
