@@ -242,7 +242,7 @@ leading hypothesis and it is testable in Search Console.
 
 ### Concrete defects found in the repo (fix regardless of cause)
 
-- [ ] **Sitemap lists images that do not exist.** `restore-missing-large-renditions.mjs`
+- [x] **Sitemap lists images that do not exist.** (2026-10-01: all live image URLs return 200, see Findings.) `restore-missing-large-renditions.mjs`
       failed on 8 renditions ("no originalsWEBP source"), and two of them are still
       listed in `public/image-sitemap.xml`:
       - `holland-day/w1600/holland-day_woman-drapery-halo-staircase-seated_year-1890_vertical_female_bw_not-%20nude.webp` (filename contains a space)
@@ -326,6 +326,22 @@ GSC Performance, Search type = **Web only**, data 2026-06-26 → 2026-09-25).
   Pages → Indexing export after 09-11; Sitemaps report (submitted vs
   indexed). Next re-check: scheduled task on 2026-10-02.
 
+**2026-10-01 — image sitemap checked live, URL by URL.** All 1000 unique
+`<image:loc>` URLs return 200, including the four suspects (space, `ä`, two
+Brady files), so the "sitemap lists images that do not exist" defect is
+resolved as far as Google sees it. Two new issues: 1010 entries but only 1000
+unique (10 images listed twice: 7 von Plueschow, 1 Stieglitz, 1 Brady, the
+Holland Day portrait), and `generate-image-sitemap.ts` has the same
+surname-instead-of-slug bug as sitemap-0, so the live file still has
+`/photographers/de-la-vaudère` with 38 images. Fix prompt:
+`docs/prompts/2026-10-01/image-sitemap-slug-dedupe.md`. Correction (same day): the 10 "duplicates" are the
+homepage's 10 featured images, listed once under `/` and once under their
+photographer page. That is valid (Google allows one image on several pages),
+not a defect. The fix keeps both listings and only dedupes within the
+photographer blocks, as a guard. Also noticed: `collection-sitemap.xml` lists
+`/profile/collections/<uuid>` URLs; confirm those pages are public and meant
+to be indexed.
+
 **2026-10-01 — Image vs Web split, 6 months** (sources:
 `docs/seo-reports/…-2026-10-01-IMAGE/`, `…-2026-10-01-WEB-6M/`,
 `…Coverage-2026-10-01/`). GSC's Web filter now has sub-options
@@ -365,7 +381,7 @@ numbers match the 09-28 Web export exactly (92 overlapping days, 0 diffs).
 
 - [x] The drop is attributed to a named cause with GSC/GA4 evidence, written up in this file (2026-10-01: 26 Jun spam update, GSC only; GA4 not checked)
 - [ ] Web impressions/day back above the pre-cliff 1 Apr – 11 Jun baseline (~93/day)
-- [ ] Every URL in `image-sitemap.xml` returns 200
+- [x] Every URL in `image-sitemap.xml` returns 200 (2026-10-01: all 1000 unique URLs checked live, all 200)
 - [ ] No raw non-ASCII or unescaped characters in any sitemap `<loc>`
 - [x] Old contributor slug 301s to the new one (308, 2026-10-01)
 - [ ] Sitemap index `lastmod` regenerates with its children

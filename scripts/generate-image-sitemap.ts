@@ -27,7 +27,7 @@ async function generateImageSitemap() {
   // Fetch all photographers
   const { data: photographers, error: photographerError } = await supabase
     .from("photographers")
-    .select("name, surname, origin");
+    .select("name, surname, origin, slug");
 
   if (photographerError) {
     console.error("Error fetching photographers:", photographerError);
@@ -53,21 +53,38 @@ async function generateImageSitemap() {
 `;
 
   // Add photographer pages with their images
+  const seenImageLocs = new Set<string>();
+  let duplicatesSkipped = 0;
   photographers.forEach((photographer) => {
-    // Build photographer slug
-    const slug = `${photographer.surname}`.toLowerCase().replace(/\s+/g, "-");
+    const slug = photographer.slug;
+    if (!slug || !/^[a-z0-9-]+$/.test(slug)) {
+      console.warn(
+        `[image-sitemap] skipping photographer with missing or non-ASCII slug: ${photographer.surname} -> ${slug}`,
+      );
+      return;
+    }
     const photographerImages = images.filter(
       (img) =>
         img.author &&
         img.author.toLowerCase().includes(photographer.surname.toLowerCase()),
     );
 
-    if (photographerImages.length > 0) {
+    const uniqueImages = photographerImages.filter((image) => {
+      const loc = imageLoc(image);
+      if (seenImageLocs.has(loc)) {
+        duplicatesSkipped += 1;
+        return false;
+      }
+      seenImageLocs.add(loc);
+      return true;
+    });
+
+    if (uniqueImages.length > 0) {
       sitemap += `  <url>
     <loc>https://www.mosaic.photography/photographers/${slug}</loc>
 `;
 
-      photographerImages.forEach((image) => {
+      uniqueImages.forEach((image) => {
         sitemap += makeImageXml(image);
       });
 
@@ -78,6 +95,8 @@ async function generateImageSitemap() {
 
   // Close sitemap
   sitemap += `</urlset>`;
+
+  console.log(`[image-sitemap] skipped ${duplicatesSkipped} duplicate image locs`);
 
   // Write to file
   const publicDir = path.join(process.cwd(), "public");
@@ -105,6 +124,23 @@ function bestSizeFolder(width?: number): string {
     : "originalsWEBP";
 }
 
+// Single source of truth for an image's <image:loc> value.
+function imageLoc(image: {
+  base_url: string;
+  filename: string;
+  width?: number;
+}): string {
+  // base_url already contains the full CDN base path; just append size bucket + filename
+  const filenameWebp = image.filename.replace(/\.[^/.]+$/, ".webp");
+  // A few filenames contain characters that must be percent-encoded to fetch:
+  // spaces and non-ASCII ("gärtners") are invalid in a sitemap <loc>, and a
+  // literal "+" is decoded as a space by the CDN, so the object 403s unless
+  // sent as %2B. encodeURI leaves "+" alone, hence the extra replace.
+  return encodeURI(
+    `${image.base_url}/${bestSizeFolder(image.width)}/${filenameWebp}`,
+  ).replace(/\+/g, "%2B");
+}
+
 // Helper function to create <image:image> block
 function makeImageXml(
   image: {
@@ -121,15 +157,7 @@ function makeImageXml(
   },
   geo_location?: string,
 ) {
-  // base_url already contains the full CDN base path; just append size bucket + filename
-  const filenameWebp = image.filename.replace(/\.[^/.]+$/, ".webp");
-  // A few filenames contain characters that must be percent-encoded to fetch:
-  // spaces and non-ASCII ("gärtners") are invalid in a sitemap <loc>, and a
-  // literal "+" is decoded as a space by the CDN, so the object 403s unless
-  // sent as %2B. encodeURI leaves "+" alone, hence the extra replace.
-  const loc = encodeURI(
-    `${image.base_url}/${bestSizeFolder(image.width)}/${filenameWebp}`,
-  ).replace(/\+/g, "%2B");
+  const loc = imageLoc(image);
   return `    <image:image>
       <image:loc>${loc}</image:loc>
       <image:title>${escapeXml(
