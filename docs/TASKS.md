@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-10-01
+> Last reviewed: 2026-10-02
 
 ---
 
@@ -424,7 +424,14 @@ screenshot). Per day:
   package.json; fixed by `9c34433`, green). Live: /llms.txt 200 but shown as
   mojibake (no charset from Amplify). Fix prompt:
   `docs/prompts/2026-10-02/llms-txt-charset.md` (openCode 2026-10-02: header
-  added in `next.config.ts`, dev returns `charset=utf-8`). [ ] verify live "—" renders.
+  added in `next.config.ts`, dev returns `charset=utf-8`). [x] Live "—" renders
+  (2026-10-02). The `next.config.ts` header has **no effect on Amplify**: files in
+  `public/` are served by CloudFront and never reach Next, so live was still
+  `text/plain`. Fixed in Amplify console → Hosting → Custom headers and cache
+  (pattern `/llms.txt`, `Content-Type: text/plain; charset=utf-8`, kept the two
+  `.well-known` JSON entries) + redeploy. Verified: llms.txt `charset=utf-8`,
+  assetlinks.json still `application/json`. Rule: headers for `public/` files go
+  in the Amplify console (no `customHttp.yml` in the repo), not `next.config.ts`.
   Live sitemap.xml lists only sitemap-0 + image-sitemap. GSC:
   `collection-sitemap.xml` removed (Carles, 2026-10-02).
   Open (low): prose names "Jean-Louis-Marie-Eugène Durieu" / "Clarence
