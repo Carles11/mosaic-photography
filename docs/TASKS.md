@@ -259,7 +259,7 @@ leading hypothesis and it is testable in Search Console.
       `/contributors` → `/community/photography`. Add a 301 for the old slug.
       2026-10-01: added in `next.config.ts` (permanent → 308); verified on
       production 2026-10-01: 308 → `/community/photography/elcarles78`.
-- [ ] **Stale sitemap index:** `public/sitemap.xml` `lastmod` is `2026-08-12T22:56:52Z`,
+- [x] **Stale sitemap index:** (2026-10-02: live index lastmod = deploy time 2026-10-02T15:44Z; `generate-sitemap-0.ts` regenerates it.) `public/sitemap.xml` `lastmod` is `2026-08-12T22:56:52Z`,
       but `image-sitemap.xml` was changed again on 08-13 (`e6ffe07`). The index does not
       signal the newer sitemap. Make `postbuild` regenerate the index too.
 - [ ] **`next-sitemap.config.js` is orphaned.** It sets `generateRobotsTxt: true` and its
@@ -420,7 +420,13 @@ screenshot). Per day:
   server returns 200 text/plain; middleware can't gate it (`.` early return).
   Content fixed: `/community` → `/community/photography` (+ `[slug]` path),
   Käsebier removed (no page), 7 missing photographers added (list = the 14
-  in sitemap-0). [ ] Verify live after deploy.
+  in sitemap-0). Deployed 2026-10-02 (`fe998d7` failed build: commit missed
+  package.json; fixed by `9c34433`, green). Live: /llms.txt 200 but shown as
+  mojibake (no charset from Amplify). Fix prompt:
+  `docs/prompts/2026-10-02/llms-txt-charset.md` (openCode 2026-10-02: header
+  added in `next.config.ts`, dev returns `charset=utf-8`). [ ] verify live "—" renders.
+  Live sitemap.xml lists only sitemap-0 + image-sitemap. GSC:
+  `collection-sitemap.xml` removed (Carles, 2026-10-02).
   Open (low): prose names "Jean-Louis-Marie-Eugène Durieu" / "Clarence
   White" vs slugs `eugene-durieu` / `clarence-hudson-white`; kept as is.
   Leftover `collection-sitemap` refs (llms.txt, next-sitemap.config.js,
@@ -434,7 +440,7 @@ screenshot). Per day:
 - [x] Every URL in `image-sitemap.xml` returns 200 (2026-10-01: all 1000 unique URLs checked live, all 200)
 - [x] No raw non-ASCII or unescaped characters in any sitemap `<loc>` (2026-10-01: sitemap-0 and image-sitemap both use `photographers.slug`; image locs are percent-encoded)
 - [x] Old contributor slug 301s to the new one (308, 2026-10-01)
-- [ ] Sitemap index `lastmod` regenerates with its children
+- [x] Sitemap index `lastmod` regenerates with its children (2026-10-02, verified live)
 
 ### Data we still need (not in the repo)
 

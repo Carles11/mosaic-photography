@@ -164,6 +164,15 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: "/llms.txt",
+        headers: [
+          {
+            key: "Content-Type",
+            value: "text/plain; charset=utf-8",
+          },
+        ],
+      },
     ];
   },
 };
