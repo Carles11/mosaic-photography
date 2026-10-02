@@ -134,7 +134,6 @@ mosaic-photography/
 ├── scripts/                        # Build-time scripts
 │   ├── generate-sitemap-0.ts
 │   ├── generate-image-sitemap.ts   # Builds public/image-sitemap.xml from Supabase
-│   ├── generate-collection-sitemap.ts
 │   ├── indexnow.ts
 │   ├── adding-new-photographers/   # Image processing pipeline
 │   │   ├── 1-convert-originals-to-webp.mjs
@@ -144,9 +143,9 @@ mosaic-photography/
 │
 ├── migrations/                     # Supabase SQL migrations (numbered)
 ├── public/                         # Static assets, sitemaps, favicons, screenshots
+│   └── llms.txt                    # AI search engine discovery file
 ├── CLAUDE.md                       # AI agent guide (read first)
 ├── .cursorrules                    # Cursor-specific rules
-├── llms.txt                        # AI search engine discovery file
 ├── next.config.ts                  # Next.js config (images, CSP headers, PWA)
 ├── pwa.config.js                   # PWA configuration
 ├── tsconfig.json                   # Path aliases: @/* @components/* @utils/*
