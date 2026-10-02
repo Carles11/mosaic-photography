@@ -93,4 +93,3 @@ Allow: /
 Sitemap: https://www.mosaic.photography/sitemap.xml
 Sitemap: https://www.mosaic.photography/sitemap-0.xml
 Sitemap: https://www.mosaic.photography/image-sitemap.xml
-Sitemap: https://www.mosaic.photography/collection-sitemap.xml

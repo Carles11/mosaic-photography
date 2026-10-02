@@ -50,7 +50,7 @@
 11. **Check renditions:** `node scripts/restore-missing-large-renditions.mjs --dry-run` (must report no gaps for the new folder).
 12. **Optional (code → openCode prompt):** timeline entries in `src/lib/timeline/photographersTimelines.ts`.
 13. **Optional:** affiliate products for the photographer (routine 3, `photographer_author = {author}`); otherwise the page tops up from general products automatically.
-14. **Deploy:** routine 5. `postbuild` regenerates `sitemap-0`, `image-sitemap`, `collection-sitemap` and pings IndexNow.
+14. **Deploy:** routine 5. `postbuild` regenerates `sitemap-0`, `image-sitemap` and the `sitemap.xml` index and pings IndexNow.
 15. **Verify** the acceptance criteria in `docs/TASKS.md` Task 1 (page, `Person` JSON-LD, `/photographers/{slug}.md`, sitemaps, homepage carousel).
 16. **Mobile:** nothing to code (same tables); open the app and check the photographer + images appear.
 

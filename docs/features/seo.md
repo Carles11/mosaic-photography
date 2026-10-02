@@ -13,7 +13,6 @@
 | `src/app/constants/faqSections.ts` | FAQ content (crawlable copy + schema source) |
 | `next-sitemap.config.js` | Sitemap + robots.txt config |
 | `scripts/generate-image-sitemap.ts` | Builds `public/image-sitemap.xml` from Supabase |
-| `scripts/generate-collection-sitemap.ts` | Builds `public/collection-sitemap.xml` |
 | `scripts/generate-sitemap-0.ts` | Builds main page sitemap |
 | `public/robots.txt` | Crawler instructions |
 
@@ -108,7 +107,8 @@ For custom schemas, use inline `<script type="application/ld+json">` in the page
 | `/sitemap.xml` | Index of all sitemaps | `next-sitemap.config.js` |
 | `/sitemap-0.xml` | All photographer + page URLs | `scripts/generate-sitemap-0.ts` |
 | `/image-sitemap.xml` | All WebP image URLs with metadata | `scripts/generate-image-sitemap.ts` |
-| `/collection-sitemap.xml` | Public collection URLs | `scripts/generate-collection-sitemap.ts` |
+
+User collections (`/profile/collections/*`) are `noindex, follow` and not in any sitemap (decision 2026-10-02).
 
 Sitemaps are generated at build time via `postbuild` in `package.json`. Requires Supabase env vars.
 
@@ -133,7 +133,7 @@ Key strategies:
 
 ## AI Search Engine Optimizations
 
-- `llms.txt` at root — machine-readable site summary for AI crawlers
+- `public/llms.txt` (served at /llms.txt) — machine-readable site summary for AI crawlers
 - Bot detection in `middleware.ts` — known AI crawlers get `skip_age_modal=1` cookie
 - Detected bots: `perplexitybot`, `anthropic`, `claude`, `gptbot`, `oai-searchbot`, `chatgpt`, `cohere`, `amazonbot`, etc.
 - FAQ content (`faqSections.ts`) targets long-tail queries about public domain, licensing, image SEO

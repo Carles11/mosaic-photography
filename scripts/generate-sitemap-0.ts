@@ -175,7 +175,7 @@ async function generateSitemap0() {
 
   // Regenerate the sitemap index so lastmod stays current
   const now = new Date().toISOString();
-  const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <sitemap>\n    <loc>https://www.mosaic.photography/sitemap-0.xml</loc>\n    <lastmod>${now}</lastmod>\n  </sitemap>\n  <sitemap>\n    <loc>https://www.mosaic.photography/image-sitemap.xml</loc>\n    <lastmod>${now}</lastmod>\n  </sitemap>\n  <sitemap>\n    <loc>https://www.mosaic.photography/collection-sitemap.xml</loc>\n    <lastmod>${now}</lastmod>\n  </sitemap>\n</sitemapindex>`;
+  const sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <sitemap>\n    <loc>https://www.mosaic.photography/sitemap-0.xml</loc>\n    <lastmod>${now}</lastmod>\n  </sitemap>\n  <sitemap>\n    <loc>https://www.mosaic.photography/image-sitemap.xml</loc>\n    <lastmod>${now}</lastmod>\n  </sitemap>\n</sitemapindex>`;
   fs.writeFileSync(path.join(publicDir, "sitemap.xml"), sitemapIndex);
   console.log("sitemap.xml (index) regenerated successfully!");
 }

@@ -10,7 +10,6 @@ module.exports = {
     additionalSitemaps: [
       "https://www.mosaic.photography/sitemap.xml",
       "https://www.mosaic.photography/image-sitemap.xml",
-      "https://www.mosaic.photography/collection-sitemap.xml",
     ],
     policies: [
       {

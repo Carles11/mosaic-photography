@@ -44,7 +44,7 @@ All 14 also have timeline data in `src/lib/timeline/photographersTimelines.ts`.
 5. Import the generated CSV into `images_resize`.
 6. Add a portrait as `000_aaa_{author}.webp` (filtered out of the gallery, used on cards).
 7. Optionally add timeline entries to `photographersTimelines.ts`.
-8. `yarn build` → `postbuild` regenerates `sitemap-0`, `image-sitemap`, `collection-sitemap` and pings IndexNow.
+8. `yarn build` → `postbuild` regenerates `sitemap-0`, `image-sitemap`, the `sitemap.xml` index and pings IndexNow.
 
 ### Naming rules (do not improvise)
 
@@ -377,6 +377,55 @@ numbers match the 09-28 Web export exactly (92 overlapping days, 0 diffs).
   `sitemap.xml` index 54 = `sitemap-0` 29 + `collection-sitemap` 10 +
   `image-sitemap` 15, identical to the `<loc>` counts in `public/`. Index
   last read 09-28, so Google has the post-09-11 sitemaps.
+
+**2026-10-02 — scheduled re-check** (source: `docs/seo-reports/2026-10-02/`,
+GSC compare exports Web + Image, Coverage, two drilldown tables; Sitemaps
+screenshot). Per day:
+
+| Comparison (Web) | Clicks/day | Impr/day |
+|---|---|---|
+| 29 May–25 Jun → 26 Jun–23 Jul | 12.5 → 1.6 | 136 → 22.6 |
+| 15 Jul–11 Aug → 12 Aug–8 Sep | 1.5 → 1.6 | 17.9 → 26.0 |
+| 24 Aug–11 Sep → 12–30 Sep (post-fix, 19 d each) | 1.9 → 2.2 | 24.2 → 16.7 |
+
+- Image impressions 214 → 50 → 37 → 15 across the same windows, 2 clicks total. Confirms 2026-10-01 conclusion.
+- Post-fix impression dip is mostly the 4 `/#section` sitelinks disappearing
+  (96 → 0); without them 363 → 318 (−12%). Homepage position 32.0 → 21.6,
+  CTR 8.2% → 12.9%. "vintage nude photography" 5 → 12 clicks, pos 5.9. Not a recovery yet.
+- Coverage data still ends 09-20: indexed 16, not indexed 33 (unchanged).
+- Crawled–not indexed (validation Failed, 10): photographers **cameron,
+  weston, von-gloeden, hudson-white**, 3 legal pages, 2 CDN fonts,
+  `site.webmanifest`. Last crawled May–5 Aug, i.e. never seen post-fix.
+- Discovered–not indexed (validation Started, 15, never crawled):
+  **demachy**, `toolkit/taschen`, 3 community pages, old `de-la-vaudère`
+  URL (now 308), 9 `/profile/collections/<uuid>`.
+- Sitemaps: unchanged, all 4 Success, 54 = 29 + 15 + 10; sitemap-0 read 10-01.
+- [x] Indexing requested via URL Inspection for cameron, weston,
+  von-gloeden, hudson-white, demachy (Carles, 2026-10-02).
+- **Decision (Carles, 2026-10-02):** user collections don't need indexing.
+  They were already `noindex` (`profile/collections/[id]/layout.tsx`) but
+  listed in `collection-sitemap.xml`, a mixed signal. → keep `noindex`
+  (switch to `follow`), drop `collection-sitemap` everywhere.
+  Prompt: `docs/prompts/2026-10-02/drop-collection-sitemap.md`.
+  After deploy: remove `collection-sitemap.xml` in GSC → Sitemaps.
+  Porting to mobile: n/a (web sitemap only).
+- Note on the "Stale sitemap index" defect: `generate-sitemap-0.ts` (l. 176–180)
+  already regenerates `sitemap.xml` at postbuild; only the committed
+  `public/` copy is stale. Verify live `lastmod` after the next deploy, then tick it.
+- [x] `docs/features/seo.md` sitemap table updated by the prompt above (openCode, 2026-10-02; tsc + lint clean).
+- **llms.txt is not live** (Carles, 2026-10-02: /llms.txt → 404). The file sits
+  in the repo root, not `public/`, since at least 2026-06-04. Breaks the GEO
+  rule in CLAUDE.md. Prompt: `docs/prompts/2026-10-02/serve-llms-txt.md`.
+  Done locally 2026-10-02 (openCode): `git mv` to `public/llms.txt`, dev
+  server returns 200 text/plain; middleware can't gate it (`.` early return).
+  Content fixed: `/community` → `/community/photography` (+ `[slug]` path),
+  Käsebier removed (no page), 7 missing photographers added (list = the 14
+  in sitemap-0). [ ] Verify live after deploy.
+  Open (low): prose names "Jean-Louis-Marie-Eugène Durieu" / "Clarence
+  White" vs slugs `eugene-durieu` / `clarence-hudson-white`; kept as is.
+  Leftover `collection-sitemap` refs (llms.txt, next-sitemap.config.js,
+  docs/architecture.md) cleaned in an openCode follow-up the same day.
+- Next re-check: ~2026-10-16 (2 weeks after indexing requests).
 
 ### Acceptance criteria
 

@@ -21,7 +21,6 @@ Key facts:
 | Main sitemap index | https://www.mosaic.photography/sitemap.xml |
 | Photographer & page index | https://www.mosaic.photography/sitemap-0.xml |
 | Image directory (all WebP assets) | https://www.mosaic.photography/image-sitemap.xml |
-| Curated collections | https://www.mosaic.photography/collection-sitemap.xml |
 | robots.txt | https://www.mosaic.photography/robots.txt |
 
 ## Key Pages
@@ -30,8 +29,8 @@ Key facts:
 - **FAQ:** https://www.mosaic.photography/faq
 - **Mobile App:** https://www.mosaic.photography/app
 - **About:** https://www.mosaic.photography/about
-- **Community:** https://www.mosaic.photography/community
-- **Community contributors:** https://www.mosaic.photography/community/[slug]
+- **Community:** https://www.mosaic.photography/community/photography
+- **Community contributors:** https://www.mosaic.photography/community/photography/[slug]
 - **Photographer pages:** https://www.mosaic.photography/photographers/[surname]
 - **Photo curations:** https://www.mosaic.photography/photo-curations
 - **Toolkit:** https://www.mosaic.photography/toolkit/[slug]
@@ -41,7 +40,7 @@ Key facts:
 
 Each photographer page includes: full name, nationality, birth/death dates, Markdown biography, historical timeline, full gallery of public domain works.
 
-Representative photographers: Wilhelm von Plüschow · Robert Demachy · Jean-Louis-Marie-Eugène Durieu · F. Holland Day · Clarence White · Alfred Stieglitz · Gertrude Käsebier · Anne Brigman · and others.
+Representative photographers: Wilhelm von Plüschow · Robert Demachy · Jean-Louis-Marie-Eugène Durieu · F. Holland Day · Clarence White · Alfred Stieglitz · Anne Brigman · Edward Weston · Julia Margaret Cameron · Wilhelm von Gloeden · Mario von Bucovich · Matthew Brady · Jane de la Vaudère · Jacques Moulin · and others.
 
 ## Image CDN Structure
 
