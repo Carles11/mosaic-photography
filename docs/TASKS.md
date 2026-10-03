@@ -197,14 +197,21 @@ that programme is still Pending Approval (applied; see Carried forward).
       the 200 first); deleted. Local `yarn start`: all three + unknown slug → 404,
       `/toolkit/taschen` → 200. Verified on production 2026-10-01 (`56ddd34`):
       amazon / poster-master / big-wall-decor / unknown slug → 404, taschen → 200.
-- [~] **Duplicate anchors in `toolkitCard.tsx`** — image and "Shop now" both
+- [x] **Duplicate anchors in `toolkitCard.tsx`** — image and "Shop now" both
       link to the same URL, so the homepage shows 30 sponsored anchors for 18
       products.
       2026-10-03 (openCode, `docs/prompts/2026-10-03/toolkit-card-single-link.md`):
       image no longer a link, one sponsored anchor per card; GTM event
       `toolkitCardClicked` removed (clicks now only `toolkitShopNowClicked`);
       `"<name> affiliate"` dropped from toolkit `keywords`. lint + tsc clean.
-      Tick after the live homepage is checked.
+      Shipped `c505bf7`, verified live 2026-10-03: server HTML of `/` has
+      18 sponsored anchors (12 "Shop Now" + 6 photographer-card dropdown links),
+      down from 30; no image inside a sponsored link; `/toolkit/taschen`
+      keywords no longer contain "affiliate".
+      New finding (not scheduled): after hydration the live DOM holds **two**
+      `.home_container` blocks (each with `home_pageContent`, `aria-hidden`),
+      so the browser shows 24 cards / 36 sponsored anchors. SSR has one.
+      Find out why `HomeClientWrapper` content mounts twice on the client.
 - [ ] **Drop `photographers.store`.** Dead in code, still populated.
 - [ ] Ask the TASCHEN programme manager which programme is credited for NL, PT
       and AU orders, and what the commission rate is (not published).
