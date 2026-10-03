@@ -101,7 +101,7 @@ Amplify.
 
 **Remaining follow-ups are listed at the end of the report** — the big one is
 Fine Art America on Awin 88153, where 18 existing links earn nothing because
-that programme was never joined.
+that programme is still Pending Approval (applied; see Carried forward).
 
 ### Where the data lives
 
@@ -176,9 +176,15 @@ that programme was never joined.
 
 ### Carried forward from the 2026-09-11 ship
 
-- [ ] **Fine Art America on Awin 88153.** Never joined; the 18 FAA links earn
-      nothing and FAA is hardcoded out of the homepage shelf. Approval turns
-      into revenue with one SQL update. Largest item outstanding.
+- [~] **Fine Art America on Awin 88153.** Applied, still Pending Approval
+      (not rejected). The 18 FAA links earn nothing and FAA is hardcoded out
+      of the homepage shelf. Approval turns into revenue with one SQL update.
+      Largest item outstanding.
+      2026-10-03: chased by email 11 Sep and via the Awin contact form 3 Oct.
+      Decision (Carles): if there's no answer by **2026-10-17**, retire FAA from
+      the live affiliate products (`is_active = false` on the advertiser and its
+      18 products, never delete; RUNBOOKS routine 3 "Retire a partner").
+      Mobile reads the same tables, so the retirement covers it too.
 - [x] **Soft 404 on `/toolkit/amazon`, `/toolkit/poster-master`,
       `/toolkit/big-wall-decor`.** `dynamicParams = false` is set and only the
       four active slugs are prerendered, but the middleware matcher makes the
