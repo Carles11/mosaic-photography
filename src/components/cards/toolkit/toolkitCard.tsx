@@ -13,15 +13,6 @@ const ToolkitCard: React.FC<ToolkitCardProps> = ({
   product,
   locale = "en",
 }) => {
-  // Track card click (main image/link)
-  const handleCardClick = () => {
-    sendGTMEvent({
-      event: "toolkitCardClicked",
-      advertiser: product.affiliate_advertisers?.name,
-      product: product.title?.[locale] ?? "",
-    });
-  };
-
   // Track Shop Now button
   const handleShopNowClick = () => {
     sendGTMEvent({
@@ -43,31 +34,16 @@ const ToolkitCard: React.FC<ToolkitCardProps> = ({
   return (
     <div className={styles.card}>
       <div className={styles.cardImageWrap}>
-        <a
-          href={product.affiliate_url}
-          target="_blank"
-          rel="sponsored noopener noreferrer"
-          style={{
-            display: "block",
-            position: "relative",
-            zIndex: 10,
-            cursor: "pointer",
-            width: "100%",
-          }}
-          className="no-fancy-link"
-          onClick={handleCardClick}
-        >
-          <Image
-            src={
-              product.image_url ||
-              "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp"
-            }
-            alt={product.title?.[locale] ?? ""}
-            width={250}
-            height={200}
-            className={styles.cardImage}
-          />
-        </a>
+        <Image
+          src={
+            product.image_url ||
+            "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp"
+          }
+          alt={product.title?.[locale] ?? ""}
+          width={250}
+          height={200}
+          className={styles.cardImage}
+        />
         <div className={styles.cardOverlay} />
         {/* {product.affiliate_advertisers?.logo_url && (
           <div className={styles.advertiserBadge}>

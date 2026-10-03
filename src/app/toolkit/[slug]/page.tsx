@@ -84,7 +84,6 @@ export async function generateMetadata({
     "Photography Resources",
     "Mosaic Photography",
     `${advertiser.name} review`,
-    `${advertiser.name} affiliate`,
   ];
 
   return {
