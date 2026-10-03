@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-10-02
+> Last reviewed: 2026-10-03
 
 ---
 
@@ -134,6 +134,9 @@ that programme is still Pending Approval (applied; see Carried forward).
 - [ ] Toolkit pages emit `CollectionPage` JSON-LD with **hardcoded `width: 800, height: 600`**
       for every product image (`src/app/toolkit/[slug]/page.tsx`). Use real dimensions, or
       consider `ItemList`/`Product` instead — the current markup asserts sizes that are wrong.
+      2026-10-03 finding: not a live defect. The `CollectionPage` branch of
+      `JsonLdSchema.tsx` only emits each item's `name`; width/height/encodingFormat
+      are passed but never rendered. Dead props only, low priority.
 - [x] Outbound affiliate links use `rel="sponsored"` alone in 12 places (toolkit card,
       `ShopLink`, all four templates, `ToolkitHero`). Add `noopener noreferrer` — only
       `PhotographerLinks.tsx` does it correctly today.
@@ -194,9 +197,14 @@ that programme is still Pending Approval (applied; see Carried forward).
       the 200 first); deleted. Local `yarn start`: all three + unknown slug → 404,
       `/toolkit/taschen` → 200. Verified on production 2026-10-01 (`56ddd34`):
       amazon / poster-master / big-wall-decor / unknown slug → 404, taschen → 200.
-- [ ] **Duplicate anchors in `toolkitCard.tsx`** — image and "Shop now" both
+- [~] **Duplicate anchors in `toolkitCard.tsx`** — image and "Shop now" both
       link to the same URL, so the homepage shows 30 sponsored anchors for 18
       products.
+      2026-10-03 (openCode, `docs/prompts/2026-10-03/toolkit-card-single-link.md`):
+      image no longer a link, one sponsored anchor per card; GTM event
+      `toolkitCardClicked` removed (clicks now only `toolkitShopNowClicked`);
+      `"<name> affiliate"` dropped from toolkit `keywords`. lint + tsc clean.
+      Tick after the live homepage is checked.
 - [ ] **Drop `photographers.store`.** Dead in code, still populated.
 - [ ] Ask the TASCHEN programme manager which programme is credited for NL, PT
       and AU orders, and what the commission rate is (not published).
