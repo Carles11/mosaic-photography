@@ -196,7 +196,8 @@ that programme is still Pending Approval (applied; see Carried forward).
       Web: `/toolkit/fine-art-america` and its `sitemap-0` entry drop out on
       the next Amplify build (prerender + sitemap are build-time). After that
       deploy: check `/toolkit/fine-art-america` → 404 and absent from
-      `sitemap-0.xml`. To revert if Awin approves later: same two updates with
+      `sitemap-0.xml`. **Verified live 2026-10-19:** 404, 0 matches in
+      sitemap-0. To revert if Awin approves later: same two updates with
       `true`, then rewrite the 18 links to Awin tracking links.
       Follow-up (not scheduled): the hardcoded "fine art america" exclusion in
       `src/components/sliders/ResourcesSlider.tsx` is now dead code.
