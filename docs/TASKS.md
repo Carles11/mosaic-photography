@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-10-03
+> Last reviewed: 2026-10-19
 
 ---
 
@@ -179,7 +179,7 @@ that programme is still Pending Approval (applied; see Carried forward).
 
 ### Carried forward from the 2026-09-11 ship
 
-- [~] **Fine Art America on Awin 88153.** Applied, still Pending Approval
+- [x] **Fine Art America on Awin 88153.** Applied, still Pending Approval
       (not rejected). The 18 FAA links earn nothing and FAA is hardcoded out
       of the homepage shelf. Approval turns into revenue with one SQL update.
       Largest item outstanding.
@@ -188,6 +188,18 @@ that programme is still Pending Approval (applied; see Carried forward).
       the live affiliate products (`is_active = false` on the advertiser and its
       18 products, never delete; RUNBOOKS routine 3 "Retire a partner").
       Mobile reads the same tables, so the retirement covers it too.
+      **Retired 2026-10-19** (Carles). Awin dashboard still "Pending", no
+      reply by email (only an FAA support auto-reply from Dec 2025). Supabase:
+      advertiser `fine-art-america` (`b8998170-…`) + its 18 products set
+      `is_active = false`, no rows deleted; verified `adv_active=false`,
+      `products_active=0`. Mobile: effective immediately (same tables).
+      Web: `/toolkit/fine-art-america` and its `sitemap-0` entry drop out on
+      the next Amplify build (prerender + sitemap are build-time). After that
+      deploy: check `/toolkit/fine-art-america` → 404 and absent from
+      `sitemap-0.xml`. To revert if Awin approves later: same two updates with
+      `true`, then rewrite the 18 links to Awin tracking links.
+      Follow-up (not scheduled): the hardcoded "fine art america" exclusion in
+      `src/components/sliders/ResourcesSlider.tsx` is now dead code.
 - [x] **Soft 404 on `/toolkit/amazon`, `/toolkit/poster-master`,
       `/toolkit/big-wall-decor`.** `dynamicParams = false` is set and only the
       four active slugs are prerendered, but the middleware matcher makes the
