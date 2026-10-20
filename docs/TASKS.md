@@ -672,9 +672,28 @@ code and the live site by Claude the same day; verdicts below.
       Scope checked read-only: only `main` holds the 3 files (added `25667e9`,
       `efb9cec`, `7b442d4`); the 2 emails are in no other file in history; every
       `main` commit from `25667e9` on gets a new hash, final tree unchanged.
-      **Next: Carles runs steps 1–4 (install, backup, rewrite, verify), STOP
-      with screenshots before the force-push.** After the push: GitHub Support
-      ticket (step 6), then Claude maps the stale hashes in the docs (step 7).
+      **Purged 2026-10-20 (steps 1–7 done).** git-filter-repo 2.47.0
+      `--sensitive-data-removal`: 42 of 918 commits rewritten, first changed
+      `25667e9`; tree unchanged (`205b847…`); both emails 0 hits in
+      `git log --all -S` on the rewritten repo; 0 PR refs, 0 forks, no
+      rulesets. Force-pushed `main` `8d071bd → 9dfbe8b`; working copy reset
+      to `origin/main`. Correction to the procedure: a 4th file in the same
+      folder, `tested-live-page-js-console-messages.md`, *was* committed
+      (`25667e9`); it has no emails and stays.
+      GitHub Support ticket **#4884318** (opened 2026-10-20, "Repository-Funktionen
+      → Branches") to drop cached views + GC old SHAs. Until it's closed,
+      old commits open by direct SHA URL.
+      **Next (after Support confirms):** step 8: delete `aaa_repos/_purge`
+      and `_backup/mosaic-photography-pre-purge-2026-10-20.git` (still has
+      the emails), keep `_backup/commit-map-2026-10-purge.txt`; check
+      `github.com/Carles11/mosaic-photography/commit/25667e9` → 404.
+      Never push from a clone made before 2026-10-20 19:30 (re-clone).
+      **Old → new hashes** (cited in this file and elsewhere; old ones below
+      are left as written):
+      `25667e9→e7b9c64` `efb9cec→d8a9622` `7b442d4→4682d63`
+      `56ddd34→452ae1b` `fe998d7→b580f14` `9c34433→661782d`
+      `c505bf7→7620167` `63d849c→08b8a57` `4880ef5→923cc48`
+      `e0ccc29→e06b793`. Full map: `_backup/commit-map-2026-10-purge.txt`.
 - [x] **#2 `/api/download-image` open proxy** (prefix check, follows redirects).
 - [x] **#3 Service worker caches Supabase REST** responses for 5 min, keyed by URL.
 - [x] **#4 JSON-LD not escaping `<`** (14 `dangerouslySetInnerHTML` blocks).
