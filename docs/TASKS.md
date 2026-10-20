@@ -576,7 +576,7 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
   Expect Bing to recover on its own; re-check BWT ~2026-10-27.
   Root cause of the failed auto-renewal not documented yet (ACM DNS
   validation CNAME?); check before April 2027.
-- [~] Homepage payload + meta description: openCode prompt
+- [x] Homepage payload + meta description (shipped `4880ef5`, see Task 4 #13): prompt
   `docs/prompts/2026-10-20/homepage-payload-and-meta.md` (2026-10-20).
   Porting to mobile: n/a (web homepage only).
 - **AI share-of-voice baseline (2026-10-20, from rio-social-hub;** full file
@@ -672,13 +672,16 @@ All 14 photographer URLs submitted via IndexNow API 2026-10-20 → HTTP 200.
 
 ### Batch 2 — homepage payload (prompt `docs/prompts/2026-10-20/homepage-payload-and-meta.md`)
 
-- [~] **#13** image rows (`url`, `created_at`) + photographer biographies sent
+- [x] **#13** image rows (`url`, `created_at`) + photographer biographies sent
       to the client; merged into the payload prompt (see Task 3, 2026-10-20).
       Done locally 2026-10-20 (Claude Code): slim `HomeGalleryImage` /
       `HomePhotographer` types mapped in `page.tsx` (JSON-LD keeps full rows);
       meta description 141 chars. Dev HTML 1,231,612 → 934,931 B (−24%),
       RSC payload 955,655 → 658,516 B (−31%). tsc + lint clean; gallery,
-      lightbox, color filter checked in Chrome. Pending: deploy + live size check.
+      lightbox, color filter checked in Chrome. Shipped `4880ef5`.
+      **Verified live 2026-10-20:** homepage 1,209,915 → **912,294 B**, RSC
+      payload 945,958 → **648,369 B**; new meta description (141 chars) live;
+      H1, 83 `<img>`, JSON-LD intact; `biography_md` 0, emails 0, canonical OK.
       Not scheduled (Carles decides): render first ~60 images + fetch the rest
       from an own route handler. Trade-offs: shuffle seed, filters run on the
       full list client-side, comment counts, images after N leave the HTML
