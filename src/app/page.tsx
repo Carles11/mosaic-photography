@@ -9,14 +9,58 @@ import { fetchPhotographersWithFeaturedSSR } from "@/utils/fetchPhotographersWit
 import { fetchGalleryImagesSSR } from "@/utils/fetchGalleryImagesSSR";
 import { fetchContributorsWithFeaturedSSR } from "@/utils/fetchContributorsWithFeaturedSSR";
 import { serializeJsonLd } from "@/helpers/jsonLd";
-import type { ImageWithOrientation } from "@/types/gallery";
+import type {
+  HomeGalleryImage,
+  HomePhotographer,
+  ImageWithOrientation,
+  Photographer,
+} from "@/types/gallery";
+
+// Every field here is serialized into the homepage HTML (RSC payload), so send
+// only what the client reads. `url` duplicates base_url + filename; created_at,
+// biographies, website and instagram are never read on the homepage.
+function toHomeImage(img: ImageWithOrientation): HomeGalleryImage {
+  return {
+    id: img.id,
+    base_url: img.base_url,
+    filename: img.filename,
+    author: img.author,
+    title: img.title,
+    description: img.description,
+    orientation: img.orientation,
+    width: img.width,
+    height: img.height,
+    print_quality: img.print_quality,
+    gender: img.gender,
+    color: img.color,
+    nudity: img.nudity,
+    year: img.year,
+    mosaicType: img.mosaicType,
+  };
+}
+
+function toHomePhotographer(p: Photographer): HomePhotographer {
+  return {
+    id: p.id,
+    name: p.name,
+    surname: p.surname,
+    author: p.author,
+    slug: p.slug,
+    birthdate: p.birthdate,
+    deceasedate: p.deceasedate,
+    origin: p.origin,
+    intro_md: p.intro_md,
+    images: p.images,
+    cardLinks: p.cardLinks,
+  };
+}
 
 export const metadata: Metadata = {
   title: {
     absolute: "Public Domain Vintage Nude Photography | Mosaic Gallery",
   },
   description:
-    "Browse Mosaic's curated gallery of public domain vintage nude photography by legendary photographers. Discover biographies, historical timelines, and thousands of copyright-free images.",
+    "Public domain vintage nude photography by legendary photographers, with biographies, timelines and over 1,000 copyright-free fine-art images.",
   openGraph: {
     title: "Public Domain Vintage Nude Photography | Mosaic Gallery",
     description:
@@ -83,10 +127,12 @@ export default async function Page() {
   // prop through four components. The card renders whatever is on cardLinks
   // and knows nothing about advertisers.
   const photographers =
-    photographersRaw?.map((photographer) => ({
-      ...photographer,
-      cardLinks: cardLinksByAuthor[photographer.author] ?? [],
-    })) ?? null;
+    photographersRaw?.map((photographer) =>
+      toHomePhotographer({
+        ...photographer,
+        cardLinks: cardLinksByAuthor[photographer.author] ?? [],
+      }),
+    ) ?? null;
 
   const homePageSchema = buildHomePageSchema(images ?? []);
 
@@ -111,7 +157,7 @@ export default async function Page() {
       >
         <HomeClient
           photographers={photographers || []}
-          images={images || []}
+          images={images?.map(toHomeImage) ?? []}
           affiliateProducts={affiliateProducts || []}
           contributors={contributors || []}
         />

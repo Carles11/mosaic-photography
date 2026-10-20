@@ -8,6 +8,41 @@ export type ImageWithOrientation = UniversalGalleryImage & {
   mosaicType?: "normal" | "large" | "wide" | "tall";
 };
 
+// Slim shapes serialized to the homepage client (src/app/page.tsx): only fields the client reads.
+export type HomeGalleryImage = Pick<
+  ImageWithOrientation,
+  | "id"
+  | "base_url"
+  | "filename"
+  | "author"
+  | "title"
+  | "description"
+  | "orientation"
+  | "width"
+  | "height"
+  | "print_quality"
+  | "gender"
+  | "color"
+  | "nudity"
+  | "year"
+  | "mosaicType"
+>;
+
+export type HomePhotographer = Pick<
+  Photographer,
+  | "id"
+  | "name"
+  | "surname"
+  | "author"
+  | "slug"
+  | "birthdate"
+  | "deceasedate"
+  | "origin"
+  | "intro_md"
+  | "images"
+  | "cardLinks"
+>;
+
 export type PossiblePSWP = {
   on?: (event: string, cb: () => void) => void;
   currSlide?: { data?: { id?: string | number; alt?: string | number } };

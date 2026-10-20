@@ -5,8 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useComments } from "@/context/CommentsContext";
 import HomeClientWrapper from "@/components/wrappers/HomeClientWrapper";
-import { Photographer } from "@/types/gallery";
-import { ImageWithOrientation } from "@/types/gallery";
+import type { HomeGalleryImage, HomePhotographer } from "@/types/gallery";
 import { AffiliateProductWithAdvertiser } from "@/utils/fetchAffiliateDataSSR";
 import { ContributorWithFeatured } from "@/utils/fetchContributorsWithFeaturedSSR";
 
@@ -16,8 +15,8 @@ if (process.env.NODE_ENV === "development") {
 }
 
 interface HomeClientProps {
-  photographers?: Photographer[];
-  images?: ImageWithOrientation[];
+  photographers?: HomePhotographer[];
+  images?: HomeGalleryImage[];
   affiliateProducts?: AffiliateProductWithAdvertiser[];
   contributors?: ContributorWithFeatured[];
 }

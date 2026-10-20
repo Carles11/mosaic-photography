@@ -294,7 +294,9 @@ const VirtualizedMosaicGallery: React.FC<VirtualizedMosaicGalleryProps> = ({
           className={!overlaysVisible ? styles.hideLightboxUi : undefined}
           slides={images.map((img) => ({
             src:
-              img.url || img.base_url || "/favicons/android-chrome-512x512.png",
+              img.base_url && img.filename
+                ? `${img.base_url}/${img.filename}`
+                : img.url || "/favicons/android-chrome-512x512.png",
             ...img,
             photographer_slug: img.photographer_slug,
             download:

@@ -661,12 +661,29 @@ page's own URL (`/` → `https://www.mosaic.photography`, photographers incl.
 `submission_notes`; 3 JSON-LD blocks, 0 raw `<`; download route returns 400
 for `cdn.mosaic.photography.evil.com` and `http://`; `sw.js` has no
 `supabase-api` cache. 3 snapshots untracked (still in git history).
-Next: request indexing for the 14 photographer pages (GSC + Bing).
+Indexing requested in GSC 2026-10-20 (Claude, Chrome): holland-day,
+von-bucovich, brigman, brady, weston, cameron, demachy, hudson-white,
+von-gloeden, stieglitz (10, daily quota hit). URL Inspection showed
+holland-day already indexed; von-bucovich + brigman "Crawled – currently not
+indexed". **Still to request: durieu, von-plueschow, de-la-vaudere, moulin
+(2026-10-21).** Bing: manual URL Submission quota is **0** for this site, and
+the BWT IndexNow page didn't load → submit via IndexNow API instead.
+All 14 photographer URLs submitted via IndexNow API 2026-10-20 → HTTP 200.
 
 ### Batch 2 — homepage payload (prompt `docs/prompts/2026-10-20/homepage-payload-and-meta.md`)
 
-- [ ] **#13** image rows (`url`, `created_at`) + photographer biographies sent
+- [~] **#13** image rows (`url`, `created_at`) + photographer biographies sent
       to the client; merged into the payload prompt (see Task 3, 2026-10-20).
+      Done locally 2026-10-20 (Claude Code): slim `HomeGalleryImage` /
+      `HomePhotographer` types mapped in `page.tsx` (JSON-LD keeps full rows);
+      meta description 141 chars. Dev HTML 1,231,612 → 934,931 B (−24%),
+      RSC payload 955,655 → 658,516 B (−31%). tsc + lint clean; gallery,
+      lightbox, color filter checked in Chrome. Pending: deploy + live size check.
+      Not scheduled (Carles decides): render first ~60 images + fetch the rest
+      from an own route handler. Trade-offs: shuffle seed, filters run on the
+      full list client-side, comment counts, images after N leave the HTML
+      (still in image-sitemap + photographer pages). Remaining weight is mostly
+      `description` (lightbox caption) and repeated `base_url`.
 
 ### Later — not scheduled, Carles decides order
 
