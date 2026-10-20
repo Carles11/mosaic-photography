@@ -572,7 +572,9 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
 - **16 Oct impressions drop explained (Carles, 2026-10-20):** the TLS
   certificate expired and AWS could not auto-renew it; renewed manually, site
   was unreachable meanwhile. Live cert now: Amazon RSA 2048 S24, valid
-  2026-09-25 11:28 UTC → 2027-04-11. Exact outage dates: _to fill in_.
+  2026-09-25 11:28 UTC → 2027-04-11. Exact outage dates: not found in the
+  repo docs, the mobile README or the project docs on 2026-10-20 (Carles
+  handled it in another chat); fill in when found.
   Expect Bing to recover on its own; re-check BWT ~2026-10-27.
   Root cause of the failed auto-renewal not documented yet (ACM DNS
   validation CNAME?); check before April 2027.
@@ -647,7 +649,10 @@ code and the live site by Claude the same day; verdicts below.
       Open: rewrite git history to purge them (destructive, force-push; decide);
       Supabase-side lock on `contributors.email` for anon (with #16).
       Exposed: Carles's own address + the one other contributor (akiuonsen).
-      Open: decide whether to tell that contributor (Carles).
+      Decided 2026-10-20 (Carles): no notice to the contributor.
+      **Decided 2026-10-20: purge the 3 snapshots from git history** (public
+      repo). Next session: write the procedure (git filter-repo, force-push,
+      scope + backup first; destructive, Carles runs it).
 - [x] **#2 `/api/download-image` open proxy** (prefix check, follows redirects).
 - [x] **#3 Service worker caches Supabase REST** responses for 5 min, keyed by URL.
 - [x] **#4 JSON-LD not escaping `<`** (14 `dangerouslySetInnerHTML` blocks).
