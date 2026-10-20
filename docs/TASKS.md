@@ -569,15 +569,31 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
   height, nudity, … ×~1,000) serialized for the client. Visible HTML is ~250 KB.
   Likely since `25667e9` (2026-09-11, "server-render the site again"). Worth
   trimming regardless of the Bing question (page weight, crawl budget, CWV).
-- **16 Oct impressions drop explained (Carles, 2026-10-20):** the TLS
-  certificate expired and AWS could not auto-renew it; renewed manually, site
-  was unreachable meanwhile. Live cert now: Amazon RSA 2048 S24, valid
-  2026-09-25 11:28 UTC → 2027-04-11. Exact outage dates: not found in the
-  repo docs, the mobile README or the project docs on 2026-10-20 (Carles
-  handled it in another chat); fill in when found.
-  Expect Bing to recover on its own; re-check BWT ~2026-10-27.
-  Root cause of the failed auto-renewal not documented yet (ACM DNS
-  validation CNAME?); check before April 2027.
+- **Correction (2026-10-20, from rio-social-hub `docs/STATE.md` + `GOTCHAS.md`):**
+  the TLS outage was **2026-09-19 → 2026-09-25**, not mid-October. Amplify-managed
+  cert (ACM us-east-1) expired 09-19; auto-renew failed because the DNS
+  validation CNAME was missing and leftover Route 53 zones confused Amplify.
+  Fixed 09-25: Route 53 zones deleted, custom domain re-added (manual config),
+  Namecheap ALIAS @ + CNAME www → CloudFront `d1xf7vld6rsksa.cloudfront.net`;
+  keep all `_…acm-validations` CNAMEs. Live cert 2026-09-25 → 2027-04-11 matches.
+  Consequences:
+  - **The 16 Oct Bing impressions drop is still unexplained** (no cert change
+    since 09-25). Re-check BWT ~2026-10-27; if it persists, look for a Bing
+    update or a site change around 15–16 Oct.
+  - **The 12 Sep–18 Oct comparison windows above (GSC + GA4) contain the
+    7 outage days.** Part of the GA4 −29% is downtime, not ranking loss.
+    Next re-check: compare 26 Sep–onwards windows only, and read GA4 daily
+    sessions 19–25 Sep to confirm the outage in the data.
+  - Bing daily data shows normal impressions 20–25 Sep (served from its
+    index while the site was down).
+  - **Search updates (web check 2026-10-20):** Google **June 2026 spam update**
+    ran 24 Jun ~12:00 ET → 26 Jun ~14:00 ET (SERoundtable), matching the
+    26 Jun cliff. Google **September 2026 spam update** started 24 Sep
+    09:15 PT, still rolling out 6 Oct (Coalition Technologies) → overlaps
+    the outage and the post-fix window; read Google numbers from ~10 Oct on.
+    No public Bing ranking update found for mid-October.
+  - Before Apr 2027: confirm ACM shows the cert "eligible for renewal"; add an
+    SSL-expiry monitor (backlog → IDEAS, Carles decides).
 - [x] Homepage payload + meta description (shipped `4880ef5`, see Task 4 #13): prompt
   `docs/prompts/2026-10-20/homepage-payload-and-meta.md` (2026-10-20).
   Porting to mobile: n/a (web homepage only).
