@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-10-19
+> Last reviewed: 2026-10-20
 
 ---
 
@@ -473,6 +473,61 @@ screenshot). Per day:
   Leftover `collection-sitemap` refs (llms.txt, next-sitemap.config.js,
   docs/architecture.md) cleaned in an openCode follow-up the same day.
 - Next re-check: ~2026-10-16 (2 weeks after indexing requests).
+
+**2026-10-20 — re-check after indexing requests** (read live in GSC + GA4 by
+Claude in Chrome; no CSV exports saved). Windows: post-fix **12 Sep–18 Oct**
+vs pre-fix **6 Aug–11 Sep**, 37 days each.
+
+GSC, Search type = Web (Google only):
+
+| | Clicks | Impr | CTR | Pos |
+|---|---|---|---|---|
+| 6 Aug–11 Sep | 62 (1.7/d) | 884 (23.9/d) | 7.0% | 35.5 |
+| 12 Sep–18 Oct | 68 (1.8/d) | 650 (17.6/d) | 10.5% | 31.6 |
+
+- Homepage 66 of 68 clicks; impressions 864 → 604 (sitelinks gone, as on 10-02).
+  Photographer pages start to show: brady 0 → 28 impr, hudson-white 4,
+  stieglitz 4, cameron 3, demachy 3 (+1 click). "vintage nude photography"
+  15 clicks / 143 impr (flat).
+- **Indexing (data to 11 Oct): indexed 16, not indexed 33 → 23.** All 5 pages
+  requested on 10-02 (cameron, weston, von-gloeden, hudson-white, demachy) are
+  **indexed**, crawled 2 Oct. 11 of 14 photographer pages indexed.
+  Indexed list also has home, about, faq, app and `toolkit/fine-art-america`
+  (retired 10-19, should drop out).
+- Crawled – currently not indexed (11, validation Failed): photographers
+  **holland-day, von-bucovich** (crawled 11 Sep), **brigman** (22 Aug);
+  `toolkit/retouch4me`, `toolkit/white-wall-de` (6 Sep); 3 legal pages,
+  2 CDN fonts, `site.webmanifest` (May–Jun, harmless).
+- Discovered – not indexed (15 → 4): `community/photography`,
+  `/akiuonsen`, `/elcarles78`, `toolkit/taschen`. Collections gone (noindex + sitemap dropped).
+- Sitemaps: all Success. index read 10-19 (43), sitemap-0 read 10-20 (28,
+  was 29: FAA dropped), image-sitemap read 10-14 (15).
+
+GA4, Traffic acquisition, session source / medium (sessions):
+
+| Source | 6 Aug–11 Sep | 12 Sep–18 Oct | Δ |
+|---|---|---|---|
+| bing / organic | 955 | 656 | −31% |
+| duckduckgo / organic | 411 | 269 | −35% |
+| yahoo / organic | 316 | 176 | −44% |
+| chatgpt.com / ai-assistant | 144 | 97 | −33% |
+| google / organic | 51 | 43 | −16% |
+| (direct) / (none) | 361 | 324 | −10% |
+| **Total** | **2,512** | **1,791** | **−29%** |
+
+- **New finding: Google is ~2% of sessions. The real organic channel is the
+  Bing index** (Bing + DuckDuckGo + Yahoo ≈ 1,100–1,700 sessions per 37 days,
+  and ChatGPT search also runs on Bing). Google recovery work alone can't move
+  the total much.
+- **The whole Bing family fell ~35% after 11 Sep, Google didn't.** Same day as
+  `efb9cec` (UA age-gate bypass removed; crawlers now get the SSR page with the
+  age-gate dialog on top). Hypothesis, not proven: Bing treats the dialog as
+  an interstitial, or re-evaluated the pages. Other candidates: seasonality
+  (Aug → Sep/Oct), a Bing update. The bypass must stay removed (cloaking).
+  → Needs Bing Webmaster Tools data (Search Performance daily, start date of
+  the drop; Site Explorer / URL Inspection on `/` to see what Bingbot renders).
+- GA4 engagement unchanged (62% engaged, ~1m15s) → real traffic loss, not tagging.
+- Next Google re-check: ~2026-11-03 (holland-day, von-bucovich, brigman).
 
 ### Acceptance criteria
 
