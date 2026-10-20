@@ -579,6 +579,34 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
 - [~] Homepage payload + meta description: openCode prompt
   `docs/prompts/2026-10-20/homepage-payload-and-meta.md` (2026-10-20).
   Porting to mobile: n/a (web homepage only).
+- **AI share-of-voice baseline (2026-10-20, from rio-social-hub;** full file
+  `rio-social-hub/docs/metrics/2026-10-geo-baseline-soss-mosaic.md`). ChatGPT +
+  Perplexity, logged out, 3 fresh chats per query, English. Mosaic in **6 of 24**
+  answers, all from one query:
+  - M3 "iPhone app with public domain vintage photographs from the 1800s and
+    early 1900s?" → Mosaic #1 in 6/6. Cited source = **App Store listing**, never
+    the website. Perplexity once: "designed for iPad, so iPhone availability may
+    be limited".
+  - M1 "public domain photographs by early photographers like Julia Margaret
+    Cameron, organized by photographer?" → 0/6 (PD Image Archive, Met Open
+    Access, V&A, Wikimedia Commons, LoC, Getty).
+  - M2 "free website or app to explore pictorialist photography 1890–1930?" →
+    0/6 (Met, George Eastman Museum, LoC, MoMA, Art Institute of Chicago).
+  - M4 "Mathew Brady's portraits online with a short biography?" → 0/6
+    (Smithsonian NPG, LoC, NPS).
+  - Key finding: **mosaic.photography was never cited**, not even for
+    photographer-page questions it answers. (Canonical bug #5, fixed
+    2026-10-20, likely a factor.)
+  - **Next session (Carles's order, one step at a time):** (1) verify in code
+    how photographer pages are built today: URL, title/H1, intro, JSON-LD,
+    internal links, App Store link; (2) check App Store listing iPhone vs iPad
+    wording (where in App Store Connect); (3) propose smallest changes so
+    photographer pages answer M1/M4 literally: question-style heading, short
+    factual answer first, life dates, gallery, Person + ImageGallery JSON-LD,
+    website ↔ App Store links; non-nude and ≤1930 rules stay; (4) then a task
+    file for the code changes.
+  - **Re-check the 4 queries: 2026-11-27 (day 60).**
+  Porting to mobile: App Store listing wording (step 2); app → website link.
 
 ### Acceptance criteria
 
