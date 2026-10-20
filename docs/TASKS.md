@@ -569,6 +569,16 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
   height, nudity, … ×~1,000) serialized for the client. Visible HTML is ~250 KB.
   Likely since `25667e9` (2026-09-11, "server-render the site again"). Worth
   trimming regardless of the Bing question (page weight, crawl budget, CWV).
+- **16 Oct impressions drop explained (Carles, 2026-10-20):** the TLS
+  certificate expired and AWS could not auto-renew it; renewed manually, site
+  was unreachable meanwhile. Live cert now: Amazon RSA 2048 S24, valid
+  2026-09-25 11:28 UTC → 2027-04-11. Exact outage dates: _to fill in_.
+  Expect Bing to recover on its own; re-check BWT ~2026-10-27.
+  Root cause of the failed auto-renewal not documented yet (ACM DNS
+  validation CNAME?); check before April 2027.
+- [~] Homepage payload + meta description: openCode prompt
+  `docs/prompts/2026-10-20/homepage-payload-and-meta.md` (2026-10-20).
+  Porting to mobile: n/a (web homepage only).
 
 ### Acceptance criteria
 
@@ -584,6 +594,84 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
 - Search Console access for `mosaic.photography` (Image vs Web split)
 - GA4 property data for the same window
 - Exact drop start date and magnitude
+
+---
+
+## Task 4 — Fix findings from the Ponytail code audit (2026-10-20)
+
+`[~]` **Goal:** fix the security, privacy and SEO defects found by the external
+code audit (Ponytail, VS Code, 2026-10-20). Claims were checked against the
+code and the live site by Claude the same day; verdicts below.
+
+### Batch 1 — do now (prompt `docs/prompts/2026-10-20/audit-batch-1.md`)
+
+- [ ] **#5 Canonical → homepage.** Live: `/photographers/*` and `/legal/*`
+      output `canonical = https://www.mosaic.photography`. Cause: `alternatives:`
+      typo in `photographers/[surname]/page.tsx` (since `eb20bfc`, 2026-05-21)
+      plus a site-wide canonical in the root layout that every page without its
+      own inherits. Likely why photographer pages took months to index (Task 3).
+      After deploy: verify live, then request indexing in GSC + Bing for the
+      14 photographer pages.
+- [ ] **#1 Contributor emails public.** Live homepage HTML had 2 contributor
+      emails + `submission_notes` (`select("*")` in 3 contributor fetchers).
+      Also in 3 committed snapshots `seo-reports/11-09-2026/url-inspections/*.html`
+      (repo is **public**). Code fix in batch 1; Carles untracks the snapshots.
+      Open: rewrite git history to purge them (destructive, force-push; decide);
+      Supabase-side lock on `contributors.email` for anon (with #16).
+      Exposed: Carles's own address + the one other contributor (akiuonsen).
+      Open: decide whether to tell that contributor (Carles).
+- [ ] **#2 `/api/download-image` open proxy** (prefix check, follows redirects).
+- [ ] **#3 Service worker caches Supabase REST** responses for 5 min, keyed by URL.
+- [ ] **#4 JSON-LD not escaping `<`** (14 `dangerouslySetInnerHTML` blocks).
+- [ ] **#6 Photographer-page Nude/Safe filter** checks `"true"`, data is
+      `"nude"`/`"not-nude"` → "Safe" shows nude images.
+
+### Batch 2 — homepage payload (prompt `docs/prompts/2026-10-20/homepage-payload-and-meta.md`)
+
+- [ ] **#13** image rows (`url`, `created_at`) + photographer biographies sent
+      to the client; merged into the payload prompt (see Task 3, 2026-10-20).
+
+### Later — not scheduled, Carles decides order
+
+- [ ] **#7** Gallery mount effect writes `nudity: "nude"` over a saved "show
+      all"; login race; filters not reset on logout; save errors ignored
+      (rule 10). Confirmed in `Gallery.tsx`.
+- [ ] **#14** Dark theme: middleware sets `x-theme` on the response, layout
+      reads request headers → always "light"; `headers()` makes every route
+      dynamic. Confirmed.
+- [ ] **#16** RLS/storage policies: not in the repo. First step read-only:
+      `select * from pg_policies` in the Supabase SQL editor (screenshot), then
+      decide. Audit also proposes ownership check on `collection_favorites`,
+      `UNIQUE(collection_id, favorite_id)`, comment length limit, avatars
+      folder policy.
+- [ ] **#9** Row count: live homepage carries 1,004 image rows, image sitemap
+      1,000 unique → run `count(*)` on `images_resize`; if > 1,000, page with
+      `.range()` + `.order("id")` in the sitemap script. (Audit's "exactly 1,000"
+      reading was partly wrong: 1,010 entries = 1,000 + 10 homepage duplicates.)
+- [ ] **#10** Sitemap scripts exit 0 on Supabase errors; refuse to write empty.
+- [ ] **#11** Contributor importer writes during `--dry-run`; inserts before S3
+      sync; no upsert. Fix before the next contributor import (RUNBOOKS 2).
+- [ ] **#12** `restore-missing-large-renditions.mjs` treats any S3 list error
+      as "empty folder" and overwrites. Fix before next run.
+- [ ] **#8** Dates without `timeZone: "UTC"` (show a day early in the Americas).
+      Claimed link to the homepage double mount is unproven.
+- [ ] **#15** Write errors hidden (0-row updates under RLS look like success);
+      avatar deleted before DB update.
+- [ ] **#17** Tests: download route, filter persistence, S3 folder picker;
+      `identity-obj-proxy` missing; run `yarn test` in `amplify.yml`.
+- [ ] **#18** ~10 places build CDN URLs by hand (rule 1); homepage JSON-LD
+      hardcodes `/w600/`.
+- [ ] **#19** Dead code (~3,000 lines, 6 unused deps, tracked junk like
+      `src/app/layout.tsx.bak`, `src/critical-above-the-fold.css.bak`, `aws/`).
+      Includes the orphaned `next-sitemap.config.js` (Task 3).
+- [ ] **#20** Repeated work per request (double photographer fetch, lightbox
+      slides rebuilt every render, favorites refetch on token refresh).
+- Not checked by the audit: live RLS, Amplify env vars, Python scripts,
+  toolkit templates, most of the collection page; no `next build` run.
+
+Porting to mobile: #1 and #16 apply (same Supabase tables; check what the app
+selects from `contributors`). #5, #2, #3, #4 are web-only. #6: check whether
+the app's nudity checks read `"nude"` correctly.
 
 ---
 

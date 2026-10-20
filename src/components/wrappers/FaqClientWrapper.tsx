@@ -3,6 +3,7 @@ import React from "react";
 import styles from "../../app/faq/faq.module.css";
 import Link from "next/link";
 import GoToTopButton from "@/components/buttons/GoToTopButton";
+import { serializeJsonLd } from "@/helpers/jsonLd";
 
 interface FAQItemProps {
   question: string;
@@ -36,7 +37,7 @@ const FaqClientWrapper: React.FC<FaqClientWrapperProps> = ({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqStructuredData),
+          __html: serializeJsonLd(faqStructuredData),
         }}
       />
       <div className={styles.faqContainer}>

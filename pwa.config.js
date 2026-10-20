@@ -54,17 +54,6 @@ module.exports = {
         },
       },
     },
-    {
-      urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/v1\/.*/i,
-      handler: "StaleWhileRevalidate",
-      options: {
-        cacheName: "supabase-api",
-        expiration: {
-          maxEntries: 50,
-          maxAgeSeconds: 300, // 5 minutes
-        },
-      },
-    },
   ],
   customWorkerDir: "src/sw-custom.js",
 

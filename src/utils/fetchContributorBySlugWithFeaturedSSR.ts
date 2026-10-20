@@ -3,6 +3,10 @@
 import { supabaseServerClient } from "@/lib/supabaseServerClient";
 import { Contributor, ContributorImage } from "@/types/contributor";
 import { getAllS3Urls } from "@/utils/imageResizingS3";
+import {
+  CONTRIBUTOR_IMAGE_COLUMNS,
+  CONTRIBUTOR_PUBLIC_COLUMNS,
+} from "@/utils/fetchContributorsSSR";
 
 export type ContributorWithFeatured = Contributor & {
   images: ContributorImage[];
@@ -15,7 +19,7 @@ export async function fetchContributorBySlugWithFeaturedSSR(
   try {
     const { data: contributor, error } = await supabaseServerClient
       .from("contributors")
-      .select("*")
+      .select(CONTRIBUTOR_PUBLIC_COLUMNS)
       .eq("slug", slug)
       .single();
 
@@ -29,7 +33,7 @@ export async function fetchContributorBySlugWithFeaturedSSR(
 
     const { data: images, error: imagesError } = await supabaseServerClient
       .from("contributor_images")
-      .select("*")
+      .select(CONTRIBUTOR_IMAGE_COLUMNS)
       .eq("contributor_id", contributor.id)
       .eq("published", true)
       .order("sort_order", { ascending: true });
@@ -59,7 +63,7 @@ export async function fetchContributorBySlugWithFeaturedSSR(
               ? "vertical"
               : "square"
           : undefined,
-      s3Progressive: getAllS3Urls(img),
+      s3Progressive: getAllS3Urls({ ...img, author: contributor.name }),
     }));
 
     const featuredImage =

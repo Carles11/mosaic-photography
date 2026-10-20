@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { tradeGothic } from "./fonts";
 import { headers } from "next/headers";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
+import { serializeJsonLd } from "@/helpers/jsonLd";
 import NonCriticalCSSLoader from "@/components/NonCriticalCSSLoader";
 import ClientLayout from "@/components/layouts/ClientLayout";
 import ClientProviders from "@/context/main/ClientProviders";
@@ -22,9 +23,6 @@ export const metadata: Metadata = {
   title: {
     default: "Public Domain Vintage Nude Photography | Mosaic Gallery",
     template: "%s | Mosaic Photography",
-  },
-  alternates: {
-    canonical: "https://www.mosaic.photography/",
   },
   authors: [
     {
@@ -154,7 +152,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: serializeJsonLd({
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "Mosaic Photography",

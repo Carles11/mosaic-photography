@@ -19,6 +19,7 @@ import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import type { GalleryProps } from "@/types/gallery";
 import { useOverlayToggle } from "@/hooks/useOverlayToggle";
+import { isNudeValue } from "@/helpers/nudity";
 import styles from "./photographerGalleryZoom.module.css";
 import { useAuthSession } from "@/context/AuthSessionContext";
 import toast from "react-hot-toast";
@@ -60,8 +61,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
     let nude = 0;
     let notNude = 0;
     images.forEach((img) => {
-      const isNude =
-        img.nudity === true || String(img.nudity).toLowerCase() === "true";
+      const isNude = isNudeValue(img.nudity);
       if (isNude) {
         nude++;
       } else {
@@ -87,8 +87,7 @@ const PhotographerGalleryZoom: React.FC<GalleryProps> = ({
 
     // Filter incoming rows based on the active nudity filter state
     const filtered = images.filter((img) => {
-      const isNude =
-        img.nudity === true || String(img.nudity).toLowerCase() === "true";
+      const isNude = isNudeValue(img.nudity);
       if (nudityFilter === "nude") return isNude;
       if (nudityFilter === "not-nude") return !isNude;
       return true;

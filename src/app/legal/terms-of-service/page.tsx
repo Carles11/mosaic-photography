@@ -19,6 +19,7 @@ export const metadata = {
       "Terms of service page of Mosaic Photography. Read the terms of service for using Mosaic Photography's website and services.",
     image: "/favicons/favicon.ico",
   },
+  alternates: { canonical: "/legal/terms-of-service" },
 };
 
 const TermsOfService: React.FC = () => {

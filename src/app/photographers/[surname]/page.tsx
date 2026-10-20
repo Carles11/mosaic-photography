@@ -13,6 +13,7 @@ import { TimelineItemModelProps } from "@/types/components";
 import { formatLifespan } from "@/helpers/dates";
 import type { Photographer } from "@/types/gallery";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
+import { serializeJsonLd } from "@/helpers/jsonLd";
 import styles from "./Photographers.module.css";
 import { getHumanReadableBiography } from "@/utils/clean-content";
 
@@ -87,7 +88,7 @@ export async function generateMetadata({
       description: desc,
       images: [ogImageUrl],
     },
-    alternatives: {
+    alternates: {
       canonical: canonicalUrl,
     },
     authors: [
@@ -114,7 +115,7 @@ function PhotographerJsonLd({
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify({
+        __html: serializeJsonLd({
           "@context": "https://schema.org",
           "@type": "Person",
           name: `${photographer.name} ${photographer.surname}`,
@@ -211,7 +212,7 @@ export default async function PhotographerDetailPage({
     <div>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
       />
       <PhotographerJsonLd
         photographer={photographer}

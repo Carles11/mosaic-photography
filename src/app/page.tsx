@@ -8,6 +8,7 @@ import {
 import { fetchPhotographersWithFeaturedSSR } from "@/utils/fetchPhotographersWithFeaturedSSR";
 import { fetchGalleryImagesSSR } from "@/utils/fetchGalleryImagesSSR";
 import { fetchContributorsWithFeaturedSSR } from "@/utils/fetchContributorsWithFeaturedSSR";
+import { serializeJsonLd } from "@/helpers/jsonLd";
 import type { ImageWithOrientation } from "@/types/gallery";
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export const metadata: Metadata = {
     description:
       "Thousands of copyright-free vintage nude photographs by legendary photographers. All public domain.",
   },
+  alternates: { canonical: "/" },
 };
 
 function buildHomePageSchema(images: ImageWithOrientation[]) {
@@ -92,7 +94,7 @@ export default async function Page() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageSchema) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(homePageSchema) }}
       />
 
       {/* The page's single H1 lives in HeroSection (above the fold, inside

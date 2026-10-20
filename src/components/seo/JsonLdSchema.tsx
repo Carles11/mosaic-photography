@@ -1,4 +1,5 @@
 import React from "react";
+import { serializeJsonLd } from "@/helpers/jsonLd";
 
 type ImageObjectProps = {
   contentUrl: string;
@@ -106,7 +107,7 @@ export default function JsonLdSchema({
     return (
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(schemaData) }}
       />
     );
   }
@@ -129,7 +130,7 @@ export default function JsonLdSchema({
     return (
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(schemaData) }}
       />
     );
   }
@@ -162,7 +163,7 @@ export default function JsonLdSchema({
     return (
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(schemaData) }}
       />
     );
   }
@@ -185,7 +186,7 @@ export default function JsonLdSchema({
     return (
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(schemaData) }}
       />
     );
   }
@@ -202,7 +203,7 @@ export default function JsonLdSchema({
     return (
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(schemaData) }}
       />
     );
   }
@@ -226,7 +227,7 @@ export default function JsonLdSchema({
     return (
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(schemaData) }}
       />
     );
   }

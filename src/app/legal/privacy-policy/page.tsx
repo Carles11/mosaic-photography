@@ -19,6 +19,7 @@ export const metadata = {
       "Privacy policy page of Mosaic Photography. Learn about Mosaic Photography's privacy practices, including our use of Google Analytics, Microsoft Clarity, and how we handle your data.",
     image: "/favicons/favicon.ico",
   },
+  alternates: { canonical: "/legal/privacy-policy" },
 };
 
 const PrivacyPolicy: React.FC = () => {

@@ -7,6 +7,7 @@ export const metadata: Metadata = {
     index: false,
     follow: false,
   },
+  alternates: { canonical: "/photo-curations" },
 };
 
 export default function PhotoCurationsPage() {

@@ -2,6 +2,10 @@ import { supabase } from "@/lib/supabaseClient";
 import { Contributor } from "@/types/contributor";
 import { UniversalGalleryImage } from "@/types/gallery";
 import { getAllS3Urls } from "@/utils/imageResizingS3";
+import {
+  CONTRIBUTOR_IMAGE_COLUMNS,
+  CONTRIBUTOR_PUBLIC_COLUMNS,
+} from "@/utils/fetchContributorsSSR";
 
 export type ContributorWithImages = Contributor & {
   images: UniversalGalleryImage[];
@@ -29,7 +33,7 @@ export async function fetchContributorBySlugSSR(
   try {
     const { data: contributors, error: contributorError } = await supabase
       .from("contributors")
-      .select("*")
+      .select(CONTRIBUTOR_PUBLIC_COLUMNS)
       .eq("slug", slug)
       .limit(1);
 
@@ -45,7 +49,7 @@ export async function fetchContributorBySlugSSR(
 
     const { data: images, error: imagesError } = await supabase
       .from("contributor_images")
-      .select("*")
+      .select(CONTRIBUTOR_IMAGE_COLUMNS)
       .eq("contributor_id", contributor.id)
       .eq("published", true)
       .order("sort_order", { ascending: true });
@@ -69,7 +73,7 @@ export async function fetchContributorBySlugSSR(
                 : "square"
             : undefined,
 
-        s3Progressive: getAllS3Urls(img),
+        s3Progressive: getAllS3Urls({ ...img, author: contributor.name }),
       }));
     }
 

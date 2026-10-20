@@ -51,3 +51,7 @@ awscliv2.zip
 
 # scratch output from scripts/restore-missing-large-renditions.mjs
 restore-failures.txt
+
+# saved page snapshots can contain personal data
+seo-reports/**/url-inspections/*.html
+docs/seo-reports/**/*.html

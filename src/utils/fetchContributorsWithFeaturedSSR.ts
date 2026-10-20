@@ -1,6 +1,10 @@
 import { supabaseServerClient } from "@/lib/supabaseServerClient";
 import { Contributor, ContributorImage } from "@/types/contributor";
 import { getAllS3Urls } from "@/utils/imageResizingS3";
+import {
+  CONTRIBUTOR_IMAGE_COLUMNS,
+  CONTRIBUTOR_PUBLIC_COLUMNS,
+} from "@/utils/fetchContributorsSSR";
 
 export type ContributorWithFeatured = Contributor & {
   featuredImage: ContributorImage | null;
@@ -16,7 +20,7 @@ export async function fetchContributorsWithFeaturedSSR(): Promise<
   try {
     const { data: contributors, error } = await supabaseServerClient
       .from("contributors")
-      .select("*")
+      .select(CONTRIBUTOR_PUBLIC_COLUMNS)
       .order("name", { ascending: true });
 
     if (error || !contributors) {
@@ -33,7 +37,7 @@ export async function fetchContributorsWithFeaturedSSR(): Promise<
         // Try contributor-selected featured image first
         const { data: featuredImages } = await supabaseServerClient
           .from("contributor_images")
-          .select("*")
+          .select(CONTRIBUTOR_IMAGE_COLUMNS)
           .eq("contributor_id", contributor.id)
           .eq("published", true)
           .eq("featured", true)
@@ -45,7 +49,7 @@ export async function fetchContributorsWithFeaturedSSR(): Promise<
         if (!img) {
           const { data: fallbackImages } = await supabaseServerClient
             .from("contributor_images")
-            .select("*")
+            .select(CONTRIBUTOR_IMAGE_COLUMNS)
             .eq("contributor_id", contributor.id)
             .eq("published", true)
             .order("sort_order", { ascending: true })
@@ -73,7 +77,7 @@ export async function fetchContributorsWithFeaturedSSR(): Promise<
                   ? "vertical"
                   : "square"
               : undefined,
-          s3Progressive: getAllS3Urls(img),
+          s3Progressive: getAllS3Urls({ ...img, author: contributor.name }),
         };
 
         return { ...(contributor as Contributor), featuredImage };

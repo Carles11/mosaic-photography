@@ -1,16 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const CDN_DOMAIN = "https://cdn.mosaic.photography";
+const CDN_HOSTNAME = "cdn.mosaic.photography";
 
 export async function GET(req: NextRequest) {
   const url = req.nextUrl.searchParams.get("url");
   const filename = req.nextUrl.searchParams.get("filename") || "download";
 
-  if (!url || !url.startsWith(CDN_DOMAIN)) {
+  let target: URL;
+  try {
+    target = new URL(url ?? "");
+  } catch {
+    return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
+  }
+  if (target.protocol !== "https:" || target.hostname !== CDN_HOSTNAME) {
     return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
   }
 
-  const response = await fetch(url);
+  let response: Response;
+  try {
+    // redirect: "error" so the CDN can't bounce us to another host
+    response = await fetch(target, { redirect: "error" });
+  } catch {
+    return NextResponse.json({ error: "CDN fetch failed" }, { status: 502 });
+  }
 
   if (!response.ok) {
     return NextResponse.json(
@@ -21,7 +33,8 @@ export async function GET(req: NextRequest) {
 
   const contentType =
     response.headers.get("Content-Type") || "application/octet-stream";
-  const disposition = `attachment; filename="${encodeURIComponent(filename)}"`;
+  const safeFilename = filename.replace(/["\r\n]/g, "");
+  const disposition = `attachment; filename="${encodeURIComponent(safeFilename)}"`;
 
   return new NextResponse(response.body, {
     headers: {

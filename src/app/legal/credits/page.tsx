@@ -22,6 +22,7 @@ export const metadata = {
       "Credits page of Mosaic Photography, thanking the creators of logos and icons used, and providing a Ko-fi link for donations.",
     image: "/favicons/favicon.ico",
   },
+  alternates: { canonical: "/legal/credits" },
 };
 
 const Credits: React.FC = () => {
