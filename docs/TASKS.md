@@ -605,14 +605,14 @@ code and the live site by Claude the same day; verdicts below.
 
 ### Batch 1 — do now (prompt `docs/prompts/2026-10-20/audit-batch-1.md`)
 
-- [ ] **#5 Canonical → homepage.** Live: `/photographers/*` and `/legal/*`
+- [x] **#5 Canonical → homepage.** Live: `/photographers/*` and `/legal/*`
       output `canonical = https://www.mosaic.photography`. Cause: `alternatives:`
       typo in `photographers/[surname]/page.tsx` (since `eb20bfc`, 2026-05-21)
       plus a site-wide canonical in the root layout that every page without its
       own inherits. Likely why photographer pages took months to index (Task 3).
       After deploy: verify live, then request indexing in GSC + Bing for the
       14 photographer pages.
-- [ ] **#1 Contributor emails public.** Live homepage HTML had 2 contributor
+- [x] **#1 Contributor emails public.** Live homepage HTML had 2 contributor
       emails + `submission_notes` (`select("*")` in 3 contributor fetchers).
       Also in 3 committed snapshots `seo-reports/11-09-2026/url-inspections/*.html`
       (repo is **public**). Code fix in batch 1; Carles untracks the snapshots.
@@ -620,11 +620,20 @@ code and the live site by Claude the same day; verdicts below.
       Supabase-side lock on `contributors.email` for anon (with #16).
       Exposed: Carles's own address + the one other contributor (akiuonsen).
       Open: decide whether to tell that contributor (Carles).
-- [ ] **#2 `/api/download-image` open proxy** (prefix check, follows redirects).
-- [ ] **#3 Service worker caches Supabase REST** responses for 5 min, keyed by URL.
-- [ ] **#4 JSON-LD not escaping `<`** (14 `dangerouslySetInnerHTML` blocks).
-- [ ] **#6 Photographer-page Nude/Safe filter** checks `"true"`, data is
+- [x] **#2 `/api/download-image` open proxy** (prefix check, follows redirects).
+- [x] **#3 Service worker caches Supabase REST** responses for 5 min, keyed by URL.
+- [x] **#4 JSON-LD not escaping `<`** (14 `dangerouslySetInnerHTML` blocks).
+- [x] **#6 Photographer-page Nude/Safe filter** checks `"true"`, data is
       `"nude"`/`"not-nude"` → "Safe" shows nude images.
+
+Batch 1 shipped `63d849c` (2026-10-20; Claude Code with the prompt above;
+lint/tsc/tests clean). **Verified live 2026-10-20:** canonicals are each
+page's own URL (`/` → `https://www.mosaic.photography`, photographers incl.
+`de-la-vaudere`, legal, about, toolkit); homepage has 0 emails and 0
+`submission_notes`; 3 JSON-LD blocks, 0 raw `<`; download route returns 400
+for `cdn.mosaic.photography.evil.com` and `http://`; `sw.js` has no
+`supabase-api` cache. 3 snapshots untracked (still in git history).
+Next: request indexing for the 14 photographer pages (GSC + Bing).
 
 ### Batch 2 — homepage payload (prompt `docs/prompts/2026-10-20/homepage-payload-and-meta.md`)
 
