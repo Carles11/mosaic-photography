@@ -529,6 +529,47 @@ GA4, Traffic acquisition, session source / medium (sessions):
 - GA4 engagement unchanged (62% engaged, ~1m15s) → real traffic loss, not tagging.
 - Next Google re-check: ~2026-11-03 (holland-day, von-bucovich, brigman).
 
+**2026-10-20 — Bing Webmaster Tools** (read live by Claude in Chrome; daily
+series from the BWT Search Performance API, 12 months).
+
+Weekly averages, Bing web (clicks/day · impr/day · avg pos):
+
+| Week of | Clk/d | Impr/d | Pos |
+|---|---|---|---|
+| Dec 2025 peak (08–21 Dec) | ~111 | ~1,120 | 5.7 |
+| Apr 2026 | 60–75 | ~660 | 7.4 |
+| 25 May – 5 Jul | 30–44 | 320–460 | 6.2–8.6 |
+| 13 – 26 Jul (spike) | ~73 | ~680 | 6.0 |
+| 3 Aug – 13 Sep | 36–51 | 320–440 | 6.8–7.4 |
+| 14 – 27 Sep | 36–46 | 327–419 | 6.9–7.3 |
+| 28 Sep – 11 Oct | 29–36 | 321–339 | **8.9–12.0** |
+| 12 – 18 Oct | **19.7** | **222** | 9.8 |
+
+- **Correction to the GA4 note above: Bing shows no step on 11 Sep.** The
+  two weeks after `efb9cec` look like August. The decline is long
+  (Dec 2025 → now, ~−80% clicks) and has two recent steps: **position slips
+  from ~7 to 9–12 from 1 Oct**, and **impressions halve overnight on 16 Oct**
+  (~300/day → 137, 128, 104 on 16–18 Oct). No deploy on 16 Oct (last code
+  deploy 10-03, docs-only/FAA build 10-19). Could be a Bing update; 3 days
+  is too few to say.
+- Last 7 d vs previous 7 d by page: homepage 2.2K → 879 impressions,
+  196 → 98 clicks. Photographer pages are tiny on Bing (von-gloeden 71 → 17
+  impr, the rest single digits). The loss is the homepage.
+- URL Inspection `/`: **Indexed successfully.** Live test passed (13:13).
+  Bingbot's rendered HTML has the H1, 83 `<img>`, the photographer names and
+  the age-gate dialog (`aria-modal`) on top. Content is not hidden from Bing,
+  so the age gate is not an indexing blocker; whether Bing scores it as an
+  interstitial is unknown.
+- BWT flags on `/`: **Error: meta description too long or too short.** Live
+  description is ~205 characters; Bing wants roughly 25–160.
+  **Notice: HTML size too long.**
+- **Homepage HTML is 1.21 MB** (curl, same for bingbot and browser UA, 200,
+  TTFB ~0.9–1.3 s). Of that, **946 KB is the RSC payload (`self.__next_f`)**:
+  ~1,000 full `images_resize` rows (filename, base_url, description, width,
+  height, nudity, … ×~1,000) serialized for the client. Visible HTML is ~250 KB.
+  Likely since `25667e9` (2026-09-11, "server-render the site again"). Worth
+  trimming regardless of the Bing question (page weight, crawl budget, CWV).
+
 ### Acceptance criteria
 
 - [x] The drop is attributed to a named cause with GSC/GA4 evidence, written up in this file (2026-10-01: 26 Jun spam update, GSC only; GA4 not checked)
