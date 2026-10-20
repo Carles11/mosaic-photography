@@ -667,8 +667,14 @@ code and the live site by Claude the same day; verdicts below.
       Exposed: Carles's own address + the one other contributor (akiuonsen).
       Decided 2026-10-20 (Carles): no notice to the contributor.
       **Decided 2026-10-20: purge the 3 snapshots from git history** (public
-      repo). Next session: write the procedure (git filter-repo, force-push,
-      scope + backup first; destructive, Carles runs it).
+      repo). Procedure written 2026-10-20:
+      `docs/prompts/2026-10-20/purge-snapshots-history.md` (committed `e0ccc29`).
+      Scope checked read-only: only `main` holds the 3 files (added `25667e9`,
+      `efb9cec`, `7b442d4`); the 2 emails are in no other file in history; every
+      `main` commit from `25667e9` on gets a new hash, final tree unchanged.
+      **Next: Carles runs steps 1–4 (install, backup, rewrite, verify), STOP
+      with screenshots before the force-push.** After the push: GitHub Support
+      ticket (step 6), then Claude maps the stale hashes in the docs (step 7).
 - [x] **#2 `/api/download-image` open proxy** (prefix check, follows redirects).
 - [x] **#3 Service worker caches Supabase REST** responses for 5 min, keyed by URL.
 - [x] **#4 JSON-LD not escaping `<`** (14 `dangerouslySetInnerHTML` blocks).

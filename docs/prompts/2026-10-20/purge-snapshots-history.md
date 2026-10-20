@@ -19,7 +19,8 @@ seo-reports/11-09-2026/url-inspections/https-www-mosaic-photography-after-fixes-
 - The 2 contributor emails appear in **no other file** in any commit (`git log --all -S`).
 - `tested-live-page-js-console-messages.md` in the same folder was never committed; it stays.
 - `.gitignore` line 56 (`seo-reports/**/url-inspections/*.html`) already stops re-adding them.
-- Effect: **40 commits on `main` get new hashes** (`25667e9` … `306b8f1`). The
+- Effect: **every commit on `main` from `25667e9` on gets a new hash** (40 as of
+  `306b8f1`, plus the docs commits made since). The
   final tree of `main` is unchanged (the files are already gone from HEAD), so
   Amplify builds the same site. 12 hashes cited in `docs/TASKS.md`,
   `docs/RUNBOOKS.md` and `claude/START-HERE.md` go stale → step 7.
@@ -55,7 +56,7 @@ git clone --mirror git@github.com:Carles11/mosaic-photography.git mosaic-photogr
 git -C mosaic-photography-pre-purge-2026-10-20.git rev-parse main 'main^{tree}'
 ```
 
-Expected: two hashes; the first starts with `306b8f1`. Note the second one (old tree hash).
+Expected: two hashes; the first = latest `main` (`git log -1` in the working copy). Note the second one (old tree hash).
 This backup still contains the emails. Keep it private, delete it after step 8.
 
 ## 3. Rewrite in a fresh clone
@@ -109,7 +110,7 @@ cd /c/Users/elcar/Documents/aaa_repos/_purge/mosaic-photography
 git push --force origin main
 ```
 
-Expected: `+ 306b8f1...<new> main -> main (forced update)`.
+Expected: `+ <old main>...<new> main -> main (forced update)`.
 Amplify starts a build of the same tree; the site doesn't change.
 
 ## 6. GitHub Support ticket
