@@ -1,3 +1,4 @@
+import Link from "next/link";
 import RioFrancesLink from "./RioFrancesLink";
 
 import styles from "./footer.module.css";
@@ -11,6 +12,12 @@ const Footer: React.FC = () => {
         <div className={styles.footerItem}>
           <p>&copy; {currentYear} Mosaic Photography Gallery</p>
           <p>
+            {/* Link, not <a>: the route /photographers/[surname] makes
+                next/no-html-link-for-pages reject a plain anchor here. */}
+            <Link href="/photographers" className="fancy-link">
+              Photographers
+            </Link>{" "}
+            |{" "}
             <a href="/legal/privacy-policy" className="fancy-link">
               Privacy Policy
             </a>{" "}

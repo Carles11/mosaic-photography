@@ -6,20 +6,22 @@ import AppFeatures from "@/components/appLanding/AppFeatures";
 import HowItWorks from "@/components/appLanding/HowItWorks";
 import QuickWhy from "@/components/appLanding/QuickWhy";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
+import { serializeJsonLd } from "@/helpers/jsonLd";
+import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/appLinks";
 import styles from "./app.module.css";
 
 export const metadata: Metadata = {
   // SEO: title <70 chars, description 50-160 chars
   title: "Mosaic App — Vintage Nude Photography Gallery",
   description:
-    "Curated vintage nude photography app. Fast galleries, curated collections, easy downloads. Free on iOS & Android.",
+    "Curated vintage nude photography app. Fast galleries, curated collections, easy downloads. Free on iPhone, iPad & Android.",
   alternates: {
     canonical: "https://www.mosaic.photography/app",
   },
   openGraph: {
     title: "Mosaic App — Vintage Nude Photography Gallery",
     description:
-      "Curated vintage nude photography app. Fast galleries, curated collections, easy downloads. Free on iOS & Android.",
+      "Curated vintage nude photography app. Fast galleries, curated collections, easy downloads. Free on iPhone, iPad & Android.",
     images: [
       {
         url: "/images/og-image.jpg",
@@ -82,12 +84,32 @@ export default function AppPage() {
         type="WebPage"
         name="Mosaic App — Iconic Vintage Nude Photography"
         url="https://www.mosaic.photography/app"
-        description="Mosaic app landing page"
+        description="Free Mosaic app for iPhone, iPad and Android: public-domain vintage photography from the 1840s to the 1930s."
       />
       <JsonLdSchema
         type="ImageGallery"
         name="Mosaic App Screenshots"
         images={screenshots}
+      />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd({
+            "@context": "https://schema.org",
+            "@type": "MobileApplication",
+            name: "Mosaic — Vintage Photography",
+            operatingSystem: "iOS, iPadOS, Android",
+            applicationCategory: "MultimediaApplication",
+            url: "https://www.mosaic.photography/app",
+            downloadUrl: [APP_STORE_URL, PLAY_STORE_URL],
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "USD",
+            },
+          }),
+        }}
       />
 
       <AppHero />

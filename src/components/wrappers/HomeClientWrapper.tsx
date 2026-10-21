@@ -3,6 +3,7 @@
 // BottomNav is rendered globally by ClientLayout; do not add it here.
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import Cookies from "js-cookie";
 import PhotographersCardsSlide from "../sliders/photographers/PhotographersCardsSlide";
 import ContributorsSlide from "../sliders/contributors/ContributorsSlide";
@@ -88,6 +89,10 @@ function HomeClientWrapper({
             photographers={photographers}
             onLoginRequired={onLoginClick}
           />
+
+          <p className={styles.sectionIntro}>
+            <Link href="/photographers">See all photographers →</Link>
+          </p>
 
           {/* SHOPPING RESOURCES */}
           {affiliateProducts && affiliateProducts.length > 0 && (

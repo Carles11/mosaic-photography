@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import styles from "./appLanding.module.css";
 import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/appLinks";
 
@@ -11,6 +10,8 @@ export default function AppHero() {
           Explore world-class, rare, high-res public domain images—free, easy,
           and always in your pocket.
         </p>
+
+        <p className={styles.lead}>Free for iPhone, iPad and Android.</p>
 
         <div className={styles.badgesRow}>
           <a

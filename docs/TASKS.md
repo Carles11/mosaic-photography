@@ -624,7 +624,7 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
     website ↔ App Store links; non-nude and ≤1930 rules stay; (4) then a task
     file for the code changes.
   - **Re-check the 4 queries: 2026-11-27 (day 60).**
-  - **2026-10-21 — steps 1, 3 and 4 done (step 2, App Store wording, still open).**
+  - **2026-10-21 — steps 1–4 done.**
     Step 1 findings (live brady/cameron + code): name spelled "Matthew" (historical
     and Wikipedia: Mathew); meta description template said "vintage nude
     photography" on all 14 pages (Brady: 0 nude of 79); `intro_md` (the short
@@ -652,10 +652,10 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
     no GEO block. IndexNow (Carles, Git Bash): `/`, `/photographers` + 14
     photographer URLs → 200.
     Follow-ups (not scheduled, Carles decides):
-    - Hub is only reachable via "All photographers" at the bottom of each
+    - [x] (done 2026-10-21, second batch) Hub is only reachable via "All photographers" at the bottom of each
       photographer page: add a "Photographers" link in `ClientLayout`
       footer/menu (rule 9) and "See all photographers →" under the homepage cards.
-    - `scripts/indexnow.ts` (runs in postbuild): builds photographer URLs from
+    - [x] (done 2026-10-21, second batch) `scripts/indexnow.ts` (runs in postbuild): builds photographer URLs from
       `surname` (sends the accented Vaudère URL), sends toolkit URLs for
       inactive advertisers (404s), lacks `/photographers`. Same fix as the
       sitemap: use `slug`, filter `is_active`, add the hub.
@@ -665,6 +665,31 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
     - Captions still "Matthew Brady" (`author` key in 3 tables + mobile).
     - Homepage `openGraph` in `page.tsx` overrides the layout's and has no image.
     - Biography `##` headings render as `<h2>`.
+    Step 2 (App Store, 2026-10-21): listing is correct (platforms "iPhone,
+    iPad"; compatibility iPhone/iPad/iPod/Mac M1+/Vision). Perplexity's "designed
+    for iPad" comes from Apple's automatic label **"Designed for iPad. Not
+    verified for macOS."**, shown because the app is offered on Apple Silicon
+    Macs. Nothing we publish says "iPhone": the web `/app` page has 0 mentions
+    of iPhone/iPad/Android; description + keywords none either.
+    Done: App Store Connect → 1.4.0 → Werbetexte → Bearbeiten (no review) changed
+    from "Introducing Community — discover contemporary photographers, explore
+    curated galleries, and share your work. Now live in Mosaic!" to "Free on
+    iPhone and iPad (and Android): 1,000+ restored public-domain photographs
+    from 1840–1930, with photographer biographies and high-res downloads."
+    Decided (Carles): keep Mac availability on (Preise und Verfügbarkeit →
+    Apple Silicon Mac); revisit if the 2026-11-27 re-check still says "iPad only".
+    Follow-up: next app version → add "iPhone and iPad" to Beschreibung (needs a
+    new version).
+    **2026-10-21 second batch** (openCode,
+    `docs/prompts/2026-10-21/hub-links-app-page-indexnow.md`): footer link
+    "Photographers" (first in the legal row, every page) + "See all photographers →"
+    under the homepage cards; `/app` says "Free for iPhone, iPad and Android.",
+    meta ends "Free on iPhone, iPad & Android.", new `MobileApplication` JSON-LD
+    (iOS, iPadOS, Android; free; both store URLs; no rating); `scripts/indexnow.ts`
+    now uses `slug`, only active advertisers, adds `/photographers` + `/app`
+    (26 URLs, replayed offline). lint/tsc/tests clean. Side effect: `.sectionIntro`
+    added to `home.module.css` also gives the toolkit intro paragraph a 2rem
+    bottom margin (it was unstyled). Live check: pending deploy.
   Porting to mobile: App Store listing wording (step 2); app → website link.
 
 ### Acceptance criteria

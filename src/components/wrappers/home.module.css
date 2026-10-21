@@ -16,6 +16,11 @@
   margin: 2rem 0 0 0;
 }
 
+/* Same rule as the photographers slide intro it follows. */
+.sectionIntro {
+  margin: 0 0 2rem 0;
+}
+
 .visible {
   opacity: 1;
   pointer-events: auto;

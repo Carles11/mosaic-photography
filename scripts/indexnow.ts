@@ -30,6 +30,8 @@ const STATIC_URLS = [
   `${SITE_URL}/about`,
   `${SITE_URL}/faq`,
   `${SITE_URL}/photo-curations`,
+  `${SITE_URL}/photographers`,
+  `${SITE_URL}/app`,
   `${SITE_URL}/legal/privacy-policy`,
   `${SITE_URL}/legal/terms-of-service`,
   `${SITE_URL}/legal/credits`,
@@ -64,9 +66,11 @@ async function submitIndexNow() {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // ── Photographers ────────────────────────────────────────────
+    // Use the DB slug: the name column produced the old accented URL
+    // (de-la-vaudère), which the site 301s to de-la-vaudere.
     const { data: photographers, error: photographersError } = await supabase
       .from("photographers")
-      .select("surname");
+      .select("slug");
 
     if (photographersError) {
       console.warn(
@@ -74,16 +78,18 @@ async function submitIndexNow() {
         photographersError.message,
       );
     } else {
-      photographerUrls = (photographers ?? []).map((p) => {
-        const slug = p.surname.toLowerCase().replace(/\s+/g, "-");
-        return `${SITE_URL}/photographers/${slug}`;
-      });
+      photographerUrls = (photographers ?? [])
+        .map((p) => p.slug)
+        .filter((slug): slug is string => Boolean(slug))
+        .map((slug) => `${SITE_URL}/photographers/${slug}`);
     }
 
     // ── Toolkit / Advertisers ────────────────────────────────────
+    // Only active partners: the inactive ones 404 and are not in the sitemap.
     const { data: advertisers, error: advertisersError } = await supabase
       .from("affiliate_advertisers")
-      .select("slug");
+      .select("slug")
+      .eq("is_active", true);
 
     if (advertisersError) {
       console.warn(
