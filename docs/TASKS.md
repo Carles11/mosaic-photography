@@ -689,7 +689,12 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
     now uses `slug`, only active advertisers, adds `/photographers` + `/app`
     (26 URLs, replayed offline). lint/tsc/tests clean. Side effect: `.sectionIntro`
     added to `home.module.css` also gives the toolkit intro paragraph a 2rem
-    bottom margin (it was unstyled). Live check: pending deploy.
+    bottom margin (it was unstyled). Shipped `7db6ec5`. **Verified live
+    2026-10-21:** `/` has 2 `href="/photographers"` + "See all photographers";
+    footer link on photographer pages; `/app` platform line, meta "Free on iPhone,
+    iPad & Android.", `MobileApplication` JSON-LD parses with both store URLs.
+    **Next session:** request indexing in GSC for von-plueschow, de-la-vaudere,
+    moulin + `/photographers` (quota resets ~daily).
   Porting to mobile: App Store listing wording (step 2); app → website link.
 
 ### Acceptance criteria
