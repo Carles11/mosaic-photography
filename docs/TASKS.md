@@ -699,6 +699,9 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
     known to Google; `/photographers` = "URL is unknown to Google" (no referring
     sitemap, no referring page detected yet; the hub is a few hours old).
     Re-inspect the hub ~2026-10-28.
+    Same day 17:40: `sitemap.xml` resubmitted in GSC → "Sitemap submitted
+    successfully". Before it, `sitemap-0.xml` was last read 2026-10-20 (28
+    discovered pages, i.e. before the hub existed); image-sitemap 15, index 43.
   Porting to mobile: App Store listing wording (step 2); app → website link.
 
 ### Acceptance criteria
