@@ -693,8 +693,12 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
     2026-10-21:** `/` has 2 `href="/photographers"` + "See all photographers";
     footer link on photographer pages; `/app` platform line, meta "Free on iPhone,
     iPad & Android.", `MobileApplication` JSON-LD parses with both store URLs.
-    **Next session:** request indexing in GSC for von-plueschow, de-la-vaudere,
-    moulin + `/photographers` (quota resets ~daily).
+    ~~**Next session:** request indexing in GSC for von-plueschow, de-la-vaudere,
+    moulin + `/photographers` (quota resets ~daily).~~ **Done 2026-10-21 17:30**
+    (Carles): all 4 "Indexierung beantragt". The 3 photographer pages were already
+    known to Google; `/photographers` = "URL is unknown to Google" (no referring
+    sitemap, no referring page detected yet; the hub is a few hours old).
+    Re-inspect the hub ~2026-10-28.
   Porting to mobile: App Store listing wording (step 2); app → website link.
 
 ### Acceptance criteria
@@ -786,7 +790,9 @@ indexed". **Still to request: durieu, von-plueschow, de-la-vaudere, moulin
 (2026-10-21).**
 2026-10-21: durieu requested; quota hit on the next one. **Still to request:
 von-plueschow (already indexed; re-request so Google sees the fix),
-de-la-vaudere, moulin, plus the new `/photographers` hub (2026-10-22).** Bing: manual URL Submission quota is **0** for this site, and
+de-la-vaudere, moulin, plus the new `/photographers` hub (2026-10-22).**
+**2026-10-21: all 4 requested (see Task 3 GEO, second batch). All 14
+photographer pages + hub now requested in GSC.** Bing: manual URL Submission quota is **0** for this site, and
 the BWT IndexNow page didn't load → submit via IndexNow API instead.
 All 14 photographer URLs submitted via IndexNow API 2026-10-20 → HTTP 200.
 
