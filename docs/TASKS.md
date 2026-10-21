@@ -830,11 +830,31 @@ All 14 photographer URLs submitted via IndexNow API 2026-10-20 → HTTP 200.
       decide. Audit also proposes ownership check on `collection_favorites`,
       `UNIQUE(collection_id, favorite_id)`, comment length limit, avatars
       folder policy.
-- [ ] **#9** Row count: live homepage carries 1,004 image rows, image sitemap
+- [x] **#9** Row count: live homepage carries 1,004 image rows, image sitemap
       1,000 unique → run `count(*)` on `images_resize`; if > 1,000, page with
       `.range()` + `.order("id")` in the sitemap script. (Audit's "exactly 1,000"
       reading was partly wrong: 1,010 entries = 1,000 + 10 homepage duplicates.)
-- [ ] **#10** Sitemap scripts exit 0 on Supabase errors; refuse to write empty.
+      **2026-10-21:** `count(*)` = **1,165** (682 nude, 483 not-nude, all
+      unique) → 165 images were never in the image sitemap. Fixed with #10
+      (openCode, `docs/prompts/2026-10-21/sitemap-pagination-and-fail-loud.md`):
+      `generate-image-sitemap.ts` pages with `.order("id").range()`.
+      **Verified live 2026-10-21:** `image-sitemap.xml` 200, 1,175
+      `<image:image>`, **1,165 unique** locs (was 1,000); index lastmod
+      21:05 UTC. `sitemap.xml` resubmitted in GSC 18:46 → "submitted
+      successfully" (image-sitemap row still showed 15 at that moment).
+      Open decision (Carles): the homepage gallery has the same cap
+      (`fetchGalleryImagesSSR.ts`, one query, no `.range()`) → 165 images never
+      appear on `/`. Fixing it adds ~16% payload; tie it to the "render first
+      ~60 + fetch the rest" idea under Batch 2. Same cap in
+      `restore-missing-large-renditions.mjs` (fix with #12).
+- [x] **#10** Sitemap scripts exit 0 on Supabase errors; refuse to write empty.
+      **2026-10-21:** both scripts `process.exit(1)` on any Supabase error, on
+      empty `images_resize`/`photographers`, and in the final `.catch` →
+      postbuild `&&` chain stops, Amplify build fails, previous deploy stays.
+      Failure path tested locally (fake table → exit 1, file md5 unchanged).
+      Note: locally on Node 20.19 `@supabase/supabase-js` needs
+      `NODE_OPTIONS="--experimental-websocket"` to run the scripts (Amplify
+      is Node 22, fine). Part of the `.nvmrc` = 20 drift.
 - [ ] **#11** Contributor importer writes during `--dry-run`; inserts before S3
       sync; no upsert. Fix before the next contributor import (RUNBOOKS 2).
 - [ ] **#12** `restore-missing-large-renditions.mjs` treats any S3 list error
