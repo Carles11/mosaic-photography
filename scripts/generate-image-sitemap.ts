@@ -10,18 +10,54 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-async function generateImageSitemap() {
-  // Fetch all resized images
-  const { data: images, error } = await supabase
-    .from("images_resize")
-    .select(
-      "id, base_url, filename, title, description, author, width, height, orientation, color, nudity",
-    )
-    .limit(5000);
+// Rows of `images_resize` as selected below.
+type SitemapImage = {
+  id: number;
+  base_url: string;
+  filename: string;
+  title?: string;
+  description?: string;
+  author?: string;
+  width?: number;
+  height?: number;
+  orientation?: string;
+  color?: string;
+  nudity?: string;
+};
 
-  if (error) {
-    console.error("Error fetching images_resize:", error);
-    return;
+async function generateImageSitemap() {
+  // Fetch all resized images.
+  // The Supabase REST API returns at most 1,000 rows per request, so page
+  // through the table. A fixed order (.order("id")) is required: without one,
+  // consecutive pages can overlap or skip rows.
+  const images: SitemapImage[] = [];
+  const PAGE_SIZE = 1000;
+
+  for (let from = 0; ; from += PAGE_SIZE) {
+    const { data, error } = await supabase
+      .from("images_resize")
+      .select(
+        "id, base_url, filename, title, description, author, width, height, orientation, color, nudity",
+      )
+      .order("id")
+      .range(from, from + PAGE_SIZE - 1);
+
+    if (error) {
+      console.error("Error fetching images_resize:", error);
+      process.exit(1);
+    }
+
+    images.push(...(data ?? []));
+
+    // A short page means the table is exhausted.
+    if (!data || data.length < PAGE_SIZE) break;
+  }
+
+  console.log(`[image-sitemap] fetched ${images.length} images_resize rows`);
+
+  if (images.length === 0) {
+    console.error("[image-sitemap] refusing to write: no images_resize rows");
+    process.exit(1);
   }
 
   // Fetch all photographers
@@ -31,7 +67,12 @@ async function generateImageSitemap() {
 
   if (photographerError) {
     console.error("Error fetching photographers:", photographerError);
-    return;
+    process.exit(1);
+  }
+
+  if (!photographers || photographers.length === 0) {
+    console.error("[image-sitemap] refusing to write: no photographers rows");
+    process.exit(1);
   }
 
   // Create XML sitemap
@@ -97,6 +138,9 @@ async function generateImageSitemap() {
   sitemap += `</urlset>`;
 
   console.log(`[image-sitemap] skipped ${duplicatesSkipped} duplicate image locs`);
+
+  const imageImageCount = (sitemap.match(/<image:image>/g) || []).length;
+  console.log(`[image-sitemap] writing ${imageImageCount} <image:image> entries`);
 
   // Write to file
   const publicDir = path.join(process.cwd(), "public");
@@ -201,4 +245,7 @@ function escapeXml(unsafe: string): string {
 }
 
 // Run the generator
-generateImageSitemap().catch(console.error);
+generateImageSitemap().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

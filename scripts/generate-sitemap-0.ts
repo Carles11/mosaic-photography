@@ -18,7 +18,12 @@ async function generateSitemap0() {
 
   if (photographerError) {
     console.error("Error fetching photographers:", photographerError);
-    return;
+    process.exit(1);
+  }
+
+  if (!photographers || photographers.length === 0) {
+    console.error("[sitemap-0] refusing to write: no photographers rows");
+    process.exit(1);
   }
 
   // Fetch community contributors for /community/photography/[slug] pages
@@ -28,7 +33,7 @@ async function generateSitemap0() {
 
   if (contributorError) {
     console.error("Error fetching contributors:", contributorError);
-    return;
+    process.exit(1);
   }
 
   // Toolkit pages for active affiliate partners (/toolkit/[slug])
@@ -39,7 +44,7 @@ async function generateSitemap0() {
 
   if (advertiserError) {
     console.error("Error fetching affiliate advertisers:", advertiserError);
-    return;
+    process.exit(1);
   }
 
   // Static pages
@@ -186,4 +191,7 @@ async function generateSitemap0() {
   console.log("sitemap.xml (index) regenerated successfully!");
 }
 
-generateSitemap0().catch(console.error);
+generateSitemap0().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
