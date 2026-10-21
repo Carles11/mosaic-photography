@@ -1,21 +1,31 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import ReactMarkdown from "react-markdown";
+import Link from "next/link";
+import ReactMarkdown, { type Components } from "react-markdown";
 import PhotographerGalleryZoom from "@/components/gallery/PhotographerGalleryZoom";
 import {
   fetchPhotographerBySlugSSR,
   fetchAllPhotographerSlugsSSR,
 } from "@/utils/fetchPhotographerByIdSSR";
+import { fetchPhotographersBasic } from "@/utils/fetchPhotographersBasic";
 import { PhotographerLinks } from "../client/PhotographerLinks";
 import { getAffiliateProductsByAuthor } from "@/utils/fetchAffiliateDataSSR";
 import Timeline from "@/components/timeline/Timeline";
 import { getTimelineBySlug } from "@/lib/timeline/photographersTimelines";
 import { TimelineItemModelProps } from "@/types/components";
-import { formatLifespan } from "@/helpers/dates";
+import { formatLifespan, formatYearRange, getYear, toIsoDate } from "@/helpers/dates";
 import type { Photographer } from "@/types/gallery";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import { serializeJsonLd } from "@/helpers/jsonLd";
 import styles from "./Photographers.module.css";
-import { getHumanReadableBiography } from "@/utils/clean-content";
+import {
+  cleanText,
+  cutAtSentenceEnd,
+  getHumanReadableBiography,
+  markdownToPlainText,
+  stripLeadingHeading,
+  trimToWordBoundary,
+} from "@/utils/clean-content";
 
 // Revalidate all pre-built photographer pages every 24 hours (ISR)
 export const revalidate = 86400;
@@ -26,12 +36,94 @@ export async function generateStaticParams() {
   return slugs.map((surname) => ({ surname }));
 }
 
+// Markdown rendering shared by the intro and the biography.
+const markdownComponents: Components = {
+  h3: ({ ...props }) => <h3 className={styles.sectionTitle} {...props} />,
+  p: ({ ...props }) => <p className={styles.sectionContent} {...props} />,
+  li: ({ ...props }) => <li style={{ marginBottom: "10px" }} {...props} />,
+};
+
+/**
+ * Short, factual answer for the top of the page. AI engines quote the first
+ * block of a page, so the answer must not be buried under the timeline.
+ */
+function buildSeoTitle({
+  name,
+  surname,
+  birthYear,
+  deathYear,
+}: {
+  name: string;
+  surname: string;
+  birthYear?: number;
+  deathYear?: number;
+}): string {
+  const years =
+    birthYear && deathYear ? ` (${birthYear}–${deathYear})` : "";
+  const title = `${name} ${surname}${years}: Public Domain Photographs | Mosaic`;
+  return title.length > 70 ? title.replace(" | Mosaic", "") : title;
+}
+
+function buildSeoDescription({
+  name,
+  surname,
+  birthYear,
+  deathYear,
+  origin,
+  imageCount,
+  nudeCount,
+}: {
+  name: string;
+  surname: string;
+  birthYear?: number;
+  deathYear?: number;
+  origin: string;
+  imageCount: number;
+  nudeCount: number;
+}): string {
+  const years =
+    birthYear && deathYear ? ` (${birthYear}–${deathYear})` : "";
+  const originPart = origin ? `, ${origin}` : "";
+  const lead = `${name} ${surname}${years}${originPart}: biography, timeline and ${imageCount} public-domain photographs`;
+  const nudePart = nudeCount > 0 ? ", including fine-art nude studies" : "";
+  const licence = ". Free to use (CC PDM 1.0).";
+
+  const full = `${lead}${nudePart}${licence}`;
+  if (full.length <= 160) return full;
+
+  // Long origins (e.g. "Wismar, Grand Duchy of Mecklenburg-Schwerin, Germany")
+  // push the description over 160 chars. Drop the least important part
+  // first, and always end on a complete sentence: a description cut in the
+  // middle of ", including ..." reads as broken.
+  const withoutLicence = `${lead}${nudePart}.`;
+  if (withoutLicence.length <= 160) return withoutLicence;
+
+  const short = `${lead}.`;
+  if (short.length <= 160) return short;
+
+  return `${trimToWordBoundary(lead, 159)}.`;
+}
+
+/**
+ * The `intro_md` short answer, in plain text. Falls back to the first
+ * paragraph of the biography. The "AI-Search & GEO Context" block is never
+ * part of it: it is written for engines, not for readers.
+ */
+function buildPersonDescription(photographer: Photographer): string {
+  const plainIntro = markdownToPlainText(photographer.intro_md ?? "");
+  if (plainIntro) return cutAtSentenceEnd(plainIntro, 300);
+
+  const biography = getHumanReadableBiography(photographer.biography_md ?? "");
+  const firstParagraph = biography.split(/\n\s*\n/)[0] ?? "";
+  return cutAtSentenceEnd(markdownToPlainText(firstParagraph), 300);
+}
+
 // Helper: generate SEO metadata for each photographer page
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ surname: string }>;
-}) {
+}): Promise<Metadata> {
   const { surname: urlSurname } = await params;
   const photographer = await fetchPhotographerBySlugSSR(urlSurname);
   if (!photographer) return {};
@@ -44,48 +136,58 @@ export async function generateMetadata({
 
   const name = photographer.name ?? "";
   const surname = photographer.surname ?? "";
-  const origin = photographer.origin ?? "";
-  const galleryCount = photographer.images?.length ?? 0;
+  const origin = cleanText(photographer.origin);
+  const images = photographer.images ?? [];
+  const imageCount = images.length;
+  const nudeCount = images.filter((img) => img.nudity === "nude").length;
+  const birthYear = getYear(photographer.birthdate);
+  const deathYear = getYear(photographer.deceasedate);
   const canonicalUrl = `https://www.mosaic.photography/photographers/${urlSurname}`;
 
-  // Short SEO title: always <70 chars
-  const seoTitle = `${name} ${surname} – Mosaic Gallery`.slice(0, 68);
-
-  // Meta description: always 50-160 chars
-  let desc = `Discover the vintage nude photography of ${name} ${surname} (${origin}), legendary in public domain art. View biography, gallery (${galleryCount} images), and historical milestones at Mosaic Photography.`;
-  if (desc.length > 160) desc = desc.slice(0, 157) + "...";
-  if (desc.length < 50)
-    desc = `Discover vintage nude photography, biography, and gallery at Mosaic Gallery.`;
+  const title = buildSeoTitle({ name, surname, birthYear, deathYear });
+  const description = buildSeoDescription({
+    name,
+    surname,
+    birthYear,
+    deathYear,
+    origin,
+    imageCount,
+    nudeCount,
+  });
 
   return {
-    title: seoTitle,
-    description: desc,
+    title: { absolute: title },
+    description,
     keywords: [
-      "vintage nude photography",
       "public domain",
-      "classic nude art",
       "gallery",
       "iconic photographers",
       name,
       surname,
       "Mosaic Gallery",
       origin,
+      ...(nudeCount > 0 ? ["vintage nude photography", "classic nude art"] : []),
     ],
     openGraph: {
-      title: seoTitle,
-      description: desc,
+      title,
+      description,
       type: "profile",
       url: canonicalUrl,
-      images: [ogImageUrl],
-      profile: {
-        firstName: name,
-        lastName: surname,
-      },
+      images: [
+        {
+          url: ogImageUrl,
+          alt: `${name} ${surname}: public-domain photograph`,
+        },
+      ],
+      // Next reads these from the top level of the OpenGraph object for
+      // type "profile" (og:profile:first_name / og:profile:last_name).
+      firstName: name,
+      lastName: surname,
     },
     twitter: {
       card: "summary_large_image",
-      title: seoTitle,
-      description: desc,
+      title,
+      description,
       images: [ogImageUrl],
     },
     alternates: {
@@ -111,6 +213,9 @@ function PhotographerJsonLd({
   canonicalUrl,
   ogImageUrl,
 }: PhotographerJsonLdProps) {
+  const birthDate = toIsoDate(photographer.birthdate);
+  const deathDate = toIsoDate(photographer.deceasedate);
+
   return (
     <script
       type="application/ld+json"
@@ -120,15 +225,14 @@ function PhotographerJsonLd({
           "@type": "Person",
           name: `${photographer.name} ${photographer.surname}`,
           url: canonicalUrl,
-          description:
-            photographer.biography_md || photographer.biography || "",
+          description: buildPersonDescription(photographer),
           image: ogImageUrl,
           jobTitle: "Photographer",
-          ...(photographer.birthdate && { birthDate: photographer.birthdate }),
-          ...(photographer.deceasedate && {
-            deathDate: photographer.deceasedate,
+          ...(birthDate && { birthDate }),
+          ...(deathDate && { deathDate }),
+          ...(cleanText(photographer.origin) && {
+            nationality: cleanText(photographer.origin),
           }),
-          ...(photographer.origin && { nationality: photographer.origin }),
           // sameAs is for references that identify the PERSON — their own
           // site, Wikipedia, an archive. The legacy `store` column held
           // affiliate shop links, and concatenating those here would have
@@ -161,6 +265,8 @@ export default async function PhotographerDetailPage({
     ...img,
     url: img.s3Progressive?.[0]?.url ?? "/favicons/android-chrome-512x512.png",
   }));
+
+  const origin = cleanText(photographer.origin);
 
   const gallerySchemaImages = imagesWithUrl.map((img) => ({
     contentUrl: img.url,
@@ -208,6 +314,20 @@ export default async function PhotographerDetailPage({
     photographer.biography_md ?? "",
   );
 
+  // Answer first: the short factual intro, without its own Markdown heading
+  // (the page already has the H1).
+  const introMarkdown = stripLeadingHeading(photographer.intro_md ?? "");
+
+  const birthYear = getYear(photographer.birthdate);
+  const deathYear = getYear(photographer.deceasedate);
+  const lifeYears = formatYearRange(birthYear, deathYear);
+
+  // Internal links to the rest of the collection.
+  const allPhotographers = (await fetchPhotographersBasic()) ?? [];
+  const otherPhotographers = allPhotographers
+    .filter((p) => p.slug && p.slug !== photographer.slug)
+    .sort((a, b) => a.surname.localeCompare(b.surname));
+
   return (
     <div>
       <script
@@ -232,15 +352,27 @@ export default async function PhotographerDetailPage({
           {photographer.name} {photographer.surname}
         </h1>
 
+        {introMarkdown && (
+          <section aria-labelledby="who-was-heading">
+            <h2 id="who-was-heading" className={styles.timelineTitle}>
+              Who was {photographer.name} {photographer.surname}?
+            </h2>
+            <ReactMarkdown components={markdownComponents}>
+              {introMarkdown}
+            </ReactMarkdown>
+          </section>
+        )}
+
         {/* GEO Quick Facts Section */}
         <section aria-label="Quick Facts">
           <ul>
+            {lifeYears && (
+              <li>
+                <strong>Lived:</strong> {lifeYears}
+              </li>
+            )}
             <li>
-              <strong>Subject:</strong> {photographer.name}{" "}
-              {photographer.surname}
-            </li>
-            <li>
-              <strong>Nationality:</strong> {photographer.origin}
+              <strong>Nationality:</strong> {origin}
             </li>
             <li>
               <strong>Collection Size:</strong> {imagesWithUrl.length} images
@@ -277,25 +409,13 @@ export default async function PhotographerDetailPage({
         <h2 className={styles.timelineTitle}>About the Photographer</h2>
         <span className={styles.sectionHeader}>
           <h3 className={styles.sectionTitle}>Born in: </h3>
-          <p className={styles.sectionContent}>{photographer.origin}</p>
+          <p className={styles.sectionContent}>{origin}</p>
         </span>
 
         <article className={styles.subsectionHeader}>
           <h3 className={styles.sectionTitle}>Biography:</h3>
           <div className={styles.sectionContent}>
-            <ReactMarkdown
-              components={{
-                h3: ({ ...props }) => (
-                  <h3 className={styles.sectionTitle} {...props} />
-                ),
-                p: ({ ...props }) => (
-                  <p className={styles.sectionContent} {...props} />
-                ),
-                li: ({ ...props }) => (
-                  <li style={{ marginBottom: "10px" }} {...props} />
-                ),
-              }}
-            >
+            <ReactMarkdown components={markdownComponents}>
               {biographyForHuman}
             </ReactMarkdown>
           </div>
@@ -316,6 +436,31 @@ export default async function PhotographerDetailPage({
         >{`(${imagesWithUrl.length})`}</span>
       </h2>
       <PhotographerGalleryZoom images={imagesWithUrl} />
+
+      <section aria-labelledby="more-photographers-heading">
+        <h2 id="more-photographers-heading" className={styles.timelineTitle}>
+          More photographers in the collection
+        </h2>
+        <ul className={styles.morePhotographersList}>
+          {otherPhotographers.map((other) => {
+            const otherYears = formatYearRange(
+              getYear(other.birthdate),
+              getYear(other.deceasedate),
+            );
+            return (
+              <li key={other.slug}>
+                <Link href={`/photographers/${other.slug}`}>
+                  {other.name} {other.surname}
+                  {otherYears ? ` (${otherYears})` : ""}
+                </Link>
+              </li>
+            );
+          })}
+          <li>
+            <Link href="/photographers">All photographers</Link>
+          </li>
+        </ul>
+      </section>
     </div>
   );
 }

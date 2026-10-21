@@ -20,8 +20,8 @@ const Timeline: React.FC<TimelineProps> = ({
         items={events}
         mode={"HORIZONTAL"}
         semanticTags={{
-          title: "h1",
-          cardTitle: "h2",
+          title: "h3",
+          cardTitle: "h4",
           cardDetailedText: "p",
         }}
         itemWidth={isMobile ? 85 : 150}

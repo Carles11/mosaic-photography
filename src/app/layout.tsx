@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     },
   ],
   description:
-    "Discover Mosaic's curated gallery of public domain nude photography, celebrating the timeless beauty of the human form through the lens of legendary photographers.",
+    "Public-domain vintage photography, 1840s–1930s: fine-art nudes, portraits and documentary work by pioneering photographers.",
   icons: {
     icon: [
       { rel: "icon", url: "/favicons/favicon.ico" },
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
         url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Mosaic Photography Gallery featuring vintage nude photography",
+        alt: "Mosaic Photography: public-domain vintage photography gallery",
       },
     ],
     type: "website",
@@ -142,7 +142,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           type="WebSite"
           name="Mosaic Photography"
           url="https://www.mosaic.photography"
-          description="Discover Mosaic's curated gallery of public domain nude photography, celebrating the timeless beauty of the human form through the lens of legendary photographers."
+          description="Public-domain vintage photography, 1840s–1930s: fine-art nudes, portraits and documentary work by pioneering photographers."
           publisher={{
             name: "Mosaic Photography",
             url: "https://www.mosaic.photography",
@@ -159,7 +159,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               url: "https://www.mosaic.photography",
               logo: "https://cdn.mosaic.photography/logos/mosaic-high-resolution-logo-transparent-DESKTOP-dark_766x541px_lg82w1.webp",
               description:
-                "Mosaic Photography is a curated gallery of public domain vintage nude photography, celebrating the timeless artistry of legendary photographers.",
+                "Public-domain vintage photography, 1840s–1930s: fine-art nudes, portraits and documentary work by pioneering photographers.",
               sameAs: [
                 "https://www.instagram.com/mosaic.photography.gallery",
                 "https://www.facebook.com/mosaic.photography.gallery",
