@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-10-20
+> Last reviewed: 2026-10-21
 
 ---
 
@@ -624,6 +624,47 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
     website ↔ App Store links; non-nude and ≤1930 rules stay; (4) then a task
     file for the code changes.
   - **Re-check the 4 queries: 2026-11-27 (day 60).**
+  - **2026-10-21 — steps 1, 3 and 4 done (step 2, App Store wording, still open).**
+    Step 1 findings (live brady/cameron + code): name spelled "Matthew" (historical
+    and Wikipedia: Mathew); meta description template said "vintage nude
+    photography" on all 14 pages (Brady: 0 nude of 79); `intro_md` (the short
+    answer) only used by the `.md` route, never on the HTML page; Person JSON-LD
+    `description` = ~2,000 chars raw Markdown incl. the "AI-Search & GEO Context"
+    block; breadcrumb pointed to `/photographers` = 404, no hub; no links between
+    photographer pages. (Claimed timeline `<h1>`s were wrong: react-chrono ignores
+    `semanticTags.title`.)
+    Decisions (Carles): A) `photographers.name` id 63 `Matthew` → `Mathew`
+    (done in Supabase, 1 row; `author` stays `Matthew Brady` because it is the
+    join key for images_resize + affiliate_products, so image captions still say
+    "Matthew"); B) middle positioning: site-wide "Public-domain vintage
+    photography, 1840s–1930s: fine-art nudes, portraits and documentary work by
+    pioneering photographers."; photographer pages say "nude" only when
+    nudeCount > 0; homepage title/H1 unchanged (Bing); C) build `/photographers`
+    hub; D) keep the TASCHEN "1000 Nudes" book on all pages.
+    Shipped (openCode, `docs/prompts/2026-10-21/photographer-pages-geo.md`):
+    "Who was X?" + intro first; title `Name (yyyy–yyyy): Public Domain
+    Photographs | Mosaic`; data-driven description; Person description ≤300
+    chars plain text, dates YYYY-MM-DD; "More photographers" links; new
+    `/photographers` hub (CollectionPage + ItemList, BreadcrumbList, in
+    sitemap-0); new site description in layout. **Verified live 2026-10-21:**
+    hub 200, canonical, 14 ListItems, in sitemap-0; brady title 60 chars, no
+    "nude"; durieu "including fine-art nude studies"; Person desc 251/163 chars,
+    no GEO block. IndexNow (Carles, Git Bash): `/`, `/photographers` + 14
+    photographer URLs → 200.
+    Follow-ups (not scheduled, Carles decides):
+    - Hub is only reachable via "All photographers" at the bottom of each
+      photographer page: add a "Photographers" link in `ClientLayout`
+      footer/menu (rule 9) and "See all photographers →" under the homepage cards.
+    - `scripts/indexnow.ts` (runs in postbuild): builds photographer URLs from
+      `surname` (sends the accented Vaudère URL), sends toolkit URLs for
+      inactive advertisers (404s), lacks `/photographers`. Same fix as the
+      sitemap: use `slug`, filter `is_active`, add the hub.
+      The IndexNow API is blocked from Claude's shells; submit from Git Bash.
+    - Count mismatch: hub excludes the `000_aaa` portrait (Brady 78), detail
+      page includes it (79).
+    - Captions still "Matthew Brady" (`author` key in 3 tables + mobile).
+    - Homepage `openGraph` in `page.tsx` overrides the layout's and has no image.
+    - Biography `##` headings render as `<h2>`.
   Porting to mobile: App Store listing wording (step 2); app → website link.
 
 ### Acceptance criteria
@@ -712,7 +753,10 @@ von-bucovich, brigman, brady, weston, cameron, demachy, hudson-white,
 von-gloeden, stieglitz (10, daily quota hit). URL Inspection showed
 holland-day already indexed; von-bucovich + brigman "Crawled – currently not
 indexed". **Still to request: durieu, von-plueschow, de-la-vaudere, moulin
-(2026-10-21).** Bing: manual URL Submission quota is **0** for this site, and
+(2026-10-21).**
+2026-10-21: durieu requested; quota hit on the next one. **Still to request:
+von-plueschow (already indexed; re-request so Google sees the fix),
+de-la-vaudere, moulin, plus the new `/photographers` hub (2026-10-22).** Bing: manual URL Submission quota is **0** for this site, and
 the BWT IndexNow page didn't load → submit via IndexNow API instead.
 All 14 photographer URLs submitted via IndexNow API 2026-10-20 → HTTP 200.
 
@@ -787,6 +831,7 @@ When a task above is finished, port it:
 |---|---|
 | New photographers | Nothing to code — same Supabase tables. Verify the app's fetchers page in the new rows and the CDN sizes the app requests exist. |
 | New affiliate partners | The app needs its own toolkit/resources surface + affiliate disclosure. Check store policy on affiliate links before shipping. |
+| Photographer pages GEO (2026-10-21) | Brady's name fix is already live in the app (same table). Consider showing `intro_md` first on `PhotographerDetailScreen`; App Store wording check (Task 3 GEO step 2). |
 | Traffic drop | Web-only (search indexing). The mobile equivalent is store listing / install analytics — track separately. |
 
 ---
