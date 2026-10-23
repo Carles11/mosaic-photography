@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-10-21
+> Last reviewed: 2026-10-23
 
 ---
 
@@ -766,6 +766,12 @@ code and the live site by Claude the same day; verdicts below.
       the emails), keep `_backup/commit-map-2026-10-purge.txt`; check
       `github.com/Carles11/mosaic-photography/commit/25667e9` → 404.
       Never push from a clone made before 2026-10-20 19:30 (re-clone).
+      **Step 8 done 2026-10-23.** GitHub Support (#4884318, 22 Oct): unreferenced
+      commits cleared. Verified (Carles, incognito): old `25667e9` → 404, new
+      `e7b9c64` opens. Deleted `aaa_repos/_purge` and
+      `_backup/mosaic-photography-pre-purge-2026-10-20.git`; only
+      `_backup/commit-map-2026-10-purge.txt` kept. Purge closed. Still open from #1:
+      Supabase-side lock on `contributors.email` for anon (→ #16).
       **Old → new hashes** (cited in this file and elsewhere; old ones below
       are left as written):
       `25667e9→e7b9c64` `efb9cec→d8a9622` `7b442d4→4682d63`
