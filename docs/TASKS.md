@@ -928,6 +928,39 @@ the app's nudity checks read `"nude"` correctly.
 
 ---
 
+## Task 5 — Keep or close Mosaic (cost, audience, monetization)
+
+`[~]` **Goal:** decide with numbers whether Mosaic stays online. Carles's rule
+(2026-10-23): it must at least cover its costs within 6–7 months (~May 2027);
+if it keeps losing money, close everything. Working doc:
+`docs/strategy/2026-10-keep-or-kill.md`.
+
+**2026-10-23 — first data** (AWS read live by Claude in Chrome; rest from Carles):
+- AWS (account `423623842495`, payer of the org; only Amplify app = Mosaic):
+  $484.50 over 12 months, Sep 2026 $40.64. **Firewall (Amplify WAF $15 + WAF
+  $8.41) ≈ $23.40/month + VAT**, more than half the bill. Data transfer
+  $7.75–13.81, compute ~$1.5, S3 $0.13, Route 53 $1, VAT 19 %.
+- Supabase Free; domain $51.68/year; Apple Developer $99/year (**renews
+  2026-11-16**); Google Play paid once. Total ≈ $53/month today, ≈ $25–28
+  without the firewall (estimate).
+- Revenue: **$0 ever** (Awin never paid).
+- App Store, 30 days to 2026-10-22: 58 first-time downloads (+41.5 %), 10.7K
+  impressions (+162 %), 213 page views, conversion 0.7 %.
+- Web: ~48 sessions/day (GA4, Task 3); 134 registered users.
+
+**Next (one per session, in order):**
+- [ ] Data: GA4 monthly sessions 12 months; Awin clicks per programme; Google
+      Play installs; App Store 12 months. Fill §2–3 of the doc.
+- [ ] Explain what the Amplify firewall protects → Carles decides keep/remove
+      (largest single saving). Check the Route 53 zone.
+- [ ] Score the monetization options (§6), incl. the photobook; fix the
+      decision rule with a date and a number (§7).
+- [ ] **Before 2026-11-16:** decide the Apple Developer renewal.
+
+Porting to mobile: app monetization options (§6 F) are mobile work if chosen.
+
+---
+
 ## Porting to mobile
 
 The `/app` route in the web sitemap is the landing page for the mobile app.
