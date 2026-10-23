@@ -836,6 +836,47 @@ All 14 photographer URLs submitted via IndexNow API 2026-10-20 → HTTP 200.
       decide. Audit also proposes ownership check on `collection_favorites`,
       `UNIQUE(collection_id, favorite_id)`, comment length limit, avatars
       folder policy.
+      **2026-10-23 — read-only check done** (Carles, SQL editor; Claude cross-checked
+      web + mobile code). RLS is on for every table. Findings:
+      - 🔴 `storage.objects` policy `open insert test`: anon + authenticated may
+        INSERT into **any bucket**, no condition. `Allow all for avatars bucket`:
+        anyone can read/overwrite/delete **any** avatar. No abuse so far: avatars
+        3 files, all `<uuid>/avatar.jpg`; `store-public-images` 51 files, all
+        owner = null (uploaded via dashboard, Dec 2025 + Jun 2026). Both apps only
+        write `avatars/<userId>/avatar.jpg` (upsert); nothing in code writes
+        `store-public-images`.
+      - 🔴 `contributors`: SELECT `true` + anon column grant → `email` and
+        `submission_notes` still public via the REST API (#1 not closed DB-side).
+        Mobile uses `select("*")` (`fetchContributorBySlug.ts`,
+        `fetchContributorsList.ts`), so a column REVOKE would break the store app.
+      - 🟠 `user_profiles`: SELECT `true` ("public profile fields" — RLS is per
+        row, not per column) → anyone can read every user's `email`, `filters`,
+        `role`, `last-name`. Only cross-user read in code: web `CommentsContext`
+        (`id, name` / `name` of comment authors). Mobile reads own row only.
+      - 🟡 `qa_logs`: any logged-in user can read all rows; no code reads it.
+      - 🟡 `favorites`: `true` SELECT overrides "own only"; needed by the public
+        collection page (`profile/collections/[id]`), keep for now.
+        `collection_favorites` INSERT doesn't check favorite ownership (low).
+      Proposed staging (Carles decides): A) storage + qa_logs policies (no code
+      change); B) `contributors.email` + `submission_notes` → private table, drop
+      the columns, update both importer scripts; C) `public_profiles` view
+      (`id, name`) for comments, web reads it, then drop the `true` policy.
+      Order A → B → C approved (Carles, 2026-10-23). `user_profiles` has
+      **134 rows** → 134 users' emails were readable via the anon key (no evidence
+      of access). GDPR: Carles decides whether a notice/report is owed; aware
+      since 2026-10-23 (`user_profiles`), 2026-10-20 (`contributors`).
+      - [x] **Stage A done 2026-10-23** (Claude Code,
+        `docs/prompts/2026-10-23/rls-a-storage-qa-logs.md` →
+        `migrations/011_rls_storage_avatars_qa_logs.sql`, rollback block at the
+        end). Run by Carles in the SQL editor: success. `pg_policies` now: 4 ×
+        `avatars_*_own` ({authenticated}, own `<uid>/` folder) + `qa_logs`
+        `Allow insert when authenticated`. Verified: anon upload to `avatars`
+        and `store-public-images` → 403 "new row violates row-level security
+        policy"; web avatar upload / replace / remove while logged in → OK.
+        Mobile avatar upload not tested yet (same policy + path). Side note:
+        mobile `deleteAvatar` has no callers (no remove button in the app).
+      - [ ] Stage B: `contributors.email` + `submission_notes` → private table.
+      - [ ] Stage C: `public_profiles` view, then drop `user_profiles` `true` policy.
 - [x] **#9** Row count: live homepage carries 1,004 image rows, image sitemap
       1,000 unique → run `count(*)` on `images_resize`; if > 1,000, page with
       `.range()` + `.order("id")` in the sitemap script. (Audit's "exactly 1,000"

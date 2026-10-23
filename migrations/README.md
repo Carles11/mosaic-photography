@@ -74,6 +74,10 @@ CREATE TABLE IF NOT EXISTS public.comments (
 );
 ```
 
+### 011_rls_storage_avatars_qa_logs.sql
+
+Locks `storage.objects` so authenticated users can only read/write/delete their own `avatars/<auth.uid()>/` folder, removes the open any-bucket insert policy, and drops the read-all `qa_logs` SELECT policy (rollback block at the end of the file).
+
 ## Verification
 
 After running the migrations, you can verify they worked by checking:
