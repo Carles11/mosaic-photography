@@ -223,35 +223,37 @@ const ImageWrapper: React.FC<ImageWrapperProps> = ({
             />
           </>
         )}
-        <JsonLdSchema
-          type="ImageObject"
-          name={image.title || "Untitled Image"}
-          description={
-            image.description || "Vintage photography from Mosaic's archives"
-          }
-          images={[
-            {
-              contentUrl: src ?? "/favicons/android-chrome-512x512.png",
-              name: image.title || "Untitled Image",
-              description:
-                image.description ||
-                "Vintage photography from Mosaic's archives",
-              creditText: image.author || "Unknown Photographer",
-              width: imgWidthFinal,
-              height: imgHeightFinal,
-              encodingFormat:
-                src && src.endsWith(".webp")
-                  ? "image/webp"
-                  : src && src.endsWith(".png")
-                  ? "image/png"
-                  : src && (src.endsWith(".jpg") || src.endsWith(".jpeg"))
-                  ? "image/jpeg"
-                  : "image/webp",
-              license: "https://creativecommons.org/publicdomain/mark/1.0/",
-              acquireLicensePage: "https://www.mosaic.photography/license",
-            },
-          ]}
-        />
+        {image.exclude_from_index !== true && (
+          <JsonLdSchema
+            type="ImageObject"
+            name={image.title || "Untitled Image"}
+            description={
+              image.description || "Vintage photography from Mosaic's archives"
+            }
+            images={[
+              {
+                contentUrl: src ?? "/favicons/android-chrome-512x512.png",
+                name: image.title || "Untitled Image",
+                description:
+                  image.description ||
+                  "Vintage photography from Mosaic's archives",
+                creditText: image.author || "Unknown Photographer",
+                width: imgWidthFinal,
+                height: imgHeightFinal,
+                encodingFormat:
+                  src && src.endsWith(".webp")
+                    ? "image/webp"
+                    : src && src.endsWith(".png")
+                    ? "image/png"
+                    : src && (src.endsWith(".jpg") || src.endsWith(".jpeg"))
+                    ? "image/jpeg"
+                    : "image/webp",
+                license: "https://creativecommons.org/publicdomain/mark/1.0/",
+                acquireLicensePage: "https://www.mosaic.photography/license",
+              },
+            ]}
+          />
+        )}
         <Image
           src={src ?? "/favicons/android-chrome-512x512.png"}
           alt={image.title || "Gallery Image in Mosaic.photography"}

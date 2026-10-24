@@ -78,6 +78,10 @@ CREATE TABLE IF NOT EXISTS public.comments (
 
 Locks `storage.objects` so authenticated users can only read/write/delete their own `avatars/<auth.uid()>/` folder, removes the open any-bucket insert policy, and drops the read-all `qa_logs` SELECT policy (rollback block at the end of the file).
 
+### 012_images_exclude_from_index.sql
+
+Adds `exclude_from_index` boolean to `images_resize` (default false). Marks 18 flagged images to be kept on the site but excluded from search indexes and CDN robots. (2026-10-24; reversible.)
+
 ## Verification
 
 After running the migrations, you can verify they worked by checking:

@@ -36,6 +36,7 @@ function toHomeImage(img: ImageWithOrientation): HomeGalleryImage {
     nudity: img.nudity,
     year: img.year,
     mosaicType: img.mosaicType,
+    exclude_from_index: (img as ImageWithOrientation).exclude_from_index,
   };
 }
 
@@ -76,7 +77,10 @@ export const metadata: Metadata = {
 };
 
 function buildHomePageSchema(images: ImageWithOrientation[]) {
-  const featured = images.slice(0, 12).map((img) => ({
+  const filtered = (images || []).filter(
+    (img) => img.exclude_from_index !== true,
+  );
+  const featured = filtered.slice(0, 12).map((img) => ({
     "@type": "ImageObject",
     contentUrl:
       img.base_url && img.filename

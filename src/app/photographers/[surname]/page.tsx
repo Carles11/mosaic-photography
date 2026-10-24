@@ -14,7 +14,7 @@ import Timeline from "@/components/timeline/Timeline";
 import { getTimelineBySlug } from "@/lib/timeline/photographersTimelines";
 import { TimelineItemModelProps } from "@/types/components";
 import { formatLifespan, formatYearRange, getYear, toIsoDate } from "@/helpers/dates";
-import type { Photographer } from "@/types/gallery";
+import type { ImageWithOrientation, Photographer } from "@/types/gallery";
 import JsonLdSchema from "@/components/seo/JsonLdSchema";
 import { serializeJsonLd } from "@/helpers/jsonLd";
 import styles from "./Photographers.module.css";
@@ -268,15 +268,17 @@ export default async function PhotographerDetailPage({
 
   const origin = cleanText(photographer.origin);
 
-  const gallerySchemaImages = imagesWithUrl.map((img) => ({
-    contentUrl: img.url,
-    name:
-      img.title || `${photographer.name} ${photographer.surname} Photograph`,
-    description: img.description || "Vintage photography from Mosaic Gallery",
-    width: img.width || "1600",
-    height: img.height || "auto",
-    encodingFormat: "image/webp",
-  }));
+  const gallerySchemaImages = imagesWithUrl
+    .filter((img) => (img as ImageWithOrientation).exclude_from_index !== true)
+    .map((img) => ({
+      contentUrl: img.url,
+      name:
+        img.title || `${photographer.name} ${photographer.surname} Photograph`,
+      description: img.description || "Vintage photography from Mosaic Gallery",
+      width: img.width || "1600",
+      height: img.height || "auto",
+      encodingFormat: "image/webp",
+    }));
 
   const ogImageUrl =
     photographer.images?.[0]?.s3Progressive?.find((img) => img.width >= 800)

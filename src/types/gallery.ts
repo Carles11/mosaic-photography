@@ -26,6 +26,7 @@ export type HomeGalleryImage = Pick<
   | "nudity"
   | "year"
   | "mosaicType"
+  | "exclude_from_index"
 >;
 
 export type HomePhotographer = Pick<
@@ -111,6 +112,8 @@ export interface UniversalGalleryImage {
   }>;
 
   print_quality?: string;
+
+  exclude_from_index?: boolean;
 }
 
 export interface ImageData {
@@ -136,6 +139,7 @@ export interface ImageData {
   nudity?: string;
   year?: number;
   print_quality?: QualityLevel;
+  exclude_from_index?: boolean;
 }
 
 export type QualityLevel =

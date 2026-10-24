@@ -23,6 +23,7 @@ type SitemapImage = {
   orientation?: string;
   color?: string;
   nudity?: string;
+  exclude_from_index?: boolean;
 };
 
 async function generateImageSitemap() {
@@ -30,30 +31,75 @@ async function generateImageSitemap() {
   // The Supabase REST API returns at most 1,000 rows per request, so page
   // through the table. A fixed order (.order("id")) is required: without one,
   // consecutive pages can overlap or skip rows.
-  const images: SitemapImage[] = [];
+  const imagesAll: SitemapImage[] = [];
   const PAGE_SIZE = 1000;
+  let columnMissing = false;
 
   for (let from = 0; ; from += PAGE_SIZE) {
     const { data, error } = await supabase
       .from("images_resize")
       .select(
-        "id, base_url, filename, title, description, author, width, height, orientation, color, nudity",
+        "id, base_url, filename, title, description, author, width, height, orientation, color, nudity, exclude_from_index",
       )
       .order("id")
       .range(from, from + PAGE_SIZE - 1);
 
     if (error) {
+      // If column doesn't exist yet (migration not run), fall back to select without it
+      const errMsg = String((error as any)?.message || error);
+      if (errMsg.includes("exclude_from_index") || errMsg.includes("column")) {
+        columnMissing = true;
+        break;
+      }
       console.error("Error fetching images_resize:", error);
       process.exit(1);
     }
 
-    images.push(...(data ?? []));
+    imagesAll.push(...((data as SitemapImage[]) ?? []));
 
     // A short page means the table is exhausted.
     if (!data || data.length < PAGE_SIZE) break;
   }
 
-  console.log(`[image-sitemap] fetched ${images.length} images_resize rows`);
+  let images: SitemapImage[] = [];
+  if (columnMissing) {
+    console.warn(
+      "[image-sitemap] exclude_from_index column missing (migration not run) — continuing with all rows",
+    );
+    for (let from = 0; ; from += PAGE_SIZE) {
+      const { data, error } = await supabase
+        .from("images_resize")
+        .select(
+          "id, base_url, filename, title, description, author, width, height, orientation, color, nudity",
+        )
+        .order("id")
+        .range(from, from + PAGE_SIZE - 1);
+
+      if (error) {
+        console.error("Error fetching images_resize:", error);
+        process.exit(1);
+      }
+
+      images.push(...((data as SitemapImage[]) ?? []));
+
+      if (!data || data.length < PAGE_SIZE) break;
+    }
+  } else {
+    images = imagesAll;
+  }
+
+  const excludedCount = columnMissing
+    ? 0
+    : imagesAll.filter((img) => img.exclude_from_index === true).length;
+
+  if (!columnMissing) {
+    images = imagesAll.filter((img) => img.exclude_from_index !== true);
+  }
+
+  console.log(`[image-sitemap] fetched ${imagesAll.length} images_resize rows`);
+  if (!columnMissing) {
+    console.log(`[image-sitemap] excluded ${excludedCount} rows with exclude_from_index=true`);
+  }
 
   if (images.length === 0) {
     console.error("[image-sitemap] refusing to write: no images_resize rows");
