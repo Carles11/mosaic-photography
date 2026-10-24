@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-10-23
+> Last reviewed: 2026-10-24
 
 ---
 
@@ -965,6 +965,23 @@ Photobook parked (results only). Details in the doc §2–3, §6.
       **Decision 2026-10-24 (Carles): locate only, do not hide or delete for
       now.** Review sheet prompt: `docs/prompts/2026-10-24/minors-review-sheet.md`.
       Ticked IDs get saved so the hide step can run later if he changes his mind.
+      **2026-10-24 later — middle way chosen (Carles):** the 18 flagged images
+      stay visible on the site but leave search: migration **012**
+      `exclude_from_index` (run in Supabase, 18 rows), image sitemap + JSON-LD
+      skip them, `cdn-robots/robots.txt` (18 Disallow, paths checked 200) —
+      commit `a418bf8`. **Amplify build #136 FAILED:** `scripts/generate-cdn-robots.ts`
+      and `scripts/review-sheet.ts` import `ws`, which has no types, and
+      `tsconfig` type-checks `scripts/`. Fix: `yarn add -D @types/ws` (prod
+      still on build #135, site fine).
+      Next, in order:
+      - [ ] Fix the build (`@types/ws`), push, check log line
+            `[image-sitemap] excluded 18 rows`.
+      - [ ] Upload `cdn-robots/robots.txt` to the S3 bucket root
+            (`mosaic.photography`, key `robots.txt`, Content-Type `text/plain`);
+            check https://cdn.mosaic.photography/robots.txt = 200 (today 403).
+      - [ ] Removal requests: GSC Removals + Bing "Block URLs" for the 18 image URLs.
+      - [ ] Mobile follow-up: filter `exclude_from_index` in the app (see Porting).
+      - [ ] Re-run `scripts/generate-cdn-robots.ts` whenever the flag changes.
 - [ ] Score the monetization options (§6), incl. the photobook; fix the
       decision rule with a date and a number (§7).
 - [ ] **Before 2026-11-16:** decide the Apple Developer renewal.
@@ -983,6 +1000,7 @@ When a task above is finished, port it:
 | New photographers | Nothing to code — same Supabase tables. Verify the app's fetchers page in the new rows and the CDN sizes the app requests exist. |
 | New affiliate partners | The app needs its own toolkit/resources surface + affiliate disclosure. Check store policy on affiliate links before shipping. |
 | Photographer pages GEO (2026-10-21) | Brady's name fix is already live in the app (same table). Consider showing `intro_md` first on `PhotographerDetailScreen`; App Store wording check (Task 3 GEO step 2). |
+| Exclude flagged images from index (2026-10-24) | Filter `exclude_from_index = true` out of the app's galleries/fetchers (6 files read `images_resize`) or decide they stay in-app; App Store review sensitivity. Needs a release. |
 | Traffic drop | Web-only (search indexing). The mobile equivalent is store listing / install analytics — track separately. |
 
 ---
