@@ -948,11 +948,23 @@ if it keeps losing money, close everything. Working doc:
   impressions (+162 %), 213 page views, conversion 0.7 %.
 - Web: ~48 sessions/day (GA4, Task 3); 134 registered users.
 
+**2026-10-24:** "nude" = the traffic (Bing 98.6 % of 21.3K clicks/12 m on the
+homepage; Google 347 vs 21 query clicks) → **keep "nude" on the web.** Awin
+2026: TASCHEN 17 clicks, WhiteWall 364, 0 sales. Ko-fi $0 → option D out.
+Photobook parked (results only). Details in the doc §2–3, §6.
+
 **Next (one per session, in order):**
 - [ ] Data: GA4 monthly sessions 12 months; Awin clicks per programme; Google
       Play installs; App Store 12 months. Fill §2–3 of the doc.
-- [ ] Explain what the Amplify firewall protects → Carles decides keep/remove
-      (largest single saving). Check the Route 53 zone.
+- [x] Firewall: removed 2026-10-24 (disassociated in Amplify, web ACL
+      deleted, budget alert `mosaic-monthly` $30). ~$28/month saved. Route 53
+      zones already gone since 09-25. Details in the doc §1.1.
+- [ ] **Hide images that could show nude minors** (found 2026-10-24: Bing and
+      Yandex match Mosaic to such queries; von Gloeden / von Plüschow sets
+      first). Carles reviews; no AI on the images. Plan in the doc §7.
+      **Decision 2026-10-24 (Carles): locate only, do not hide or delete for
+      now.** Review sheet prompt: `docs/prompts/2026-10-24/minors-review-sheet.md`.
+      Ticked IDs get saved so the hide step can run later if he changes his mind.
 - [ ] Score the monetization options (§6), incl. the photobook; fix the
       decision rule with a date and a number (§7).
 - [ ] **Before 2026-11-16:** decide the Apple Developer renewal.

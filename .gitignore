@@ -55,3 +55,6 @@ restore-failures.txt
 # saved page snapshots can contain personal data
 seo-reports/**/url-inspections/*.html
 docs/seo-reports/**/*.html
+
+# local review sheets (contain nude thumbnails and review notes; never commit)
+/review/

@@ -46,6 +46,16 @@ more than half the bill, for a site with ~50 visits/day. Without it, and with
 the lighter homepage, AWS would be roughly **$12–15/month incl. VAT** (estimate).
 Decision needed (see §7): keep the firewall or not.
 
+**2026-10-24 — firewall removed.** Rules were only 3 AWS managed groups (IP
+reputation, Common, KnownBadInputs); no rate limit, no bot control. Last 3 h:
+16 of 3.76K requests blocked (0.4 %), all exploit probes (`/.env`-type paths,
+React2Shell body; the site runs Next 15.5.19, patched since 15.5.7). Carles
+disassociated it in Amplify and deleted the web ACL in WAF (Global: 0 ACLs;
+JSON backup in `WEBs\Mosaic`). Budget alert `mosaic-monthly` = $30/month
+(85 % / 100 % actual, 100 % forecast) replaces it as the cost guard. Re-add in
+Amplify → Firewall if an attack ever shows up. Route 53: zones were deleted
+2026-09-25 (Task 3); Sep $1 was the partial month → expect $0 from Oct.
+
 ### 1.2 Other fixed costs
 
 | Item | Cost | Per month | Note |
@@ -69,8 +79,10 @@ Plus Carles's hours (not costed; TODO: decide whether to put a value on them).
 
 - **$0, ever.** Awin (TASCHEN, WhiteWall, Retouch4me) has never paid.
   Amazon account terminated; Fine Art America never approved, retired 2026-10-19.
-- TODO: Awin dashboard → clicks per programme, last 6 months (are there clicks
-  at all, or zero sales because zero clicks?).
+- Awin 2026 YTD (read 2026-10-24): TASCHEN **17 clicks**, WhiteWall **364
+  clicks**, 0 sales. TASCHEN was barely seen; WhiteWall (print your own photos)
+  doesn't fit the audience.
+- Ko-fi badge (nav + /about) live for months: **$0**.
 
 ## 3. Audience
 
@@ -85,6 +97,19 @@ Plus Carles's hours (not costed; TODO: decide whether to put a value on them).
 - Google: 26 Jun 2026 spam-update cliff (−83 % impressions); no recovery yet.
 - Registered users: **134** (`user_profiles`, 2026-10-23).
 - TODO: GA4 monthly sessions for 12 months; engaged sessions; top pages.
+
+**Search queries (read 2026-10-24):** "nude" is the traffic.
+- Bing 12 months: 21.3K clicks / 220.6K impressions; **21.0K clicks (98.6 %)
+  land on the homepage** (title "Public Domain Vintage Nude Photography").
+  Top 25 keywords are all nude/nudist ("nude magazines", "vintage nudes",
+  "vintage nudity", "vintage nudist pics"…).
+- Google 16 months (Web): 1.19K clicks; queries with "nude" 347 clicks vs
+  21 without (mostly "nudist"/"nudity").
+- Yandex: negligible volume, same pattern.
+- **Decision 2026-10-24 (Carles): do not remove "nude" from the web**
+  (homepage title/H1/meta). App Store listing stays without it (Apple rules).
+- ⚠️ Bing and Yandex also show Mosaic for queries seeking nude images of
+  minors. → image review task (Task 5 / §7).
 
 ### 3.2 App
 
@@ -142,9 +167,9 @@ For each: effort, potential, risk vs the rules. To be scored in the next session
 | # | Option | Notes |
 |---|---|---|
 | A | **Cut costs first** (firewall, Route 53 zone) | Halves the bar to clear. Low effort. |
-| B | **Mosaic photobook** (large, high-end; Carles in InDesign) | Carles's preferred project. Options: print-on-demand (Blurb, Lulu, etc.: no stock, printed and shipped by the provider) or pre-sales/crowdfunding to fund an offset run. Verify: nudity policy of each printer/platform; which platform works with Carles's German business; shipping costs. |
+| B | **Mosaic photobook** (PARKED 2026-10-24: audience searches for free nudes, not books; Carles only does it if it brings results) (large, high-end; Carles in InDesign) | Carles's preferred project. Options: print-on-demand (Blurb, Lulu, etc.: no stock, printed and shipped by the provider) or pre-sales/crowdfunding to fund an offset run. Verify: nudity policy of each printer/platform; which platform works with Carles's German business; shipping costs. |
 | C | **Prints on demand** | Carles doesn't ship anything: a print-on-demand provider prints near the buyer and ships; Mosaic only uploads files and sets a price. Verify art-nude policy per provider. |
-| D | **Direct support** (Patreon / Ko-fi / Buy Me a Coffee) | Membership/tip platforms: fans pay a small monthly amount or one-off tip. Patreon allows art nudity with an adult flag (verify). Needs an audience that cares — 134 users, ~50 visits/day. |
+| D | **Direct support** (OUT 2026-10-24: Ko-fi badge already live, $0 ever) (Patreon / Ko-fi / Buy Me a Coffee) | Membership/tip platforms: fans pay a small monthly amount or one-off tip. Patreon allows art nudity with an adult flag (verify). Needs an audience that cares — 134 users, ~50 visits/day. |
 | E | **Paid high-res downloads / packs** | Free web size; paid restored large files or per-photographer packs. The work being sold is the restoration/curation (the images are public domain). |
 | F | **App monetization** | Tip jar, one-time "supporter" unlock, or subscription for hi-res/offline. The app is the asset AI assistants recommend. |
 | G | **Owned audience** (newsletter) | Not money directly; feeds B–F. Weekly photograph + story. |
@@ -154,9 +179,13 @@ For each: effort, potential, risk vs the rules. To be scored in the next session
 
 ## 7. Decisions and deadlines
 
-- [ ] **Firewall on Amplify:** keep (~$28/month incl. VAT) or remove.
-  Carles decides; explain what it protects first.
-- [ ] Route 53 hosted zone: still needed? ($1/month)
+- [x] **Firewall on Amplify:** removed 2026-10-24 (~$28/month saved); budget
+  alert $30 instead. See §1.1.
+- [x] Route 53 hosted zone: already deleted 2026-09-25; confirm $0 in Oct bill.
+- [ ] **Hide images that could show nude minors** (Carles reviews; rows moved
+  to an archive table, files out of public S3, removal requests in GSC/Bing).
+  **2026-10-24: Carles decided to locate them only (keep online, no hiding,
+  no deletion); hide procedure stays ready.**
 - [ ] **Apple Developer renewal 2026-11-16** ($99): renew only if Mosaic stays
   at least until the next decision point. Removing it pulls the app from the
   App Store (the only AI-cited Mosaic source).
