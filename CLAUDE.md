@@ -123,6 +123,8 @@ NEXT_PUBLIC_SITE_URL=              # https://www.mosaic.photography
 
 Never expose `SUPABASE_SERVICE_ROLE_KEY` to the browser.
 
+AWS access and account setup: see docs/AWS_ACCESS.md. Never use root credentials; never print, log or commit access keys.
+
 ---
 
 ## What NOT to Do
