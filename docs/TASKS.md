@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-10-24
+> Last reviewed: 2026-10-26
 
 ---
 
@@ -974,13 +974,25 @@ Photobook parked (results only). Details in the doc §2–3, §6.
       `tsconfig` type-checks `scripts/`. Fix: `yarn add -D @types/ws` (prod
       still on build #135, site fine).
       Next, in order:
-      - [ ] Fix the build (`@types/ws`), push, check log line
-            `[image-sitemap] excluded 18 rows`.
-      - [ ] Upload `cdn-robots/robots.txt` to the S3 bucket root
-            (`mosaic.photography`, key `robots.txt`, Content-Type `text/plain`);
-            check https://cdn.mosaic.photography/robots.txt = 200 (today 403).
-      - [ ] Removal requests: GSC Removals + Bing "Block URLs" for the 18 image URLs.
-      - [ ] Mobile follow-up: filter `exclude_from_index` in the app (see Porting).
+      - [x] Fix the build (`@types/ws`), push — `57bc946`. Checked live
+            2026-10-25: none of the 18 files in `image-sitemap.xml` (1,157 image:loc).
+            Amplify log line not checked.
+      - [x] Upload `cdn-robots/robots.txt` to the S3 bucket root — done 2026-10-25.
+            The bucket root is private (policy only opens `mosaic-collections/`,
+            `mosaic-collection/`, `advertisers/`, `logos/`, `fonts/`), so a statement
+            `PublicReadForRobotsTxt` (GetObject on `robots.txt` only) was added to the
+            bucket policy. Checked: 200, `text/plain`, identical to the repo file,
+            18 Disallow; `test.txt`/`test.png` in the root still 403, images 200.
+            Re-uploading after `generate-cdn-robots.ts` needs no policy change.
+      - [x] Removal requests: **skipped, decision 2026-10-26 (Carles): robots.txt only.**
+            The 18 images = 107 live CDN URLs (6–7 sizes each); GSC Removals / Bing
+            Block URLs are per-URL and temporary. Coverage checked 2026-10-25: GSC has
+            Domain property `mosaic.photography` (covers `cdn.`); Bing lists
+            `mosaic.photography` (subdomain coverage untested). Re-check in a few weeks
+            with a Bing/Google image search for the filenames.
+      - [x] Mobile follow-up: **decision 2026-10-26 (Carles): option (b), the 18 stay
+            visible in the app** (same as web; the app is not indexed). No code, no release.
+            Watch App Store review notes if Apple ever flags content.
       - [ ] Re-run `scripts/generate-cdn-robots.ts` whenever the flag changes.
 - [ ] Score the monetization options (§6), incl. the photobook; fix the
       decision rule with a date and a number (§7).
@@ -1000,7 +1012,7 @@ When a task above is finished, port it:
 | New photographers | Nothing to code — same Supabase tables. Verify the app's fetchers page in the new rows and the CDN sizes the app requests exist. |
 | New affiliate partners | The app needs its own toolkit/resources surface + affiliate disclosure. Check store policy on affiliate links before shipping. |
 | Photographer pages GEO (2026-10-21) | Brady's name fix is already live in the app (same table). Consider showing `intro_md` first on `PhotographerDetailScreen`; App Store wording check (Task 3 GEO step 2). |
-| Exclude flagged images from index (2026-10-24) | Filter `exclude_from_index = true` out of the app's galleries/fetchers (6 files read `images_resize`) or decide they stay in-app; App Store review sensitivity. Needs a release. |
+| Exclude flagged images from index (2026-10-24) | **Decided 2026-10-26: nothing to port** — the 18 stay visible in the app (option b). If Apple review ever objects, filter `exclude_from_index = true` in the 6 files that read `images_resize` and release. |
 | Traffic drop | Web-only (search indexing). The mobile equivalent is store listing / install analytics — track separately. |
 
 ---
