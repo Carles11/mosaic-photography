@@ -32,7 +32,6 @@ Key facts:
 - **Community:** https://www.mosaic.photography/community/photography
 - **Community contributors:** https://www.mosaic.photography/community/photography/[slug]
 - **Photographer pages:** https://www.mosaic.photography/photographers/[surname]
-- **Photo curations:** https://www.mosaic.photography/photo-curations
 - **Toolkit:** https://www.mosaic.photography/toolkit/[slug]
 - **Auth:** https://www.mosaic.photography/auth/login — auth pages are NOT indexed
 

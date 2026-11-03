@@ -21,7 +21,6 @@ const DEFAULT_URLS = [
   SITE_URL,
   `${SITE_URL}/about`,
   `${SITE_URL}/faq`,
-  `${SITE_URL}/photo-curations`,
   `${SITE_URL}/legal/privacy-policy`,
   `${SITE_URL}/legal/terms-of-service`,
 ];

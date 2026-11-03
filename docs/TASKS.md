@@ -547,9 +547,15 @@ GA4, Traffic acquisition, session source / medium (sessions):
   **Bug:** `/photo-curations` is `noindex, nofollow` but listed in `sitemap-0.xml`
   (sitemap should only list indexable URLs). BWT sitemaps: 4 known, 0 errors;
   `collection-sitemap.xml` (removed 10-02) still listed, last crawl 5/22.
-  Open: request indexing for `/photographers` + `/about` in BWT (Carles's go);
-  drop `/photo-curations` from the sitemap (openCode); optionally remove
-  `collection-sitemap.xml` from BWT.
+  - [x] BWT "Request indexing" for `/photographers` + `/about` — done 2026-11-03
+        (Claude in Chrome, Carles's go). Re-inspect ~2026-11-10.
+  - [x] Drop `/photo-curations` (login-only, noindex is right) from
+        `sitemap-0.xml`, `llms.txt` and both IndexNow lists (`scripts/indexnow.ts`,
+        `src/app/api/indexnow/route.ts`) — done 2026-11-03 by openCode, prompt
+        `docs/prompts/2026-11-03/drop-photo-curations-from-sitemap.md`. Lint OK,
+        sitemap-0 = 28 URLs. After the Amplify build: check live
+        `sitemap-0.xml` has no `photo-curations`. Mobile: nothing to port.
+  - [ ] Optional: remove `collection-sitemap.xml` from BWT Sitemaps.
 
 **2026-10-20 — Bing Webmaster Tools** (read live by Claude in Chrome; daily
 series from the BWT Search Performance API, 12 months).

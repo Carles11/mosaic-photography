@@ -56,12 +56,6 @@ async function generateSitemap0() {
       priority: "1.0",
     },
     {
-      loc: "https://www.mosaic.photography/photo-curations",
-      lastmod: new Date().toISOString(),
-      changefreq: "weekly",
-      priority: "0.8",
-    },
-    {
       loc: "https://www.mosaic.photography/photographers",
       lastmod: new Date().toISOString(),
       changefreq: "weekly",

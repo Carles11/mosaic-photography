@@ -29,7 +29,6 @@ const STATIC_URLS = [
   SITE_URL,
   `${SITE_URL}/about`,
   `${SITE_URL}/faq`,
-  `${SITE_URL}/photo-curations`,
   `${SITE_URL}/photographers`,
   `${SITE_URL}/app`,
   `${SITE_URL}/legal/privacy-policy`,
