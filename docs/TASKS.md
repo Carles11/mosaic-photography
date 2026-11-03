@@ -528,6 +528,15 @@ GA4, Traffic acquisition, session source / medium (sessions):
   the drop; Site Explorer / URL Inspection on `/` to see what Bingbot renders).
 - GA4 engagement unchanged (62% engaged, ~1m15s) → real traffic loss, not tagging.
 - Next Google re-check: ~2026-11-03 (holland-day, von-bucovich, brigman).
+  **Done 2026-11-03** (GSC read live by Claude in Chrome): **all 3 indexed**
+  ("URL is on Google", Googlebot smartphone, canonical = inspected URL); last
+  crawl holland-day 10-23, von-bucovich 10-25, brigman 10-25 (in 4 sitemaps).
+  Pages report (updated 10-27): **indexed 21** (was 16), not indexed 19.
+  Crawled – not indexed is down to 6, all harmless (2 CDN fonts, 3 legal pages,
+  `site.webmanifest`; last crawled May–Jun). 403 (2): `cdn.` root and
+  `cdn…/community/photography/akiuonsen` (Jun, harmless). noindex 3, redirect 3,
+  404 1 — rows not opened. Discovered – not indexed 4: validation Passed.
+  Nothing left to request; next Google look with the monthly sitemap check.
 
 **2026-10-20 — Bing Webmaster Tools** (read live by Claude in Chrome; daily
 series from the BWT Search Performance API, 12 months).
