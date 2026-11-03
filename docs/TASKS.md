@@ -537,6 +537,19 @@ GA4, Traffic acquisition, session source / medium (sessions):
   `cdn…/community/photography/akiuonsen` (Jun, harmless). noindex 3, redirect 3,
   404 1 — rows not opened. Discovered – not indexed 4: validation Passed.
   Nothing left to request; next Google look with the monthly sitemap check.
+  **Bing, same day** (BWT URL Inspection API, all 29 URLs of `sitemap-0.xml`):
+  **24 indexed**, incl. all 14 photographer pages (crawled 18 Oct–3 Nov),
+  home, faq, app, community hub + both contributors, the 3 toolkit pages,
+  privacy policy. **5 "Discovered but not selected"** (never crawled):
+  `/photographers` (hub, new 10-21), `/about`, `/photo-curations`,
+  `/legal/terms-of-service`, `/legal/credits`. `/photographers` and `/about`
+  return 200 to bingbot with self-canonical, no noindex.
+  **Bug:** `/photo-curations` is `noindex, nofollow` but listed in `sitemap-0.xml`
+  (sitemap should only list indexable URLs). BWT sitemaps: 4 known, 0 errors;
+  `collection-sitemap.xml` (removed 10-02) still listed, last crawl 5/22.
+  Open: request indexing for `/photographers` + `/about` in BWT (Carles's go);
+  drop `/photo-curations` from the sitemap (openCode); optionally remove
+  `collection-sitemap.xml` from BWT.
 
 **2026-10-20 — Bing Webmaster Tools** (read live by Claude in Chrome; daily
 series from the BWT Search Performance API, 12 months).
