@@ -580,6 +580,21 @@ Weekly averages, Bing web (clicks/day · impr/day · avg pos):
   - **The 16 Oct Bing impressions drop is still unexplained** (no cert change
     since 09-25). Re-check BWT ~2026-10-27; if it persists, look for a Bing
     update or a site change around 15–16 Oct.
+    **Re-check 2026-11-03** (BWT read live by Claude in Chrome, data to 1 Nov):
+    the drop is **partly recovered, not gone.** Daily avg per week (impr / clicks / pos):
+    5 Oct 339 / 29.0 / 12.0 · 12 Oct 222 / 19.7 / 10.0 · 19 Oct 198 / 19.7 / 9.3 ·
+    26 Oct 263 / 20.7 / 7.5. 31 Oct + 1 Nov: 336/34 and 333/33 (pre-drop level,
+    weekend). Homepage per day: 290 impr (1–14 Oct) → 108 (16–22) → 159 (25 Oct–1 Nov).
+    Position recovered (12 → ~7.5); impressions ~80 % and clicks ~65 % of early Oct.
+    Query mix changed: "nudes" 125 impr at pos 13.4 (1–14 Oct) → 56 at pos 4.7
+    (25 Oct–1 Nov); von Gloeden/Plüschow "naked"-type queries and an
+    "old young" query that brought impressions before 16 Oct are gone from the top list.
+    Reading: fewer, better-matched queries (possibly Bing filtering some query
+    classes), not a site penalty. Recovery starts ~21–24 Oct, after the homepage
+    payload/meta fix (`923cc48`, 10-20) and `exclude_from_index` (10-24); can't
+    separate the two. Still no confirmed Bing update for October (web check 11-03).
+    Next: re-check BWT ~2026-11-17 (2 more weeks); if weekly avg stays ≥ 260 impr,
+    close this item.
   - **The 12 Sep–18 Oct comparison windows above (GSC + GA4) contain the
     7 outage days.** Part of the GA4 −29% is downtime, not ranking loss.
     Next re-check: compare 26 Sep–onwards windows only, and read GA4 daily
