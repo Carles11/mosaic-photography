@@ -929,6 +929,8 @@ All 14 photographer URLs submitted via IndexNow API 2026-10-20 → HTTP 200.
         `contributors`; `contributor_private` 2 rows, 2 emails, RLS on, 0 policies,
         0 anon/authenticated grants. Both importer scripts write `contributor_private`.
         Live `/community/photography` + `/elcarles78` render (2 contributors, 14 images).
+        Mobile store app checked by Carles 2026-11-04: Home "From the community" shows
+        both contributors, both detail pages open with photos. Commit `7819fbd`.
         Ponytail review: ship. **Skipped (rare, visible error):** if the private insert
         fails after the contributor insert, a re-run takes the "already exists" path and
         never writes the email → fix = upsert `contributor_private` (`onConflict:
