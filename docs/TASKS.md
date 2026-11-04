@@ -1053,6 +1053,9 @@ Photobook parked (results only). Details in the doc §2–3, §6.
       **After transfer (web task):** `public/.well-known/apple-app-site-association`
       has `ACN2RLHS2A.com.carlosdelrio.mosaicphotographyapp` → swap to the new
       Team ID (bundle ID stays); new EAS iOS credentials for the new team.
+      **Fallback decided (Carles, 2026-11-04):** if the Valhalio company account
+      isn't active in time, renew the personal account for Mosaic. Reminder set
+      for 2026-11-14 09:00 (Santiago).
 
 Porting to mobile: app monetization options (§6 F) are mobile work if chosen.
 
