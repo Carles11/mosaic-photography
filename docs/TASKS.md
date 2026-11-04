@@ -553,8 +553,9 @@ GA4, Traffic acquisition, session source / medium (sessions):
         `sitemap-0.xml`, `llms.txt` and both IndexNow lists (`scripts/indexnow.ts`,
         `src/app/api/indexnow/route.ts`) — done 2026-11-03 by openCode, prompt
         `docs/prompts/2026-11-03/drop-photo-curations-from-sitemap.md`. Lint OK,
-        sitemap-0 = 28 URLs. After the Amplify build: check live
-        `sitemap-0.xml` has no `photo-curations`. Mobile: nothing to port.
+        sitemap-0 = 28 URLs. Commit `a247012`; **verified live 2026-11-03**
+        (build 15:01 UTC): `sitemap-0.xml` 28 `<loc>`, 0 `photo-curations` in
+        sitemap-0 and `llms.txt`. Mobile: nothing to port.
   - [ ] Optional: remove `collection-sitemap.xml` from BWT Sitemaps.
 
 **2026-10-20 — Bing Webmaster Tools** (read live by Claude in Chrome; daily
@@ -1040,6 +1041,18 @@ Photobook parked (results only). Details in the doc §2–3, §6.
 - [ ] Score the monetization options (§6), incl. the photobook; fix the
       decision rule with a date and a number (§7).
 - [ ] **Before 2026-11-16:** decide the Apple Developer renewal.
+      **2026-11-04 (Carles):** waiting for the new Apple Developer account
+      (lio@valhalio.com) to activate, then **transfer the Mosaic iOS app** there
+      instead of paying two memberships. Facts checked (Apple "App transfer criteria"):
+      both accounts must be active, not pending/changing, with the latest free +
+      paid agreements accepted; app has ≥1 released version; not in review;
+      TestFlight builds/testers removed and Xcode Cloud data cleared first.
+      Mosaic has no IAP (Ko-fi only) and no Sign in with Apple, push or iCloud.
+      **Risk:** if the new account isn't active before 11-16, transfer can't
+      happen from a lapsed account → renew or accept the app leaving the store.
+      **After transfer (web task):** `public/.well-known/apple-app-site-association`
+      has `ACN2RLHS2A.com.carlosdelrio.mosaicphotographyapp` → swap to the new
+      Team ID (bundle ID stays); new EAS iOS credentials for the new team.
 
 Porting to mobile: app monetization options (§6 F) are mobile work if chosen.
 
