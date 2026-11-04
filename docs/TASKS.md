@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-10-26
+> Last reviewed: 2026-11-04
 
 ---
 
@@ -919,7 +919,23 @@ All 14 photographer URLs submitted via IndexNow API 2026-10-20 → HTTP 200.
         policy"; web avatar upload / replace / remove while logged in → OK.
         Mobile avatar upload not tested yet (same policy + path). Side note:
         mobile `deleteAvatar` has no callers (no remove button in the app).
-      - [ ] Stage B: `contributors.email` + `submission_notes` → private table.
+      - [x] **Stage B done 2026-11-04** (Claude Code,
+        `docs/prompts/2026-11-04/rls-b-contributors-private.md` →
+        `migrations/013_contributors_private_contact.sql`, rollback block at the end).
+        Pre-checks: `contributors.id` = uuid; trigger `handle_contributors_updated_at`
+        only sets `updated_at`. CSV backup outside git
+        (`WEBs\Mosaic\Supabase\contributors-before-013-2026-11-04.csv`). Run by Carles
+        in the SQL editor: success. Verified: `email` / `submission_notes` gone from
+        `contributors`; `contributor_private` 2 rows, 2 emails, RLS on, 0 policies,
+        0 anon/authenticated grants. Both importer scripts write `contributor_private`.
+        Live `/community/photography` + `/elcarles78` render (2 contributors, 14 images).
+        Ponytail review: ship. **Skipped (rare, visible error):** if the private insert
+        fails after the contributor insert, a re-run takes the "already exists" path and
+        never writes the email → fix = upsert `contributor_private` (`onConflict:
+        contributor_id`) in that branch, ~5 lines per script.
+        Seen on `/community/photography` (not fixed): Twitter description says "public
+        domain photographs by legendary photographers" (wrong for community, CC BY);
+        the "Unlike the public domain archive" paragraph appears twice.
       - [ ] Stage C: `public_profiles` view, then drop `user_profiles` `true` policy.
 - [x] **#9** Row count: live homepage carries 1,004 image rows, image sitemap
       1,000 unique → run `count(*)` on `images_resize`; if > 1,000, page with
@@ -1072,6 +1088,7 @@ When a task above is finished, port it:
 | New affiliate partners | The app needs its own toolkit/resources surface + affiliate disclosure. Check store policy on affiliate links before shipping. |
 | Photographer pages GEO (2026-10-21) | Brady's name fix is already live in the app (same table). Consider showing `intro_md` first on `PhotographerDetailScreen`; App Store wording check (Task 3 GEO step 2). |
 | Exclude flagged images from index (2026-10-24) | **Decided 2026-10-26: nothing to port** — the 18 stay visible in the app (option b). If Apple review ever objects, filter `exclude_from_index = true` in the 6 files that read `images_resize` and release. |
+| RLS Stage B, contributor contact private (2026-11-04) | Nothing breaks (`select("*")` just returns fewer fields). Cleanup only: drop `email` + `submission_notes` from `src/4-shared/types/contributor.ts`; no release needed for it. |
 | Traffic drop | Web-only (search indexing). The mobile equivalent is store listing / install analytics — track separately. |
 
 ---

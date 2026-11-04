@@ -63,7 +63,7 @@
 1. **Intake.** Submissions arrive by email via the form on `/community/photography` (mailto `submissions@mosaic.photography`). Confirm rights + chosen licence with the contributor (default `cc-by-4.0` — community images are **not** public domain).
 2. **Choose the slug** — ASCII, final. Never change it later (the `elcarles` → `elcarles78` change lost its 301; see TASKS Task 3).
 3. **Create the folder** `C:\Users\elcar\Documents\WEBs\Mosaic\Contributors\{slug}\` with:
-   - `contributor.json` — template in `import-instructions.txt` (slug, name, bio, description, website, instagram, featured, license_default, default_license_url, country, email, source_type `community`, nudity, workType, category). Use the **same email** as their Mosaic account so the avatar is copied from `user_profiles`.
+   - `contributor.json` — template in `import-instructions.txt` (slug, name, bio, description, website, instagram, featured, license_default, default_license_url, country, email, source_type `community`, nudity, workType, category). Use the **same email** as their Mosaic account so the avatar is copied from `user_profiles`. The importer stores `email` and `submission_notes` in `contributor_private` (service role only), not in `contributors`.
    - `images.json` — optional per-image overrides (title, description, year, featured, nudity).
    - `originals\used\` — the final images (`.jpg .jpeg .png .tif .tiff .webp .nef`).
 4. **Dry run:**

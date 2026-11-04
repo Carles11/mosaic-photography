@@ -88,6 +88,16 @@ Example: `https://cdn.mosaic.photography/mosaic-collections/public-domain-collec
 | `filters` | jsonb | Persisted `GalleryFilter` object |
 | (other profile fields) | | |
 
+### `contributor_private`
+Contributor contact data, split out of the public `contributors` table (`migrations/013_contributors_private_contact.sql`). RLS on, **no policies**, no anon/authenticated grants: service role only (importer scripts, dashboard).
+
+| Column | Type | Notes |
+|---|---|---|
+| `contributor_id` | uuid | PK, FK to `contributors.id` on delete cascade |
+| `email` | text\|null | Contributor's contact email |
+| `submission_notes` | text\|null | Internal notes from the submission |
+| `created_at` | timestamptz | default now() |
+
 ### `affiliate_advertisers`
 | Column | Type | Notes |
 |---|---|---|
@@ -120,6 +130,7 @@ Example: `https://cdn.mosaic.photography/mosaic-collections/public-domain-collec
 - `collections`: users manage own collections; public read for shared collections
 - `comments`: public read; authenticated write own; see `migrations/003_setup_comments_rls.sql`
 - `user_profiles`: users read/write own row only
+- `contributor_private`: no policies; service role only
 
 ---
 

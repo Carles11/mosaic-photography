@@ -277,9 +277,7 @@ if (!contributor) {
       featured: contributorData.featured,
       license_default: contributorData.license_default,
       country: contributorData.country,
-      email: contributorData.email,
       source_type: contributorData.source_type,
-      submission_notes: contributorData.submission_notes,
       default_license_url: contributorData.default_license_url,
       nudity: contributorData.nudity,
       workType: contributorData.workType, // ⚠ check your DB column name — was camelCase in original
@@ -294,6 +292,20 @@ if (!contributor) {
   }
 
   contributor = newContributor;
+
+  // Contact data lives in contributor_private (service role only), not in the public table.
+  const { error: privateError } = await supabaseAdmin
+    .from("contributor_private")
+    .insert({
+      contributor_id: contributor.id,
+      email: contributorData.email,
+      submission_notes: contributorData.submission_notes,
+    });
+
+  if (privateError) {
+    console.error(privateError);
+    process.exit(1);
+  }
   console.log("✅ Contributor created");
 } else {
   console.log("✅ Contributor already exists");

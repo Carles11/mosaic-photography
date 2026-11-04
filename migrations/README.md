@@ -82,6 +82,10 @@ Locks `storage.objects` so authenticated users can only read/write/delete their 
 
 Adds `exclude_from_index` boolean to `images_resize` (default false). Marks 18 flagged images to be kept on the site but excluded from search indexes and CDN robots. (2026-10-24; reversible.)
 
+### 013_contributors_private_contact.sql
+
+Moves `contributors.email` and `submission_notes` into the new `contributor_private` table (RLS on, no policies: service role only), with a guard that aborts before the drop if the copy is incomplete. Rollback block at the end of the file.
+
 ## Verification
 
 After running the migrations, you can verify they worked by checking:
