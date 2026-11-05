@@ -86,6 +86,10 @@ Adds `exclude_from_index` boolean to `images_resize` (default false). Marks 18 f
 
 Moves `contributors.email` and `submission_notes` into the new `contributor_private` table (RLS on, no policies: service role only), with a guard that aborts before the drop if the copy is incomplete. Rollback block at the end of the file.
 
+### 014_user_profiles_public_view.sql
+
+Adds the read-only `public_profiles` view (`id`, `name` of comment authors) and drops the read-all `user_profiles` SELECT policy, so emails and other profile fields are no longer readable with the anon key. Run it before deploying the web change. Rollback block at the end of the file.
+
 ## Verification
 
 After running the migrations, you can verify they worked by checking:

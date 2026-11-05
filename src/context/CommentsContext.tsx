@@ -182,7 +182,7 @@ export function CommentsProvider({ children }: { children: React.ReactNode }) {
         ];
 
         const { data: profilesData } = await supabase
-          .from("user_profiles")
+          .from("public_profiles")
           .select("id, name")
           .in("id", userIds);
 

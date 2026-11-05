@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-11-04
+> Last reviewed: 2026-11-05
 
 ---
 
@@ -938,7 +938,20 @@ All 14 photographer URLs submitted via IndexNow API 2026-10-20 → HTTP 200.
         Seen on `/community/photography` (not fixed): Twitter description says "public
         domain photographs by legendary photographers" (wrong for community, CC BY);
         the "Unlike the public domain archive" paragraph appears twice.
-      - [ ] Stage C: `public_profiles` view, then drop `user_profiles` `true` policy.
+      - [x] **Stage C done 2026-11-05** (Claude Code,
+        `docs/prompts/2026-11-05/rls-c-public-profiles.md` →
+        `migrations/014_user_profiles_public_view.sql`, rollback block at the end).
+        Pre-check: `user_profiles` already had 4 own-row policies (incl. SELECT
+        `auth.uid() = id`), so only `"Allow read of public profile fields"` (`true`) was
+        dropped. New view `public_profiles` (`id`, `name`, only users who have commented;
+        security-definer on purpose, advisor will flag it). Web `CommentsContext` reads
+        author names from the view; every other `user_profiles` read is own-row (web +
+        mobile, checked). Run by Carles in the SQL editor: success. Verified as `anon`:
+        `user_profiles` 0 rows, `public_profiles` 6; `pg_policies` = the 4 own-row
+        policies. Ponytail review: ship. lint/tsc/tests clean. Mobile: nothing to port.
+        Not changed (out of scope): anon/authenticated still hold full table grants on
+        `user_profiles` (TRUNCATE etc. not reachable via REST); policies protect it.
+        **After deploy:** check comment author names still show on an image with comments.
 - [x] **#9** Row count: live homepage carries 1,004 image rows, image sitemap
       1,000 unique → run `count(*)` on `images_resize`; if > 1,000, page with
       `.range()` + `.order("id")` in the sitemap script. (Audit's "exactly 1,000"

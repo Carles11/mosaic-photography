@@ -82,11 +82,26 @@ Example: `https://cdn.mosaic.photography/mosaic-collections/public-domain-collec
 | `user_email` | text | Display name (not actual email) |
 
 ### `user_profiles`
-| Column | Type | Notes |
-|---|---|---|
-| `user_id` | uuid | Auth user ID |
-| `filters` | jsonb | Persisted `GalleryFilter` object |
-| (other profile fields) | | |
+Own row only (see RLS below); other users' names go through `public_profiles`.
+
+| Column | Notes |
+|---|---|
+| `id` | uuid, primary key, auth user ID |
+| `name` | Display name |
+| `last-name` | Last name (hyphen: quote it in SQL) |
+| `email` | User's email |
+| `role` | User role |
+| `instagram` | Instagram handle |
+| `website` | User's website URL |
+| `own_store_name` | User's store name |
+| `own_store_url` | User's store URL |
+| `avatar_url` | Public avatar URL |
+| `filters` | jsonb, persisted `GalleryFilter` object |
+| `created_at` | |
+| `updated_at` | |
+
+### `public_profiles` (view)
+`id` and `name` of users who have posted a comment; readable by anon and authenticated (`migrations/014_user_profiles_public_view.sql`). Runs as owner to read past `user_profiles` RLS, so the Supabase advisor flags it as a "security definer view": intended.
 
 ### `contributor_private`
 Contributor contact data, split out of the public `contributors` table (`migrations/013_contributors_private_contact.sql`). RLS on, **no policies**, no anon/authenticated grants: service role only (importer scripts, dashboard).
@@ -130,6 +145,7 @@ Contributor contact data, split out of the public `contributors` table (`migrati
 - `collections`: users manage own collections; public read for shared collections
 - `comments`: public read; authenticated write own; see `migrations/003_setup_comments_rls.sql`
 - `user_profiles`: users read/write own row only
+- `public_profiles` (view): read-only for anon/authenticated; `id`, `name` of comment authors
 - `contributor_private`: no policies; service role only
 
 ---
