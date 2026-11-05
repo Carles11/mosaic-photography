@@ -951,7 +951,27 @@ All 14 photographer URLs submitted via IndexNow API 2026-10-20 → HTTP 200.
         policies. Ponytail review: ship. lint/tsc/tests clean. Mobile: nothing to port.
         Not changed (out of scope): anon/authenticated still hold full table grants on
         `user_profiles` (TRUNCATE etc. not reachable via REST); policies protect it.
-        **After deploy:** check comment author names still show on an image with comments.
+        Commit `0aea956`, **verified live 2026-11-05:** deployed chunk reads
+        `public_profiles`. The commenter in Carles's screenshots shows "User 5d96ba71…"
+        because that account has no `user_profiles` row (fallback, same as before).
+      - [x] **Comment moderation, 2026-11-05** (found while checking Stage C live).
+        One account (`5d96ba71-6609-4dcc-b0d9-86cc5cf98873`, signed up 2026-08-29,
+        no profile) posted **18 explicit sexual comments in 28 min** on 29 Aug on nude
+        images, incl. `moulin_jeune-fille-nue-debout` (one of the 18 flagged images),
+        `von-plueschow_naked-boy-in-stream` and `von-gloeden_two-naked-youths-hugging-garden`
+        (both **not** flagged). Backup CSV outside git
+        (`WEBs\Mosaic\Supabase\comments-5d96ba71-before-delete-2026-11-05.csv`).
+        Found: `reports.reports_comment_id_fkey` → `comments` is ON DELETE CASCADE; 0
+        reports pointed at these comments. Deleted the 18 (guarded: count = 18, reports
+        = 0). Account banned (`auth.users.banned_until = 2999-12-31`; undo: set null).
+        The only other report ever (`reports` id `93411bc8…`, mobile report button,
+        2026-01-27, image 1410 `von-plueschow_naked-man-holding-sword`, "Inappropriate
+        content") had sat `pending` 9 months: Carles looked at it, "young man, not a
+        boy" → `status = 'rejected'`. Reporter: user since 2026-01-24, no other activity.
+        **Gap:** nobody gets told about new comments or reports (both apps). Idea 4 in
+        `docs/IDEAS.md`; Carles decides.
+        Open (Carles, not today): look again at the two unflagged "boy"/"youths" files
+        above against the minors list (Task 5).
 - [x] **#9** Row count: live homepage carries 1,004 image rows, image sitemap
       1,000 unique → run `count(*)` on `images_resize`; if > 1,000, page with
       `.range()` + `.order("id")` in the sitemap script. (Audit's "exactly 1,000"

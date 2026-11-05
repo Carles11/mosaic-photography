@@ -122,3 +122,19 @@ Pilot (cheap, ~$10–20): pick ~20 eligible images, generate 3 s teasers + one 1
 3. Teacher plan only if asked for / signs of classroom use.
 
 **Suggested next step:** web MVP first (setup screen + runner, no DB). A good first openCode task. Then port to mobile.
+
+---
+
+## Idea 4 — Comment and report moderation  `💡 idea`
+
+**Why (2026-11-05):** 18 explicit comments from one account sat public for 2+
+months, and the only in-app report waited 9 months as `pending`, because nobody
+is told when either arrives (details: TASKS.md Task 4, #16, "Comment moderation").
+Apple expects reported user content to be handled.
+
+Options, smallest first (Carles decides):
+- A weekly read-only SQL check (new comments + pending reports) as a scheduled task.
+- A notification on new report or comment (Supabase webhook / trigger → email).
+- A report button on the web too (today only the mobile app has one).
+- Pre-moderation (comments hidden until approved), or turning comments off.
+
