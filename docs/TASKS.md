@@ -1062,6 +1062,10 @@ Photobook parked (results only). Details in the doc §2–3, §6.
       10-24); Route 53 $0. Run-rate without firewall ≈ $13/month incl. VAT →
       total fixed cost ≈ **$25.50/month**. Still open: Awin Retouch4me, App Store
       12 months, Google Play.
+      **Awin done** (doc §2): YTD TASCHEN 25 + WhiteWall 386 clicks, 0 sales,
+      nothing pending; Oct alone 126 clicks. Retouch4me absent from the report
+      (links are Awin-tracked; unresolved). Enjox Toys still joined, never linked →
+      Carles decides whether to leave it. Still open: App Store 12 months, Google Play.
 - [x] Firewall: removed 2026-10-24 (disassociated in Amplify, web ACL
       deleted, budget alert `mosaic-monthly` $30). ~$28/month saved. Route 53
       zones already gone since 09-25. Details in the doc §1.1.

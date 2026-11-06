@@ -107,6 +107,24 @@ Plus Carles's hours (not costed; TODO: decide whether to put a value on them).
   clicks**, 0 sales. TASCHEN was barely seen; WhiteWall (print your own photos)
   doesn't fit the audience.
 - Ko-fi badge (nav + /about) live for months: **$0**.
+- **Awin re-check 2026-11-06** (Advertiser Performance, all publisher accounts,
+  read live by Claude in Chrome). Year to date (1 Jan – 6 Nov 2026): **TASCHEN DE
+  25 clicks, WhiteWall DE 386 clicks (5 impressions), 0 sales, €0 pending,
+  approved, bonus or declined.** October alone: TASCHEN 13, WhiteWall 113 (126 of
+  the year's 411 clicks, i.e. ~30 %, in one month). Most likely that comes from the
+  Oct photographer-page and hub work, which put more people on the pages that carry
+  the links. Other TASCHEN regions (FR, US, ES, UK): 0 clicks.
+- **Retouch4me: not in the report** (joined, programme launched 2026-03-07; EPC
+  $12.45 network-wide). The live `/toolkit/retouch4me` page does use Awin links
+  (`tidd.ly` short links plus one `awin1.com … v=123978`), so it's tracked. Either
+  nobody clicked, or the report's region list (FR/DE/IT/ES/UK/US) doesn't cover the
+  programme's region. Unresolved; low value.
+- Joined programmes (12; page 1 of 2 read): TASCHEN DE/ES/FR/UK/US, WhiteWall DE, retouch4me,
+  Poster Master US + Big Wall Decor US (both hidden on the site) and **Enjox Toys,
+  still joined though never linked** (adult-adjacent, rule says no). Carles decides
+  whether to leave it.
+- Reading: ~400 clicks in 10 months and 0 sales. Affiliate (§6 J) isn't going to
+  cover ~$25/month without a different audience.
 
 ## 3. Audience
 
