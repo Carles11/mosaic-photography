@@ -134,6 +134,7 @@ A trigger on `public.reports` emails `mosaic@rio-frances.com` through Resend on 
   Good: `status_code` 200 and an `id` in `content`. 400 or 401 = key invalid or deleted, 403 = key inactive or suspended, or recipient or sender not allowed (`content` says which), 429 = Resend limit.
 - **Missed emails:** a failed email never blocks a report, so check `select * from public.reports where status = 'pending' order by created_at desc;`. If the key is missing or the trigger hits a SQL error, it only logs a warning (Supabase → Logs → Postgres).
 - **Recipient:** must stay the Resend account address, and `from` must stay `onboarding@resend.dev`, until a domain is verified in Resend.
+- **Never add `net` or `vault` to Data API → Exposed schemas.** `pg_net`'s queue holds the key for a few seconds and Supabase grants it to `PUBLIC` (owner `supabase_admin`, can't be revoked by us). Keeping `net` unexposed is what keeps it private (checked 2026-11-06).
 
 ---
 

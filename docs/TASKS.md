@@ -1139,7 +1139,7 @@ Porting to mobile: app monetization options (§6 F) are mobile work if chosen.
 
 ## Task 6 — Moderation alerts
 
-`[~]` **Goal:** Carles hears about reported content without checking the database.
+`[x]` **Goal:** Carles hears about reported content without checking the database.
 From `docs/IDEAS.md` Idea 4, **decided 2026-11-06 (Carles):** email to
 `mosaic@rio-frances.com` on every new report (comment or image). **No email per
 comment.**
@@ -1150,8 +1150,8 @@ comment.**
   `mosaic@rio-frances.com` (alias of his mailbox). Without a verified domain, Resend
   only delivers to the account address, which is exactly the one recipient we need.
 - Prompt: `docs/prompts/2026-11-06/report-email-alerts.md` (Claude Code, migration 015).
-- [ ] Carles: Resend account + API key (Sending access), stored in Vault.
-- [ ] Migration 015 run + test report → email received → test row deleted.
+- [x] Carles: Resend account + API key (Sending access), stored in Vault (2026-11-06).
+- [x] Migration 015 run + test report → email received → test row deleted (2026-11-06).
 - Later (not decided): weekly digest of new comments; report button on the web
   (today mobile only).
 - **2026-11-06, migration 015 written, not run yet** (`migrations/015_report_email_alerts.sql`,
@@ -1168,6 +1168,21 @@ comment.**
     (`trigger.c`). Check 2 in the migration confirms it live.
   - One email per report with no rate limit: a signed-in user could flood the mailbox and
     use up the Resend quota. Reports still save. Not addressed.
+- **2026-11-06, live and verified** (Carles, SQL editor; Claude checked each result).
+  Column check: all ids as expected (`reports.image_id`, `comments.image_id`,
+  `images_resize.id` all bigint; the "text" note above was wrong, harmless). Vault secret
+  `resend_api_key` added. 015 ran: success. Check 2 (insert as `authenticated`, rolled
+  back): no permission error. Test report (image 1410) → email in the **inbox** of
+  `mosaic@rio-frances.com` within a minute, all fields correct → test row deleted by id
+  (1 row).
+  - Check 1 was **true/true**, not false: `net.http_request_queue` and `net._http_response`
+    belong to `supabase_admin`, which grants all rights to `PUBLIC` (Supabase's default
+    pg_net setup). Our role can't revoke it (tried: no effect). **Not reachable from
+    outside:** Data API exposed schemas = `public`, `graphql_public` only (screenshot
+    2026-11-06). Rule added to RUNBOOKS §7: never expose `net` (or `vault`).
+  - Seen, not changed: Data API "Automatically expose new tables" is **on** (Supabase
+    recommends off). Carles decides.
+  - Branch `feat/report-email-alerts` (`0b3988e` + this note), merged to `main`.
 
 Porting to mobile: nothing to code (the trigger fires for app reports too).
 
