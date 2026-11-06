@@ -1056,7 +1056,7 @@ Photobook parked (results only). Details in the doc §2–3, §6.
       (`/natalie-and-alexander` etc., ~360 sessions) in the Mosaic GA4 property,
       not investigated. Still open: AWS Oct bill, Awin Retouch4me clicks, App Store
       12 months, Google Play.
-      Later same day: foreign paths = 6 weddweb couple URLs on
+      Later same day: foreign paths = 6 couple-name paths (look like weddweb tenant URLs, unconfirmed) on
       `www.mosaic.photography`, 28 Dec–20 Jan only, 479 sessions; Carles: leave it.
       **AWS Oct bill done** (doc §1.1): $33.86 incl. $17.76 firewall (billed until
       10-24); Route 53 $0. Run-rate without firewall ≈ $13/month incl. VAT →

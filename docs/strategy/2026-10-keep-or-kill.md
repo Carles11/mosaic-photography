@@ -180,13 +180,14 @@ deduplicated total. Treat them as ±1 %.
   **Checked 2026-11-06:** hostname = `www.mosaic.photography`, so the visits
   really arrived at Mosaic. Mosaic's GA4 is not running on another site. All of
   them fall between 28 Dec 2025 and 20 Jan 2026, in two bursts (~2 Jan and
-  ~14 Jan), and six weddweb couple paths are involved: natalie-and-alexander 141,
+  ~14 Jan), and six couple-name paths are involved (they *look like* weddweb tenant URLs; not confirmed): natalie-and-alexander 141,
   danielle-and-david 139, frank-and-kate 77, rebecca-and-chris 65,
   mark-and-nikisha 39, maddy-and-ben 18 (**479 sessions**). Every one is a new
   user with 0 s engagement. Live, these paths return 404 on Mosaic. None after
-  Jan 2026. Likely cause: weddweb links (invitation / share / QR) were built with
-  the Mosaic domain at that time, so guests landed on a Mosaic 404. That's a
-  weddweb bug, to be checked in the weddweb repo. Effect on Mosaic numbers:
+  Jan 2026. Hypothesis (unproven): links somewhere (e.g. weddweb invitation /
+  share / QR) were built with the Mosaic domain at that time, so guests landed on
+  a Mosaic 404. Could also be a bot or an unrelated source. Carles checks in the
+  weddweb repo (prompt `docs/prompts/2026-11-06/weddweb-mosaic-domain-check.md`). Effect on Mosaic numbers:
   Dec 2025 / Jan 2026 are inflated by ~480 sessions (Jan real ≈ 2,500).
 
 **Search queries (read 2026-10-24):** "nude" is the traffic.
