@@ -125,7 +125,7 @@ Pilot (cheap, ~$10–20): pick ~20 eligible images, generate 3 s teasers + one 1
 
 ---
 
-## Idea 4 — Comment and report moderation  `💡 idea`
+## Idea 4 — Comment and report moderation  `💡 idea` → report alerts moved to TASKS Task 6 (2026-11-06)
 
 **Why (2026-11-05):** 18 explicit comments from one account sat public for 2+
 months, and the only in-app report waited 9 months as `pending`, because nobody

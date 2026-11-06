@@ -1134,6 +1134,29 @@ Photobook parked (results only). Details in the doc §2–3, §6.
 
 Porting to mobile: app monetization options (§6 F) are mobile work if chosen.
 
+
+---
+
+## Task 6 — Moderation alerts
+
+`[~]` **Goal:** Carles hears about reported content without checking the database.
+From `docs/IDEAS.md` Idea 4, **decided 2026-11-06 (Carles):** email to
+`mosaic@rio-frances.com` on every new report (comment or image). **No email per
+comment.**
+
+- Route: DB trigger on `public.reports` → `pg_net` → Resend HTTP API, key in Supabase
+  Vault (`resend_api_key`). No Edge Function (Edge Functions can't use SMTP ports 25/587,
+  so Carles's own SMTP was dropped). Resend account to be created by Carles with
+  `mosaic@rio-frances.com` (alias of his mailbox). Without a verified domain, Resend
+  only delivers to the account address, which is exactly the one recipient we need.
+- Prompt: `docs/prompts/2026-11-06/report-email-alerts.md` (Claude Code, migration 015).
+- [ ] Carles: Resend account + API key (Sending access), stored in Vault.
+- [ ] Migration 015 run + test report → email received → test row deleted.
+- Later (not decided): weekly digest of new comments; report button on the web
+  (today mobile only).
+
+Porting to mobile: nothing to code (the trigger fires for app reports too).
+
 ---
 
 ## Porting to mobile
