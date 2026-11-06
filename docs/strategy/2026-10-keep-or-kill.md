@@ -56,6 +56,29 @@ JSON backup in `WEBs\Mosaic`). Budget alert `mosaic-monthly` = $30/month
 Amplify → Firewall if an attack ever shows up. Route 53: zones were deleted
 2026-09-25 (Task 3); Sep $1 was the partial month → expect $0 from Oct.
 
+**2026-11-06 — October bill checked** (Billing → Bills, read live by Claude in
+Chrome; issued 2026-11-01). **Total $33.86** = $28.43 pre-tax + $5.41 VAT.
+
+| Item (Oct 2026) | $ |
+|---|---|
+| Amplify firewall (`HOSTING_WAF`, 0.763 months) | 11.44 |
+| WAF (service) | 6.32 |
+| Amplify bandwidth out (47.75 GB) | 7.16 |
+| Amplify SSR compute (duration + requests) | 2.03 |
+| Amplify build minutes (135 min) | 1.35 |
+| S3 | 0.13 |
+| Route 53 | **not on the bill (0)** |
+| CloudFront, CloudWatch, others | 0.00 |
+
+- The firewall was still billed until it was removed on 10-24 (0.763 months ≈
+  24 days): $17.76 of the $28.43.
+- **Without the firewall, October would have cost $10.67 pre-tax ≈ $12.70 incl.
+  VAT.** November so far (1–6 Nov, estimate): $2.06 pre-tax, no WAF line, which
+  points to ~$11–12 pre-tax / ~$13–14 incl. VAT for a full month. Confirmed: the
+  firewall and Route 53 are gone.
+- Bandwidth is now the largest item (~$7/month). The homepage HTML (0.9 MB,
+  Task 4 Batch 2) is the main lever if this needs to go lower.
+
 ### 1.2 Other fixed costs
 
 | Item | Cost | Per month | Note |
@@ -72,6 +95,7 @@ Amplify → Firewall if an attack ever shows up. Route 53: zones were deleted
 |---|---|
 | Today (AWS Sep + domain + Apple) | **≈ $53** (≈ $640/year) |
 | Without firewall (estimate) | **≈ $25–28** (≈ $300–340/year) |
+| **From Nov 2026 (measured, 2026-11-06):** AWS ~$13 + domain $4.31 + Apple $8.25 | **≈ $25.50** (≈ $310/year) |
 
 Plus Carles's hours (not costed; TODO: decide whether to put a value on them).
 
