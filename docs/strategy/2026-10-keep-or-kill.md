@@ -220,7 +220,47 @@ App Store Connect, last 30 days to 2026-10-22 (Analyse → Übersicht):
   baseline 2026-10-20: #1 in 6/6 answers for the iPhone-app query).
 - Impressions grew sharply after the 2026-10-21 promo-text change; conversion
   from impression to download is low.
-- TODO: App Store downloads for 12 months; Google Play installs + active users.
+- ~~TODO: App Store downloads for 12 months; Google Play installs + active users.~~
+  Done 2026-11-06, below.
+
+**App Store, lifetime 28 Nov 2025 – 4 Nov 2026** (Analyse → Kennzahlen, read live
+2026-11-06 by Claude in Chrome). App "Mosaic — Vintage Photography" (id 6755329136),
+release 28 Nov 2025. **247 first-time downloads**, 692 product page views.
+
+| Month | First-time downloads |
+|---|---|
+| Nov 2025 (from 28 Nov, launch) | 44 |
+| Dec 2025 | 46 |
+| Jan 2026 | 4 |
+| Feb | 19 |
+| Mar | 21 |
+| Apr | 6 |
+| May | 22 |
+| Jun | 12 |
+| Jul | 9 |
+| Aug | 22 |
+| Sep | 20 |
+| Oct 2026 | 18 |
+| Nov 2026 (1–4) | 4 |
+
+- After the launch burst (90 in 5 weeks), the app stays flat at **~5–22/month,
+  avg ~15**. The +162 % impressions after the 2026-10-21 promo-text change didn't
+  turn into more downloads (Oct 18 vs Sep 20).
+- Last 90 days (7 Aug – 4 Nov): 62 first-time downloads (+67.6 %), 6 re-downloads,
+  10.4K impressions (+104 %), 216 page views, conversion 0.8 %, 2 crashes (1.4.0 iOS).
+  Retention: "not enough data" (opt-in only).
+- Note: the 2026-10-22 figure "58 in 30 days" above was most likely the 90-day view
+  (the overview defaults to 90 days).
+- **Google Play, 1 Nov 2025 – 5 Nov 2026** (Statistiken, read live 2026-11-06 by
+  Claude in Chrome; private developer account "Carles del Río Francés", second
+  Google login in Chrome, *not* `c.delriofrances@gmail.com`, which only holds the
+  new empty VALHALIO account). App `com.carlos_delrio.mosaicphotographyapp`, last
+  updated 8 Jun 2026. **88 new users in 12 months** (Nov 10, Dec 12, Jan 4, Feb 1,
+  Mar 8, Apr 9, May 4, Jun 6, Jul 6, Aug 15, Sep 8, Oct 4, Nov 1–5 1). Installed
+  audience ~10–18 devices/day all year (≈13 now). Last 28 days: 6 device
+  acquisitions, 3 monthly active devices.
+- **Both stores together: ~335 first-time installs in 12 months, ~20/month after
+  launch.** iOS is ~3/4 of it.
 
 ## 4. Why it doesn't grow (diagnosis)
 

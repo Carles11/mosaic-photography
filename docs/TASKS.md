@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-11-05
+> Last reviewed: 2026-11-06
 
 ---
 
@@ -1049,8 +1049,8 @@ homepage; Google 347 vs 21 query clicks) → **keep "nude" on the web.** Awin
 Photobook parked (results only). Details in the doc §2–3, §6.
 
 **Next (one per session, in order):**
-- [ ] Data: GA4 monthly sessions 12 months; Awin clicks per programme; Google
-      Play installs; App Store 12 months. Fill §2–3 of the doc.
+- [x] Data: GA4 monthly sessions 12 months; Awin clicks per programme; Google
+      Play installs; App Store 12 months. Fill §2–3 of the doc. (2026-11-06)
       2026-11-06: **GA4 done** (doc §3.1): 26,578 sessions in 12 months, peak
       Dec 2025 3,702, Oct 2026 1,480 (lowest). Foreign wedding-style paths
       (`/natalie-and-alexander` etc., ~360 sessions) in the Mosaic GA4 property,
@@ -1066,6 +1066,11 @@ Photobook parked (results only). Details in the doc §2–3, §6.
       nothing pending; Oct alone 126 clicks. Retouch4me absent from the report
       (links are Awin-tracked; unresolved). Enjox Toys still joined, never linked →
       Carles decides whether to leave it. Still open: App Store 12 months, Google Play.
+      Enjox: **decided 2026-11-06 (Carles): leave as is** (joined, never linked, no effect).
+      **App Store done** (doc §3.2): 247 first-time downloads lifetime (from 28 Nov
+      2025), ~15/month after the launch burst; Oct 18. **Google Play done:** 88 new
+      users in 12 months, ~13 installed devices (private dev account, second Google
+      login in Chrome). → **Data item complete**; next: score §6 + fix the rule (§7).
 - [x] Firewall: removed 2026-10-24 (disassociated in Amplify, web ACL
       deleted, budget alert `mosaic-monthly` $30). ~$28/month saved. Route 53
       zones already gone since 09-25. Details in the doc §1.1.
