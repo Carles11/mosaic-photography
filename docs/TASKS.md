@@ -1154,6 +1154,20 @@ comment.**
 - [ ] Migration 015 run + test report → email received → test row deleted.
 - Later (not decided): weekly digest of new comments; report button on the web
   (today mobile only).
+- **2026-11-06, migration 015 written, not run yet** (`migrations/015_report_email_alerts.sql`,
+  runbook section 7). Findings:
+  - Id types disagree: `comments.image_id` is text (migration 004), `reports.image_id` a
+    number (mobile model), `images_resize.id` "uuid/text" in `docs/data-model.md`. The
+    trigger compares them as text, so it works whatever the column check shows.
+  - The mobile sheet (`ReportBottomSheet.tsx`) can send `comment_id`, `image_id` and
+    `reported_user_id`, and `reason` can be free text. A report with only a user gets the
+    plain subject `Mosaic: new report`; the subject is kept to one line.
+  - `pg_net` keeps responses only 6 hours, so check a failed send soon. `reports` stays the
+    record of what came in.
+  - Revoking EXECUTE is safe: Postgres checks it at `CREATE TRIGGER`, not when firing
+    (`trigger.c`). Check 2 in the migration confirms it live.
+  - One email per report with no rate limit: a signed-in user could flood the mailbox and
+    use up the Resend quota. Reports still save. Not addressed.
 
 Porting to mobile: nothing to code (the trigger fires for app reports too).
 

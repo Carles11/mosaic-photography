@@ -123,6 +123,18 @@ From `C:\mosaicapp\README.md` → "Release Checklist":
 3. Test login, filters, age gate, downloads, favorites, collections, comments, reports, profile.
 4. JS-only change → `eas update --channel production --message "…"`. Native change → `eas build --profile production` then `eas submit --profile production`.
 
+## 7. Report email alerts
+
+A trigger on `public.reports` emails `mosaic@rio-frances.com` through Resend on every new report (`migrations/015_report_email_alerts.sql`).
+
+- **Key:** Supabase Vault secret `resend_api_key` (Project → Integrations → Vault). Never put it anywhere else.
+- **Rotate:** create a new key in Resend, edit the secret's value in Vault (keep the name), then delete the old key in Resend. The trigger reads the secret on every report, so nothing else changes.
+- **Check failures** (SQL editor; `pg_net` keeps responses for only 6 hours):
+  `select id, status_code, content, timed_out, error_msg, created from net._http_response order by created desc limit 20;`
+  Good: `status_code` 200 and an `id` in `content`. 400 or 401 = key invalid or deleted, 403 = key inactive or suspended, or recipient or sender not allowed (`content` says which), 429 = Resend limit.
+- **Missed emails:** a failed email never blocks a report, so check `select * from public.reports where status = 'pending' order by created_at desc;`. If the key is missing or the trigger hits a SQL error, it only logs a warning (Supabase → Logs → Postgres).
+- **Recipient:** must stay the Resend account address, and `from` must stay `onboarding@resend.dev`, until a domain is verified in Resend.
+
 ---
 
 ## Inconsistencies found while writing this (not fixed — Carles decides)

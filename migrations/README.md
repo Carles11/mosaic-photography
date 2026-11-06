@@ -90,6 +90,10 @@ Moves `contributors.email` and `submission_notes` into the new `contributor_priv
 
 Adds the read-only `public_profiles` view (`id`, `name` of comment authors) and drops the read-all `user_profiles` SELECT policy, so emails and other profile fields are no longer readable with the anon key. Run it before deploying the web change. Rollback block at the end of the file.
 
+### 015_report_email_alerts.sql
+
+Adds a trigger on `reports` that emails the owner through Resend (`pg_net`, key in Vault secret `resend_api_key`). Create the secret first. Test and rollback blocks at the end of the file; see `docs/RUNBOOKS.md` section 7.
+
 ## Verification
 
 After running the migrations, you can verify they worked by checking:
