@@ -1051,6 +1051,11 @@ Photobook parked (results only). Details in the doc §2–3, §6.
 **Next (one per session, in order):**
 - [ ] Data: GA4 monthly sessions 12 months; Awin clicks per programme; Google
       Play installs; App Store 12 months. Fill §2–3 of the doc.
+      2026-11-06: **GA4 done** (doc §3.1): 26,578 sessions in 12 months, peak
+      Dec 2025 3,702, Oct 2026 1,480 (lowest). Foreign wedding-style paths
+      (`/natalie-and-alexander` etc., ~360 sessions) in the Mosaic GA4 property,
+      not investigated. Still open: AWS Oct bill, Awin Retouch4me clicks, App Store
+      12 months, Google Play.
 - [x] Firewall: removed 2026-10-24 (disassociated in Amplify, web ACL
       deleted, budget alert `mosaic-monthly` $30). ~$28/month saved. Route 53
       zones already gone since 09-25. Details in the doc §1.1.

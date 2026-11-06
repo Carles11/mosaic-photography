@@ -96,7 +96,45 @@ Plus Carles's hours (not costed; TODO: decide whether to put a value on them).
   plus a halving of impressions on 16 Oct (unexplained; re-check 2026-10-27).
 - Google: 26 Jun 2026 spam-update cliff (−83 % impressions); no recovery yet.
 - Registered users: **134** (`user_profiles`, 2026-10-23).
-- TODO: GA4 monthly sessions for 12 months; engaged sessions; top pages.
+- ~~TODO: GA4 monthly sessions for 12 months; engaged sessions; top pages.~~
+  Done 2026-11-06, see "GA4, 12 months" below.
+
+**GA4, 12 months, 1 Nov 2025 – 31 Oct 2026** (read live 2026-11-06 by Claude in
+Chrome; Traffic acquisition × Month). Total **26,578 sessions**, 16,067 engaged
+(60.4 %), avg engagement 1m 25s, revenue $0. Organic Search 21,338 (80.3 %),
+Direct 4,395 (16.5 %), AI Assistant 389 (1.5 %, from Jun 2026), Referral 273,
+Unassigned 175, Organic Social 65.
+
+| Month | Sessions | Engaged | Organic Search | Direct | AI Assistant |
+|---|---|---|---|---|---|
+| Nov 2025 | 2,793 | 1,727 | 2,243 | 506 | – |
+| Dec 2025 | **3,702** | 2,318 | 3,113 | 539 | – |
+| Jan 2026 | 2,973 | 1,511 | 2,122 | 819 | – |
+| Feb | 1,909 | 1,172 | 1,644 | 234 | – |
+| Mar | 1,831 | 1,154 | 1,550 | 243 | – |
+| Apr | 2,045 | 1,300 | 1,749 | 263 | – |
+| May | 2,200 | 1,353 | 1,819 | 317 | – |
+| Jun | 1,820 | 1,091 | 1,453 | 318 | 10 |
+| Jul | 2,431 | 1,488 | 1,997 | 316 | 69 |
+| Aug | 2,096 | 1,330 | 1,650 | 295 | 111 |
+| Sep | 1,626 | 1,019 | 1,248 | 242 | 102 |
+| Oct 2026 | **1,480** | 896 | 1,018 | 306 | 96 |
+
+Monthly rows are summed per channel, so they add up to 26,906, ~1 % above the
+deduplicated total. Treat them as ±1 %.
+
+- Trend: peak Dec 2025, then 1,800–2,400/month through Aug, then down to
+  **1,480 in Oct (−60 % vs Dec, −33 % vs the 12-month avg of ~2,215)**.
+  Organic Search Oct = 1,018, the lowest month in the year. Sep includes the
+  7-day TLS outage; Oct doesn't.
+- Landing pages: `/` 24,638 (92.7 %), `(not set)` 331, von-plueschow 206 (avg
+  5m 58s), von-gloeden 107, `/app` 103, weston 94, moulin 71. 91 landing pages
+  in total.
+- ⚠️ **Foreign hits in the Mosaic property:** `/natalie-and-alexander` 141,
+  `/danielle-and-david` 140, `/frank-and-kate` 77 (sessions = users = new users,
+  0 s engagement). These paths don't exist on Mosaic and look like wedding
+  pages (weddweb?), so another site is probably sending to this GA4 property, or
+  it's spam. ~360+ sessions, ~1.4 %. Not investigated yet.
 
 **Search queries (read 2026-10-24):** "nude" is the traffic.
 - Bing 12 months: 21.3K clicks / 220.6K impressions; **21.0K clicks (98.6 %)
