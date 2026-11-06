@@ -557,6 +557,12 @@ GA4, Traffic acquisition, session source / medium (sessions):
         (build 15:01 UTC): `sitemap-0.xml` 28 `<loc>`, 0 `photo-curations` in
         sitemap-0 and `llms.txt`. Mobile: nothing to port.
   - [ ] Optional: remove `collection-sitemap.xml` from BWT Sitemaps.
+  - **Queued 2026-11-06 (not started):** now, no homepage change: BWT sitemap
+    removal above; `/community/photography` duplicate paragraph + wrong Twitter
+    description (openCode prompt); backlinks via rio-outreach-hub `find-prospects`.
+    After the 11-17 BWT reading only: homepage payload (repeated `base_url`,
+    `description` lazily for the lightbox) and #14 (`headers()` makes every
+    route dynamic, TTFB ~1 s).
 
 **2026-10-20 — Bing Webmaster Tools** (read live by Claude in Chrome; daily
 series from the BWT Search Performance API, 12 months).
