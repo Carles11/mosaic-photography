@@ -1107,6 +1107,10 @@ Photobook parked (results only). Details in the doc §2–3, §6.
       **Fallback decided (Carles, 2026-11-04):** if the Valhalio company account
       isn't active in time, renew the personal account for Mosaic. Reminder set
       for 2026-11-14 09:00 (Santiago).
+      **2026-11-06 check (Carles, screenshot):** Valhalio enrollment submitted
+      2026-11-02, account shows "Servicios Tecnologicos Valhalio SpA (Ausstehend)",
+      "Ihre Registrierung wird bearbeitet". D-U-N-S received 10-26 and matched by
+      Apple. Still pending → transfer not possible yet. Decision stays on 11-14.
 
 Porting to mobile: app monetization options (§6 F) are mobile work if chosen.
 
