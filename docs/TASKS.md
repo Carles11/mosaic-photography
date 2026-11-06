@@ -1111,6 +1111,13 @@ Photobook parked (results only). Details in the doc §2–3, §6.
       - [ ] Re-run `scripts/generate-cdn-robots.ts` whenever the flag changes.
 - [ ] Score the monetization options (§6), incl. the photobook; fix the
       decision rule with a date and a number (§7).
+      **Parked 2026-11-06 (Carles):** other apps first; pick up later. Draft on
+      the table (not decided): one money test = E paid high-res packs, non-nude
+      first (payment-provider nudity policies unchecked) + H curator page; B/C/F
+      not now; rule draft: checkpoint 2027-02-28 (≥1 sale, else minimum mode),
+      final 2027-05-31 (Mar–May revenue ≥ costs ≈ $77, else close in June).
+      Bar: ≈ $25.50/month, ≈ $17 if Valhalio carries the Apple fee.
+      Apple renewal (11-14) is not blocked by this: fallback already decided.
 - [ ] **Before 2026-11-16:** decide the Apple Developer renewal.
       **2026-11-04 (Carles):** waiting for the new Apple Developer account
       (lio@valhalio.com) to activate, then **transfer the Mosaic iOS app** there
