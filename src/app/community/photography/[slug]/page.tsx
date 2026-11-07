@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  fetchAllContributorSlugsSSR,
-  fetchContributorBySlugSSR,
-} from "@/utils/fetchContributorBySlugSSR";
+import { fetchAllContributorSlugsSSR } from "@/utils/fetchContributorBySlugSSR";
 import PhotographerGalleryZoom from "@/components/gallery/PhotographerGalleryZoom";
 import Image from "next/image";
 import { fetchContributorBySlugWithFeaturedSSR } from "@/utils/fetchContributorBySlugWithFeaturedSSR";
 import ShareButtons from "@/components/buttons/ShareButtons";
 import Link from "next/link";
+import { serializeJsonLd } from "@/helpers/jsonLd";
+import {
+  markdownToPlainText,
+  trimToWordBoundary,
+} from "@/utils/clean-content";
 
 import styles from "./PhotographyDetail.module.css";
 
@@ -28,21 +30,28 @@ export async function generateMetadata({
   params,
 }: ContributorPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const contributor = await fetchContributorBySlugSSR(slug);
+  const contributor = await fetchContributorBySlugWithFeaturedSSR(slug);
 
   const baseUrl = `https://www.mosaic.photography/community/photography/${slug}`;
 
   if (!contributor) {
+    const description =
+      "Community users contributing with a gallery on Mosaic Photography. Browse photographs, collections and contemporary works.";
+
     return {
       title: "Community – Mosaic Photographers",
-      description:
-        "Community users contributing with a gallery on Mosaic Photography. Browse photographs, collections and private works.",
+      description,
       openGraph: {
         title: "Community – Mosaic Photographers",
-        description:
-          "Mosaic is a free, ad-free archive of public domain photography from the late 19th and early 20th centuries.",
+        description,
         type: "website",
         url: baseUrl,
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "Community – Mosaic Photographers",
+        description,
+        images: ["/images/og-image.jpg"],
       },
       alternates: {
         canonical: baseUrl,
@@ -50,16 +59,51 @@ export async function generateMetadata({
     };
   }
 
-  const description = `${contributor.name} contributor gallery on Mosaic Photography. Browse photographs, collections and public domain works.`;
+  const title = `${contributor.name} – Mosaic Contributors`;
+  const description = `${contributor.name} – contemporary photographs shared on Mosaic Photography's community gallery. The photographer keeps all rights.`;
+
+  const featuredImage = contributor.featuredImage;
+  const renditions = (featuredImage?.s3Progressive ?? []).filter(
+    (r) => !r.url.includes("/originalsWEBP/"),
+  );
+  const ogRendition =
+    renditions.find((r) => r.width === 1200) ??
+    renditions[renditions.length - 1];
+  const ogImageUrl =
+    ogRendition?.url ?? featuredImage?.url ?? "/images/og-image.jpg";
+  const ogWidth = ogRendition?.width;
+  const ogHeight =
+    ogRendition && featuredImage?.width && featuredImage?.height
+      ? Math.round(
+          (ogRendition.width * featuredImage.height) / featuredImage.width,
+        )
+      : undefined;
 
   return {
-    title: `${contributor.name} – Mosaic Contributors`,
+    title,
     description,
     openGraph: {
-      title: `${contributor.name} – Mosaic Contributors`,
+      title,
       description,
       type: "website",
       url: baseUrl,
+      images: [
+        {
+          url: ogImageUrl,
+          alt: contributor.name,
+          ...(ogWidth && ogHeight
+            ? { width: ogWidth, height: ogHeight }
+            : featuredImage
+              ? {}
+              : { width: 1200, height: 630 }),
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [ogImageUrl],
     },
     alternates: {
       canonical: baseUrl,
@@ -81,9 +125,69 @@ export default async function ContributorDetailPage({
   const shareUrl = `https://www.mosaic.photography/community/photography/${slug}`;
   const shareText = `${contributor.name} on Mosaic Photography`;
 
+  const imageUrl = heroImage
+    ? (heroImage.s3Progressive?.[0]?.url ??
+      heroImage.url ??
+      "/images/og-image.jpg")
+    : "/images/og-image.jpg";
+
+  const personDescription = contributor.description
+    ? trimToWordBoundary(markdownToPlainText(contributor.description), 300)
+    : "";
+
+  const profilePageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    mainEntity: {
+      "@type": "Person",
+      name: contributor.name,
+      url: shareUrl,
+      ...(heroImage ? { image: imageUrl } : {}),
+      ...(personDescription ? { description: personDescription } : {}),
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.mosaic.photography/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Community",
+        item: "https://www.mosaic.photography/community/photography",
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: contributor.name,
+        item: shareUrl,
+      },
+    ],
+  };
+
   // Then in the JSX, add this after the <h2> in aboutSection:
   return (
     <main className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd(profilePageJsonLd),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd(breadcrumbJsonLd),
+        }}
+      />
+
       <section className={styles.hero}>
         {heroImage && (
           <div className={styles.heroImageWrapper}>

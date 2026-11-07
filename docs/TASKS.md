@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-11-06
+> Last reviewed: 2026-11-07
 
 ---
 
@@ -556,13 +556,24 @@ GA4, Traffic acquisition, session source / medium (sessions):
         sitemap-0 = 28 URLs. Commit `a247012`; **verified live 2026-11-03**
         (build 15:01 UTC): `sitemap-0.xml` 28 `<loc>`, 0 `photo-curations` in
         sitemap-0 and `llms.txt`. Mobile: nothing to port.
-  - [ ] Optional: remove `collection-sitemap.xml` from BWT Sitemaps.
+  - [x] Optional: remove `collection-sitemap.xml` from BWT Sitemaps. Done 2026-11-07
+        (Claude in Chrome, Carles's go): BWT now 3 sitemaps, 0 errors, 88 URLs discovered.
   - **Queued 2026-11-06 (not started):** now, no homepage change: BWT sitemap
     removal above; `/community/photography` duplicate paragraph + wrong Twitter
     description (openCode prompt); backlinks via rio-outreach-hub `find-prospects`.
     After the 11-17 BWT reading only: homepage payload (repeated `base_url`,
     `description` lazily for the lightbox) and #14 (`headers()` makes every
     route dynamic, TTFB ~1 s).
+  - **2026-11-07:** BWT sitemap removal done (see above). `/community/photography` fix
+    done locally by openCode (`docs/prompts/2026-11-07/community-page-meta-jsonld.md` +
+    follow-up `community-og-image-size.md`): duplicate "Unlike the public domain archive"
+    paragraph removed from the header; hub + contributor pages get their own `twitter`
+    block and `og:image` (the page `openGraph` replaced the layout's, so there was none);
+    contributor description no longer says "public domain works"; **new finding: neither
+    page had JSON-LD (rule 8)** → hub `CollectionPage` + `ItemList` + `BreadcrumbList`,
+    contributor `ProfilePage`/`Person` + `BreadcrumbList`. Contributor `og:image` = w1200
+    with real width/height. lint/tsc clean; dev curls checked. After deploy: verify live,
+    IndexNow the 3 URLs. Porting to mobile: n/a (web metadata only).
 
 **2026-10-20 — Bing Webmaster Tools** (read live by Claude in Chrome; daily
 series from the BWT Search Performance API, 12 months).

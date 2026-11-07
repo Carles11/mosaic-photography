@@ -6,30 +6,98 @@ import PhotographyClientForm from "./PhotographyClientForm";
 import styles from "./PhotographyCommunity.module.css";
 import Image from "next/image";
 import ShareButtons from "@/components/buttons/ShareButtons";
+import { serializeJsonLd } from "@/helpers/jsonLd";
+
+const PAGE_URL = "https://www.mosaic.photography/community/photography";
+const PAGE_TITLE = "Community Contributors – Mosaic Photography";
+const PAGE_DESCRIPTION =
+  "Contemporary photographers and creators who share their work through Mosaic Photography. Thoughtful, timeless image-making from around the world.";
 
 export const metadata: Metadata = {
-  title: "Community Contributors – Mosaic Photography",
-  description:
-    "Contemporary photographers and creators who share their work through Mosaic Photography. Thoughtful, timeless image-making from around the world.",
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
   openGraph: {
-    title: "Community Contributors – Mosaic Photography",
-    description:
-      "Contemporary photographers and creators who share their work through Mosaic Photography. Thoughtful, timeless image-making from around the world.",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
     type: "website",
-    url: "https://www.mosaic.photography/community/photography",
+    url: PAGE_URL,
+    images: [
+      {
+        url: "/images/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Mosaic Photography community: contemporary photographers",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    images: ["/images/og-image.jpg"],
   },
   alternates: {
-    canonical: "https://www.mosaic.photography/community/photography",
+    canonical: PAGE_URL,
   },
 };
 
 export default async function ContributorsPage() {
   const contributors = await fetchContributorsWithFeaturedSSR();
-  const shareUrl = "https://www.mosaic.photography/community/photography";
+  const shareUrl = PAGE_URL;
   const shareText =
     "Mosaic Photography Community – Contemporary photographers with a timeless eye";
+
+  const collectionPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Mosaic Photography community",
+    url: PAGE_URL,
+    description: PAGE_DESCRIPTION,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: contributors.map((c, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: c.name,
+        url: `${PAGE_URL}/${c.slug}`,
+      })),
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://www.mosaic.photography/",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Community",
+        item: PAGE_URL,
+      },
+    ],
+  };
+
   return (
     <main className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd(collectionPageJsonLd),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd(breadcrumbJsonLd),
+        }}
+      />
+
       <header className={styles.header}>
         <h1 className={styles.pageTitle}>The community</h1>
         <h2 className={styles.pageSubTitle}>
@@ -38,11 +106,8 @@ export default async function ContributorsPage() {
         </h2>
 
         <p className={styles.intro}>
-          Unlike the public domain archive, these photographs are contemporary
-          work — owned by the photographers who made them, presented here by
-          their choice. Mosaic displays them. The photographers keep everything
-          else. Their work reflects a similar appreciation for craftsmanship,
-          visual storytelling, and photographic heritage.
+          Their work shares the archive&apos;s appreciation for craftsmanship,
+          visual storytelling and photographic heritage.
         </p>
 
         <p className={styles.intro}>
