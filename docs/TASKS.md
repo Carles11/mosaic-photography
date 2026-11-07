@@ -576,7 +576,8 @@ GA4, Traffic acquisition, session source / medium (sessions):
     **verified live 2026-11-07:** hub paragraph ×1, twitter + og:image (og-image.jpg
     1200×630), CollectionPage/ItemList/BreadcrumbList; both contributor pages: no "public
     domain works", w1200 og:image with real size, ProfilePage/Person/BreadcrumbList; all
-    JSON-LD blocks parse (4 per page). IndexNow for the 3 URLs: Carles, Git Bash.
+    JSON-LD blocks parse (4 per page). IndexNow for the 3 URLs: Carles, Git Bash → 200.
+    **Next session ("weiter"):** backlinks via rio-outreach-hub `find-prospects` (last of the 11-06 queue).
     Note: `scripts/indexnow.ts` (postbuild) never sends community URLs; not changed.
     Seen, not changed (Carles decides): `akiuonsen` og:image is its featured nude photo,
     so share previews on social networks show a nude.
