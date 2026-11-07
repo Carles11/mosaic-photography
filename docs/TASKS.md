@@ -572,8 +572,15 @@ GA4, Traffic acquisition, session source / medium (sessions):
     contributor description no longer says "public domain works"; **new finding: neither
     page had JSON-LD (rule 8)** → hub `CollectionPage` + `ItemList` + `BreadcrumbList`,
     contributor `ProfilePage`/`Person` + `BreadcrumbList`. Contributor `og:image` = w1200
-    with real width/height. lint/tsc clean; dev curls checked. After deploy: verify live,
-    IndexNow the 3 URLs. Porting to mobile: n/a (web metadata only).
+    with real width/height. lint/tsc clean; dev curls checked. Shipped `edd8a9c`,
+    **verified live 2026-11-07:** hub paragraph ×1, twitter + og:image (og-image.jpg
+    1200×630), CollectionPage/ItemList/BreadcrumbList; both contributor pages: no "public
+    domain works", w1200 og:image with real size, ProfilePage/Person/BreadcrumbList; all
+    JSON-LD blocks parse (4 per page). IndexNow for the 3 URLs: Carles, Git Bash.
+    Note: `scripts/indexnow.ts` (postbuild) never sends community URLs; not changed.
+    Seen, not changed (Carles decides): `akiuonsen` og:image is its featured nude photo,
+    so share previews on social networks show a nude.
+    Porting to mobile: n/a (web metadata only).
 
 **2026-10-20 — Bing Webmaster Tools** (read live by Claude in Chrome; daily
 series from the BWT Search Performance API, 12 months).
