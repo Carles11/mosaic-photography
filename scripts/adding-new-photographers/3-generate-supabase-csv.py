@@ -1,15 +1,14 @@
 import os
 import csv
 import re
-from PIL import Image
+import sys
+import argparse
+from datetime import date
 
 ROOT = r"C:\Users\elcar\Documents\WEBs\Mosaic\IMGs"
 ROOTOUTPUT = r"C:\Users\elcar\Documents\WEBs\Mosaic\Supabase"
 CDN_BASE = "https://cdn.mosaic.photography/mosaic-collections/public-domain-collection"
-OUTPUT_CSV = os.path.join(ROOTOUTPUT, "images_resize_import_fix1.csv")
 
-if not os.path.exists(ROOTOUTPUT):
-    os.makedirs(ROOTOUTPUT)
 
 def fix_author(author_raw):
     photographer_map = {
@@ -22,24 +21,25 @@ def fix_author(author_raw):
         "anne-brigman": "Anne Brigman",
     }
     author_raw_lower = author_raw.strip().lower()
-    
+
     for key, val in photographer_map.items():
         if author_raw_lower == key or author_raw_lower == key.replace("-", " "):
             return val
-            
+
     if author_raw_lower:
         return " ".join([w.capitalize() for w in author_raw_lower.replace("-", " ").split()])
     return ""
+
 
 def parse_filename(filename):
     name, _ = os.path.splitext(filename)
     if name.endswith("_ms"):
         name = name[:-3]
-    
+
     # 1. Clean up "000_aaa_" prefix if present
     if name.startswith("000_aaa_"):
         name = name[len("000_aaa_"):]
-        
+
     # 2. Extract year using regex (catches -year-XXXX or _year-XXXX)
     year = ""
     year_match = re.search(r'[-_]year-(\d{4})', name)
@@ -47,13 +47,13 @@ def parse_filename(filename):
         year = year_match.group(1)
         # Remove the year block from the name so it doesn't pollute the title
         name = name.replace(year_match.group(0), "")
-        
+
     parts = name.split('_')
     author_raw = parts[0] if len(parts) > 0 else ""
     title_raw = parts[1] if len(parts) > 1 else ""
-    
+
     orientation, gender, color, nudity = "", "", "", "nude"
-    
+
     for p in parts[2:]:
         if p in ["vertical", "horizontal", "square"]:
             orientation = p
@@ -67,11 +67,11 @@ def parse_filename(filename):
                 gender = p
         elif p == "not-nude" or p == "not":
             nudity = "not-nude"
-            
+
     # Format Title (Title Case)
     title_words = [w for w in title_raw.replace("-", " ").split() if w]
     title_clean = " ".join([w.capitalize() for w in title_words])
-    
+
     # Format Description (Sentence Case)
     desc_clean = ""
     if title_clean:
@@ -79,39 +79,67 @@ def parse_filename(filename):
         desc_clean = title_clean[0].upper() + title_clean[1:].lower()
         if not desc_clean.endswith("."):
             desc_clean += "."
-            
+
     return author_raw, title_clean, year, orientation, gender, color, nudity, desc_clean
 
+
 def get_image_dimensions(full_path):
+    from PIL import Image
+
     try:
         with Image.open(full_path) as img:
             return img.width, img.height
     except Exception:
         return None, None
 
-rows = []
-target_photographers = ["matthew-brady", "julia-margaret-cameron"]
 
-for photographer in target_photographers:
-    pdir = os.path.join(ROOT, photographer)
-    if not os.path.isdir(pdir): continue
-    
+class Parser(argparse.ArgumentParser):
+    def error(self, message):
+        self.print_usage(sys.stderr)
+        self.exit(1, f"{self.prog}: error: {message}\n")
+
+
+def main():
+    parser = Parser(description="Generate the images_resize CSV for one photographer.")
+    parser.add_argument("--folder", required=True, help="Photographer folder slug")
+    parser.add_argument("--author", required=True, help="Display name / join key")
+    parser.add_argument("--out", default=None, help="Output CSV path")
+    args = parser.parse_args()
+
+    folder = args.folder
+    pdir = os.path.join(ROOT, folder)
     webp_dir = os.path.join(pdir, "originalsWEBP")
-    if not os.path.isdir(webp_dir): continue
-    
+
+    if not os.path.isdir(pdir):
+        print(f"Folder not found: {pdir}", file=sys.stderr)
+        return 1
+
+    if not os.path.isdir(webp_dir):
+        print(f"originalsWEBP folder not found: {webp_dir} (did step 1 finish?)", file=sys.stderr)
+        return 1
+
+    out_path = args.out or os.path.join(
+        ROOTOUTPUT, f"images_resize_{folder}_{date.today().isoformat()}.csv"
+    )
+    out_dir = os.path.dirname(out_path)
+    if out_dir and not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+
+    rows = []
+
     for img_file in os.listdir(webp_dir):
         if not img_file.lower().endswith('.webp'):
             continue
-            
+
         full_path = os.path.join(webp_dir, img_file)
         width, height = get_image_dimensions(full_path)
-        
+
         author_raw, title, year, orientation, gender, color, nudity, desc = parse_filename(img_file)
-        
+
         row = {
-            "base_url": f"{CDN_BASE}/{photographer}",
-            "filename": img_file, 
-            "author": fix_author(author_raw),
+            "base_url": f"{CDN_BASE}/{folder}",
+            "filename": img_file,
+            "author": args.author,
             "title": title,
             "year": year,
             "orientation": orientation,
@@ -126,11 +154,20 @@ for photographer in target_photographers:
         }
         rows.append(row)
 
-header = ["base_url", "filename", "author", "title", "year", "orientation", "color", "nudity", "width", "height", "print_quality", "description", "gender", "moderation"]
+    if not rows:
+        print(f"No rows produced for {folder}.", file=sys.stderr)
+        return 1
 
-with open(OUTPUT_CSV, "w", newline="", encoding="utf-8") as f:
-    writer = csv.DictWriter(f, fieldnames=header)
-    writer.writeheader()
-    writer.writerows(rows)
+    header = ["base_url", "filename", "author", "title", "year", "orientation", "color", "nudity", "width", "height", "print_quality", "description", "gender", "moderation"]
 
-print(f"Done! Processed {len(rows)} images. CSV saved to {OUTPUT_CSV}")
+    with open(out_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=header)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    print(f"Done! Processed {len(rows)} images. CSV saved to {out_path}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

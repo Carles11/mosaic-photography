@@ -1,9 +1,7 @@
 import fs from "fs";
 import path from "path";
-import sharp from "sharp";
 
-// UPDATE THIS!!!: Process both new photographers
-const authors = ["matthew-brady", "julia-margaret-cameron"];
+let sharp;
 
 const IMG_ROOT = "C:\\Users\\elcar\\Documents\\WEBs\\Mosaic\\IMGs";
 const supportedExtensions = [
@@ -15,6 +13,30 @@ const supportedExtensions = [
   ".bmp",
   ".webp",
 ];
+
+function printUsage() {
+  console.log(
+    "Usage: node scripts/adding-new-photographers/1-convert-originals-to-webp.mjs --folder <slug> [--folder <slug> ...]",
+  );
+}
+
+function parseFolders(argv) {
+  const folders = [];
+
+  for (let i = 0; i < argv.length; i++) {
+    if (argv[i] === "--folder") {
+      const value = argv[++i];
+      if (!value) throw new Error("Missing value for --folder");
+      folders.push(value);
+    } else if (argv[i] === "-h" || argv[i] === "--help") {
+      return null;
+    } else {
+      throw new Error(`Unknown argument: ${argv[i]}`);
+    }
+  }
+
+  return folders;
+}
 
 function toWebpName(filename) {
   return path.parse(filename).name + ".webp";
@@ -32,7 +54,23 @@ async function convertToWebp(imageName, originalsDir, outputDir) {
 }
 
 async function main() {
-  for (const author of authors) {
+  let folders;
+  try {
+    folders = parseFolders(process.argv.slice(2));
+  } catch (error) {
+    console.error(error.message);
+    printUsage();
+    process.exit(1);
+  }
+
+  if (!folders || folders.length === 0) {
+    printUsage();
+    process.exit(1);
+  }
+
+  ({ default: sharp } = await import("sharp"));
+
+  for (const author of folders) {
     const originalsDir = path.join(IMG_ROOT, author, "originals");
     const outputDir = path.join(IMG_ROOT, author, "originalsWEBP");
 
@@ -66,4 +104,5 @@ async function main() {
 
 main().catch((err) => {
   console.error(err);
+  process.exitCode = 1;
 });

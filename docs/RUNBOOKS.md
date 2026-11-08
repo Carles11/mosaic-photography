@@ -5,7 +5,7 @@
 > code is the truth; if a script changes, update the matching section here.
 > Where to run: **Git Bash in the web repo root** unless stated. Secrets live in
 > `.env.local` (repo root) and Amplify env vars — never paste them into docs/chat.
-> Last reviewed: 2026-09-26
+> Last reviewed: 2026-11-08
 
 **Common prerequisites**
 - `.env.local` with `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` (used by `scripts/lib/supabaseAdmin.mjs` and the sitemap scripts).
@@ -17,28 +17,31 @@
 
 ## 1. Steps to follow to add a new public-domain photographer and their photos
 
-**Scripts:** `scripts/adding-new-photographers/1-…mjs`, `2-…mjs`, `3-…py` · **Tables:** `photographers`, `images_resize` · **S3:** `mosaic-collections/public-domain-collection/{folder}/`
+**Scripts:** `scripts/adding-new-photographers/0-…mjs`, `1-…mjs`, `2-…mjs`, `3-…py`, `run-pipeline.mjs` · **Tables:** `photographers`, `images_resize` · **S3:** `mosaic-collections/public-domain-collection/{folder}/`
 
 1. **Check rights.** Photographer must be clearly public domain (CC PDM 1.0). Note the source of the originals.
 2. **Pick two names and keep them apart:**
    - `folder` = lowercase ASCII hyphen slug of the full name, e.g. `matthew-brady` → S3 folder, filename prefix, `base_url`.
    - `author` = display name, e.g. `Matthew Brady` → `photographers.author`, `images_resize.author`, `affiliate_products.photographer_author`. The photographer page joins images on `author` (`fetchPhotographerByIdSSR.ts`), so it must be **identical** in all three tables.
    - `slug` = URL `/photographers/{slug}` — ASCII only (see the `de-la-vaudère` problem in TASKS Task 1/3).
-3. **Put originals** in `C:\Users\elcar\Documents\WEBs\Mosaic\IMGs\{folder}\originals\`.
-4. **Rename every file** (lowercase, ASCII, no spaces — the parser in `3-…py` depends on it):
-   `{folder}_{title-in-hyphens}_year-{YYYY}_{orientation}_{gender}_{color}[_not-nude].jpg`
-   - orientation: `vertical|horizontal|square` · color: `bw|color|sepia` · gender: `male|female|couple|group|mixed`
-   - no `not-nude` token ⇒ the image is imported as **`nude`**. Check each one.
-   - portrait for cards: `000_aaa_{folder}.jpg` (filtered out of the gallery).
-5. **Edit the hardcoded lists** (they still say `matthew-brady`, `julia-margaret-cameron`):
-   - `authors` in `1-convert-originals-to-webp.mjs` and `2-generate-responsive-sizes.mjs`
-   - `target_photographers` in `3-generate-supabase-csv.py`; add `"{folder}": "{author}"` to `photographer_map` if plain title-case would be wrong (von, de La, accents); change `OUTPUT_CSV` to a new file name.
-6. **Run, in order:**
+3. **Fetch candidates from Wikimedia Commons** (writes `IMGs\{folder}\_commons\manifest.json` + `review.html`):
    ```bash
-   node scripts/adding-new-photographers/1-convert-originals-to-webp.mjs   # → originalsWEBP/ (q95)
-   node scripts/adding-new-photographers/2-generate-responsive-sizes.mjs   # → w400…w1600 (q85, never upscales)
-   python scripts/adding-new-photographers/3-generate-supabase-csv.py      # → …\Mosaic\Supabase\<csv>
+   node scripts/adding-new-photographers/0-fetch-from-commons.mjs --folder {folder} \
+     --category "Photographs by …" [--category "…"] [--file "File:…"] [--depth 2] [--min-px 1600] [--low-res-floor 900] [--max-year 1930]
    ```
+   Recurses into subcategories; keeps PD/CC0 only (LoC/Flickr “No restrictions” is accepted and flagged “No known restrictions: check”); jpeg/png/tiff; long side ≥ `--min-px` (1600) is normal, between `--low-res-floor` (900) and `--min-px` goes to the separate “Low resolution — exceptions only” section, below the floor is rejected. Explicit `--file` items skip the size filter so a small card portrait can still be reviewed. Rejected files stay in the manifest with a reason.
+   **Low-res rule:** `--min-px` stays 1600; a low-res card needs both `keep` and `accept low-res exception`, and `--apply` warns when exceptions exceed 10 % of kept images (portraits exempt).
+4. **Review in the browser.** Open `IMGs\{folder}\_commons\review.html` from disk in Chrome. For each kept card choose keep, nudity (`nude|not-nude`), gender, possible minor, title, year, colour and (optionally) the portrait. **Save decisions** → `decisions.json` (refuses while a kept card lacks nudity, gender, title or year; low-res cards also need “accept low-res exception”).
+5. **Download the kept originals** with the routine-1 filenames + provenance:
+   ```bash
+   node scripts/adding-new-photographers/0-fetch-from-commons.mjs --folder {folder} --apply path\to\decisions.json
+   ```
+   `possible minor` items are not downloaded (decide by hand, Task 5). `IMGs\{folder}\_commons\sources.csv` records Commons title, description URL, licence, credit, artist, date and the sheet's choices, including `low_res` and `license_note`. `--apply` prints the number of low-res exceptions kept and warns above 10 % of kept images.
+6. **Run the pipeline** (1 → 2 → 3, stops at the first failure):
+   ```bash
+   node scripts/adding-new-photographers/run-pipeline.mjs --folder {folder} --author "{author}"
+   ```
+   → `originalsWEBP/` (q95), `w400…w1600/` (q85, never upscales), `…\Mosaic\Supabase\images_resize_{folder}_{date}.csv`.
 7. **Review the CSV:** `author` exact, `nudity` per row, `year`, `orientation`. `print_quality` is always `standard` here (`scripts/fix_print_quality.py` exists to correct it later).
 8. **Upload to S3** (no script for this — same pattern as the contributor sync). Dry run first:
    ```bash
