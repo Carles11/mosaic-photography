@@ -8,7 +8,7 @@
 > Last reviewed: 2026-11-08
 
 **Common prerequisites**
-- `.env.local` with `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` (used by `scripts/lib/supabaseAdmin.mjs` and the sitemap scripts).
+- `.env` with `NEXT_PUBLIC_SUPABASE_URL` and `.env.local` with `SUPABASE_SERVICE_ROLE_KEY` (scripts load `.env`, then `.env.local` on top; used by `scripts/lib/supabaseAdmin.mjs` and the sitemap scripts).
 - AWS CLI logged in with write access to bucket `mosaic.photography` (served as `https://cdn.mosaic.photography/…`).
 - `yarn install` done (sharp); Python 3 + Pillow for the `.py` scripts.
 - Local image workspace (outside the repo): `C:\Users\elcar\Documents\WEBs\Mosaic\` → `IMGs\` (public-domain), `Contributors\` (community), `Supabase\` (CSV output).
@@ -17,7 +17,7 @@
 
 ## 1. Steps to follow to add a new public-domain photographer and their photos
 
-**Scripts:** `scripts/adding-new-photographers/0-…mjs`, `1-…mjs`, `2-…mjs`, `3-…py`, `run-pipeline.mjs` · **Tables:** `photographers`, `images_resize` · **S3:** `mosaic-collections/public-domain-collection/{folder}/`
+**Scripts:** `scripts/adding-new-photographers/0-…mjs`, `1-…mjs`, `2-…mjs`, `3-…py`, `run-pipeline.mjs`, `4-publish.mjs` · **Tables:** `photographers`, `images_resize` · **S3:** `mosaic-collections/public-domain-collection/{folder}/`
 
 1. **Check rights.** Photographer must be clearly public domain (CC PDM 1.0). Note the source of the originals.
 2. **Pick two names and keep them apart:**
@@ -43,14 +43,14 @@
    ```
    → `originalsWEBP/` (q95), `w400…w1600/` (q85, never upscales), `…\Mosaic\Supabase\images_resize_{folder}_{date}.csv`.
 7. **Review the CSV:** `author` exact, `nudity` per row, `year`, `orientation`. `print_quality` is always `standard` here (`scripts/fix_print_quality.py` exists to correct it later).
-8. **Upload to S3** (no script for this — same pattern as the contributor sync). Dry run first:
+8. **Write `IMGs\{folder}\_commons\photographer.json`** (Claude, orchestrator): `name, surname, author, slug, origin, intro, intro_md, biography, biography_md, birthdate, deceasedate` (+ `website`, `instagram`, usually `null`). Web reads `intro_md`/`biography_md`; mobile reads plain-text `intro`/`biography` (`SHOULD_RENDER_MARKDOWN = false`), so all four are required. `intro_md` starts with `# {Full Name} (YYYY–YYYY)` like the existing rows. Dates are `YYYY-MM-DD` (`timestamptz` columns; a bare year is rejected). The portrait row needs a `year` and `orientation` too: put them in the portrait filename before step 6, or edit the CSV.
+9. **Plan** (validates everything locally, reads Supabase, runs `aws s3 sync --dryrun`; writes nothing):
    ```bash
-   aws s3 sync "C:\Users\elcar\Documents\WEBs\Mosaic\IMGs\{folder}" s3://mosaic.photography/mosaic-collections/public-domain-collection/{folder} --dryrun
+   node scripts/adding-new-photographers/4-publish.mjs --folder {folder} [--csv path\to\images_resize_{folder}_….csv]
    ```
-   then again without `--dryrun`. Spot-check one `https://cdn.mosaic.photography/mosaic-collections/public-domain-collection/{folder}/w800/<file>.webp`.
-9. **Supabase → `photographers`:** insert the row (`name, surname, author, slug, biography(_md), intro(_md), birthdate, deceasedate, origin, website, instagram`).
-10. **Supabase → `images_resize`:** Table editor → Import data from CSV → the file from step 6.
-11. **Check renditions:** `node scripts/restore-missing-large-renditions.mjs --dry-run` (must report no gaps for the new folder).
+   Screenshot the plan to Claude.
+10. **Publish:** same command with `--yes`. It syncs to S3 (excludes `_commons/`, never `--delete`), checks every file the app can request (`originalsWEBP` + each `w{n}` ≤ image width) answers 200 on the CDN, and only then inserts the `photographers` row (skipped if the author exists) and the missing `images_resize` rows. Re-running is a no-op. It prints rollback SQL/`aws s3 rm --dryrun` but never runs them. Node 20 needs `NODE_OPTIONS=--experimental-websocket`.
+11. *(Fallback, by hand, if the script can't be used:)* `aws s3 sync "…\IMGs\{folder}" s3://mosaic.photography/mosaic-collections/public-domain-collection/{folder} --exclude "_commons/*" --dryrun`, then without `--dryrun`; spot-check a `w800` URL on the CDN; insert the `photographers` row in the table editor; Table editor → Import data from CSV for `images_resize`.
 12. **Optional (code → openCode prompt):** timeline entries in `src/lib/timeline/photographersTimelines.ts`.
 13. **Optional:** affiliate products for the photographer (routine 3, `photographer_author = {author}`); otherwise the page tops up from general products automatically.
 14. **Deploy:** routine 5. `postbuild` regenerates `sitemap-0`, `image-sitemap` and the `sitemap.xml` index and pings IndexNow.
