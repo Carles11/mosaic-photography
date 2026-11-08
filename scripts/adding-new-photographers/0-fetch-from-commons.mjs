@@ -12,7 +12,7 @@ const IMG_ROOT =
     : "/mnt/c/Users/elcar/Documents/WEBs/Mosaic/IMGs";
 
 const VALID_NUDITY = ["nude", "not-nude"];
-const VALID_GENDERS = ["male", "female", "couple", "group", "mixed"];
+const VALID_GENDERS = ["male", "female", "couple", "group", "mixed", "none"];
 const VALID_COLORS = ["bw", "sepia", "color"];
 
 function usage() {
@@ -310,6 +310,8 @@ function plainTitle(objectName, commonsTitle) {
 
 function slugifyTitle(title) {
   const slug = String(title || "")
+    .replace(/ß/g, "ss")
+    .replace(/['’]/g, "")
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
@@ -352,6 +354,7 @@ function csvEscape(value) {
 function writeCsv(filePath, rows) {
   const header = [
     "filename",
+    "mosaic_title",
     "commons_title",
     "description_url",
     "original_url",
@@ -362,6 +365,8 @@ function writeCsv(filePath, rows) {
     "year",
     "nudity",
     "gender",
+    "orientation",
+    "color",
     "possible_minor",
     "low_res",
     "license_note",
@@ -662,6 +667,7 @@ function buildReviewHtml(folder, records) {
               <option value="couple">couple</option>
               <option value="group">group</option>
               <option value="mixed">mixed</option>
+              <option value="none">none (no people)</option>
             </select>
           </label>
 
@@ -1002,15 +1008,43 @@ function makeFilename({
   const baseSlug = slugifyTitle(mosaicTitle);
   const titleSlug = suffix ? `${baseSlug}-${suffix}` : baseSlug;
   const nudityPart = nudity === "not-nude" ? "_not-nude" : "";
-  return `${folder}_${titleSlug}_year-${year}_${orientation}_${gender}_${color}${nudityPart}${extension}`;
+  // "none" = no people: no gender token, so script 3 leaves gender empty.
+  const genderPart = gender === "none" ? "" : `_${gender}`;
+  return `${folder}_${titleSlug}_year-${year}_${orientation}${genderPart}_${color}${nudityPart}${extension}`;
 }
 
+const RATE_LIMIT_BACKOFF_MS = [30_000, 60_000, 120_000];
+let lastDownloadAt = 0;
+
 async function downloadFile(url, destination) {
-  for (let attempt = 0; attempt < 3; attempt++) {
+  let rateLimitRetries = 0;
+  for (let attempt = 0; attempt < 3; ) {
+    // upload.wikimedia.org rate-limits bots: one file at a time, >= 1 s apart.
+    const wait = 1000 - (Date.now() - lastDownloadAt);
+    if (wait > 0) await sleep(wait);
+    lastDownloadAt = Date.now();
     try {
       const res = await fetch(url, {
         headers: { "User-Agent": USER_AGENT },
       });
+      if (res.status === 429 || res.status === 503) {
+        if (rateLimitRetries >= RATE_LIMIT_BACKOFF_MS.length) {
+          throw Object.assign(new Error(`${res.status} ${res.statusText}`), {
+            final: true,
+          });
+        }
+        const retryAfter = Number(res.headers.get("retry-after"));
+        const delay =
+          Number.isFinite(retryAfter) && retryAfter > 0
+            ? retryAfter * 1000
+            : RATE_LIMIT_BACKOFF_MS[rateLimitRetries];
+        rateLimitRetries += 1;
+        console.log(
+          `  ${res.status} from Commons, retry ${rateLimitRetries}/${RATE_LIMIT_BACKOFF_MS.length} in ${Math.round(delay / 1000)} s`,
+        );
+        await sleep(delay);
+        continue;
+      }
       if (!res.ok) {
         throw new Error(`${res.status} ${res.statusText}`);
       }
@@ -1018,8 +1052,9 @@ async function downloadFile(url, destination) {
       fs.writeFileSync(destination, buffer);
       return;
     } catch (error) {
-      if (attempt === 2) throw error;
-      await sleep(500 * (attempt + 1));
+      attempt += 1;
+      if (error.final || attempt === 3) throw error;
+      await sleep(500 * attempt);
     }
   }
 }
@@ -1104,6 +1139,10 @@ async function runApply(opts) {
     const nudity = decision.nudity;
     const gender = decision.gender;
     const color = decision.color || "bw";
+    const orientation = orientationFor(
+      Number(decision.width),
+      Number(decision.height),
+    );
     const extension =
       extensionForMime(decision.mime) ||
       extensionFromUrl(decision.original_url) ||
@@ -1122,10 +1161,6 @@ async function runApply(opts) {
     } else if (decision.portrait) {
       filename = `000_aaa_${opts.folder}${extension}`;
     } else {
-      const orientation = orientationFor(
-        Number(decision.width),
-        Number(decision.height),
-      );
       const baseName = makeFilename({
         folder: opts.folder,
         mosaicTitle,
@@ -1164,6 +1199,7 @@ async function runApply(opts) {
     const destination = path.join(originalsDir, filename);
     const sourceRow = {
       filename,
+      mosaic_title: mosaicTitle,
       commons_title: decision.commons_title || "",
       description_url: decision.description_url || "",
       original_url: decision.original_url || "",
@@ -1175,6 +1211,8 @@ async function runApply(opts) {
       year: String(decision.year ?? ""),
       nudity,
       gender,
+      orientation,
+      color,
       possible_minor: decision.possible_minor ? "true" : "false",
       low_res: decision.low_res ? "true" : "false",
       license_note: decision.license_note || "",

@@ -83,6 +83,15 @@ def parse_filename(filename):
     return author_raw, title_clean, year, orientation, gender, color, nudity, desc_clean
 
 
+def read_sources(pdir):
+    """Rows of _commons/sources.csv (written by 0-fetch-from-commons --apply), keyed by filename stem."""
+    path = os.path.join(pdir, "_commons", "sources.csv")
+    if not os.path.isfile(path):
+        return {}
+    with open(path, newline="", encoding="utf-8") as f:
+        return {os.path.splitext(r["filename"])[0]: r for r in csv.DictReader(f)}
+
+
 def get_image_dimensions(full_path):
     from PIL import Image
 
@@ -125,6 +134,7 @@ def main():
     if out_dir and not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
+    sources = read_sources(pdir)
     rows = []
 
     for img_file in os.listdir(webp_dir):
@@ -135,6 +145,19 @@ def main():
         width, height = get_image_dimensions(full_path)
 
         author_raw, title, year, orientation, gender, color, nudity, desc = parse_filename(img_file)
+
+        stem = os.path.splitext(img_file)[0]
+        src = sources.get(stem[:-3] if stem.endswith("_ms") else stem)
+        if src and src.get("mosaic_title"):
+            title = src["mosaic_title"]
+            desc = f"{title}. Photograph by {args.author}, {src.get('year') or year}."
+        if src and img_file.startswith("000_aaa_"):
+            nudity = "not-nude"
+            year = src.get("year") or year
+            orientation = src.get("orientation") or orientation
+            color = src.get("color") or color
+            g = src.get("gender", "")
+            gender = "mixed" if g in ("couple", "group") else ("" if g == "none" else g)
 
         row = {
             "base_url": f"{CDN_BASE}/{folder}",

@@ -1207,6 +1207,99 @@ export const photographerTimelines: Record<string, TimelineItemModelProps[]> = {
       eventType: "personal",
     },
   ],
+  koppitz: [
+    {
+      title: "1884",
+      cardTitle: "Born in Austrian Silesia",
+      cardDetailedText:
+        "Rudolf Koppitz was born on 3 January 1884 in Schreiberseifen, Austrian Silesia (today Skrbovice in the Czech Republic), into a rural Protestant family.",
+      eventType: "personal",
+    },
+    {
+      title: "1897",
+      cardTitle: "The Vienna Secession is founded",
+      cardDetailedText:
+        "Gustav Klimt and fellow artists break with Vienna's academic establishment and found the Vienna Secession. Its decorative, symbolist style later shapes Koppitz's photographs.",
+      eventType: "historical",
+    },
+    {
+      title: "1897",
+      cardTitle: "Apprenticeship in Freudenthal",
+      cardDetailedText:
+        "At thirteen he begins training with the photographer Robert Rotter in nearby Freudenthal (Bruntál), then works in small commercial studios.",
+      eventType: "personal",
+    },
+    {
+      title: "1912",
+      cardTitle: "Graphische Lehr- und Versuchsanstalt",
+      cardDetailedText:
+        "He enrols at Vienna's school for photography and printing. By 1913 he is an assistant there; his teacher, the Czech Symbolist Karel Novák, influences his early work.",
+      eventType: "personal",
+    },
+    {
+      title: "1914",
+      cardTitle: "Outbreak of the First World War",
+      cardDetailedText:
+        "Austria-Hungary goes to war in the summer of 1914.",
+      eventType: "historical",
+    },
+    {
+      title: "1914–1918",
+      cardTitle: "Field and aerial photographer",
+      cardDetailedText:
+        "Koppitz serves as a field and aerial reconnaissance photographer, recording landscapes from the air, soldiers and the communities along the front.",
+      eventType: "personal",
+    },
+    {
+      title: "1918",
+      cardTitle: "End of Austria-Hungary",
+      cardDetailedText:
+        "The empire collapses at the end of the war; Vienna becomes the capital of the new Republic of Austria.",
+      eventType: "historical",
+    },
+    {
+      title: "1919",
+      cardTitle: "Professor in Vienna",
+      cardDetailedText:
+        "He becomes a professor at the Graphische Lehr- und Versuchsanstalt, a post he holds for about twenty years.",
+      eventType: "personal",
+    },
+    {
+      title: "1923",
+      cardTitle: "Marriage and \"In the Bosom of Nature\"",
+      cardDetailedText:
+        "He marries the photographer Anna Arbeitlang, his studio partner since 1921, who retouches his prints and often models for him. The same year he makes \"In the Bosom of Nature\", a nude self-portrait in an Alpine landscape.",
+      eventType: "personal",
+    },
+    {
+      title: "1925",
+      cardTitle: "Bewegungsstudie",
+      cardDetailedText:
+        "Koppitz creates Bewegungsstudie (Motion Study), his best-known image, with dancers in a frieze-like composition in the spirit of the Vienna Secession. His daughter Liselotte is born the same year.",
+      eventType: "personal",
+    },
+    {
+      title: "1926",
+      cardTitle: "Success in the United States",
+      cardDetailedText:
+        "His prints are shown at the Pittsburgh Salon (1926, 1927, 1928) and in about fourteen juried exhibitions in the United States up to 1930.",
+      eventType: "personal",
+    },
+    {
+      title: "1929",
+      cardTitle: "The Wall Street Crash",
+      cardDetailedText:
+        "The stock market crash in New York starts the Great Depression, which hits Austria hard in the early 1930s.",
+      eventType: "historical",
+    },
+    {
+      title: "1936",
+      cardTitle: "\"Land und Leute\" and death",
+      cardDetailedText:
+        "His exhibition \"Land und Leute\" (Country and People), about 500 photographs of rural Austria, opens in Vienna. He dies on 8 July 1936 in Perchtoldsdorf, near Vienna, aged 52.",
+      eventType: "personal",
+    },
+  ],
 };
 
 /**
@@ -1224,4 +1317,5 @@ Sources:
  Camera Work archives, exhibition catalogs, The Weston Collective, Kunsthalle Mannheim, The Art Story.
  Museum of Fine Arts Boston, Getty Museum, Barnebys Magazine, National Galleries of Scotland.
  Historic Camera, Alchetron, National Gallery of Art, museum catalogs.
+ Albertina Sammlungen Online, Austria-Forum (AEIOU).
 */

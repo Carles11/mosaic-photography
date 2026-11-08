@@ -14,7 +14,7 @@
 
 ## Task 1 — Add more photographers to the collection
 
-`[ ]` **Goal:** grow the public-domain collection beyond the current **14 photographers / ~1010 indexed images**.
+`[~]` **Goal:** grow the public-domain collection beyond the current **14 photographers / ~1010 indexed images**.
 
 **Current roster** (from `public/sitemap-0.xml`): brady, brigman, cameron,
 de-la-vaudère, demachy, durieu, holland-day, hudson-white, moulin, stieglitz,
@@ -68,7 +68,28 @@ All 14 also have timeline data in `src/lib/timeline/photographersTimelines.ts`.
 
 ### Open decisions
 
-- [ ] Target number for this round (e.g. +5 photographers)?
+- [x] Target number for this round (e.g. +5 photographers)?
+      **Decided 2026-11-08 (Carles): 3 — Eugène Atget, Gertrude Käsebier, Rudolf Koppitz.**
+      Sources: `docs/research/2026-11-08-new-photographers-sources.md`.
+
+### Round 1 progress (2026-11-08)
+
+New pipeline (RUNBOOKS routine 1, rewritten): `0-fetch-from-commons.mjs` (Commons candidates →
+`review.html` → `decisions.json` → `--apply`), `run-pipeline.mjs` (scripts 1–3 with `--folder/--author`),
+`4-publish.mjs` (S3 sync → CDN check → Supabase; plan by default, `--yes` to write). Prompts in
+`docs/prompts/2026-11-08/`. Commits `5a32917`, `50c6222` + timeline/llms/fetch-fix commit.
+Low-res rule (Carles): long side ≥ 1600 px; 900–1600 only as a ticked exception, warn above 10 %.
+
+- [x] **Koppitz** published 2026-11-08: photographers id 65, slug `koppitz`, 12 images
+      (images_resize ids 2793–2804; 1 low-res exception: Hedy Pfundmayr), portrait = *Auf Skitour*
+      (no face portrait of him on Commons; his self-portrait *In the Bosom of Nature* is a nude).
+      Live check: page 200, own canonical, Person + ImageGallery + BreadcrumbList JSON-LD, `.md` route,
+      listed on `/photographers`. Timeline (13 events) + `llms.txt` in the next deploy.
+      After deploy: check sitemap-0 + image-sitemap contain koppitz; request indexing (GSC + Bing).
+      Seen, not changed: "Quick Facts → Nationality" shows `origin` (a birthplace) for every photographer.
+- [ ] **Atget** (Met 134 + Getty 60 hi-res on Commons; heavy dedupe) — next.
+- [ ] **Käsebier** (LoC + Met; rewrite period racial wording in LoC titles).
+- Porting to mobile: nothing to code (same tables); Carles checks the app shows Koppitz.
 - [x] Slug policy for non-ASCII surnames — `de-la-vaudère` is currently a raw
       non-ASCII URL. Decide: transliterate to `de-la-vaudere` + 301, or keep and
       percent-encode everywhere. **Blocks Task 3.**
