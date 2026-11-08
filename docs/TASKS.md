@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-11-07
+> Last reviewed: 2026-11-08
 
 ---
 
@@ -577,7 +577,13 @@ GA4, Traffic acquisition, session source / medium (sessions):
     1200×630), CollectionPage/ItemList/BreadcrumbList; both contributor pages: no "public
     domain works", w1200 og:image with real size, ProfilePage/Person/BreadcrumbList; all
     JSON-LD blocks parse (4 per page). IndexNow for the 3 URLs: Carles, Git Bash → 200.
-    **Next session ("weiter"):** backlinks via rio-outreach-hub `find-prospects` (last of the 11-06 queue).
+    ~~**Next session ("weiter"):** backlinks via rio-outreach-hub `find-prospects` (last of the 11-06 queue).~~
+    **2026-11-08:** not run from here. Backlinks are owned by **rio-outreach-hub** (weekly scheduled
+    round Mon 10:47 Santiago + daily reply check); status lives only in its `tracker/mosaic.csv` and
+    `tracker/links.csv` (sync rule in the hub's `AGENTS.md`, 2026-11-08). State read 2026-11-08:
+    13 rows, 10 sent (5 followed up, 5 with follow-up due 11-17), 0 replies, 0 links; **3 drafts in
+    `review` since 11-02 wait for Carles** (library.ccsf.edu 74, francescasciandra.art 68, check her
+    country first (ES/DE/IT rule), philamuseum.libguides.com 66).
     Note: `scripts/indexnow.ts` (postbuild) never sends community URLs; not changed.
     Seen, not changed (Carles decides): `akiuonsen` og:image is its featured nude photo,
     so share previews on social networks show a nude.
