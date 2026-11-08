@@ -85,9 +85,17 @@ Low-res rule (Carles): long side ≥ 1600 px; 900–1600 only as a ticked except
       (no face portrait of him on Commons; his self-portrait *In the Bosom of Nature* is a nude).
       Live check: page 200, own canonical, Person + ImageGallery + BreadcrumbList JSON-LD, `.md` route,
       listed on `/photographers`. Timeline (13 events) + `llms.txt` in the next deploy.
-      After deploy: check sitemap-0 + image-sitemap contain koppitz; request indexing (GSC + Bing).
+      **Deployed `3be7763`, verified live 2026-11-08:** timeline (13 events) on the page, `llms.txt` lists him,
+      `sitemap-0` 29 URLs incl. `/photographers/koppitz`, `image-sitemap` 12 Koppitz entries (1,169 images),
+      index lastmod 2026-11-08 14:00 UTC; IndexNow ran in postbuild (Bing). GSC: "URL is not on Google" →
+      **indexing requested 2026-11-08** (Claude in Chrome, Carles's go). Re-inspect ~2026-11-15.
+      Carles to check the mobile app shows Koppitz (same tables).
       Seen, not changed: "Quick Facts → Nationality" shows `origin` (a birthplace) for every photographer.
-- [ ] **Atget** (Met 134 + Getty 60 hi-res on Commons; heavy dedupe) — next.
+- [ ] **Atget** (Met 134 + Getty 60 hi-res on Commons; heavy dedupe) — **next session**: run
+      `0-fetch-from-commons.mjs --folder eugene-atget --category "Photographs by Eugène Atget in the Metropolitan Museum of Art"
+      --category "Photographs by Eugène Atget in the J. Paul Getty Museum"` (depth 0–1; the full category has 3,684 files).
+      Known script gap: dedupe pre-selection misses variants with different titles (Koppitz had 6 Bewegungsstudie
+      versions) — Carles dedupes by hand in the sheet.
 - [ ] **Käsebier** (LoC + Met; rewrite period racial wording in LoC titles).
 - Porting to mobile: nothing to code (same tables); Carles checks the app shows Koppitz.
 - [x] Slug policy for non-ASCII surnames — `de-la-vaudère` is currently a raw
