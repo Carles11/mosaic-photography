@@ -584,6 +584,10 @@ GA4, Traffic acquisition, session source / medium (sessions):
     13 rows, 10 sent (5 followed up, 5 with follow-up due 11-17), 0 replies, 0 links; **3 drafts in
     `review` since 11-02 wait for Carles** (library.ccsf.edu 74, francescasciandra.art 68, check her
     country first (ES/DE/IT rule), philamuseum.libguides.com 66).
+    Same day (Carles, Git Bash, `outreach.py`): **approved** library.ccsf.edu + philamuseum.libguides.com
+    (sent by the hub's hourly sender from Mon 11-09 08:00 UTC; ccsf is `ready_manual`, check
+    `logs/activity.csv` if it doesn't go out); **rejected** francescasciandra.art (about page: likely
+    based in Portugal, individual → no cold email without consent). 0 Mosaic drafts left in review.
     Note: `scripts/indexnow.ts` (postbuild) never sends community URLs; not changed.
     Seen, not changed (Carles decides): `akiuonsen` og:image is its featured nude photo,
     so share previews on social networks show a nude.
