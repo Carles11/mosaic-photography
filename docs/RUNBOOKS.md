@@ -126,6 +126,15 @@ From `C:\mosaicapp\README.md` → "Release Checklist":
 3. Test login, filters, age gate, downloads, favorites, collections, comments, reports, profile.
 4. JS-only change → `eas update --channel production --message "…"`. Native change → `eas build --profile production` then `eas submit --profile production`.
 
+**OTA safety (added 2026-11-10):** `runtimeVersion` is a plain string (`1.4.0`), not a fingerprint, so
+an OTA reaches every store build with that string even if its native code differs. Before any
+`eas update`, open expo.dev → Builds → the live production build per platform and compare its commit
+with `master` (`git diff --stat <commit> master`; any change in `package.json`, `app.config.js`,
+`plugins/` or native folders = not OTA-safe for that platform). As of 2026-11-10: **iOS 1.4.0 (47) is
+OTA-safe, Android 1.4.0 (30) is NOT** (built from `a0348f4`, before RNFirebase 24.1.0) → always pass
+`--platform ios` until a new Android build is live. Publish without `--environment`: the Supabase
+`EXPO_PUBLIC_*` vars live in the committed `.env`, not in the EAS `production` environment.
+
 ## 7. Report email alerts
 
 A trigger on `public.reports` emails `mosaic@rio-frances.com` through Resend on every new report (`migrations/015_report_email_alerts.sql`).

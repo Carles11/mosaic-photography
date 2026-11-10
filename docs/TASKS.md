@@ -1300,7 +1300,14 @@ Bug reported by Carles 2026-11-10 (store app, not logged in). **Scheduled: next 
   - Carles tested logged out (gallery + lightbox heart, comments ×3 in gallery/lightbox/photographer
     page) and logged in (favorite, comment send/delete): all OK.
   - Merged to mobile `master` as `f8f01e2` (commits `795b409`, `7fb017e`), pushed 2026-11-10.
-    **Still to do:** ship in the next store release (RUNBOOKS routine 6), after the Apple account decision (11-14).
+    **iOS shipped as OTA 2026-11-10** (`eas update --channel production --platform ios`, runtime 1.4.0,
+    update group `abc21b91-0718-4d21-b446-90b48035a641`, from `f8f01e2`; also carries `2e5eefa`, the
+    11 Sep affiliate-link fix). Store build 47 = `36a3cb8`, JS-only diff to master. Supabase vars come
+    from the committed `.env` (not in EAS env), same as build 47.
+    **Android NOT shipped:** Play build 1.4.0 (30) is from `a0348f4` (before RNFirebase 24.1.0),
+    fingerprint `2f59f67` ≠ master `3c71139`, but the **same runtime 1.4.0** → an OTA would reach it
+    with mismatched native code. Needs a new production build + Play release (RUNBOOKS routine 6).
+    Next session candidate.
   - Found on the way, not fixed: the mobile repo's `yarn lint` (ESLint "Cannot redefine plugin import")
     and `npx tsc --noEmit` (`ignoreDeprecations: "6.0"` invalid for TS 5.9) both fail on config, so
     the app has no working static check; plus one existing TS error in
