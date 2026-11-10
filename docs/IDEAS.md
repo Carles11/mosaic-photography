@@ -138,3 +138,16 @@ Options, smallest first (Carles decides):
 - A report button on the web too (today only the mobile app has one).
 - Pre-moderation (comments hidden until approved), or turning comments off.
 
+
+---
+
+## Idea 5 — Mobile: make commenting easier to find  `💡 idea`
+
+**Why (Carles, 2026-11-10, while testing Task 7 in the emulator):** getting to "write a comment" is
+not intuitive. The 💬 icon is small, under each card or behind a tap in the lightbox (icons hidden
+until you tap the image), and the sheet then needs a login first. Comments are rare today (0 on most images).
+
+Options (Carles decides; nothing scheduled):
+- Bigger/labelled comment entry ("0 comments · Add one") under each card.
+- Lightbox: keep the action icons visible on open instead of after a tap.
+- Logged out: a "Log in to comment" button in the sheet that opens `/auth/login` (today only text).

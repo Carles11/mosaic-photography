@@ -1271,7 +1271,7 @@ Porting to mobile: nothing to code (the trigger fires for app reports too).
 
 ## Task 7 — Mobile: logged-out taps on favorite / comment
 
-`[ ]` **Goal:** a logged-out user gets clear feedback every time on the image actions.
+`[~]` **Goal:** a logged-out user gets clear feedback every time on the image actions.
 Bug reported by Carles 2026-11-10 (store app, not logged in). **Scheduled: next session
 ("weiter").** Not investigated yet.
 
@@ -1282,6 +1282,30 @@ Bug reported by Carles 2026-11-10 (store app, not logged in). **Scheduled: next 
 - Where to look first (mobile repo `C:\mosaicapp`): the favorite and comment buttons on
   the image/lightbox screen and the toast helper (likely a "shown once" flag or a
   toast id that dedupes).
+- **2026-11-10, read-only check (Claude):** likely cause of the heart bug: the lightbox
+  (`ZoomGalleryModal`) is an RN `<Modal>` and the only toast host (`MosaicToast`) is in
+  `app/_layout.tsx`, so the toast renders under the Modal; the lightbox heart also never opens
+  login. Comments have no toast at all (the sheet shows a login line); "first tap only" not
+  pinned down yet (suspects: `index={1}` with one snap point, state not reset, close/open race).
+  Prompt: `docs/prompts/2026-11-10/mobile-logged-out-image-actions.md` (openCode).
+- **2026-11-10, fixed in code, verified in the Android emulator** (EAS development build,
+  Metro on port 8082 because 8081 was busy with another project). Mobile branch
+  `fix/logged-out-image-actions`, 7 files, ~34 lines:
+  - Heart: the lightbox now closes, shows the toast and opens `/auth/login`; `<MosaicToast />` is also
+    rendered inside `ZoomGalleryModal`'s Modal, so the download-panel toasts show there now as well.
+  - Comments: `index={1}` → `index={0}` plus `enableDynamicSizing={false}` (new pass-through prop on
+    `BottomSheetModal`, comments sheet only). gorhom v5 adds a content-height snap point by default,
+    so `index={0}` alone opened the sheet a few lines tall (follow-up prompt
+    `mobile-comments-sheet-height.md`). The photographer-page lightbox 💬 was never wired; now it is.
+  - Carles tested logged out (gallery + lightbox heart, comments ×3 in gallery/lightbox/photographer
+    page) and logged in (favorite, comment send/delete): all OK.
+  - **Still to do:** merge to `master`, then ship in the next store release (RUNBOOKS routine 6).
+  - Found on the way, not fixed: the mobile repo's `yarn lint` (ESLint "Cannot redefine plugin import")
+    and `npx tsc --noEmit` (`ignoreDeprecations: "6.0"` invalid for TS 5.9) both fail on config, so
+    the app has no working static check; plus one existing TS error in
+    `fetchContributorsList.ts:35`. openCode under WSL writes CRLF (repo is LF) → consider
+    `.gitattributes` `* text=auto eol=lf` in the mobile repo. Carles decides.
+  - UX note from testing → `docs/IDEAS.md` Idea 5 (commenting hard to find).
 
 Porting to web: check the web gallery handles logged-out favorite/comment taps the same way.
 
