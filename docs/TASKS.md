@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-11-08
+> Last reviewed: 2026-11-10
 
 ---
 
@@ -1266,6 +1266,24 @@ comment.**
   - Branch `feat/report-email-alerts` (`0b3988e` + this note), merged to `main`.
 
 Porting to mobile: nothing to code (the trigger fires for app reports too).
+
+---
+
+## Task 7 — Mobile: logged-out taps on favorite / comment
+
+`[ ]` **Goal:** a logged-out user gets clear feedback every time on the image actions.
+Bug reported by Carles 2026-11-10 (store app, not logged in). **Scheduled: next session
+("weiter").** Not investigated yet.
+
+- Heart (favorite): tap does nothing. No toast, no login prompt.
+- Message icon (comments): toast "debes estar logeado" shows only the **first** tap;
+  later taps show nothing.
+- Expected: same login hint on every tap, for both icons (or open the login screen).
+- Where to look first (mobile repo `C:\mosaicapp`): the favorite and comment buttons on
+  the image/lightbox screen and the toast helper (likely a "shown once" flag or a
+  toast id that dedupes).
+
+Porting to web: check the web gallery handles logged-out favorite/comment taps the same way.
 
 ---
 
