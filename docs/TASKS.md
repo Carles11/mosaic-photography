@@ -578,6 +578,16 @@ GA4, Traffic acquisition, session source / medium (sessions):
   `collection-sitemap.xml` (removed 10-02) still listed, last crawl 5/22.
   - [x] BWT "Request indexing" for `/photographers` + `/about` — done 2026-11-03
         (Claude in Chrome, Carles's go). Re-inspect ~2026-11-10.
+        **Re-inspected 2026-11-10** (Claude in Chrome): both still "Discovered but not crawled"
+        in the Bing index; Live URL test passes for both ("URL can be indexed by Bing", no SEO/GEO
+        issues, 2 markup types). Not re-requested. Next look with the 11-17 BWT reading.
+  - **2026-11-10 — BWT "Crawl politeness issues" email: false alarm.** The sentence ("current crawl
+    setting … preventing Bing from crawling effectively") is the hidden preview text of every BWT
+    email since at least June (it says "www.website.com", and also appears on the permission-change
+    mails for weddweb/rio-frances); the email body is only the monthly report. Checked: BWT Crawl
+    Control = default, Recommendations empty, no crawl notification; bingbot UA gets 200 on `/`,
+    `/photographers/koppitz`, `robots.txt` (Bingbot group has no Crawl-delay). Nothing to change.
+    Same email, Bing October: **8.1K impressions (−25.3%), 742 clicks (−38.2%)** vs September.
   - [x] Drop `/photo-curations` (login-only, noindex is right) from
         `sitemap-0.xml`, `llms.txt` and both IndexNow lists (`scripts/indexnow.ts`,
         `src/app/api/indexnow/route.ts`) — done 2026-11-03 by openCode, prompt
