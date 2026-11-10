@@ -1299,7 +1299,8 @@ Bug reported by Carles 2026-11-10 (store app, not logged in). **Scheduled: next 
     `mobile-comments-sheet-height.md`). The photographer-page lightbox 💬 was never wired; now it is.
   - Carles tested logged out (gallery + lightbox heart, comments ×3 in gallery/lightbox/photographer
     page) and logged in (favorite, comment send/delete): all OK.
-  - **Still to do:** merge to `master`, then ship in the next store release (RUNBOOKS routine 6).
+  - Merged to mobile `master` as `f8f01e2` (commits `795b409`, `7fb017e`), pushed 2026-11-10.
+    **Still to do:** ship in the next store release (RUNBOOKS routine 6), after the Apple account decision (11-14).
   - Found on the way, not fixed: the mobile repo's `yarn lint` (ESLint "Cannot redefine plugin import")
     and `npx tsc --noEmit` (`ignoreDeprecations: "6.0"` invalid for TS 5.9) both fail on config, so
     the app has no working static check; plus one existing TS error in
