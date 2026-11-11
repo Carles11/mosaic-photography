@@ -140,6 +140,12 @@ AWS access and account setup: see docs/AWS_ACCESS.md. Never use root credentials
 
 ---
 
+## Outreach & social (external hubs)
+
+Outreach and social status live in Carles11/rio-outreach-hub and Carles11/rio-social-hub, not here. Before work on partners, promo codes, users, links, posts or public claims, read `brands/mosaic.md` in both (read-only). Hub hand-offs arrive as entries in `docs/TASKS.md`; when you change a public fact (feature, price, plan), add a dated note under the task so the hub's `facts/mosaic.md` can be updated.
+
+---
+
 ## Deep Docs
 
 - `docs/TASKS.md` — active task list for the web project
