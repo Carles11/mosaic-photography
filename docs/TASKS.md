@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-11-10
+> Last reviewed: 2026-11-11
 
 ---
 
@@ -1308,6 +1308,14 @@ Bug reported by Carles 2026-11-10 (store app, not logged in). **Scheduled: next 
     fingerprint `2f59f67` ≠ master `3c71139`, but the **same runtime 1.4.0** → an OTA would reach it
     with mismatched native code. Needs a new production build + Play release (RUNBOOKS routine 6).
     Next session candidate.
+  - **2026-11-11, Android submitted** (Carles, Git Bash). Bumped `version` + `runtimeVersion` to **1.4.1**
+    (mobile `ea43235`, pushed) so build 30 (runtime 1.4.0, old native) can't receive future OTAs.
+    Checked first: the only Android update on production/1.4.0 is `2e5eefa` (11 Sep). EAS build
+    `b6855376-…` = **1.4.1 (31)**, fingerprint `7ce1ab8`, commit `ea43235`; `eas submit --latest` →
+    Play production, release status COMPLETED (full rollout). Play Console 11-11 11:58: **"Wird überprüft"**.
+    Next: when Play shows "Bei Google Play verfügbar", install from the store logged out and re-test
+    heart + comments, then close Task 7. Consequence: OTAs from `master` (runtime 1.4.1) no longer reach
+    iOS build 47 (1.4.0); the next iOS change needs a new iOS build (also needed after the Valhalio transfer).
   - Found on the way, not fixed: the mobile repo's `yarn lint` (ESLint "Cannot redefine plugin import")
     and `npx tsc --noEmit` (`ignoreDeprecations: "6.0"` invalid for TS 5.9) both fail on config, so
     the app has no working static check; plus one existing TS error in

@@ -134,6 +134,9 @@ with `master` (`git diff --stat <commit> master`; any change in `package.json`, 
 OTA-safe, Android 1.4.0 (30) is NOT** (built from `a0348f4`, before RNFirebase 24.1.0) → always pass
 `--platform ios` until a new Android build is live. Publish without `--environment`: the Supabase
 `EXPO_PUBLIC_*` vars live in the committed `.env`, not in the EAS `production` environment.
+**Update 2026-11-11:** `master` is runtime **1.4.1**. Android 1.4.1 (31) built from `ea43235` (in Play review);
+iOS store build is still 1.4.0 (47), so an OTA from `master` reaches Android 31 only. Next iOS change = new
+iOS build (routine above, native path).
 
 ## 7. Report email alerts
 
