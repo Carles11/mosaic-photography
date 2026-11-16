@@ -89,6 +89,12 @@ Low-res rule (Carles): long side ≥ 1600 px; 900–1600 only as a ticked except
       `sitemap-0` 29 URLs incl. `/photographers/koppitz`, `image-sitemap` 12 Koppitz entries (1,169 images),
       index lastmod 2026-11-08 14:00 UTC; IndexNow ran in postbuild (Bing). GSC: "URL is not on Google" →
       **indexing requested 2026-11-08** (Claude in Chrome, Carles's go). Re-inspect ~2026-11-15.
+      **Re-inspected 2026-11-16** (GSC read live by Claude in Chrome, read-only): **"URL is on Google",
+      page is indexed.** Last crawl 2026-11-08 11:06, Googlebot smartphone, fetch successful; sitemaps
+      `image-sitemap.xml` + `sitemap.xml`; referring page: none detected; Breadcrumbs 1 valid item.
+      Pages report same day: indexed **22** (was 21), not indexed 19 (noindex 3, redirect 3, 403 2, 404 1,
+      Crawled – not indexed 5, Discovered – not indexed 5 with validation Passed). Nothing to request.
+      Note: GSC access is on the **second** Google account in Chrome (`/u/1/`); the default account has none.
       Carles to check the mobile app shows Koppitz (same tables).
       Seen, not changed: "Quick Facts → Nationality" shows `origin` (a birthplace) for every photographer.
 - [ ] **Atget** (Met 134 + Getty 60 hi-res on Commons; heavy dedupe) — **next session**: run
@@ -1293,7 +1299,7 @@ Porting to mobile: nothing to code (the trigger fires for app reports too).
 
 ## Task 7 — Mobile: logged-out taps on favorite / comment
 
-`[~]` **Goal:** a logged-out user gets clear feedback every time on the image actions.
+`[x]` **Goal:** a logged-out user gets clear feedback every time on the image actions.
 Bug reported by Carles 2026-11-10 (store app, not logged in). **Scheduled: next session
 ("weiter").** Not investigated yet.
 
@@ -1343,6 +1349,11 @@ Bug reported by Carles 2026-11-10 (store app, not logged in). **Scheduled: next 
     the app has no working static check; plus one existing TS error in
     `fetchContributorsList.ts:35`. openCode under WSL writes CRLF (repo is LF) → consider
     `.gitattributes` `* text=auto eol=lf` in the mobile repo. Carles decides.
+  - **2026-11-16, closed.** Play listing shows "Updated on Nov 11, 2026"; Carles installed **1.4.1** from
+    Google Play and tested logged out: heart (gallery + lightbox) and comments (gallery, lightbox,
+    photographer page) all give the login feedback every time. Android done. iOS has the same fix via
+    the 11-10 OTA (build 47, runtime 1.4.0); no further iOS release planned (Apple account not renewed,
+    Task 5). Still open, not scheduled: the "Porting to web" check below.
   - UX note from testing → `docs/IDEAS.md` Idea 5 (commenting hard to find).
 
 Porting to web: check the web gallery handles logged-out favorite/comment taps the same way.
