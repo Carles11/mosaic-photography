@@ -1240,6 +1240,8 @@ Photobook parked (results only). Details in the doc §2–3, §6.
       **Decided 2026-11-16 (Carles): wait. Nothing is prepared or changed until the App Store listing
       actually goes down; then reopen this with the inventory.** Open question for then: delete or keep
       the `apple-app-site-association` file. Outside the repo: AlternativeTo listing (social hub).
+      Watch: the scheduled task "Mosaic – Monday brief" (Mon 08:52 Santiago) now checks the App Store
+      listing each week and puts "iOS app is off the App Store" first in its report when it is down.
 
 Porting to mobile: app monetization options (§6 F) are mobile work if chosen.
 
