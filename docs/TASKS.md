@@ -8,7 +8,7 @@
 > "Porting to mobile" at the bottom.
 >
 > Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
-> Last reviewed: 2026-11-11
+> Last reviewed: 2026-11-16
 
 ---
 
@@ -1192,7 +1192,7 @@ Photobook parked (results only). Details in the doc §2–3, §6.
       final 2027-05-31 (Mar–May revenue ≥ costs ≈ $77, else close in June).
       Bar: ≈ $25.50/month, ≈ $17 if Valhalio carries the Apple fee.
       Apple renewal (11-14) is not blocked by this: fallback already decided.
-- [ ] **Before 2026-11-16:** decide the Apple Developer renewal.
+- [x] **Before 2026-11-16:** decide the Apple Developer renewal. (Decided 2026-11-16: not renewed, see end of this item.)
       **2026-11-04 (Carles):** waiting for the new Apple Developer account
       (lio@valhalio.com) to activate, then **transfer the Mosaic iOS app** there
       instead of paying two memberships. Facts checked (Apple "App transfer criteria"):
@@ -1212,6 +1212,28 @@ Photobook parked (results only). Details in the doc §2–3, §6.
       2026-11-02, account shows "Servicios Tecnologicos Valhalio SpA (Ausstehend)",
       "Ihre Registrierung wird bearbeitet". D-U-N-S received 10-26 and matched by
       Apple. Still pending → transfer not possible yet. Decision stays on 11-14.
+      **Decided 2026-11-16 (Carles): do NOT renew the personal Apple Developer account for now**
+      (first taken 11-13, recorded in rio-social-hub `brands/mosaic.md`; replaces the 11-04 fallback).
+      The iOS app leaves the App Store when the membership lapses; the transfer to Valhalio is not
+      possible from a lapsed account unless it is renewed later. **Android stays as is** on Google Play
+      (one-time fee, nothing to renew unless Google asks). Task 7 Android close-out still applies.
+      **Public fact changed (for the hubs' `facts/mosaic.md`):** iOS app no longer available once the
+      membership lapses; Android app still available. No app claims for iPhone/iPad from then on.
+      Next: read-only inventory of every app mention on the web (openCode,
+      `docs/prompts/2026-11-16/app-mentions-inventory.md` → `docs/research/2026-11-16-app-mentions-inventory.md`),
+      then Carles decides what to remove/reword (`/app`, `MobileApplication` JSON-LD, `llms.txt`,
+      `apple-app-site-association`, banners). Also then: App Store promo text is moot; the 11-27 GEO
+      re-check query M3 ("iPhone app…") will no longer be answerable by Mosaic.
+      **2026-11-16, inventory done** (openCode): `docs/research/2026-11-16-app-mentions-inventory.md`.
+      App Store listing still live that day (1.4.0, "Free on iPhone and iPad"). Places that claim iOS:
+      `src/app/layout.tsx:167` (Organization `sameAs`, hardcoded, every page), `FooterAppBanner.tsx`
+      (every page), `HomeAppBanner.tsx`, `AppHero.tsx`, `src/app/app/page.tsx` (meta/OG/`WebPage` text,
+      `MobileApplication` `operatingSystem` + `downloadUrl`), `AppScreenshots.tsx` (iPhone shot),
+      privacy policy l. 133 heading, `public/.well-known/apple-app-site-association`. Android parts,
+      `/app` route, sitemap/IndexNow entries and `llms.txt` stay.
+      **Decided 2026-11-16 (Carles): wait. Nothing is prepared or changed until the App Store listing
+      actually goes down; then reopen this with the inventory.** Open question for then: delete or keep
+      the `apple-app-site-association` file. Outside the repo: AlternativeTo listing (social hub).
 
 Porting to mobile: app monetization options (§6 F) are mobile work if chosen.
 

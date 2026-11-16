@@ -1,0 +1,109 @@
+# Mobile-app mentions inventory (read-only)
+
+Scope: repo scanned excluding `node_modules/`, `.next/`, `.git/`, `docs/`, `seo-reports/`, `affiliate-reports/`. Searched case-insensitively for the terms requested in `docs/prompts/2026-11-16/app-mentions-inventory.md`; unrelated `apple-touch-icon`, CSS `-apple-system`, and generic `application` matches ignored. `public/image-sitemap.xml` contained incidental image filename/caption matches (`la-curios`, `george-demetrios` containing `ios`) — not app mentions and excluded. Build/generated artifacts reviewed: `public/sw.js`, `public/sitemap-0.xml`, `public/sitemap.xml` (for `/app`/app-chunk references); `yarn.lock` only had unrelated package-name substrings (`android-arm*`, integrity hashes) — excluded.
+
+## 1. Mentions table
+
+| File:line | Platform (iOS / Android / both) | Kind | Exact text or URL | Rendered where |
+|---|---|---|---|---|
+| `src/lib/appLinks.ts:1-2` | iOS | config/redirect/header (exported constant) | `export const APP_STORE_URL = "https://apps.apple.com/us/app/iconic-photography-gallery/id6755329136";` | Source of store URL used by `/app`, footer banner, home banner, app hero |
+| `src/lib/appLinks.ts:4-5` | Android | config/redirect/header (exported constant) | `export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.carlos_delrio.mosaicphotographyapp";` | Source of store URL used by `/app`, footer banner, home banner, app hero |
+| `src/app/app/page.tsx:3` | both | link/button (imported component renders CTAs) | `import AppHero from "@/components/appLanding/AppHero";` | `/app` only (route component) |
+| `src/app/app/page.tsx:4` | iOS | visible text (imported component renders screenshot) | `import AppScreenshots from "@/components/appLanding/AppScreenshots";` | `/app` only |
+| `src/app/app/page.tsx:10` | both | config/redirect/header (import) | `import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/appLinks";` | `/app` only (used in JSON-LD `downloadUrl`) |
+| `src/app/app/page.tsx:16-17` | both | metadata (description) | `description: "Curated vintage nude photography app. Fast galleries, curated collections, easy downloads. Free on iPhone, iPad & Android.",` | `/app` only (page metadata) |
+| `src/app/app/page.tsx:19` | both | metadata (canonical) | `canonical: "https://www.mosaic.photography/app",` | `/app` only |
+| `src/app/app/page.tsx:22-25` | both | metadata (OG title/description) | `title: "Mosaic App — Vintage Nude Photography Gallery"` / `description: "... Free on iPhone, iPad & Android."` | `/app` only (OpenGraph) |
+| `src/app/app/page.tsx:59-64` | iOS | visible text (structured screenshot data) | `contentUrl: \`${host}/screenshots/Apple-iPhone-16-Pro-Max/Apple-iPhone-16-Pro-Max-Screenshot1.png\`, name: "iPhone photo view", description: "High-resolution image viewer with metadata"` | `/app` only (feeds `ImageGallery` JSON-LD/screenshots section) |
+| `src/app/app/page.tsx:80` | both | visible text | `Mosaic — Iconic Vintage Nude Photography, Now On Your Phone` | `/app` only (H1) |
+| `src/app/app/page.tsx:85` | both | JSON-LD (prop/visible schema context) | `name="Mosaic App — Iconic Vintage Nude Photography"` | `/app` only (`WebPage` JSON-LD) |
+| `src/app/app/page.tsx:86-87` | both | JSON-LD (props) | `url="https://www.mosaic.photography/app"` / `description="Free Mosaic app for iPhone, iPad and Android: public-domain vintage photography from the 1840s to the 1930s."` | `/app` only (`WebPage` JSON-LD) |
+| `src/app/app/page.tsx:100-112` | both | JSON-LD | `{"@type":"MobileApplication","name":"Mosaic — Vintage Photography","operatingSystem":"iOS, iPadOS, Android","applicationCategory":"MultimediaApplication","url":"https://www.mosaic.photography/app","downloadUrl":[APP_STORE_URL, PLAY_STORE_URL],"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}` | `/app` only (inline `<script type="application/ld+json">`) |
+| `src/app/app/page.tsx:115` | both | link/button (component) | `<AppHero />` (renders App Store + Google Play badge links via `APP_STORE_URL`/`PLAY_STORE_URL`) | `/app` only |
+| `src/app/app/page.tsx:116` | iOS | visible text (component) | `<AppScreenshots />` (includes iPhone screenshot/card) | `/app` only |
+| `src/app/app/page.tsx:117-119` | both | visible text (components) | `<AppFeatures />`, `<HowItWorks />`, `<QuickWhy />` (general app feature copy, no platform names in these components) | `/app` only |
+| `src/components/appLanding/AppHero.tsx:3` | both | config/redirect/header (import) | `import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/appLinks";` | `/app` only (rendered by `src/app/app/page.tsx`) |
+| `src/components/appLanding/AppHero.tsx:10-14` | both | visible text | `Explore world-class, rare, high-res public domain images—free, easy, and always in your pocket.` / `Free for iPhone, iPad and Android.` | `/app` only |
+| `src/components/appLanding/AppHero.tsx:17-34` | iOS | link/button + visible text (image alt) | `href={APP_STORE_URL}` `data-gtm="app-landing-ios"` `aria-label="Download on the App Store"` `alt="Download on the App Store"` `src="/images/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg"` | `/app` only |
+| `src/components/appLanding/AppHero.tsx:36-53` | Android | link/button + visible text (image alt) | `href={PLAY_STORE_URL}` `data-gtm="app-landing-android"` `aria-label="Get it on Google Play"` `alt="Get it on Google Play"` `src="/images/GetItOnGooglePlay_Badge_Web_color_English.svg"` | `/app` only |
+| `src/components/appLanding/AppHero.tsx:56-67` | both | visible text + link/button (QR to app page) | `Scan to download the app:` / QR image `src="/images/QR/Mosaic-Photography-Gallery.png"` `alt="QR code linking to Mosaic app download page"` | `/app` only |
+| `src/components/appLanding/AppScreenshots.tsx:14-19` | iOS | visible text (screenshot entry) | `src: "/screenshots/Apple-iPhone-16-Pro-Max/Apple-iPhone-16-Pro-Max-Screenshot1.png"` / `alt: "Mosaic app — iPhone photo view"` / `caption: "High-resolution image viewer with metadata."` | `/app` only |
+| `src/components/appLanding/AppScreenshots.tsx:7-12` | Android | visible text (screenshot entry) | `src: "/screenshots/Android-10-inch-tablet/main-gallery-home-tablet-10inch.png"` / `alt: "Mosaic app — tablet gallery view"` (Android path/name context) | `/app` only |
+| `src/components/appLanding/AppScreenshots.tsx:21-26` | Android | visible text (screenshot entry) | `src: "/screenshots/Android-Samsung-Galaxy-S21-Ultra/Samsung-Galaxy-S21-Ultra-Screenshot1.png"` / `alt: "Mosaic app — Android search by artist"` | `/app` only |
+| `src/components/appBanner/FooterAppBanner.tsx:7` | both | config/redirect/header (import) | `import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/appLinks";` | Every page using global footer (`ClientLayout`/`Footer`) |
+| `src/components/appBanner/FooterAppBanner.tsx:10-21` | both | link/button (analytics handler) | `const handleClick = (platform: "ios" | "android") => { ... event: "app_banner_click", platform ... }` | Every page (footer) |
+| `src/components/appBanner/FooterAppBanner.tsx:27` | both | visible text (aria) | `aria-label="Download the Mosaic mobile app"` | Every page (footer) |
+| `src/components/appBanner/FooterAppBanner.tsx:31-48` | iOS | link/button + visible text (image alt) | `href={APP_STORE_URL}` `data-gtm="app-banner-ios"` `aria-label="Download on the App Store"` `onClick={() => handleClick("ios")}` `alt="Download on the App Store"` `src="/images/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg"` | Every page (footer) |
+| `src/components/appBanner/FooterAppBanner.tsx:50-67` | Android | link/button + visible text (image alt) | `href={PLAY_STORE_URL}` `data-gtm="app-banner-android"` `aria-label="Get it on Google Play"` `onClick={() => handleClick("android")}` `alt="Get it on Google Play"` `src="/images/GetItOnGooglePlay_Badge_Web_color_English.svg"` | Every page (footer) |
+| `src/components/appBanner/FooterAppBanner.tsx:69` | both | link/button (internal) | `<Link href="/app">Learn more...</Link>` | Every page (footer) |
+| `src/components/footer/Footer.tsx:5` | both | visible text/link (imported component) | `import FooterAppBanner from "@/components/appBanner/FooterAppBanner";` | Every page (global footer) |
+| `src/components/footer/Footer.tsx:87` | both | link/button (component render) | `<FooterAppBanner />` | Every page (global footer) |
+| `src/components/appBanner/HomeAppBanner.tsx:7` | both | config/redirect/header (import) | `import { APP_STORE_URL, PLAY_STORE_URL } from "@/lib/appLinks";` | Home page header/title area (`HomeTitles`) |
+| `src/components/appBanner/HomeAppBanner.tsx:61-71` | both | link/button (analytics handler) | `const pushBadgeClick = (platform: "ios" | "android") => { ... event: "app_banner_click", platform ... }` | Home page |
+| `src/components/appBanner/HomeAppBanner.tsx:79` | both | visible text (aria) | `aria-label="Download the Mosaic mobile app"` | Home page |
+| `src/components/appBanner/HomeAppBanner.tsx:83-101` | iOS | link/button + visible text (image alt) | `href={APP_STORE_URL}` `data-gtm="app-banner-ios"` `aria-label="Download on the App Store"` `onClick={() => pushBadgeClick("ios")}` `alt="Download on the App Store"` `src="/images/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg"` | Home page |
+| `src/components/appBanner/HomeAppBanner.tsx:103-120` | Android | link/button + visible text (image alt) | `href={PLAY_STORE_URL}` `data-gtm="app-banner-android"` `aria-label="Get it on Google Play"` `onClick={() => pushBadgeClick("android")}` `alt="Get it on Google Play"` `src="/images/GetItOnGooglePlay_Badge_Web_color_English.svg"` | Home page |
+| `src/components/appBanner/HomeAppBanner.tsx:123-129` | both | link/button (internal) | `<Link href="/app" ... aria-label="Learn more about the Mosaic app"> <p ...>About the app &rarr;</p> </Link>` | Home page |
+| `src/components/header/titles/HomeTitles.tsx:1` | both | visible text/link (imported component) | `import HomeAppBanner from "@/components/appBanner/HomeAppBanner";` | Home page |
+| `src/components/header/titles/HomeTitles.tsx:9` | both | link/button (component render) | `<HomeAppBanner />` | Home page |
+| `src/app/layout.tsx:167` | iOS | metadata (Organization `sameAs`) | `"https://apps.apple.com/us/app/iconic-photography-gallery/id6755329136",` | Every page (root layout JSON-LD Organization) |
+| `src/app/layout.tsx:168` | Android | metadata (Organization `sameAs`) | `"https://play.google.com/store/apps/details?id=com.carlos_delrio.mosaicphotographyapp",` | Every page (root layout JSON-LD Organization) |
+| `src/app/legal/privacy-policy/page.tsx:119` | both | visible text | `<li>Log in to the Mosaic Photography App</li>` | `/legal/privacy-policy` only |
+| `src/app/legal/privacy-policy/page.tsx:133` | both | visible text (heading) | `For App Store & Play Store Reviewers` | `/legal/privacy-policy` only |
+| `src/app/legal/privacy-policy/page.tsx:135` | both | visible text | `This version of Mosaic Photography complies with store requirements. Key` | `/legal/privacy-policy` only |
+| `public/llms.txt:30` | both | static file (llms.txt) | `- **Mobile App:** https://www.mosaic.photography/app` | Public static file `/llms.txt` (crawlers/agents) |
+| `public/.well-known/apple-app-site-association:6` | iOS | static file (.well-known, universal links / app association) | `"ACN2RLHS2A.com.carlosdelrio.mosaicphotographyapp"` (in `appIDs`) | Public static file `/.well-known/apple-app-site-association` (iOS universal links) |
+| `public/.well-known/assetlinks.json:6` | Android | static file (.well-known, app links) | `"package_name": "com.carlos_delrio.mosaicphotographyapp"` | Public static file `/.well-known/assetlinks.json` (Android App Links verification) |
+| `public/.well-known/assetlinks.json:8-9` | Android | static file (.well-known) | SHA256 cert fingerprints for Android app (`B7:AE:...:DB`, `6C:0D:...:1B`) | Public static file `/.well-known/assetlinks.json` |
+| `public/.well-known/assetlinks.txt:6` | Android | static file (.well-known) | `"package_name": "com.carlos_delrio.mosaicphotographyapp"` | Public static file `/.well-known/assetlinks.txt` |
+| `public/.well-known/assetlinks.txt:8` | Android | static file (.well-known) | SHA256 cert fingerprint `6845e5f9458db5897acc8660c3722961578c77e93d5993579225cc9530b8e0e3` | Public static file `/.well-known/assetlinks.txt` |
+| `scripts/generate-sitemap-0.ts:77-81` | both | sitemap/IndexNow list (source) | `{ loc: "https://www.mosaic.photography/app", lastmod: ..., changefreq: "monthly", priority: "0.6" }` | Build-time sitemap generation for `/app` entry in `public/sitemap-0.xml` |
+| `scripts/indexnow.ts:33` | both | sitemap/IndexNow list (source) | ``${SITE_URL}/app`,`` in `STATIC_URLS` | Build-time IndexNow submission list (production) |
+| `src/app/api/indexnow/route.ts:20-26` | both | config/redirect/header (default URLs) | `DEFAULT_URLS` omits `/app` (no app URL present) | API route `POST /api/indexnow` fallback list — **no `/app` mention** (checked) |
+| `public/sitemap-0.xml:33` | both | sitemap/IndexNow list (generated/static output) | `<loc>https://www.mosaic.photography/app</loc>` | Public sitemap `/sitemap-0.xml` (crawlers) |
+| `public/sw.js:1` | both | config/redirect/header (generated service worker precache/build artifact) | Precaches/references `/_next/static/chunks/app/app/page-...js` and app screenshot/badge/QR assets (e.g. `/images/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg`, `/images/GetItOnGooglePlay_Badge_Web_color_English.svg`, `/images/QR/Mosaic-Photography-Gallery.png`, `/screenshots/Apple-iPhone-16-Pro-Max/*`, `/screenshots/Android-*`) | Service worker cache manifest (generated build artifact in `public/`) |
+| `public/images/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg` | iOS | static file (badge asset) | Apple App Store badge image file referenced by banners/hero | `/app`, home banner, footer (all pages) where rendered |
+| `public/images/GetItOnGooglePlay_Badge_Web_color_English.svg` | Android | static file (badge asset) | Google Play badge image file referenced by banners/hero | `/app`, home banner, footer (all pages) where rendered |
+| `public/images/QR/Mosaic-Photography-Gallery.png` | both | static file (QR asset) | QR image `alt="QR code linking to Mosaic app download page"` in `AppHero` | `/app` only |
+| `public/images/QR/Mosaic-photography-app-play-store-qr-code-mobile-2048px.svg` | Android | static file (QR asset) | Play Store QR image file (filename indicates Play Store/mobile app) | Not referenced in scanned source files (asset present) |
+| `public/images/QR/Mosaic-photography-app-play-store-qr-code-mobile-4096px.svg` | Android | static file (QR asset) | Play Store QR image file (filename indicates Play Store/mobile app) | Not referenced in scanned source files (asset present) |
+| `public/screenshots/Apple-iPhone-16-Pro-Max/*.png` | iOS | static file (app screenshots) | iPhone app screenshot assets (e.g. `Apple-iPhone-16-Pro-Max-Screenshot1.png` used in `/app`) | `/app` page references Screenshot1; others present as assets |
+| `public/screenshots/Android-10-inch-tablet/*.png` | Android | static file (app screenshots) | Android tablet screenshot assets (e.g. `main-gallery-home-tablet-10inch.png` used in `/app`) | `/app` page references one; others present as assets |
+| `public/screenshots/Android-Samsung-Galaxy-S21-Ultra/*.png` | Android | static file (app screenshots) | Android phone screenshot assets (e.g. `Samsung-Galaxy-S21-Ultra-Screenshot1.png` used in `/app`) | `/app` page references one; others present as assets |
+| `src/types/ui.ts:2` | iOS | config/redirect/header (type definition) | `ios: string;` (app-related type shape; no URL/text rendered directly) | Type only (check consumers if changed) |
+| `src/components/cards/PhotographersViewCard.module.css:133` | iOS | visible text (code comment, not rendered) | `/*  for ipad pro and tablets */` | Not rendered to users (CSS comment) |
+| `src/components/comments/CommentForm.module.css:131` | iOS | visible text (code comment, not rendered) | `font-size: 16px; /* Prevents zoom on iOS */` | Not rendered to users (CSS comment) |
+| `src/lib/timeline/photographersTimelines.ts:1229` | iOS | visible text (content data) | `"At thirteen he begins training with the photographer Robert Rotter in nearby Freudenthal (Bruntál), then works in small commercial studios."` — contains substring `ios` in `studios` (incidental, not a mobile-app mention) | Photographer timeline content; **not an app mention** (false positive by substring) |
+| `next.config.ts:168-175` | both | config/redirect/header | `source: "/llms.txt"` headers set `Content-Type: text/plain` (serves llms.txt which lists Mobile App `/app`) | Public `/llms.txt` delivery |
+| `src/app/app/app.module.css:1-13` | both | visible text (styling for `/app` hero) | Styles for `/app` page header/headline | `/app` only |
+| `src/app/layout.tsx.bak:148` | — | (backup file, apple-touch-icon only) | `apple: "/favicons/apple-touch-icon.png"` — no app-store/mobile-app mention; icon match ignored per scope | Not active source (backup) |
+
+## 2. Single source of truth?
+
+**No — store URLs are not fully centralized in `src/lib/appLinks.ts`.**
+
+- Defined in `src/lib/appLinks.ts:1-5`: `APP_STORE_URL` (`https://apps.apple.com/us/app/iconic-photography-gallery/id6755329136`) and `PLAY_STORE_URL` (`https://play.google.com/store/apps/details?id=com.carlos_delrio.mosaicphotographyapp`).
+- Imported and used from `src/lib/appLinks.ts` by: `src/app/app/page.tsx:10`, `src/components/appLanding/AppHero.tsx:3`, `src/components/appBanner/FooterAppBanner.tsx:7`, `src/components/appBanner/HomeAppBanner.tsx:7`.
+- **Hardcoded elsewhere (not from `appLinks.ts`):** `src/app/layout.tsx:167-168` — both App Store and Google Play URLs are hardcoded in the Organization JSON-LD `sameAs` array (every page).
+
+## 3. Things that break if the iOS app is gone
+
+- **`src/app/layout.tsx:167` (root Organization JSON-LD `sameAs`, every page):** hardcoded App Store URL will point to a removed app; public claim of iOS app presence.
+- **`src/app/app/page.tsx:16-17,24,87` and `src/components/appLanding/AppHero.tsx:14`:** visible/metadata copy states "Free on iPhone, iPad & Android" / "iPhone, iPad and Android".
+- **`src/app/app/page.tsx:100-112` (`MobileApplication` JSON-LD on `/app`):** `operatingSystem: "iOS, iPadOS, Android"` and `downloadUrl` includes `APP_STORE_URL` (App Store link) — incorrect if iOS app unavailable.
+- **`src/components/appLanding/AppHero.tsx:17-34`, `src/components/appBanner/HomeAppBanner.tsx:83-101`, `src/components/appBanner/FooterAppBanner.tsx:31-48`:** App Store badge links/buttons (`aria-label="Download on the App Store"`, GTM `*-ios`, `handleClick("ios")`) rendered on `/app`, home, and every page footer.
+- **`src/app/app/page.tsx:59-64` and `src/components/appLanding/AppScreenshots.tsx:14-19`:** iPhone screenshot asset/caption/name (`Apple-iPhone-16-Pro-Max-Screenshot1.png`, "iPhone photo view") presented as current app platform.
+- **`src/app/legal/privacy-policy/page.tsx:133`:** heading "For App Store & Play Store Reviewers" references App Store.
+- **`public/.well-known/apple-app-site-association`:** iOS universal links/app association for `ACN2RLHS2A.com.carlosdelrio.mosaicphotographyapp` — will be invalid/orphaned once app/membership gone.
+- **`public/llms.txt:30`:** advertises "Mobile App: https://www.mosaic.photography/app" without platform caveat (page currently claims iOS+iPad+Android).
+- **No `apple-itunes-app` Smart App Banner meta tag found** in scanned source/config (searched repo; none present). Not an existing break point in code.
+- **Android remains:** `PLAY_STORE_URL`, Google Play badges/links, Play Store QR assets (`public/images/QR/Mosaic-photography-app-play-store-qr-code-mobile-*.svg`), Android screenshots, `assetlinks.json`/`assetlinks.txt` (package `com.carlos_delrio.mosaicphotographyapp`), and `/app` sitemap/IndexNow entries still reference the app landing — must be reworded to Android-only (or kept accurate) rather than removed blindly.
+
+## 4. Counts
+
+- **Total mentions:** 52 (table rows/items above; includes distinct source mentions, generated/static outputs and assets relevant to app/store/platform claims; excludes unrelated `apple-touch-icon`, false-positive `studios` substring, `yarn.lock` noise, and "no match" checks)
+- **iOS-only:** 13 (`src/lib/appLinks.ts` APP_STORE_URL, `/app` iPhone screenshot data+render refs, AppHero iOS badge/link, HomeAppBanner iOS badge/link, FooterAppBanner iOS badge/link, `src/app/layout.tsx:167` sameAs App Store, `public/.well-known/apple-app-site-association`, Apple badge asset, Apple iPhone screenshot assets)
+- **Android-only:** 14 (`src/lib/appLinks.ts` PLAY_STORE_URL, AppHero Android badge/link, HomeAppBanner Android badge/link, FooterAppBanner Android badge/link, `src/app/layout.tsx:168` sameAs Play Store, `assetlinks.json` + fingerprints, `assetlinks.txt` + fingerprint, Google Play badge asset, two Play Store QR SVG assets, Android screenshot asset groups noted)
+- **Both:** 25 (shared `/app` metadata/copy/JSON-LD operating systems+downloadUrl, shared banners/hero text+imports+internal `/app` links, footer/home component wiring, privacy-policy app/store-reviewer text, `llms.txt`, `/app` in sitemap script/output and IndexNow script, shared QR asset for app page, generated `sw.js` app precache refs, app-landing shared components/styles)
+
+**Notes / could not fully check:** `public/sw.js` and `public/sitemap-0.xml` are generated artifacts (counts treated their relevant app-related content as single mention rows). `src/app/api/indexnow/route.ts` default URL list does not include `/app` (verified). No `apple-itunes-app` meta tag found. No tests mentioning app/store terms found. Consumer usage of `src/types/ui.ts` `ios` field not exhaustively traced beyond definition.
